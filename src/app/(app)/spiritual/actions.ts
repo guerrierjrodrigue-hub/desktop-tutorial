@@ -26,6 +26,29 @@ export async function createPrayerRequest(input: {
   return { ok: true };
 }
 
+/** Advance a reading plan by one day for the signed-in user (idempotent-ish). */
+export async function advanceReadingPlan(
+  planId: string,
+  completedDays: number,
+): Promise<ActionResult> {
+  const ctx = await getAuthedContext();
+  if (!ctx) return demoOk;
+
+  const { error } = await ctx.supabase.from("reading_progress").upsert(
+    {
+      user_id: ctx.userId,
+      reading_plan_id: planId,
+      completed_days: completedDays,
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: "user_id,reading_plan_id" },
+  );
+  if (error) return { ok: false, error: error.message };
+
+  revalidatePath("/spiritual");
+  return { ok: true };
+}
+
 /** Mark a prayer request answered / unanswered. */
 export async function setPrayerAnswered(
   id: string,

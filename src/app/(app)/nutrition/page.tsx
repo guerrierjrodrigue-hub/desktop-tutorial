@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Flame, Beef, Wheat, Droplet, Clock, Plus } from "lucide-react";
+import { Flame, Beef, Wheat, Droplet, Clock } from "lucide-react";
 import { Topbar } from "@/components/layout/topbar";
 import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Ring } from "@/components/ui/ring";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { FoodLogger } from "@/components/nutrition/food-logger";
 import { recipes, macroTargets } from "@/data/nutrition";
 import { todayStats } from "@/data/dashboard";
 
@@ -31,11 +31,7 @@ export default function NutritionPage() {
         <PageHeader
           title="Nutrition"
           subtitle="Fuel with intention — track calories, macros, and hydration."
-        >
-          <Button size="sm">
-            <Plus className="size-4" /> Log food
-          </Button>
-        </PageHeader>
+        />
 
         <div className="grid gap-5 lg:grid-cols-3">
           {/* Calories ring */}
@@ -118,6 +114,11 @@ export default function NutritionPage() {
               </div>
             </div>
           </Card>
+        </div>
+
+        {/* Food log */}
+        <div className="mt-5">
+          <FoodLogger />
         </div>
 
         {/* Recipes */}

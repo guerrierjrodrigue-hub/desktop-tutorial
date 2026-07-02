@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { BookOpen, Brain, HandHeart, CheckCircle2 } from "lucide-react";
+import { BookOpen, Brain, HandHeart } from "lucide-react";
 import { Topbar } from "@/components/layout/topbar";
 import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PrayerJournal } from "@/components/spiritual/prayer-journal";
+import { ReadingPlans } from "@/components/spiritual/reading-plans";
 import { dailyDevotional } from "@/data/devotional";
 import { readingPlans, memoryVerses } from "@/data/spiritual";
 import { getPrayerRequests } from "@/lib/queries/spiritual";
@@ -56,44 +57,7 @@ export default async function SpiritualPage() {
         <div className="mt-6 grid gap-5 lg:grid-cols-3">
           {/* Reading plans */}
           <div className="space-y-5 lg:col-span-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Reading plans</CardTitle>
-              </CardHeader>
-              <div className="space-y-3">
-                {readingPlans.map((plan) => {
-                  const done = plan.completedDays === plan.totalDays;
-                  return (
-                    <div
-                      key={plan.id}
-                      className="rounded-xl border border-border bg-surface-2 p-4"
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <h3 className="font-serif font-semibold leading-tight">
-                            {plan.title}
-                          </h3>
-                          <p className="mt-0.5 text-sm text-muted">
-                            {plan.description}
-                          </p>
-                        </div>
-                        {done && (
-                          <Badge variant="green">
-                            <CheckCircle2 className="size-3" /> Done
-                          </Badge>
-                        )}
-                      </div>
-                      <div className="mt-3">
-                        <Progress value={plan.completedDays / plan.totalDays} />
-                        <p className="mt-1.5 text-xs text-muted">
-                          {plan.completedDays}/{plan.totalDays} days
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </Card>
+            <ReadingPlans initial={readingPlans} />
 
             {/* Memory verses */}
             <Card>
