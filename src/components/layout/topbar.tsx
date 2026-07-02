@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { Bell, Flame } from "lucide-react";
+import { Flame } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import { Logo } from "@/components/brand/logo";
+import { NotificationsBell } from "@/components/layout/notifications-bell";
 import { getCurrentUser } from "@/lib/queries/profile";
 
 export async function Topbar({ title }: { title?: string }) {
@@ -24,12 +25,7 @@ export async function Topbar({ title }: { title?: string }) {
           <Flame className="size-4" />
           {currentUser.streak}
         </span>
-        <button
-          aria-label="Notifications"
-          className="grid size-10 place-items-center rounded-full text-muted transition hover:bg-surface-2 hover:text-foreground"
-        >
-          <Bell className="size-5" />
-        </button>
+        <NotificationsBell />
         <Link href="/profile" aria-label="Your profile">
           <Avatar name={currentUser.name} color="var(--color-green)" />
         </Link>

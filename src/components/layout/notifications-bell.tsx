@@ -1,0 +1,107 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { Bell, Check } from "lucide-react";
+import { Icon } from "@/components/ui/icon";
+import { notifications as seed } from "@/data/notifications";
+import { cn } from "@/lib/utils";
+
+const accentClass: Record<string, string> = {
+  gold: "bg-gold/15 text-gold-bright",
+  green: "bg-green/25 text-green-bright",
+  bronze: "bg-bronze/20 text-bronze",
+};
+
+export function NotificationsBell() {
+  const [items, setItems] = useState(seed);
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const unread = items.filter((n) => !n.read).length;
+
+  // Close on outside click or Escape.
+  useEffect(() => {
+    if (!open) return;
+    function onClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  function markAllRead() {
+    setItems((prev) => prev.map((n) => ({ ...n, read: true })));
+  }
+
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        aria-label={`Notifications${unread ? `, ${unread} unread` : ""}`}
+        aria-expanded={open}
+        onClick={() => setOpen((v) => !v)}
+        className="relative grid size-10 place-items-center rounded-full text-muted transition hover:bg-surface-2 hover:text-foreground"
+      >
+        <Bell className="size-5" />
+        {unread > 0 && (
+          <span className="absolute right-1.5 top-1.5 grid min-w-4 place-items-center rounded-full bg-gold px-1 text-[10px] font-bold text-background">
+            {unread}
+          </span>
+        )}
+      </button>
+
+      {open && (
+        <div
+          role="menu"
+          className="glass absolute right-0 top-12 z-50 w-80 overflow-hidden rounded-2xl border border-border shadow-2xl"
+        >
+          <div className="flex items-center justify-between border-b border-border px-4 py-3">
+            <span className="text-sm font-semibold">Notifications</span>
+            {unread > 0 && (
+              <button
+                onClick={markAllRead}
+                className="flex items-center gap-1 text-xs font-medium text-gold-bright hover:underline"
+              >
+                <Check className="size-3.5" /> Mark all read
+              </button>
+            )}
+          </div>
+
+          <ul className="max-h-96 overflow-y-auto">
+            {items.map((n) => (
+              <li
+                key={n.id}
+                className={cn(
+                  "flex gap-3 border-b border-border/60 px-4 py-3 transition last:border-0",
+                  !n.read && "bg-gold/5",
+                )}
+              >
+                <span
+                  className={cn(
+                    "grid size-9 shrink-0 place-items-center rounded-lg",
+                    accentClass[n.accent],
+                  )}
+                >
+                  <Icon name={n.icon} className="size-4" />
+                </span>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium leading-tight">{n.title}</p>
+                  <p className="mt-0.5 text-xs text-muted">{n.body}</p>
+                  <p className="mt-1 text-[11px] text-faint">{n.time}</p>
+                </div>
+                {!n.read && (
+                  <span className="mt-1.5 size-2 shrink-0 rounded-full bg-gold" />
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
