@@ -24,6 +24,7 @@ import { badges } from "@/data/dashboard";
 import { Icon } from "@/components/ui/icon";
 import { levelFromXp } from "@/lib/utils";
 import { signOutAction } from "@/app/(auth)/actions";
+import { ManageBillingButton } from "@/components/billing/manage-billing-button";
 
 export const metadata: Metadata = {
   title: "Profile",
@@ -159,7 +160,20 @@ export default async function ProfilePage() {
           </Card>
         </div>
 
-        {!currentUser.isPremium && (
+        {currentUser.isPremium ? (
+          <Card className="mt-5 flex flex-col items-center justify-between gap-4 bg-gradient-to-br from-gold/12 to-surface sm:flex-row">
+            <div className="text-center sm:text-left">
+              <h3 className="font-serif text-lg font-semibold">
+                You&apos;re a Premium member
+              </h3>
+              <p className="text-sm text-muted">
+                Thank you for investing in your discipline. Manage or update your
+                plan anytime.
+              </p>
+            </div>
+            <ManageBillingButton />
+          </Card>
+        ) : (
           <Card className="mt-5 flex flex-col items-center justify-between gap-4 bg-gradient-to-br from-gold/12 to-surface sm:flex-row">
             <div className="text-center sm:text-left">
               <h3 className="font-serif text-lg font-semibold">

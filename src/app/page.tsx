@@ -15,6 +15,7 @@ import { Hero } from "@/components/marketing/hero";
 import { Reveal } from "@/components/ui/reveal";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { CheckoutButton } from "@/components/billing/checkout-button";
 import { plans } from "@/data/pricing";
 
 const features = [
@@ -269,14 +270,12 @@ function Pricing() {
                   </li>
                 ))}
               </ul>
-              <Link href="/dashboard" className="mt-7">
-                <Button
-                  className="w-full"
-                  variant={plan.highlighted ? "primary" : "secondary"}
-                >
-                  {plan.cta}
-                </Button>
-              </Link>
+              <CheckoutButton
+                plan={plan.plan}
+                label={plan.cta}
+                className="mt-7 w-full"
+                variant={plan.highlighted ? "primary" : "secondary"}
+              />
             </div>
           </Reveal>
         ))}

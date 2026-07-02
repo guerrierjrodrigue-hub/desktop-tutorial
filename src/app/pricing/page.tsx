@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Check, ShieldCheck } from "lucide-react";
 import { MarketingNav } from "@/components/marketing/marketing-nav";
 import { MarketingFooter } from "@/components/marketing/marketing-footer";
 import { Reveal } from "@/components/ui/reveal";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { CheckoutButton } from "@/components/billing/checkout-button";
 import { plans } from "@/data/pricing";
 
 export const metadata: Metadata = {
@@ -77,14 +76,12 @@ export default function PricingPage() {
                       </li>
                     ))}
                   </ul>
-                  <Link href="/dashboard" className="mt-7">
-                    <Button
-                      className="w-full"
-                      variant={plan.highlighted ? "primary" : "secondary"}
-                    >
-                      {plan.cta}
-                    </Button>
-                  </Link>
+                  <CheckoutButton
+                    plan={plan.plan}
+                    label={plan.cta}
+                    className="mt-7 w-full"
+                    variant={plan.highlighted ? "primary" : "secondary"}
+                  />
                 </div>
               </Reveal>
             ))}

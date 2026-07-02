@@ -6,8 +6,10 @@ import { Topbar } from "@/components/layout/topbar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { PremiumGate } from "@/components/billing/premium-gate";
 import { programs } from "@/data/programs";
 import { getProgramBySlug } from "@/lib/queries/programs";
+import { getCurrentUser } from "@/lib/queries/profile";
 import { formatDuration } from "@/lib/utils";
 
 export function generateStaticParams() {
@@ -36,6 +38,8 @@ export default async function ProgramDetailPage({
   const program = await getProgramBySlug(programId);
   if (!program) notFound();
 
+  const user = await getCurrentUser();
+  const locked = program.premium && !user.isPremium;
   const firstWeek = program.schedule[0];
 
   return (
@@ -82,11 +86,13 @@ export default async function ProgramDetailPage({
               {formatDuration(program.durationMinutes)} / session
             </span>
           </div>
-          <Button className="mt-6">Start week 1</Button>
+          {!locked && <Button className="mt-6">Start week 1</Button>}
         </div>
 
+        {locked && <PremiumGate />}
+
         {/* Week 1 schedule */}
-        <div className="mt-8">
+        <div className={locked ? "pointer-events-none mt-8 opacity-40 blur-sm select-none" : "mt-8"} aria-hidden={locked}>
           <h2 className="font-serif text-xl font-semibold">
             Week {firstWeek.week}
           </h2>

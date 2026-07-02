@@ -1,5 +1,6 @@
 export interface Plan {
   name: string;
+  plan: "free" | "monthly" | "annual";
   price: string;
   period: string;
   description: string;
@@ -11,6 +12,7 @@ export interface Plan {
 export const plans: Plan[] = [
   {
     name: "Seeker",
+    plan: "free",
     price: "Free",
     period: "",
     description: "Start the journey and build the habit.",
@@ -25,6 +27,7 @@ export const plans: Plan[] = [
   },
   {
     name: "Disciple",
+    plan: "monthly",
     price: "$9",
     period: "/mo",
     description: "The full Kingdom Athlete experience.",
@@ -40,6 +43,7 @@ export const plans: Plan[] = [
   },
   {
     name: "Legacy",
+    plan: "annual",
     price: "$79",
     period: "/yr",
     description: "Best value — commit for the year.",
