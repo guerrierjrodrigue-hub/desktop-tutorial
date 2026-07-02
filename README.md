@@ -27,6 +27,10 @@ daily rhythm — guided training, Scripture, prayer, and **Barnabas**, an AI fai
 | Spiritual | ✅ | Devotional, reading plans, verse memorization, prayer journal |
 | Barnabas AI coach | ✅ | Live chat via `/api/coach` — real OpenAI when a key is set, warm in-voice offline fallback otherwise |
 | Auth & database | ✅ | Supabase Auth (email + Google/Apple), full Postgres schema with RLS, seed data, session middleware, data-access layer — all with mock fallback when unconfigured |
+| Persistence (writes) | ✅ | Prayer journal, community posts/likes, habit logs, food logs, reading progress persist via server actions (demo no-op when unconfigured) |
+| Payments | ✅ | Stripe subscriptions (checkout + trial), webhook → `is_premium`, billing portal, premium gating on locked programs |
+| Admin console | ✅ | `is_admin`-gated dashboard: KPIs, users, content, payments, logs |
+| Testing | ✅ | Vitest unit suite (XP math, Barnabas routing, Stripe mapping) — 17 tests |
 | Gamification | ✅ | XP curve, levels, badges, streaks, challenges, leaderboard |
 | Community | ✅ | Feed with testimonies / progress / prayer, likes, groups |
 | Profile | ✅ | Stats, level progress, details, achievements, premium upsell |
@@ -83,7 +87,13 @@ cp .env.example .env.local   # optional — app runs without any keys
 npm run dev                  # http://localhost:3000
 ```
 
-Scripts: `npm run dev` · `npm run build` · `npm run start` · `npm run lint`
+Scripts: `npm run dev` · `npm run build` · `npm run start` · `npm run lint` · `npm test`
+
+### Testing
+Unit tests run on **Vitest** (`npm test`): XP/level math and formatters
+(`src/lib/utils.test.ts`), Barnabas intent routing (`src/lib/barnabas.test.ts`),
+and Stripe plan mapping (`src/lib/stripe/config.test.ts`). Extend with
+Playwright for E2E — Chromium is preinstalled in the web environment.
 
 ### Barnabas AI coach
 Set `OPENAI_API_KEY` in `.env.local` to enable real responses. Without it, the

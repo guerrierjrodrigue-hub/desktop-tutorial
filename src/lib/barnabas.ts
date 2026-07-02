@@ -34,11 +34,13 @@ export function offlineBarnabasReply(userText: string): string {
   if (/(unmotivat|tired|discourag|lazy|hard|struggl)/.test(t)) {
     return "First — thank you for showing up and being honest. That's already discipline. 🙌 Motivation comes and goes; faithfulness is what we're building. Let's make today small and winnable: 10 minutes of easy movement and a few deep breaths. “Those who hope in the Lord will renew their strength” (Isaiah 40:31). Want me to pick something gentle for you?";
   }
+  // Nutrition is checked before workouts so "what to eat after training"
+  // resolves to food guidance rather than a workout plan.
+  if (/(eat|food|nutrition|meal|protein|diet|recipe)/.test(t)) {
+    return "Great question. After training, aim for protein + carbs within an hour or so — something like grilled chicken and rice, or a berry-protein smoothie. Keep it whole-food and simple. Roughly 0.7–1g of protein per pound of bodyweight across the day is a solid target. Want a quick recipe idea?";
+  }
   if (/(workout|exercise|train|routine)/.test(t)) {
     return "Love it. Here's a simple 20-minute full-body circuit — 3 rounds, minimal rest:\n\n• Bodyweight squats — 15\n• Push-ups (knees are fine) — 10\n• Reverse lunges — 10 / leg\n• Plank — 30 seconds\n\nMove with control and stop if anything sharp shows up. Want me to make it easier or harder?";
-  }
-  if (/(eat|food|nutrition|meal|protein|diet)/.test(t)) {
-    return "Great question. After training, aim for protein + carbs within an hour or so — something like grilled chicken and rice, or a berry-protein smoothie. Keep it whole-food and simple. Roughly 0.7–1g of protein per pound of bodyweight across the day is a solid target. Want a quick recipe idea?";
   }
   if (/(honor|body|temple|steward)/.test(t)) {
     return "Beautifully asked. Scripture calls our bodies temples of the Holy Spirit (1 Cor. 6:19–20). Honoring God with your body isn't about a perfect physique — it's faithful stewardship: moving, resting, eating, and sleeping in a way that keeps you ready to love and serve. Small, consistent obedience over time. What area feels hardest for you right now?";
