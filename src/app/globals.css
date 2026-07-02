@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ *
+ * Kingdom Athlete — design tokens
+ * Premium, dark-by-default identity: deep black, warm white, gold,
+ * deep green, bronze accent. Elegant serif display + clean sans body.
+ * ------------------------------------------------------------------ */
+
+@theme {
+  --color-background: #0a0b0d;
+  --color-surface: #121417;
+  --color-surface-2: #191c21;
+  --color-elevated: #20242a;
+  --color-foreground: #f6f4ee;
+  --color-muted: #9a9ca3;
+  --color-faint: #6c6f77;
+  --color-border: #24282e;
+
+  --color-gold: #d4af37;
+  --color-gold-bright: #edcb68;
+  --color-gold-deep: #a5842a;
+
+  --color-green: #1a5c43;
+  --color-green-deep: #0d3326;
+  --color-green-bright: #2f9e73;
+
+  --color-bronze: #b58a5a;
+
+  --color-success: #34d399;
+  --color-warning: #fbbf24;
+  --color-danger: #f87171;
+
+  --font-sans:
+    var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+
+  --radius: 1rem;
+
+  --shadow-glow: 0 0 0 1px rgba(212, 175, 55, 0.15),
+    0 8px 40px -8px rgba(212, 175, 55, 0.25);
+}
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Ambient background: subtle radial gold/green glow on deep black. */
+.bg-ambient {
+  background:
+    radial-gradient(
+      60rem 60rem at 85% -10%,
+      rgba(212, 175, 55, 0.08),
+      transparent 60%
+    ),
+    radial-gradient(
+      50rem 50rem at -10% 20%,
+      rgba(26, 92, 67, 0.14),
+      transparent 55%
+    ),
+    var(--color-background);
+}
+
+/* Frosted surface used across cards and panels. */
+.glass {
+  background: color-mix(in srgb, var(--color-surface) 82%, transparent);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--color-border);
+}
+
+.text-gradient-gold {
+  background: linear-gradient(
+    100deg,
+    var(--color-gold-bright),
+    var(--color-gold) 45%,
+    var(--color-bronze)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ring-gold {
+  box-shadow: var(--shadow-glow);
+}
+
+/* Custom, unobtrusive scrollbar. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-elevated);
+  border-radius: 999px;
+  border: 3px solid var(--color-background);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-faint);
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-surface-2);
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.04),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
