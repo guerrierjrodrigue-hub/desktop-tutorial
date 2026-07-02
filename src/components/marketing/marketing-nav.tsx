@@ -19,12 +19,12 @@ export function MarketingNav() {
           </a>
         </nav>
         <div className="flex items-center gap-2">
-          <Link href="/dashboard">
+          <Link href="/login">
             <Button variant="ghost" size="sm" className="hidden sm:inline-flex">
               Sign in
             </Button>
           </Link>
-          <Link href="/dashboard">
+          <Link href="/signup">
             <Button size="sm">Start free</Button>
           </Link>
         </div>
