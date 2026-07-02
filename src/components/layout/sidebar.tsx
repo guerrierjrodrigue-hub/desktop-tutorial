@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { Logo } from "@/components/brand/logo";
 import { navItems } from "@/lib/nav";
 import { cn } from "@/lib/utils";
-import { Sparkles } from "lucide-react";
+import { Sparkles, ShieldCheck } from "lucide-react";
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -62,6 +62,14 @@ export function Sidebar() {
           Start free trial
         </Link>
       </div>
+
+      <Link
+        href="/admin"
+        className="mt-2 flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-faint transition-colors hover:bg-surface-2/60 hover:text-foreground"
+      >
+        <ShieldCheck className="size-5 text-faint" />
+        Admin
+      </Link>
     </aside>
   );
 }
