@@ -3,7 +3,7 @@ import { Topbar } from "@/components/layout/topbar";
 import { PageHeader } from "@/components/layout/page-header";
 import { ProgramCard } from "@/components/fitness/program-card";
 import { Badge } from "@/components/ui/badge";
-import { programs } from "@/data/programs";
+import { getPrograms } from "@/lib/queries/programs";
 import type { ProgramCategory } from "@/types";
 
 export const metadata: Metadata = {
@@ -21,7 +21,8 @@ const categories: { key: ProgramCategory | "all"; label: string }[] = [
   { key: "bodyweight", label: "Bodyweight" },
 ];
 
-export default function FitnessPage() {
+export default async function FitnessPage() {
+  const programs = await getPrograms();
   return (
     <>
       <Topbar title="Fitness" />

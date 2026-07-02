@@ -1,10 +1,11 @@
 import { Flame, Zap } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { currentUser } from "@/data/user";
+import { getCurrentUser } from "@/lib/queries/profile";
 import { levelFromXp } from "@/lib/utils";
 
-export function ProgressCard() {
+export async function ProgressCard() {
+  const currentUser = await getCurrentUser();
   const { level, nextLevelXp, progress } = levelFromXp(currentUser.xp);
   const toNext = nextLevelXp - currentUser.xp;
 

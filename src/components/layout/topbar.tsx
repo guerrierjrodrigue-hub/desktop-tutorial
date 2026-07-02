@@ -2,9 +2,10 @@ import Link from "next/link";
 import { Bell, Flame } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import { Logo } from "@/components/brand/logo";
-import { currentUser } from "@/data/user";
+import { getCurrentUser } from "@/lib/queries/profile";
 
-export function Topbar({ title }: { title?: string }) {
+export async function Topbar({ title }: { title?: string }) {
+  const currentUser = await getCurrentUser();
   return (
     <header className="glass sticky top-0 z-30 flex h-16 items-center justify-between gap-4 border-b border-border px-4 sm:px-6">
       <div className="flex items-center gap-3">

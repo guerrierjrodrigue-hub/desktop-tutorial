@@ -11,6 +11,7 @@ import {
   BookMarked,
   Settings,
   Crown,
+  LogOut,
 } from "lucide-react";
 import { Topbar } from "@/components/layout/topbar";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,16 +19,18 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
-import { currentUser } from "@/data/user";
+import { getCurrentUser } from "@/lib/queries/profile";
 import { badges } from "@/data/dashboard";
 import { Icon } from "@/components/ui/icon";
 import { levelFromXp } from "@/lib/utils";
+import { signOutAction } from "@/app/(auth)/actions";
 
 export const metadata: Metadata = {
   title: "Profile",
 };
 
-export default function ProfilePage() {
+export default async function ProfilePage() {
+  const currentUser = await getCurrentUser();
   const { level, progress, nextLevelXp } = levelFromXp(currentUser.xp);
   const earned = badges.filter((b) => b.earned);
 
@@ -75,9 +78,16 @@ export default function ProfilePage() {
                 <Stat icon={Trophy} label="Badges" value={earned.length} />
               </div>
             </div>
-            <Button variant="secondary" size="icon" aria-label="Settings">
-              <Settings className="size-5" />
-            </Button>
+            <div className="flex gap-2">
+              <Button variant="secondary" size="icon" aria-label="Settings">
+                <Settings className="size-5" />
+              </Button>
+              <form action={signOutAction}>
+                <Button type="submit" variant="secondary" size="icon" aria-label="Sign out">
+                  <LogOut className="size-5" />
+                </Button>
+              </form>
+            </div>
           </div>
 
           <div className="relative mt-6">

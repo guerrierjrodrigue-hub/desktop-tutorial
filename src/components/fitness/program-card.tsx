@@ -10,7 +10,11 @@ const levelLabel: Record<Program["level"], string> = {
   advanced: "Advanced",
 };
 
-export function ProgramCard({ program }: { program: Program }) {
+export function ProgramCard({
+  program,
+}: {
+  program: Omit<Program, "schedule">;
+}) {
   return (
     <Link
       href={`/fitness/${program.id}`}

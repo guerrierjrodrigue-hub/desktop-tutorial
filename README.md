@@ -26,6 +26,7 @@ daily rhythm — guided training, Scripture, prayer, and **Barnabas**, an AI fai
 | Nutrition | ✅ | Calorie ring, macro bars, hydration tracker, recipe library |
 | Spiritual | ✅ | Devotional, reading plans, verse memorization, prayer journal |
 | Barnabas AI coach | ✅ | Live chat via `/api/coach` — real OpenAI when a key is set, warm in-voice offline fallback otherwise |
+| Auth & database | ✅ | Supabase Auth (email + Google/Apple), full Postgres schema with RLS, seed data, session middleware, data-access layer — all with mock fallback when unconfigured |
 | Gamification | ✅ | XP curve, levels, badges, streaks, challenges, leaderboard |
 | Community | ✅ | Feed with testimonies / progress / prayer, likes, groups |
 | Profile | ✅ | Stats, level progress, details, achievements, premium upsell |
@@ -89,15 +90,43 @@ Set `OPENAI_API_KEY` in `.env.local` to enable real responses. Without it, the
 `/api/coach` route returns thoughtful, on-brand fallback replies so the coach
 always works in demos. The persona and guardrails live in `src/lib/barnabas.ts`.
 
+### Backend (Supabase Auth + Postgres)
+
+The database and auth are fully modeled and wired. **With no Supabase env vars
+the app runs on mock data and auth is a demo redirect** — so nothing is required
+locally. To go live:
+
+```bash
+# 1. Create a project at supabase.com, then set in .env.local:
+#    NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY
+# 2. Apply the schema, RLS, and seed data:
+supabase db reset            # runs supabase/migrations/* then supabase/seed.sql
+# 3. In Supabase Auth settings, add redirect URL: <site>/auth/callback
+#    and enable Google / Apple providers if desired.
+```
+
+| File | Purpose |
+|------|---------|
+| `supabase/migrations/0001_initial_schema.sql` | 27 tables, enums, constraints, indexes, `handle_new_user` trigger |
+| `supabase/migrations/0002_rls_policies.sql` | RLS: public catalog reads, owner-only user data, admin writes |
+| `supabase/seed.sql` | Catalog seed (programs, verses, recipes, badges, groups, challenges) |
+| `src/lib/supabase/{client,server,middleware}.ts` | `@supabase/ssr` clients + session refresh |
+| `src/app/(auth)/actions.ts` | Server actions: email auth, OAuth, sign-out |
+| `src/lib/queries/*` | Typed data-access with mock fallback (`getCurrentUser`, `getPrograms`, …) |
+
+Regenerate types after schema changes:
+`supabase gen types typescript --local > src/types/database.ts`.
+
 ---
 
 ## 🗺️ Integration roadmap (next phases)
 
 The UI is intentionally decoupled so these slot in cleanly:
 
-1. **Supabase** — Auth (Google/Apple/email), Postgres schema with RLS for the
-   domain in `src/types`, Storage for avatars/media, Edge Functions. Replace the
-   `src/data/*` modules with typed queries.
+1. **Supabase** — ✅ Auth + schema + RLS + seed + data-access layer done.
+   Remaining: expand `src/lib/queries/*` to cover every screen's writes
+   (habit logs, food logs, prayer journal, posts), Storage for avatars/media,
+   and Edge Functions.
 2. **Stripe** — subscriptions (Seeker / Disciple / Legacy from `src/data/pricing.ts`),
    checkout + webhook to flip `UserProfile.isPremium`, gate premium programs.
 3. **OpenAI** — already wired in `/api/coach`; add streaming responses.

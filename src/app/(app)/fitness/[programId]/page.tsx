@@ -6,7 +6,8 @@ import { Topbar } from "@/components/layout/topbar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { getProgram, programs } from "@/data/programs";
+import { programs } from "@/data/programs";
+import { getProgramBySlug } from "@/lib/queries/programs";
 import { formatDuration } from "@/lib/utils";
 
 export function generateStaticParams() {
@@ -19,7 +20,7 @@ export async function generateMetadata({
   params: Promise<{ programId: string }>;
 }): Promise<Metadata> {
   const { programId } = await params;
-  const program = getProgram(programId);
+  const program = await getProgramBySlug(programId);
   return {
     title: program?.title ?? "Program",
     description: program?.description,
@@ -32,7 +33,7 @@ export default async function ProgramDetailPage({
   params: Promise<{ programId: string }>;
 }) {
   const { programId } = await params;
-  const program = getProgram(programId);
+  const program = await getProgramBySlug(programId);
   if (!program) notFound();
 
   const firstWeek = program.schedule[0];

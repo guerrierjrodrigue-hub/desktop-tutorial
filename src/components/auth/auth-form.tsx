@@ -1,22 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
 import Link from "next/link";
-import { Mail, Lock, User, ArrowRight } from "lucide-react";
+import { Mail, Lock, User, ArrowRight, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  emailAuthAction,
+  oauthAction,
+  type AuthState,
+} from "@/app/(auth)/actions";
 
 export function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const isSignup = mode === "signup";
-  const [loading, setLoading] = useState(false);
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    // Demo only — wiring to Supabase Auth happens behind this boundary.
-    setTimeout(() => {
-      window.location.href = "/dashboard";
-    }, 700);
-  }
+  const [state, formAction] = useActionState<AuthState, FormData>(
+    emailAuthAction,
+    {},
+  );
 
   return (
     <div className="w-full max-w-sm">
@@ -31,14 +31,8 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
 
       {/* OAuth */}
       <div className="mt-8 space-y-3">
-        <OAuthButton
-          provider="Google"
-          onClick={() => (window.location.href = "/dashboard")}
-        />
-        <OAuthButton
-          provider="Apple"
-          onClick={() => (window.location.href = "/dashboard")}
-        />
+        <OAuthButton provider="google" label="Google" />
+        <OAuthButton provider="apple" label="Apple" />
       </div>
 
       <div className="my-6 flex items-center gap-3 text-xs text-faint">
@@ -47,12 +41,14 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
         <span className="h-px flex-1 bg-border" />
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-3">
+      <form action={formAction} className="space-y-3">
+        <input type="hidden" name="mode" value={mode} />
         {isSignup && (
-          <Field icon={User} type="text" placeholder="Full name" autoComplete="name" />
+          <Field icon={User} name="name" type="text" placeholder="Full name" autoComplete="name" />
         )}
         <Field
           icon={Mail}
+          name="email"
           type="email"
           placeholder="Email address"
           autoComplete="email"
@@ -60,9 +56,11 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
         />
         <Field
           icon={Lock}
+          name="password"
           type="password"
           placeholder="Password"
           autoComplete={isSignup ? "new-password" : "current-password"}
+          minLength={6}
           required
         />
 
@@ -74,12 +72,14 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
           </div>
         )}
 
-        <Button type="submit" className="mt-2 w-full group" disabled={loading}>
-          {loading ? "One moment…" : isSignup ? "Create account" : "Sign in"}
-          {!loading && (
-            <ArrowRight className="transition-transform group-hover:translate-x-0.5" />
-          )}
-        </Button>
+        {state.error && (
+          <p className="flex items-center gap-2 rounded-lg bg-danger/10 px-3 py-2 text-sm text-danger">
+            <AlertCircle className="size-4 shrink-0" />
+            {state.error}
+          </p>
+        )}
+
+        <SubmitButton isSignup={isSignup} />
       </form>
 
       <p className="mt-6 text-center text-sm text-muted">
@@ -92,6 +92,18 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
         </Link>
       </p>
     </div>
+  );
+}
+
+function SubmitButton({ isSignup }: { isSignup: boolean }) {
+  const { pending } = useFormStatus();
+  return (
+    <Button type="submit" className="mt-2 w-full group" disabled={pending}>
+      {pending ? "One moment…" : isSignup ? "Create account" : "Sign in"}
+      {!pending && (
+        <ArrowRight className="transition-transform group-hover:translate-x-0.5" />
+      )}
+    </Button>
   );
 }
 
@@ -112,20 +124,22 @@ function Field({
 
 function OAuthButton({
   provider,
-  onClick,
+  label,
 }: {
-  provider: "Google" | "Apple";
-  onClick: () => void;
+  provider: "google" | "apple";
+  label: string;
 }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="flex h-12 w-full items-center justify-center gap-3 rounded-xl border border-border bg-surface-2 text-sm font-medium transition hover:bg-elevated"
-    >
-      {provider === "Google" ? <GoogleGlyph /> : <AppleGlyph />}
-      Continue with {provider}
-    </button>
+    <form action={oauthAction}>
+      <input type="hidden" name="provider" value={provider} />
+      <button
+        type="submit"
+        className="flex h-12 w-full items-center justify-center gap-3 rounded-xl border border-border bg-surface-2 text-sm font-medium transition hover:bg-elevated"
+      >
+        {provider === "google" ? <GoogleGlyph /> : <AppleGlyph />}
+        Continue with {label}
+      </button>
+    </form>
   );
 }
 

@@ -1,4 +1,4 @@
-import { currentUser } from "@/data/user";
+import { getCurrentUser } from "@/lib/queries/profile";
 
 function greetingFor(date: Date): string {
   const h = date.getHours();
@@ -7,7 +7,8 @@ function greetingFor(date: Date): string {
   return "Good evening";
 }
 
-export function Greeting() {
+export async function Greeting() {
+  const currentUser = await getCurrentUser();
   const now = new Date();
   const firstName = currentUser.name.split(" ")[0];
   const dateLabel = now.toLocaleDateString("en-US", {
