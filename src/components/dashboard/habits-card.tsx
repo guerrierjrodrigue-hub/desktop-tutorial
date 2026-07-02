@@ -1,24 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Check, Flame } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
 import { habits as seedHabits } from "@/data/dashboard";
+import { toggleHabit } from "@/app/(app)/dashboard/actions";
 import { cn } from "@/lib/utils";
 
 export function HabitsCard() {
   const [habits, setHabits] = useState(seedHabits);
+  const [, startTransition] = useTransition();
   const done = habits.filter((h) => h.done).length;
 
   function toggle(id: string) {
+    let nextDone = false;
     setHabits((prev) =>
-      prev.map((h) =>
-        h.id === id
-          ? { ...h, done: !h.done, streak: h.done ? h.streak - 1 : h.streak + 1 }
-          : h,
-      ),
+      prev.map((h) => {
+        if (h.id !== id) return h;
+        nextDone = !h.done;
+        return {
+          ...h,
+          done: nextDone,
+          streak: nextDone ? h.streak + 1 : h.streak - 1,
+        };
+      }),
     );
+    startTransition(async () => {
+      await toggleHabit(id, nextDone);
+    });
   }
 
   return (

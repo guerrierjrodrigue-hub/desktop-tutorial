@@ -1,0 +1,27 @@
+"use server";
+
+import { getAuthedContext } from "@/lib/supabase/auth";
+import { type ActionResult, demoOk } from "@/lib/actions/result";
+
+/**
+ * Record whether a habit was completed today. Upserts a single row per
+ * (habit, day) so toggling on/off is idempotent.
+ */
+export async function toggleHabit(
+  habitId: string,
+  done: boolean,
+): Promise<ActionResult> {
+  const ctx = await getAuthedContext();
+  if (!ctx) return demoOk;
+
+  const today = new Date().toISOString().slice(0, 10);
+  const { error } = await ctx.supabase
+    .from("habit_logs")
+    .upsert(
+      { habit_id: habitId, user_id: ctx.userId, log_date: today, done },
+      { onConflict: "habit_id,log_date" },
+    );
+
+  if (error) return { ok: false, error: error.message };
+  return { ok: true };
+}

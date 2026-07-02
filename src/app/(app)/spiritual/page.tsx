@@ -1,21 +1,24 @@
 import type { Metadata } from "next";
-import { BookOpen, Brain, HandHeart, CheckCircle2, Circle } from "lucide-react";
+import { BookOpen, Brain, HandHeart, CheckCircle2 } from "lucide-react";
 import { Topbar } from "@/components/layout/topbar";
 import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { PrayerJournal } from "@/components/spiritual/prayer-journal";
 import { dailyDevotional } from "@/data/devotional";
-import { readingPlans, memoryVerses, prayerRequests } from "@/data/spiritual";
+import { readingPlans, memoryVerses } from "@/data/spiritual";
+import { getPrayerRequests } from "@/lib/queries/spiritual";
 
 export const metadata: Metadata = {
   title: "Spiritual",
   description: "Bible reading plans, devotionals, prayer journal, and verse memorization.",
 };
 
-export default function SpiritualPage() {
+export default async function SpiritualPage() {
   const { verse, reflection, prayer } = dailyDevotional;
+  const prayers = await getPrayerRequests();
 
   return (
     <>
@@ -131,41 +134,7 @@ export default function SpiritualPage() {
 
           {/* Prayer journal */}
           <div>
-            <Card>
-              <CardHeader>
-                <CardTitle>Prayer journal</CardTitle>
-                <Button size="sm" variant="ghost">
-                  + New
-                </Button>
-              </CardHeader>
-              <div className="space-y-3">
-                {prayerRequests.map((p) => (
-                  <div
-                    key={p.id}
-                    className="rounded-xl border border-border bg-surface-2 p-4"
-                  >
-                    <div className="flex items-start gap-2">
-                      {p.answered ? (
-                        <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-green-bright" />
-                      ) : (
-                        <Circle className="mt-0.5 size-4 shrink-0 text-faint" />
-                      )}
-                      <div>
-                        <h3 className="text-sm font-semibold leading-tight">
-                          {p.title}
-                        </h3>
-                        <p className="mt-1 text-xs text-muted">{p.body}</p>
-                        {p.answered && (
-                          <span className="mt-2 inline-block text-xs font-semibold text-green-bright">
-                            Answered · Praise God
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Card>
+            <PrayerJournal initial={prayers} />
           </div>
         </div>
       </main>

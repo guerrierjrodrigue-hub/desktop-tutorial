@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { PenSquare } from "lucide-react";
 import { Topbar } from "@/components/layout/topbar";
 import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,11 +19,7 @@ export default function CommunityPage() {
         <PageHeader
           title="Community"
           subtitle="Encourage and be encouraged. As iron sharpens iron."
-        >
-          <Button size="sm">
-            <PenSquare className="size-4" /> Share
-          </Button>
-        </PageHeader>
+        />
 
         <div className="grid gap-5 lg:grid-cols-3">
           <div className="lg:col-span-2">

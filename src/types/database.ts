@@ -157,6 +157,19 @@ export interface CommunityPostRow {
   created_at: Timestamptz;
 }
 
+export interface PostLikeRow {
+  post_id: string;
+  user_id: string;
+}
+
+export interface HabitLogRow {
+  id: string;
+  habit_id: string;
+  user_id: string;
+  log_date: DateStr;
+  done: boolean;
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -173,6 +186,8 @@ export interface Database {
       prayer_requests: T<PrayerRequestRow>;
       memory_verses: T<MemoryVerseRow>;
       community_posts: T<CommunityPostRow>;
+      post_likes: T<PostLikeRow>;
+      habit_logs: T<HabitLogRow>;
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

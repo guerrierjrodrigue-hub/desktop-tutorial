@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Heart, MessageCircle, Share2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
+import { PostComposer } from "@/components/community/post-composer";
 import { communityPosts } from "@/data/community";
+import { toggleLike } from "@/app/(app)/community/actions";
 import { cn } from "@/lib/utils";
 import type { CommunityPost } from "@/types";
 
@@ -17,19 +19,30 @@ const kindMeta: Record<CommunityPost["kind"], { label: string; variant: "gold" |
 
 export function PostFeed() {
   const [posts, setPosts] = useState(communityPosts);
+  const [, startTransition] = useTransition();
 
-  function toggleLike(id: string) {
+  function prependPost(post: CommunityPost) {
+    setPosts((prev) => [post, ...prev]);
+  }
+
+  function like(id: string) {
+    let nextLiked = false;
     setPosts((prev) =>
-      prev.map((p) =>
-        p.id === id
-          ? { ...p, liked: !p.liked, likes: p.liked ? p.likes - 1 : p.likes + 1 }
-          : p,
-      ),
+      prev.map((p) => {
+        if (p.id !== id) return p;
+        nextLiked = !p.liked;
+        return { ...p, liked: nextLiked, likes: nextLiked ? p.likes + 1 : p.likes - 1 };
+      }),
     );
+    startTransition(async () => {
+      await toggleLike(id, nextLiked);
+    });
   }
 
   return (
     <div className="space-y-4">
+      <PostComposer onPost={prependPost} />
+
       {posts.map((post) => {
         const meta = kindMeta[post.kind];
         return (
@@ -49,7 +62,7 @@ export function PostFeed() {
 
             <div className="mt-4 flex items-center gap-5 text-sm text-muted">
               <button
-                onClick={() => toggleLike(post.id)}
+                onClick={() => like(post.id)}
                 className={cn(
                   "flex items-center gap-1.5 transition hover:text-danger",
                   post.liked && "text-danger",
