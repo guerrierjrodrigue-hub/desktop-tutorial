@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Send, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SUGGESTED_PROMPTS } from "@/lib/barnabas";
+import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 import type { ChatMessage } from "@/types";
 
@@ -41,6 +42,7 @@ export function BarnabasChat() {
     setMessages(next);
     setInput("");
     setLoading(true);
+    track("coach_message_sent");
 
     try {
       const res = await fetch("/api/coach", {

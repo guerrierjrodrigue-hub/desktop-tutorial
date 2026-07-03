@@ -31,6 +31,9 @@ daily rhythm — guided training, Scripture, prayer, and **Barnabas**, an AI fai
 | Payments | ✅ | Stripe subscriptions (checkout + trial), webhook → `is_premium`, billing portal, premium gating on locked programs |
 | Admin console | ✅ | `is_admin`-gated dashboard: KPIs, users, content, payments, logs |
 | Testing | ✅ | Vitest unit suite (XP math, Barnabas routing, Stripe mapping) — 17 tests |
+| Observability | ✅ | PostHog analytics (pageviews + events) & Sentry monitoring — both no-op when unconfigured |
+| Notifications | ✅ | In-app notifications panel (topbar bell, unread badge, mark-all-read) |
+| Ops | ✅ | `DEPLOYMENT.md`, `vercel.json`, GitHub Actions CI (lint/typecheck/test/build) |
 | Gamification | ✅ | XP curve, levels, badges, streaks, challenges, leaderboard |
 | Community | ✅ | Feed with testimonies / progress / prayer, likes, groups |
 | Profile | ✅ | Stats, level progress, details, achievements, premium upsell |
