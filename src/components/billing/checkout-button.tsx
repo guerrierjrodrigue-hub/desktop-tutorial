@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button, type ButtonProps } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
+import { track } from "@/lib/analytics";
 
 interface CheckoutButtonProps extends ButtonProps {
   plan: "monthly" | "annual" | "free";
@@ -14,6 +15,7 @@ export function CheckoutButton({ plan, label, ...props }: CheckoutButtonProps) {
   const [loading, setLoading] = useState(false);
 
   async function go() {
+    track("checkout_started", { plan });
     if (plan === "free") {
       window.location.href = "/signup";
       return;

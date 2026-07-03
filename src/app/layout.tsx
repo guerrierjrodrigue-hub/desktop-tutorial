@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Fraunces } from "next/font/google";
 import "./globals.css";
+import { AnalyticsProvider } from "@/components/providers/analytics-provider";
 import {
   APP_NAME,
   APP_TAGLINE,
@@ -76,7 +77,9 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${fraunces.variable} h-full antialiased`}
     >
-      <body className="bg-ambient min-h-full">{children}</body>
+      <body className="bg-ambient min-h-full">
+        <AnalyticsProvider>{children}</AnalyticsProvider>
+      </body>
     </html>
   );
 }
