@@ -4,23 +4,28 @@ import { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SUGGESTED_PROMPTS } from "@/lib/barnabas";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
+import { setActiveCoach } from "@/app/(app)/coach/actions";
+import type { Coach } from "@/data/coaches";
 import type { ChatMessage } from "@/types";
 
-const GREETING: ChatMessage = {
-  id: "greeting",
-  role: "assistant",
-  content:
-    "Hi, I'm Barnabas — your faith & fitness coach. 🙌 I'm here to encourage you, plan your training, talk nutrition, or simply pray with you. How can I help today?",
-};
-
-export function BarnabasChat() {
-  const [messages, setMessages] = useState<ChatMessage[]>([GREETING]);
+/**
+ * Rendered with `key={coach.id}` by its parent so switching coaches remounts
+ * this component fresh instead of needing an effect to reset local state.
+ */
+export function CoachChat({ coach }: { coach: Coach }) {
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    { id: "greeting", role: "assistant", content: coach.greeting },
+  ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Remember which coach the user is talking to.
+  useEffect(() => {
+    setActiveCoach(coach.id).catch(() => {});
+  }, [coach.id]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({
@@ -42,13 +47,16 @@ export function BarnabasChat() {
     setMessages(next);
     setInput("");
     setLoading(true);
-    track("coach_message_sent");
+    track("coach_message_sent", { coachId: coach.id });
 
     try {
       const res = await fetch("/api/coach", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: next.filter((m) => m.id !== "greeting") }),
+        body: JSON.stringify({
+          coachId: coach.id,
+          messages: next.filter((m) => m.id !== "greeting"),
+        }),
       });
       const data = await res.json();
       setMessages((prev) => [
@@ -79,15 +87,15 @@ export function BarnabasChat() {
       {/* Messages */}
       <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto p-4 sm:p-6">
         {messages.map((m) => (
-          <MessageBubble key={m.id} message={m} />
+          <MessageBubble key={m.id} message={m} coach={coach} />
         ))}
-        {loading && <TypingIndicator />}
+        {loading && <TypingIndicator coach={coach} />}
       </div>
 
       {/* Suggestions */}
       {messages.length <= 1 && (
         <div className="flex flex-wrap gap-2 px-4 pb-3 sm:px-6">
-          {SUGGESTED_PROMPTS.map((p) => (
+          {coach.suggestedPrompts.map((p) => (
             <button
               key={p}
               onClick={() => send(p)}
@@ -110,8 +118,8 @@ export function BarnabasChat() {
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Message Barnabas…"
-          aria-label="Message Barnabas"
+          placeholder={`Message ${coach.name}…`}
+          aria-label={`Message ${coach.name}`}
           className="h-11 flex-1 rounded-full border border-border bg-surface-2 px-4 text-sm outline-none transition focus:border-gold/40 focus:ring-2 focus:ring-gold/20"
         />
         <Button type="submit" size="icon" disabled={!input.trim() || loading} aria-label="Send">
@@ -122,7 +130,7 @@ export function BarnabasChat() {
   );
 }
 
-function MessageBubble({ message }: { message: ChatMessage }) {
+function MessageBubble({ message, coach }: { message: ChatMessage; coach: Coach }) {
   const isUser = message.role === "user";
   return (
     <motion.div
@@ -132,7 +140,12 @@ function MessageBubble({ message }: { message: ChatMessage }) {
       className={cn("flex gap-3", isUser && "flex-row-reverse")}
     >
       {!isUser && (
-        <span className="grid size-8 shrink-0 place-items-center rounded-full bg-gradient-to-br from-gold-bright to-gold-deep text-background">
+        <span
+          className={cn(
+            "grid size-8 shrink-0 place-items-center rounded-full bg-gradient-to-br text-background",
+            coach.avatarGradient,
+          )}
+        >
           <Sparkles className="size-4" />
         </span>
       )}
@@ -150,7 +163,7 @@ function MessageBubble({ message }: { message: ChatMessage }) {
   );
 }
 
-function TypingIndicator() {
+function TypingIndicator({ coach }: { coach: Coach }) {
   return (
     <AnimatePresence>
       <motion.div
@@ -158,7 +171,12 @@ function TypingIndicator() {
         animate={{ opacity: 1 }}
         className="flex gap-3"
       >
-        <span className="grid size-8 shrink-0 place-items-center rounded-full bg-gradient-to-br from-gold-bright to-gold-deep text-background">
+        <span
+          className={cn(
+            "grid size-8 shrink-0 place-items-center rounded-full bg-gradient-to-br text-background",
+            coach.avatarGradient,
+          )}
+        >
           <Sparkles className="size-4" />
         </span>
         <div className="flex items-center gap-1 rounded-2xl bg-surface-2 px-4 py-3">

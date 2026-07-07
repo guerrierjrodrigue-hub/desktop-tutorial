@@ -1,14 +1,43 @@
+import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
 import { APP_MISSION } from "@/lib/constants";
 
 const columns = [
   {
     title: "Product",
-    links: ["Features", "Programs", "Barnabas AI", "Pricing"],
+    links: [
+      { label: "Features", href: "/#features" },
+      { label: "Programs", href: "/fitness" },
+      { label: "Barnabas AI", href: "/#barnabas" },
+      { label: "Pricing", href: "/pricing" },
+    ],
   },
-  { title: "Company", links: ["About", "Mission", "Careers", "Contact"] },
-  { title: "Resources", links: ["Blog", "Devotionals", "Help Center", "Community"] },
-  { title: "Legal", links: ["Privacy", "Terms", "Cookies"] },
+  {
+    title: "Company",
+    links: [
+      { label: "About", href: "/about" },
+      { label: "Mission", href: "/about#mission" },
+      { label: "Careers", href: "/careers" },
+      { label: "Contact", href: "/contact" },
+    ],
+  },
+  {
+    title: "Resources",
+    links: [
+      { label: "Blog", href: "/blog" },
+      { label: "Devotionals", href: "/spiritual" },
+      { label: "Help Center", href: "/help" },
+      { label: "Community", href: "/community" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { label: "Privacy", href: "/privacy" },
+      { label: "Terms", href: "/terms" },
+      { label: "Cookies", href: "/cookies" },
+    ],
+  },
 ];
 
 export function MarketingFooter() {
@@ -24,10 +53,10 @@ export function MarketingFooter() {
             <h4 className="text-sm font-semibold text-foreground">{col.title}</h4>
             <ul className="mt-4 space-y-2.5 text-sm text-muted">
               {col.links.map((link) => (
-                <li key={link}>
-                  <a href="#" className="transition hover:text-gold-bright">
-                    {link}
-                  </a>
+                <li key={link.label}>
+                  <Link href={link.href} className="transition hover:text-gold-bright">
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>

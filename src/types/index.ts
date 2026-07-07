@@ -31,6 +31,9 @@ export interface UserProfile {
   xp: number;
   streak: number;
   joinedAt: string;
+  identities: string[];
+  primaryGoal?: string;
+  onboardedAt?: string;
 }
 
 export interface Exercise {
@@ -148,6 +151,13 @@ export interface PrayerRequest {
   createdAt: string;
 }
 
+export interface JournalEntry {
+  id: string;
+  title: string;
+  body: string;
+  createdAt: string;
+}
+
 export interface CommunityPost {
   id: string;
   author: string;
@@ -165,3 +175,15 @@ export interface ChatMessage {
   role: "user" | "assistant";
   content: string;
 }
+
+export type CoachId = "barnabas" | "titan" | "forge" | "haven";
+
+export type IdentityId =
+  | "athlete"
+  | "disciplined"
+  | "christian"
+  | "student"
+  | "entrepreneur"
+  | "wellness"
+  | "parent"
+  | "creator";

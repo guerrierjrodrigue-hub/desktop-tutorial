@@ -101,7 +101,7 @@ Scripts: `npm run dev` · `npm run build` · `npm run start` · `npm run lint` �
   browser in CI. Both suites run in demo mode — no keys required.
 
 ### Barnabas AI coach
-Set `OPENAI_API_KEY` in `.env.local` to enable real responses. Without it, the
+Set `ANTHROPIC_API_KEY` in `.env.local` to enable real responses. Without it, the
 `/api/coach` route returns thoughtful, on-brand fallback replies so the coach
 always works in demos. The persona and guardrails live in `src/lib/barnabas.ts`.
 

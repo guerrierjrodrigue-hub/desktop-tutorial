@@ -34,6 +34,9 @@ export interface ProfileRow {
   is_admin: boolean;
   xp: number;
   streak: number;
+  primary_goal: string | null;
+  identities: string[];
+  onboarded_at: Timestamptz | null;
   joined_at: Timestamptz;
   updated_at: Timestamptz;
 }
@@ -170,6 +173,21 @@ export interface HabitLogRow {
   done: boolean;
 }
 
+export interface UserPreferencesRow {
+  user_id: string;
+  active_coach: string;
+  dashboard_layout: { id: string; hidden: boolean }[];
+  updated_at: Timestamptz;
+}
+
+export interface JournalEntryRow {
+  id: string;
+  user_id: string;
+  title: string;
+  body: string;
+  created_at: Timestamptz;
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -188,6 +206,8 @@ export interface Database {
       community_posts: T<CommunityPostRow>;
       post_likes: T<PostLikeRow>;
       habit_logs: T<HabitLogRow>;
+      user_preferences: T<UserPreferencesRow>;
+      journal_entries: T<JournalEntryRow>;
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

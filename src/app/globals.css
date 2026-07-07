@@ -2,29 +2,33 @@
 
 /* ------------------------------------------------------------------ *
  * Kingdom Athlete — design tokens
- * Premium, dark-by-default identity: deep black, warm white, gold,
- * deep green, bronze accent. Elegant serif display + clean sans body.
+ * Apple Fitness-inspired identity: true-black surfaces, iOS system
+ * grays, and the three activity-ring accents (Move red, Exercise
+ * green, Stand cyan). Elegant serif display + clean sans body.
  * ------------------------------------------------------------------ */
 
 @theme {
-  --color-background: #0a0b0d;
-  --color-surface: #121417;
-  --color-surface-2: #191c21;
-  --color-elevated: #20242a;
-  --color-foreground: #f6f4ee;
-  --color-muted: #9a9ca3;
-  --color-faint: #6c6f77;
-  --color-border: #24282e;
+  --color-background: #000000;
+  --color-surface: #1c1c1e;
+  --color-surface-2: #2c2c2e;
+  --color-elevated: #3a3a3c;
+  --color-foreground: #ffffff;
+  --color-muted: #98989f;
+  --color-faint: #6c6c70;
+  --color-border: #313134;
 
-  --color-gold: #d4af37;
-  --color-gold-bright: #edcb68;
-  --color-gold-deep: #a5842a;
+  /* "Move" ring — red/pink */
+  --color-gold: #fa114f;
+  --color-gold-bright: #ff375f;
+  --color-gold-deep: #c60d40;
 
-  --color-green: #1a5c43;
-  --color-green-deep: #0d3326;
-  --color-green-bright: #2f9e73;
+  /* "Exercise" ring — green */
+  --color-green: #63d131;
+  --color-green-deep: #1e7a1b;
+  --color-green-bright: #a6e22e;
 
-  --color-bronze: #b58a5a;
+  /* "Stand" ring — cyan */
+  --color-bronze: #00d4e0;
 
   --color-success: #34d399;
   --color-warning: #fbbf24;
@@ -36,8 +40,8 @@
 
   --radius: 1rem;
 
-  --shadow-glow: 0 0 0 1px rgba(212, 175, 55, 0.15),
-    0 8px 40px -8px rgba(212, 175, 55, 0.25);
+  --shadow-glow: 0 0 0 1px rgba(250, 17, 79, 0.18),
+    0 8px 40px -8px rgba(250, 17, 79, 0.3);
 }
 
 :root {
@@ -60,17 +64,17 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Ambient background: subtle radial gold/green glow on deep black. */
+/* Ambient background: subtle radial red/green ring glow on true black. */
 .bg-ambient {
   background:
     radial-gradient(
       60rem 60rem at 85% -10%,
-      rgba(212, 175, 55, 0.08),
+      color-mix(in srgb, var(--color-gold) 10%, transparent),
       transparent 60%
     ),
     radial-gradient(
       50rem 50rem at -10% 20%,
-      rgba(26, 92, 67, 0.14),
+      color-mix(in srgb, var(--color-green) 16%, transparent),
       transparent 55%
     ),
     var(--color-background);
@@ -87,8 +91,8 @@ body {
   background: linear-gradient(
     100deg,
     var(--color-gold-bright),
-    var(--color-gold) 45%,
-    var(--color-bronze)
+    var(--color-gold) 55%,
+    var(--color-gold-deep)
   );
   -webkit-background-clip: text;
   background-clip: text;

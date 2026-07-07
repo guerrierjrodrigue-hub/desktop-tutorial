@@ -21,6 +21,9 @@ function mapProfile(row: ProfileRow): UserProfile {
     xp: row.xp,
     streak: row.streak,
     joinedAt: row.joined_at,
+    identities: row.identities,
+    primaryGoal: row.primary_goal ?? undefined,
+    onboardedAt: row.onboarded_at ?? undefined,
   };
 }
 

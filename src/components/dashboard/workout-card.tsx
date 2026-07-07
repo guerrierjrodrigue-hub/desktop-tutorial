@@ -44,7 +44,10 @@ export function WorkoutCard() {
           ))}
         </ul>
 
-        <Link href={`/fitness/${program.id}`} className="mt-5 block">
+        <Link
+          href={`/fitness/${program.id}/session/${workoutOfDay.id}`}
+          className="mt-5 block"
+        >
           <Button className="w-full group">
             Start workout
             <ArrowRight className="transition-transform group-hover:translate-x-0.5" />

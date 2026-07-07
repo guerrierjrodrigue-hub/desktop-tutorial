@@ -86,7 +86,11 @@ export default async function ProgramDetailPage({
               {formatDuration(program.durationMinutes)} / session
             </span>
           </div>
-          {!locked && <Button className="mt-6">Start week 1</Button>}
+          {!locked && (
+            <Link href={`/fitness/${program.id}/session/${firstWeek.days[0].id}`}>
+              <Button className="mt-6">Start week 1</Button>
+            </Link>
+          )}
         </div>
 
         {locked && <PremiumGate />}
@@ -104,7 +108,7 @@ export default async function ProgramDetailPage({
           <div className="mt-4 space-y-4">
             {firstWeek.days.map((day, i) => (
               <Card key={day.id}>
-                <div className="mb-3 flex items-center justify-between">
+                <div className="mb-3 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
                     <span className="grid size-9 place-items-center rounded-lg bg-green/20 text-sm font-semibold text-green-bright">
                       D{i + 1}
@@ -116,10 +120,17 @@ export default async function ProgramDetailPage({
                       <p className="text-xs text-muted">{day.focus}</p>
                     </div>
                   </div>
-                  <span className="flex items-center gap-1.5 text-sm text-muted">
-                    <Clock className="size-4" />
-                    {formatDuration(day.durationMinutes)}
-                  </span>
+                  <div className="flex shrink-0 items-center gap-3">
+                    <span className="hidden items-center gap-1.5 text-sm text-muted sm:flex">
+                      <Clock className="size-4" />
+                      {formatDuration(day.durationMinutes)}
+                    </span>
+                    <Link href={`/fitness/${program.id}/session/${day.id}`}>
+                      <Button size="sm" variant="secondary">
+                        Start
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
 
                 <ul className="divide-y divide-border overflow-hidden rounded-xl border border-border">

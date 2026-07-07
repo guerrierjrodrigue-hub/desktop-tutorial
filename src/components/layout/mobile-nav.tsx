@@ -2,15 +2,17 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { mobileNavItems } from "@/lib/nav";
+import { getMobileNavItems } from "@/lib/nav";
+import { getPurposeNavItem } from "@/lib/personalization";
 import { cn } from "@/lib/utils";
 
-export function MobileNav() {
+export function MobileNav({ identities }: { identities: string[] }) {
   const pathname = usePathname();
+  const items = getMobileNavItems(getPurposeNavItem(identities));
 
   return (
     <nav className="glass fixed inset-x-0 bottom-0 z-40 flex items-stretch justify-around border-t border-border pb-[env(safe-area-inset-bottom)] lg:hidden">
-      {mobileNavItems.map((item) => {
+      {items.map((item) => {
         const active =
           pathname === item.href || pathname.startsWith(item.href + "/");
         return (

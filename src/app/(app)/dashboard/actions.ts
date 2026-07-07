@@ -25,3 +25,18 @@ export async function toggleHabit(
   if (error) return { ok: false, error: error.message };
   return { ok: true };
 }
+
+/** Persist the signed-in user's dashboard widget order/visibility. */
+export async function saveDashboardLayout(
+  layout: { id: string; hidden: boolean }[],
+): Promise<ActionResult> {
+  const ctx = await getAuthedContext();
+  if (!ctx) return demoOk;
+
+  const { error } = await ctx.supabase
+    .from("user_preferences")
+    .upsert({ user_id: ctx.userId, dashboard_layout: layout }, { onConflict: "user_id" });
+  if (error) return { ok: false, error: error.message };
+
+  return { ok: true };
+}

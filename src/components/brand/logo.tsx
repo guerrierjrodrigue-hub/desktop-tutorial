@@ -14,7 +14,7 @@ export function Logo({
 }) {
   return (
     <Link href={href} className={cn("group inline-flex items-center gap-2.5", className)}>
-      <span className="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-gold-bright to-gold-deep text-background shadow-[0_6px_20px_-6px_rgba(212,175,55,0.6)]">
+      <span className="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-gold-bright to-gold-deep text-background shadow-[0_6px_20px_-6px_rgba(250,17,79,0.6)]">
         <Glyph />
       </span>
       {showText && (
