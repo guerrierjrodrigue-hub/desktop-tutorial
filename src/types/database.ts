@@ -125,6 +125,8 @@ export interface ReadingPlanRow {
   total_days: number;
 }
 
+export type RecipeCategory = "weight-loss" | "muscle-gain" | "fasting" | "breakfast" | "quick-easy";
+
 export interface RecipeRow {
   id: string;
   name: string;
@@ -134,6 +136,7 @@ export interface RecipeRow {
   fat_g: number;
   minutes: number;
   tags: string[];
+  category: RecipeCategory | null;
 }
 
 export interface PrayerRequestRow {
@@ -208,6 +211,7 @@ export interface ChallengeRow {
   type: "personal" | "friends" | "church";
   ends_at: DateStr | null;
   created_at: Timestamptz;
+  created_by: string | null;
 }
 
 export interface ChallengeParticipantRow {

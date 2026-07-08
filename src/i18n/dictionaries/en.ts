@@ -172,6 +172,14 @@ const en = {
   "fitness.categoryMobility": "Mobility",
   "fitness.categoryBodyweight": "Bodyweight",
 
+  // Nutrition page — recipe categories
+  "nutrition.categoryAll": "All",
+  "nutrition.categoryWeightLoss": "Weight loss",
+  "nutrition.categoryMuscleGain": "Muscle gain",
+  "nutrition.categoryFasting": "Fasting",
+  "nutrition.categoryBreakfast": "Breakfast",
+  "nutrition.categoryQuickEasy": "Quick & easy",
+
   // Community page
   "community.title": "Community",
   "community.subtitle": "Encourage and be encouraged. As iron sharpens iron.",
@@ -196,6 +204,9 @@ const en = {
   "challenges.friends": "Friends",
   "challenges.church": "Church",
   "challenges.percentComplete": "complete",
+  "challenges.titlePlaceholder": "Challenge name…",
+  "challenges.descriptionPlaceholder": "What's the challenge?",
+  "challenges.daysUnit": "days",
 
   // Notifications
   "notifications.title": "Notifications",
