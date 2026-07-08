@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { BookOpen, Brain, HandHeart } from "lucide-react";
+import Link from "next/link";
+import { BookOpen, Brain, HandHeart, ArrowRight } from "lucide-react";
 import { Topbar } from "@/components/layout/topbar";
 import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +12,8 @@ import { ReadingPlans } from "@/components/spiritual/reading-plans";
 import { dailyDevotional } from "@/data/devotional";
 import { readingPlans, memoryVerses } from "@/data/spiritual";
 import { getPrayerRequests } from "@/lib/queries/spiritual";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 
 export const metadata: Metadata = {
   title: "Spiritual",
@@ -19,16 +22,34 @@ export const metadata: Metadata = {
 
 export default async function SpiritualPage() {
   const { verse, reflection, prayer } = dailyDevotional;
-  const prayers = await getPrayerRequests();
+  const [prayers, dict] = await Promise.all([getPrayerRequests(), getDictionary(await getLocale())]);
 
   return (
     <>
       <Topbar title="Spiritual" />
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6">
         <PageHeader
-          title="Spiritual"
-          subtitle="Train the soul with the same discipline as the body."
+          title={dict["spiritual.title"]}
+          subtitle={dict["spiritual.subtitle"]}
         />
+
+        {/* Read the full Bible */}
+        <Link href="/spiritual/bible" className="block">
+          <Card className="mb-5 flex items-center justify-between gap-4 bg-gradient-to-br from-gold/10 to-surface transition hover:border-gold/30">
+            <div className="flex items-center gap-3">
+              <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-gold/15 text-gold-bright">
+                <BookOpen className="size-5" />
+              </span>
+              <div>
+                <h3 className="font-serif text-lg font-semibold leading-tight">
+                  {dict["spiritual.bible"]}
+                </h3>
+                <p className="text-sm text-muted">{dict["spiritual.bibleSubtitle"]}</p>
+              </div>
+            </div>
+            <ArrowRight className="size-5 shrink-0 text-faint" />
+          </Card>
+        </Link>
 
         {/* Today's devotional */}
         <Card className="relative overflow-hidden bg-gradient-to-br from-green-deep/50 to-surface">

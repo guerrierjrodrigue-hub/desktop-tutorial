@@ -5,19 +5,27 @@ import { Topbar } from "@/components/layout/topbar";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { getCurrentUser } from "@/lib/queries/profile";
-import { badges } from "@/data/dashboard";
+import { getBadges } from "@/lib/queries/badges";
 import { Icon } from "@/components/ui/icon";
 import { levelFromXp } from "@/lib/utils";
 import { signOutAction } from "@/app/(auth)/actions";
 import { ManageBillingButton } from "@/components/billing/manage-billing-button";
 import { ProfileEditor } from "@/components/profile/profile-editor";
+import { LanguageSwitcher } from "@/components/settings/language-switcher";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 
 export const metadata: Metadata = {
   title: "Profile",
 };
 
 export default async function ProfilePage() {
-  const currentUser = await getCurrentUser();
+  const [currentUser, badges, locale] = await Promise.all([
+    getCurrentUser(),
+    getBadges(),
+    getLocale(),
+  ]);
+  const dict = await getDictionary(locale);
   const { level, progress, nextLevelXp } = levelFromXp(currentUser.xp);
   const earned = badges.filter((b) => b.earned);
 
@@ -36,7 +44,7 @@ export default async function ProfilePage() {
           {/* Badges */}
           <Card>
             <CardHeader>
-              <CardTitle>Achievements</CardTitle>
+              <CardTitle>{dict["dashboard.achievements"]}</CardTitle>
               <span className="text-xs text-muted">
                 {earned.length}/{badges.length}
               </span>
@@ -69,6 +77,10 @@ export default async function ProfilePage() {
             </div>
           </Card>
         </ProfileEditor>
+
+        <div className="mt-5">
+          <LanguageSwitcher currentLocale={locale} dict={dict} />
+        </div>
 
         {currentUser.isPremium ? (
           <Card className="mt-5 flex flex-col items-center justify-between gap-4 bg-gradient-to-br from-gold/12 to-surface sm:flex-row">

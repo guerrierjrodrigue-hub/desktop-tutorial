@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp, Eye, EyeOff, Settings2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { saveDashboardLayout } from "@/app/(app)/dashboard/actions";
 import { cn } from "@/lib/utils";
+import type { Dictionary } from "@/i18n/dictionaries/en";
 
 export interface WidgetEntry {
   id: string;
@@ -32,9 +33,11 @@ function reconcile(saved: WidgetEntry[], widgets: Widget[]): WidgetEntry[] {
 export function DashboardGrid({
   widgets,
   initialLayout,
+  dict,
 }: {
   widgets: Widget[];
   initialLayout: WidgetEntry[];
+  dict: Dictionary;
 }) {
   const [layout, setLayout] = useState<WidgetEntry[]>(() => reconcile(initialLayout, widgets));
   const [customizing, setCustomizing] = useState(false);
@@ -78,7 +81,7 @@ export function DashboardGrid({
     <div>
       <div className="mb-4 flex justify-end">
         <Button variant="secondary" size="sm" onClick={() => setCustomizing((v) => !v)}>
-          <Settings2 className="size-4" /> {customizing ? "Done" : "Customize"}
+          <Settings2 className="size-4" /> {customizing ? dict["common.done"] : dict["common.customize"]}
         </Button>
       </div>
 

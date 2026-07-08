@@ -5,21 +5,10 @@ import { Plus, Flame, X, UtensilsCrossed } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { createFoodLog } from "@/app/(app)/nutrition/actions";
+import type { FoodLogEntry } from "@/types";
 
-interface Entry {
-  id: string;
-  name: string;
-  calories: number;
-  proteinG: number;
-}
-
-const STARTER: Entry[] = [
-  { id: "s1", name: "Sunrise Egg & Oats", calories: 420, proteinG: 28 },
-  { id: "s2", name: "Warrior Protein Bowl", calories: 540, proteinG: 45 },
-];
-
-export function FoodLogger() {
-  const [entries, setEntries] = useState<Entry[]>(STARTER);
+export function FoodLogger({ initial }: { initial: FoodLogEntry[] }) {
+  const [entries, setEntries] = useState<FoodLogEntry[]>(initial);
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [calories, setCalories] = useState("");
@@ -33,7 +22,7 @@ export function FoodLogger() {
     const trimmed = name.trim();
     if (!trimmed) return;
 
-    const entry: Entry = {
+    const entry: FoodLogEntry = {
       id: crypto.randomUUID(),
       name: trimmed,
       calories: Number(calories) || 0,

@@ -5,9 +5,25 @@ export interface UserPreferences {
   dashboardLayout: { id: string; hidden: boolean }[];
 }
 
+/**
+ * A lean default: only the essentials are visible on first load. Everything
+ * else stays one tap away via the dashboard's "Customize" toggle.
+ */
 const DEFAULT_PREFERENCES: UserPreferences = {
   activeCoach: "barnabas",
-  dashboardLayout: [],
+  dashboardLayout: [
+    { id: "progress", hidden: false },
+    { id: "workout", hidden: false },
+    { id: "habits", hidden: false },
+    { id: "stats", hidden: false },
+    { id: "devotional", hidden: false },
+    { id: "quote-of-day", hidden: false },
+    { id: "daily-quests", hidden: true },
+    { id: "transformation-score", hidden: true },
+    { id: "challenge", hidden: true },
+    { id: "recommendations", hidden: true },
+    { id: "badges", hidden: true },
+  ],
 };
 
 /** The signed-in user's saved coach + dashboard layout (empty/default when unconfigured). */

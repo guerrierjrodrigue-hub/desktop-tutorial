@@ -34,8 +34,8 @@ export const PRIMARY_GOAL_OPTIONS = [
  */
 export function getPurposeNavItem(identities: string[]): NavItem {
   return identities.includes("christian")
-    ? { href: "/spiritual", label: "Spiritual", icon: BookOpen }
-    : { href: "/journal", label: "Purpose Journal", icon: Compass };
+    ? { href: "/spiritual", label: "Spiritual", labelKey: "nav.spiritual", icon: BookOpen }
+    : { href: "/journal", label: "Purpose Journal", labelKey: "nav.purposeJournal", icon: Compass };
 }
 
 /** Suggests which coach persona best fits a user's selected identities. */

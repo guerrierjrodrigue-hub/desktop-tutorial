@@ -5,8 +5,9 @@ import { usePathname } from "next/navigation";
 import { getMobileNavItems } from "@/lib/nav";
 import { getPurposeNavItem } from "@/lib/personalization";
 import { cn } from "@/lib/utils";
+import type { Dictionary } from "@/i18n/dictionaries/en";
 
-export function MobileNav({ identities }: { identities: string[] }) {
+export function MobileNav({ identities, dict }: { identities: string[]; dict: Dictionary }) {
   const pathname = usePathname();
   const items = getMobileNavItems(getPurposeNavItem(identities));
 
@@ -26,7 +27,7 @@ export function MobileNav({ identities }: { identities: string[] }) {
             )}
           >
             <item.icon className="size-5" />
-            {item.label}
+            {item.labelKey ? dict[item.labelKey] : item.label}
           </Link>
         );
       })}

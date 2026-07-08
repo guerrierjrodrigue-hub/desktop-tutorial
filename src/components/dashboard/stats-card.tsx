@@ -1,10 +1,12 @@
 import { Flame, Timer, Droplets } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Ring } from "@/components/ui/ring";
-import { todayStats } from "@/data/dashboard";
+import { getTodayStats } from "@/lib/queries/stats";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 
-export function StatsCard() {
-  const s = todayStats;
+export async function StatsCard() {
+  const [s, dict] = await Promise.all([getTodayStats(), getDictionary(await getLocale())]);
   const rings = [
     {
       label: "Calories",
@@ -35,13 +37,13 @@ export function StatsCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Today&apos;s activity</CardTitle>
+        <CardTitle>{dict["dashboard.todaysActivity"]}</CardTitle>
       </CardHeader>
       <div className="grid grid-cols-3 gap-2">
         {rings.map((r) => (
           <div key={r.label} className="flex flex-col items-center gap-2">
             <Ring
-              value={r.value / r.goal}
+              value={r.goal > 0 ? r.value / r.goal : 0}
               size={92}
               stroke={9}
               progressClassName={r.color}

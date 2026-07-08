@@ -2,19 +2,25 @@ import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { getCurrentUser } from "@/lib/queries/profile";
+import { getHabits } from "@/lib/queries/habits";
 import { getRecommendations } from "@/lib/recommendations";
 import { programs } from "@/data/programs";
-import { habits } from "@/data/dashboard";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 
 export async function RecommendationsCard() {
-  const user = await getCurrentUser();
+  const [user, habits, dict] = await Promise.all([
+    getCurrentUser(),
+    getHabits(),
+    getDictionary(await getLocale()),
+  ]);
   const recs = getRecommendations(user, programs, habits);
   if (!recs.length) return null;
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Recommended for you</CardTitle>
+        <CardTitle>{dict["dashboard.recommended"]}</CardTitle>
       </CardHeader>
       <div className="space-y-2">
         {recs.map((rec) => (

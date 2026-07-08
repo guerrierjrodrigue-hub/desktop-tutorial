@@ -6,7 +6,9 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { challenges } from "@/data/dashboard";
+import { getChallenges, getChallengeLeaderboard } from "@/lib/queries/challenges";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 import type { Challenge } from "@/types";
 
 export const metadata: Metadata = {
@@ -20,15 +22,13 @@ const typeMeta: Record<Challenge["type"], { icon: typeof Users; label: string }>
   church: { icon: Church, label: "Church" },
 };
 
-const leaderboard = [
-  { rank: 1, name: "Marcus T.", points: 2840 },
-  { rank: 2, name: "Sarah M.", points: 2610 },
-  { rank: 3, name: "David Bennett", points: 2480, you: true },
-  { rank: 4, name: "Elena R.", points: 2210 },
-  { rank: 5, name: "James P.", points: 1990 },
-];
+export default async function ChallengesPage() {
+  const [challenges, leaderboard, dict] = await Promise.all([
+    getChallenges(),
+    getChallengeLeaderboard(),
+    getDictionary(await getLocale()),
+  ]);
 
-export default function ChallengesPage() {
   return (
     <>
       <Topbar title="Challenges" />
@@ -40,6 +40,12 @@ export default function ChallengesPage() {
 
         <div className="grid gap-5 lg:grid-cols-3">
           <div className="space-y-4 lg:col-span-2">
+            {challenges.length === 0 && (
+              <Card>
+                <p className="text-sm text-muted">{dict["empty.noChallengesAvailable"]}</p>
+              </Card>
+            )}
+
             {challenges.map((c) => {
               const meta = typeMeta[c.type];
               return (
@@ -99,43 +105,47 @@ export default function ChallengesPage() {
                   </span>
                 </CardTitle>
               </CardHeader>
-              <ul className="space-y-1">
-                {leaderboard.map((row) => (
-                  <li
-                    key={row.rank}
-                    className={`flex items-center gap-3 rounded-xl px-3 py-2.5 ${
-                      row.you ? "bg-gold/10 ring-1 ring-gold/25" : ""
-                    }`}
-                  >
-                    <span className="w-5 text-center text-sm font-semibold text-muted">
-                      {row.rank <= 3 ? (
-                        <Medal
-                          className={`mx-auto size-4 ${
-                            row.rank === 1
-                              ? "text-gold-bright"
-                              : row.rank === 2
-                                ? "text-muted"
-                                : "text-bronze"
-                          }`}
-                        />
-                      ) : (
-                        row.rank
-                      )}
-                    </span>
-                    <span className="flex-1 text-sm font-medium">
-                      {row.name}
-                      {row.you && (
-                        <span className="ml-1.5 text-xs text-gold-bright">
-                          (you)
-                        </span>
-                      )}
-                    </span>
-                    <span className="text-sm font-semibold text-gold-bright">
-                      {row.points.toLocaleString()}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              {leaderboard.length === 0 ? (
+                <p className="text-sm text-muted">{dict["empty.noOneOnLeaderboard"]}</p>
+              ) : (
+                <ul className="space-y-1">
+                  {leaderboard.map((row) => (
+                    <li
+                      key={row.rank}
+                      className={`flex items-center gap-3 rounded-xl px-3 py-2.5 ${
+                        row.you ? "bg-gold/10 ring-1 ring-gold/25" : ""
+                      }`}
+                    >
+                      <span className="w-5 text-center text-sm font-semibold text-muted">
+                        {row.rank <= 3 ? (
+                          <Medal
+                            className={`mx-auto size-4 ${
+                              row.rank === 1
+                                ? "text-gold-bright"
+                                : row.rank === 2
+                                  ? "text-muted"
+                                  : "text-bronze"
+                            }`}
+                          />
+                        ) : (
+                          row.rank
+                        )}
+                      </span>
+                      <span className="flex-1 text-sm font-medium">
+                        {row.name}
+                        {row.you && (
+                          <span className="ml-1.5 text-xs text-gold-bright">
+                            (you)
+                          </span>
+                        )}
+                      </span>
+                      <span className="text-sm font-semibold text-gold-bright">
+                        {row.points.toLocaleString()}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </Card>
           </div>
         </div>

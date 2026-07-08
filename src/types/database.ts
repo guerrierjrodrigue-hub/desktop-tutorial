@@ -165,12 +165,75 @@ export interface PostLikeRow {
   user_id: string;
 }
 
+export interface HabitRow {
+  id: string;
+  user_id: string;
+  label: string;
+  icon: string;
+  created_at: Timestamptz;
+}
+
 export interface HabitLogRow {
   id: string;
   habit_id: string;
   user_id: string;
   log_date: DateStr;
   done: boolean;
+}
+
+export interface DailyStatRow {
+  user_id: string;
+  stat_date: DateStr;
+  calories_burned: number;
+  calories_goal: number;
+  active_minutes: number;
+  active_minutes_goal: number;
+  protein_g: number;
+  water_ml: number;
+  water_goal_ml: number;
+}
+
+export interface UserBadgeRow {
+  user_id: string;
+  badge_id: string;
+  earned_at: Timestamptz;
+}
+
+export interface ChallengeRow {
+  id: string;
+  title: string;
+  description: string;
+  type: "personal" | "friends" | "church";
+  ends_at: DateStr | null;
+  created_at: Timestamptz;
+}
+
+export interface ChallengeParticipantRow {
+  challenge_id: string;
+  user_id: string;
+  progress: number;
+  points: number;
+  joined_at: Timestamptz;
+}
+
+export interface FoodLogRow {
+  id: string;
+  user_id: string;
+  log_date: DateStr;
+  name: string;
+  calories: number;
+  protein_g: number;
+  carbs_g: number;
+  fat_g: number;
+  created_at: Timestamptz;
+}
+
+export interface WorkoutLogRow {
+  id: string;
+  user_id: string;
+  workout_day_id: string | null;
+  duration_minutes: number;
+  completed_at: Timestamptz;
 }
 
 export interface UserPreferencesRow {
@@ -205,7 +268,14 @@ export interface Database {
       memory_verses: T<MemoryVerseRow>;
       community_posts: T<CommunityPostRow>;
       post_likes: T<PostLikeRow>;
+      habits: T<HabitRow>;
       habit_logs: T<HabitLogRow>;
+      daily_stats: T<DailyStatRow>;
+      user_badges: T<UserBadgeRow>;
+      challenges: T<ChallengeRow>;
+      challenge_participants: T<ChallengeParticipantRow>;
+      workout_logs: T<WorkoutLogRow>;
+      food_logs: T<FoodLogRow>;
       user_preferences: T<UserPreferencesRow>;
       journal_entries: T<JournalEntryRow>;
     };

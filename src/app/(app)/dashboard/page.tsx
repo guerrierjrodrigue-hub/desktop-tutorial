@@ -11,27 +11,34 @@ import { ChallengeCard } from "@/components/dashboard/challenge-card";
 import { DailyQuestsCard } from "@/components/dashboard/daily-quests-card";
 import { TransformationScoreCard } from "@/components/dashboard/transformation-score-card";
 import { RecommendationsCard } from "@/components/dashboard/recommendations-card";
+import { QuoteOfDayCard } from "@/components/dashboard/quote-of-day-card";
 import { DashboardGrid } from "@/components/dashboard/dashboard-grid";
 import { getUserPreferences } from "@/lib/queries/preferences";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 
 export const metadata: Metadata = {
   title: "Dashboard",
 };
 
 export default async function DashboardPage() {
-  const { dashboardLayout } = await getUserPreferences();
+  const [{ dashboardLayout }, dict] = await Promise.all([
+    getUserPreferences(),
+    getDictionary(await getLocale()),
+  ]);
 
   const widgets = [
-    { id: "progress", label: "Level & progress", node: <ProgressCard /> },
-    { id: "workout", label: "Today's workout", node: <WorkoutCard /> },
-    { id: "devotional", label: "Devotional", node: <DevotionalCard /> },
-    { id: "daily-quests", label: "Daily quests", node: <DailyQuestsCard /> },
-    { id: "transformation-score", label: "Transformation score", node: <TransformationScoreCard /> },
-    { id: "stats", label: "Today's activity", node: <StatsCard /> },
-    { id: "challenge", label: "Active challenge", node: <ChallengeCard /> },
-    { id: "recommendations", label: "Recommended for you", node: <RecommendationsCard /> },
-    { id: "habits", label: "Today's habits", node: <HabitsCard /> },
-    { id: "badges", label: "Achievements", node: <BadgesCard /> },
+    { id: "progress", label: dict["dashboard.progress"], node: <ProgressCard /> },
+    { id: "workout", label: dict["dashboard.todaysWorkout"], node: <WorkoutCard /> },
+    { id: "habits", label: dict["dashboard.todaysHabits"], node: <HabitsCard /> },
+    { id: "stats", label: dict["dashboard.todaysActivity"], node: <StatsCard /> },
+    { id: "devotional", label: dict["dashboard.devotional"], node: <DevotionalCard /> },
+    { id: "quote-of-day", label: dict["dashboard.quoteOfDay"], node: <QuoteOfDayCard /> },
+    { id: "daily-quests", label: dict["dashboard.dailyQuests"], node: <DailyQuestsCard /> },
+    { id: "transformation-score", label: dict["dashboard.transformationScore"], node: <TransformationScoreCard /> },
+    { id: "challenge", label: dict["dashboard.activeChallenge"], node: <ChallengeCard /> },
+    { id: "recommendations", label: dict["dashboard.recommended"], node: <RecommendationsCard /> },
+    { id: "badges", label: dict["dashboard.achievements"], node: <BadgesCard /> },
   ];
 
   return (
@@ -40,7 +47,7 @@ export default async function DashboardPage() {
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6">
         <Greeting />
         <div className="mt-6">
-          <DashboardGrid widgets={widgets} initialLayout={dashboardLayout} />
+          <DashboardGrid widgets={widgets} initialLayout={dashboardLayout} dict={dict} />
         </div>
       </main>
     </>

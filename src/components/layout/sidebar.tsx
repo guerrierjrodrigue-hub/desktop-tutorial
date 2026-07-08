@@ -11,9 +11,14 @@ import {
 } from "@/lib/nav";
 import { getPurposeNavItem } from "@/lib/personalization";
 import { cn } from "@/lib/utils";
+import type { Dictionary } from "@/i18n/dictionaries/en";
 import { Sparkles, ShieldCheck } from "lucide-react";
 
-function NavLink({ item, active }: { item: NavItem; active: boolean }) {
+function navLabel(item: NavItem, dict: Dictionary): string {
+  return item.labelKey ? dict[item.labelKey] : item.label;
+}
+
+function NavLink({ item, active, dict }: { item: NavItem; active: boolean; dict: Dictionary }) {
   return (
     <Link
       href={item.href}
@@ -34,12 +39,12 @@ function NavLink({ item, active }: { item: NavItem; active: boolean }) {
           active ? "text-gold-bright" : "text-faint group-hover:text-foreground",
         )}
       />
-      {item.label}
+      {navLabel(item, dict)}
     </Link>
   );
 }
 
-export function Sidebar({ identities }: { identities: string[] }) {
+export function Sidebar({ identities, dict }: { identities: string[]; dict: Dictionary }) {
   const pathname = usePathname();
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + "/");
@@ -52,16 +57,16 @@ export function Sidebar({ identities }: { identities: string[] }) {
       </div>
 
       <nav className="mt-8 flex flex-1 flex-col gap-1">
-        <NavLink item={dashboardNavItem} active={isActive(dashboardNavItem.href)} />
+        <NavLink item={dashboardNavItem} active={isActive(dashboardNavItem.href)} dict={dict} />
 
         {groups.map((group) => (
           <div key={group.id} className="mt-4 first:mt-0">
             <p className="px-3 text-[11px] font-semibold uppercase tracking-wide text-faint">
-              {group.label}
+              {group.labelKey ? dict[group.labelKey] : group.label}
             </p>
             <div className="mt-1 flex flex-col gap-1">
               {group.items.map((item) => (
-                <NavLink key={item.href} item={item} active={isActive(item.href)} />
+                <NavLink key={item.href} item={item} active={isActive(item.href)} dict={dict} />
               ))}
             </div>
           </div>
@@ -69,7 +74,7 @@ export function Sidebar({ identities }: { identities: string[] }) {
 
         <div className="mt-4 flex flex-col gap-1 border-t border-border pt-4">
           {standaloneNavItems.map((item) => (
-            <NavLink key={item.href} item={item} active={isActive(item.href)} />
+            <NavLink key={item.href} item={item} active={isActive(item.href)} dict={dict} />
           ))}
         </div>
       </nav>
@@ -77,16 +82,14 @@ export function Sidebar({ identities }: { identities: string[] }) {
       <div className="mt-4 rounded-2xl border border-gold/20 bg-gradient-to-b from-gold/10 to-transparent p-4">
         <div className="mb-1 flex items-center gap-2 text-gold-bright">
           <Sparkles className="size-4" />
-          <span className="text-sm font-semibold">Go Premium</span>
+          <span className="text-sm font-semibold">{dict["nav.goPremium"]}</span>
         </div>
-        <p className="text-xs text-muted">
-          Unlock all programs, Barnabas coaching & advanced insights.
-        </p>
+        <p className="text-xs text-muted">{dict["nav.goPremiumBlurb"]}</p>
         <Link
           href="/pricing"
           className="mt-3 inline-flex h-9 w-full items-center justify-center rounded-full bg-gradient-to-b from-gold-bright to-gold text-sm font-semibold text-background transition hover:brightness-105"
         >
-          Start free trial
+          {dict["nav.startFreeTrial"]}
         </Link>
       </div>
 
@@ -95,7 +98,7 @@ export function Sidebar({ identities }: { identities: string[] }) {
         className="mt-2 flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-faint transition-colors hover:bg-surface-2/60 hover:text-foreground"
       >
         <ShieldCheck className="size-5 text-faint" />
-        Admin
+        {dict["nav.admin"]}
       </Link>
     </aside>
   );

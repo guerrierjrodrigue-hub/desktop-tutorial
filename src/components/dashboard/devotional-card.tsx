@@ -2,9 +2,12 @@ import Link from "next/link";
 import { BookOpen, HandHeart } from "lucide-react";
 import { dailyDevotional } from "@/data/devotional";
 import { Card } from "@/components/ui/card";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 
-export function DevotionalCard() {
+export async function DevotionalCard() {
   const { verse, prayer, quote } = dailyDevotional;
+  const dict = await getDictionary(await getLocale());
   return (
     <Card className="relative overflow-hidden bg-gradient-to-br from-green-deep/60 to-surface">
       <div className="pointer-events-none absolute -right-8 -top-8 size-40 rounded-full bg-gold/10 blur-2xl" />
@@ -12,7 +15,7 @@ export function DevotionalCard() {
         <div className="flex items-center gap-2 text-gold-bright">
           <BookOpen className="size-4" />
           <span className="text-xs font-semibold uppercase tracking-wide">
-            Verse of the day
+            {dict["spiritual.verseOfDay"]}
           </span>
         </div>
         <blockquote className="mt-3 font-serif text-xl leading-snug">
@@ -26,7 +29,7 @@ export function DevotionalCard() {
           <div className="flex items-center gap-2 text-muted">
             <HandHeart className="size-4" />
             <span className="text-xs font-semibold uppercase tracking-wide">
-              Prayer of the day
+              {dict["spiritual.prayerOfDay"]}
             </span>
           </div>
           <p className="mt-2 text-sm leading-relaxed text-foreground/90">
@@ -40,7 +43,7 @@ export function DevotionalCard() {
           href="/spiritual"
           className="mt-4 inline-flex text-sm font-semibold text-gold-bright hover:underline"
         >
-          Open today&apos;s devotional →
+          {dict["spiritual.openDevotional"]} →
         </Link>
       </div>
     </Card>

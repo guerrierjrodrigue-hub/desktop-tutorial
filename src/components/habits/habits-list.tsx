@@ -12,7 +12,7 @@ import type { Habit } from "@/types";
 
 const ICON_CHOICES = ["Check", "Dumbbell", "BookOpen", "Droplet", "Moon", "Sun", "Heart", "Brain"];
 
-export function HabitsList({ initial }: { initial: Habit[] }) {
+export function HabitsList({ initial, title }: { initial: Habit[]; title: string }) {
   const [habits, setHabits] = useState(initial);
   const [composing, setComposing] = useState(false);
   const [label, setLabel] = useState("");
@@ -58,7 +58,7 @@ export function HabitsList({ initial }: { initial: Habit[] }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Today&apos;s habits</CardTitle>
+        <CardTitle>{title}</CardTitle>
         <span className="text-xs font-semibold text-gold-bright">
           {done}/{habits.length}
         </span>

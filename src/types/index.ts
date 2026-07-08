@@ -124,6 +124,13 @@ export interface DailyStats {
   waterGoalMl: number;
 }
 
+export interface FoodLogEntry {
+  id: string;
+  name: string;
+  calories: number;
+  proteinG: number;
+}
+
 export interface Recipe {
   id: string;
   name: string;
