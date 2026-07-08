@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
+import { sendWelcomeEmail } from "@/lib/email";
 
 export interface AuthState {
   error?: string;
@@ -45,6 +46,7 @@ export async function emailAuthAction(
       },
     });
     if (error) return { error: error.message };
+    void sendWelcomeEmail(email, name || email.split("@")[0]);
   } else {
     const { error } = await supabase.auth.signInWithPassword({
       email,

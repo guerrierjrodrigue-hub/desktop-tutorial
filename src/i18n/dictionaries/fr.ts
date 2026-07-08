@@ -183,6 +183,8 @@ const fr: Dictionary = {
   "notifications.title": "Notifications",
   "notifications.markAllRead": "Tout marquer comme lu",
   "notifications.empty": "Aucune notification pour l'instant.",
+
+  "community.noPostsYet": "Aucune publication pour l'instant — sois le premier à partager un témoignage, une avancée ou une demande de prière.",
 } as const;
 
 export default fr;

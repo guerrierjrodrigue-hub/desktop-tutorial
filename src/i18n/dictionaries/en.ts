@@ -201,6 +201,9 @@ const en = {
   "notifications.title": "Notifications",
   "notifications.markAllRead": "Mark all read",
   "notifications.empty": "No notifications yet.",
+
+  // Community
+  "community.noPostsYet": "No posts yet — be the first to share a testimony, progress update, or prayer request.",
 } as const;
 
 export default en;

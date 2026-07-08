@@ -32,16 +32,22 @@ export async function generateMetadata({
 
 export default async function ProgramDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ programId: string }>;
+  searchParams: Promise<{ week?: string }>;
 }) {
   const { programId } = await params;
+  const { week } = await searchParams;
   const program = await getProgramBySlug(programId);
   if (!program) notFound();
 
   const user = await getCurrentUser();
   const locked = program.premium && !user.isPremium;
-  const firstWeek = program.schedule[0];
+
+  const requestedWeek = Number(week) || 1;
+  const activeWeek =
+    program.schedule.find((w) => w.week === requestedWeek) ?? program.schedule[0];
 
   return (
     <>
@@ -87,27 +93,41 @@ export default async function ProgramDetailPage({
               {formatDuration(program.durationMinutes)} / session
             </span>
           </div>
-          {!locked && (
-            <Link href={`/fitness/${program.id}/session/${firstWeek.days[0].id}`}>
-              <Button className="mt-6">Start week 1</Button>
+          {!locked && activeWeek?.days[0] && (
+            <Link href={`/fitness/${program.id}/session/${activeWeek.days[0].id}`}>
+              <Button className="mt-6">Start week {activeWeek.week}</Button>
             </Link>
           )}
         </div>
 
         {locked && <PremiumGate />}
 
-        {/* Week 1 schedule */}
         <div className={locked ? "pointer-events-none mt-8 opacity-40 blur-sm select-none" : "mt-8"} aria-hidden={locked}>
+          {program.schedule.length > 1 && (
+            <div className="mb-4 flex flex-wrap gap-2">
+              {program.schedule.map((w) => (
+                <Link key={w.week} href={`/fitness/${program.id}?week=${w.week}`} scroll={false}>
+                  <Badge
+                    variant={w.week === activeWeek?.week ? "gold" : "neutral"}
+                    className="cursor-pointer px-3 py-1.5"
+                  >
+                    Week {w.week}
+                  </Badge>
+                </Link>
+              ))}
+            </div>
+          )}
+
           <h2 className="font-serif text-xl font-semibold">
-            Week {firstWeek.week}
+            Week {activeWeek?.week}
           </h2>
           <p className="text-sm text-muted">
-            {program.weeks} weeks of progressive overload. Here&apos;s your first
-            week.
+            {program.weeks} weeks of progressive overload — increase weight or
+            reps each week as it gets easier.
           </p>
 
           <div className="mt-4 space-y-4">
-            {firstWeek.days.map((day, i) => (
+            {activeWeek?.days.map((day, i) => (
               <Card key={day.id}>
                 <div className="mb-3 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
