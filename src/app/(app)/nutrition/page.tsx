@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
-import { Flame, Beef, Wheat, Droplet, Clock } from "lucide-react";
+import { Flame, Beef, Wheat, Droplet } from "lucide-react";
 import { Topbar } from "@/components/layout/topbar";
 import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Ring } from "@/components/ui/ring";
 import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
 import { FoodLogger } from "@/components/nutrition/food-logger";
-import { recipes, macroTargets } from "@/data/nutrition";
+import { RecipesSection } from "@/components/nutrition/recipes-section";
+import { macroTargets } from "@/data/nutrition";
 import { getTodayStats } from "@/lib/queries/stats";
-import { getFoodLogsToday } from "@/lib/queries/nutrition";
+import { getFoodLogsToday, getRecipes } from "@/lib/queries/nutrition";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 
 export const metadata: Metadata = {
   title: "Nutrition",
@@ -17,7 +19,12 @@ export const metadata: Metadata = {
 };
 
 export default async function NutritionPage() {
-  const [todayStats, foodLogs] = await Promise.all([getTodayStats(), getFoodLogsToday()]);
+  const [todayStats, foodLogs, recipes, dict] = await Promise.all([
+    getTodayStats(),
+    getFoodLogsToday(),
+    getRecipes(),
+    getDictionary(await getLocale()),
+  ]);
   const consumed = foodLogs.reduce(
     (sum, e) => ({ calories: sum.calories + e.calories, proteinG: sum.proteinG + e.proteinG }),
     { calories: 0, proteinG: 0 },
@@ -127,46 +134,7 @@ export default async function NutritionPage() {
         </div>
 
         {/* Recipes */}
-        <div className="mt-8">
-          <div className="mb-4 flex items-end justify-between">
-            <div>
-              <h2 className="font-serif text-xl font-semibold">Recipes</h2>
-              <p className="text-sm text-muted">
-                High-protein, whole-food meals to fuel your training.
-              </p>
-            </div>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {recipes.map((r) => (
-              <Card key={r.id} className="p-0">
-                <div className="h-24 rounded-t-[var(--radius)] bg-gradient-to-br from-green-deep to-surface-2" />
-                <div className="p-4">
-                  <h3 className="font-serif font-semibold leading-tight">
-                    {r.name}
-                  </h3>
-                  <div className="mt-2 flex flex-wrap gap-1.5">
-                    {r.tags.map((t) => (
-                      <Badge key={t} variant="neutral" className="text-[10px]">
-                        {t}
-                      </Badge>
-                    ))}
-                  </div>
-                  <div className="mt-3 flex items-center justify-between text-xs text-muted">
-                    <span className="flex items-center gap-1">
-                      <Flame className="size-3.5 text-gold/70" />
-                      {r.calories} kcal
-                    </span>
-                    <span>P {r.proteinG}g</span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="size-3.5" />
-                      {r.minutes}m
-                    </span>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
+        <RecipesSection recipes={recipes} dict={dict} />
       </main>
     </>
   );

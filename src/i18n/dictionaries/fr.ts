@@ -158,6 +158,13 @@ const fr: Dictionary = {
   "fitness.categoryMobility": "Mobilité",
   "fitness.categoryBodyweight": "Poids du corps",
 
+  "nutrition.categoryAll": "Tous",
+  "nutrition.categoryWeightLoss": "Perte de poids",
+  "nutrition.categoryMuscleGain": "Prise de muscle",
+  "nutrition.categoryFasting": "Jeûne",
+  "nutrition.categoryBreakfast": "Petit-déjeuner",
+  "nutrition.categoryQuickEasy": "Rapide & facile",
+
   "community.title": "Communauté",
   "community.subtitle": "Encourage et sois encouragé. Comme le fer aiguise le fer.",
   "community.yourGroups": "Tes groupes",
@@ -179,6 +186,9 @@ const fr: Dictionary = {
   "challenges.friends": "Amis",
   "challenges.church": "Église",
   "challenges.percentComplete": "terminé",
+  "challenges.titlePlaceholder": "Nom du défi…",
+  "challenges.descriptionPlaceholder": "En quoi consiste le défi ?",
+  "challenges.daysUnit": "jours",
 
   "notifications.title": "Notifications",
   "notifications.markAllRead": "Tout marquer comme lu",

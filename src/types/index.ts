@@ -133,6 +133,8 @@ export interface FoodLogEntry {
   proteinG: number;
 }
 
+export type RecipeCategory = "weight-loss" | "muscle-gain" | "fasting" | "breakfast" | "quick-easy";
+
 export interface Recipe {
   id: string;
   name: string;
@@ -142,6 +144,7 @@ export interface Recipe {
   fatG: number;
   minutes: number;
   tags: string[];
+  category: RecipeCategory | null;
 }
 
 export interface ReadingPlan {
