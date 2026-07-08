@@ -14,7 +14,7 @@ export async function RecommendationsCard() {
     getHabits(),
     getDictionary(await getLocale()),
   ]);
-  const recs = getRecommendations(user, programs, habits);
+  const recs = getRecommendations(user, programs, habits, dict);
   if (!recs.length) return null;
 
   return (

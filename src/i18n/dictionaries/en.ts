@@ -85,6 +85,11 @@ const en = {
   "spiritual.verseOfDay": "Verse of the day",
   "spiritual.prayerOfDay": "Prayer of the day",
   "spiritual.openDevotional": "Open today's devotional",
+  "spiritual.todaysDevotional": "Today's devotional",
+  "spiritual.prayer": "Prayer",
+  "spiritual.markComplete": "Mark as complete",
+  "spiritual.verseMemorization": "Verse memorization",
+  "spiritual.mastered": "mastered",
   "spiritual.bible": "Bible",
   "spiritual.bibleSubtitle": "Read the complete Bible in French or English.",
   "spiritual.readBible": "Read the Bible",
@@ -99,6 +104,51 @@ const en = {
   "empty.browseChallenges": "Browse challenges",
   "empty.noOneOnLeaderboard": "No one has joined a challenge yet — be the first.",
   "empty.noChallengesAvailable": "No challenges are available right now — check back soon.",
+
+  // Onboarding wizard
+  "onboarding.step": "Step",
+  "onboarding.of": "of",
+  "onboarding.languageTitle": "Choose your language",
+  "onboarding.languageSubtitle": "You can change this anytime from your profile.",
+  "onboarding.goalTitle": "What is your primary goal?",
+  "onboarding.goalSubtitle": "We'll shape your daily rhythm around this.",
+  "onboarding.identityTitle": "Who do you want to become?",
+  "onboarding.identitySubtitle": "Pick as many as resonate — the app adapts to each one.",
+  "onboarding.summaryTitle": "You're all set",
+  "onboarding.summarySubtitle": "Here's the journey we're building for you.",
+  "onboarding.primaryGoalLabel": "Primary goal",
+  "onboarding.identitiesLabel": "Identities",
+  "onboarding.back": "Back",
+  "onboarding.enterApp": "Enter Kingdom Athlete",
+
+  // Onboarding goal options
+  "goal.buildMuscle": "Build Muscle",
+  "goal.loseWeight": "Lose Weight",
+  "goal.improveEndurance": "Improve Endurance",
+  "goal.becomeDisciplined": "Become More Disciplined",
+  "goal.liveHealthier": "Live Healthier",
+  "goal.buildHabits": "Build Better Habits",
+  "goal.improveMentalWellness": "Improve Mental Wellness",
+  "goal.growSpiritually": "Grow Spiritually",
+  "goal.increaseProductivity": "Increase Productivity",
+
+  // Onboarding identity options
+  "identity.athlete": "Athlete",
+  "identity.disciplined": "Disciplined Person",
+  "identity.christian": "Christian",
+  "identity.student": "Student",
+  "identity.entrepreneur": "Entrepreneur",
+  "identity.wellness": "Wellness Seeker",
+  "identity.parent": "Parent",
+  "identity.creator": "Creator",
+
+  // Recommendations widget
+  "recommendations.matchesGoal": "Matches your goal:",
+  "recommendations.wellRounded": "A well-rounded place to start.",
+  "recommendations.takeFocusSession": "Take a Focus session",
+  "recommendations.focusDescription": "A quiet 15-minute reset can help momentum return.",
+  "recommendations.joinChallenge": "Join a challenge",
+  "recommendations.communityDescription": "Iron sharpens iron — find accountability in Community.",
 } as const;
 
 export default en;

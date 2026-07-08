@@ -5,8 +5,9 @@ import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
 export async function QuoteOfDayCard() {
-  const quote = getQuoteOfDay();
-  const dict = await getDictionary(await getLocale());
+  const locale = await getLocale();
+  const dict = await getDictionary(locale);
+  const quote = getQuoteOfDay(locale);
 
   return (
     <Card className="relative overflow-hidden bg-gradient-to-br from-gold/10 to-surface">

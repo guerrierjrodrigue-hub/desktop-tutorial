@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { BookOpen, HandHeart } from "lucide-react";
-import { dailyDevotional } from "@/data/devotional";
+import { getDailyDevotional } from "@/data/devotional";
 import { Card } from "@/components/ui/card";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
 export async function DevotionalCard() {
-  const { verse, prayer, quote } = dailyDevotional;
-  const dict = await getDictionary(await getLocale());
+  const locale = await getLocale();
+  const dict = await getDictionary(locale);
+  const { verse, prayer, quote } = getDailyDevotional(locale);
   return (
     <Card className="relative overflow-hidden bg-gradient-to-br from-green-deep/60 to-surface">
       <div className="pointer-events-none absolute -right-8 -top-8 size-40 rounded-full bg-gold/10 blur-2xl" />

@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PrayerJournal } from "@/components/spiritual/prayer-journal";
 import { ReadingPlans } from "@/components/spiritual/reading-plans";
-import { dailyDevotional } from "@/data/devotional";
+import { getDailyDevotional } from "@/data/devotional";
 import { readingPlans, memoryVerses } from "@/data/spiritual";
 import { getPrayerRequests } from "@/lib/queries/spiritual";
 import { getLocale } from "@/lib/locale";
@@ -21,8 +21,9 @@ export const metadata: Metadata = {
 };
 
 export default async function SpiritualPage() {
-  const { verse, reflection, prayer } = dailyDevotional;
-  const [prayers, dict] = await Promise.all([getPrayerRequests(), getDictionary(await getLocale())]);
+  const locale = await getLocale();
+  const [prayers, dict] = await Promise.all([getPrayerRequests(), getDictionary(locale)]);
+  const { verse, reflection, prayer } = getDailyDevotional(locale);
 
   return (
     <>
@@ -56,7 +57,7 @@ export default async function SpiritualPage() {
           <div className="pointer-events-none absolute -right-10 -top-10 size-48 rounded-full bg-gold/10 blur-3xl" />
           <div className="relative">
             <Badge variant="gold">
-              <BookOpen className="size-3" /> Today&apos;s devotional
+              <BookOpen className="size-3" /> {dict["spiritual.todaysDevotional"]}
             </Badge>
             <blockquote className="mt-4 max-w-3xl font-serif text-2xl leading-snug">
               “{verse.text}”
@@ -67,11 +68,11 @@ export default async function SpiritualPage() {
             <p className="mt-4 max-w-2xl text-muted">{reflection}</p>
             <div className="mt-5 rounded-xl border border-border bg-black/20 p-4">
               <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted">
-                <HandHeart className="size-4" /> Prayer
+                <HandHeart className="size-4" /> {dict["spiritual.prayer"]}
               </p>
               <p className="mt-2 text-sm leading-relaxed">{prayer}</p>
             </div>
-            <Button className="mt-5">Mark as complete</Button>
+            <Button className="mt-5">{dict["spiritual.markComplete"]}</Button>
           </div>
         </Card>
 
@@ -85,7 +86,7 @@ export default async function SpiritualPage() {
               <CardHeader>
                 <CardTitle>
                   <span className="inline-flex items-center gap-2">
-                    <Brain className="size-4" /> Verse memorization
+                    <Brain className="size-4" /> {dict["spiritual.verseMemorization"]}
                   </span>
                 </CardTitle>
               </CardHeader>
@@ -100,7 +101,7 @@ export default async function SpiritualPage() {
                         {v.reference}
                       </p>
                       <span className="text-xs text-muted">
-                        {Math.round(v.mastery * 100)}% mastered
+                        {Math.round(v.mastery * 100)}% {dict["spiritual.mastered"]}
                       </span>
                     </div>
                     <p className="mt-1.5 font-serif text-sm italic text-foreground/90">

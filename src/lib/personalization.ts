@@ -1,31 +1,43 @@
 import { BookOpen, Compass } from "lucide-react";
 import type { NavItem } from "@/lib/nav";
+import type { DictionaryKey } from "@/i18n/dictionaries/en";
 import type { CoachId, IdentityId } from "@/types";
 
 /** Selectable identities in onboarding — "who do you want to become?" */
-export const IDENTITY_OPTIONS: { id: IdentityId; label: string }[] = [
-  { id: "athlete", label: "Athlete" },
-  { id: "disciplined", label: "Disciplined Person" },
-  { id: "christian", label: "Christian" },
-  { id: "student", label: "Student" },
-  { id: "entrepreneur", label: "Entrepreneur" },
-  { id: "wellness", label: "Wellness Seeker" },
-  { id: "parent", label: "Parent" },
-  { id: "creator", label: "Creator" },
+export const IDENTITY_OPTIONS: { id: IdentityId; labelKey: DictionaryKey }[] = [
+  { id: "athlete", labelKey: "identity.athlete" },
+  { id: "disciplined", labelKey: "identity.disciplined" },
+  { id: "christian", labelKey: "identity.christian" },
+  { id: "student", labelKey: "identity.student" },
+  { id: "entrepreneur", labelKey: "identity.entrepreneur" },
+  { id: "wellness", labelKey: "identity.wellness" },
+  { id: "parent", labelKey: "identity.parent" },
+  { id: "creator", labelKey: "identity.creator" },
 ];
 
-/** Selectable primary goals in onboarding. */
-export const PRIMARY_GOAL_OPTIONS = [
-  "Build Muscle",
-  "Lose Weight",
-  "Improve Endurance",
-  "Become More Disciplined",
-  "Live Healthier",
-  "Build Better Habits",
-  "Improve Mental Wellness",
-  "Grow Spiritually",
-  "Increase Productivity",
-] as const;
+export type GoalId =
+  | "build-muscle"
+  | "lose-weight"
+  | "improve-endurance"
+  | "become-disciplined"
+  | "live-healthier"
+  | "build-habits"
+  | "improve-mental-wellness"
+  | "grow-spiritually"
+  | "increase-productivity";
+
+/** Selectable primary goals in onboarding — `id` is the stable stored value; `labelKey` is display-only. */
+export const PRIMARY_GOAL_OPTIONS: { id: GoalId; labelKey: DictionaryKey }[] = [
+  { id: "build-muscle", labelKey: "goal.buildMuscle" },
+  { id: "lose-weight", labelKey: "goal.loseWeight" },
+  { id: "improve-endurance", labelKey: "goal.improveEndurance" },
+  { id: "become-disciplined", labelKey: "goal.becomeDisciplined" },
+  { id: "live-healthier", labelKey: "goal.liveHealthier" },
+  { id: "build-habits", labelKey: "goal.buildHabits" },
+  { id: "improve-mental-wellness", labelKey: "goal.improveMentalWellness" },
+  { id: "grow-spiritually", labelKey: "goal.growSpiritually" },
+  { id: "increase-productivity", labelKey: "goal.increaseProductivity" },
+];
 
 /**
  * The Purpose pillar's single nav item adapts to the user's identities:

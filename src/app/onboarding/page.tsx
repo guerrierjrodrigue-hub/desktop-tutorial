@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { OnboardingWizard } from "@/components/onboarding/onboarding-wizard";
 import { getCurrentUser } from "@/lib/queries/profile";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 
 export const metadata: Metadata = {
   title: "Welcome",
@@ -13,11 +15,17 @@ export default async function OnboardingPage({
   searchParams: Promise<{ edit?: string }>;
 }) {
   const { edit } = await searchParams;
-  const user = edit ? await getCurrentUser() : null;
+  const [user, locale] = await Promise.all([
+    edit ? getCurrentUser() : Promise.resolve(null),
+    getLocale(),
+  ]);
+  const dict = await getDictionary(locale);
 
   return (
     <div className="bg-ambient flex min-h-svh flex-col items-center justify-center px-4 py-10">
       <OnboardingWizard
+        locale={locale}
+        dict={dict}
         initialGoal={user?.primaryGoal}
         initialIdentities={user?.identities}
       />
