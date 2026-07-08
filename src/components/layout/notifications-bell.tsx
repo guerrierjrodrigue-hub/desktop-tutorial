@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Bell, Check } from "lucide-react";
 import { Icon } from "@/components/ui/icon";
-import { notifications as seed } from "@/data/notifications";
+import type { AppNotification } from "@/data/notifications";
+import type { Dictionary } from "@/i18n/dictionaries/en";
 import { cn } from "@/lib/utils";
 
 const accentClass: Record<string, string> = {
@@ -12,8 +13,14 @@ const accentClass: Record<string, string> = {
   bronze: "bg-bronze/20 text-bronze",
 };
 
-export function NotificationsBell() {
-  const [items, setItems] = useState(seed);
+export function NotificationsBell({
+  initial,
+  dict,
+}: {
+  initial: AppNotification[];
+  dict: Dictionary;
+}) {
+  const [items, setItems] = useState(initial);
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const unread = items.filter((n) => !n.read).length;
@@ -61,17 +68,22 @@ export function NotificationsBell() {
           className="glass absolute right-0 top-12 z-50 w-80 overflow-hidden rounded-2xl border border-border shadow-2xl"
         >
           <div className="flex items-center justify-between border-b border-border px-4 py-3">
-            <span className="text-sm font-semibold">Notifications</span>
+            <span className="text-sm font-semibold">{dict["notifications.title"]}</span>
             {unread > 0 && (
               <button
                 onClick={markAllRead}
                 className="flex items-center gap-1 text-xs font-medium text-gold-bright hover:underline"
               >
-                <Check className="size-3.5" /> Mark all read
+                <Check className="size-3.5" /> {dict["notifications.markAllRead"]}
               </button>
             )}
           </div>
 
+          {items.length === 0 ? (
+            <p className="px-4 py-6 text-center text-sm text-muted">
+              {dict["notifications.empty"]}
+            </p>
+          ) : (
           <ul className="max-h-96 overflow-y-auto">
             {items.map((n) => (
               <li
@@ -100,6 +112,7 @@ export function NotificationsBell() {
               </li>
             ))}
           </ul>
+          )}
         </div>
       )}
     </div>
