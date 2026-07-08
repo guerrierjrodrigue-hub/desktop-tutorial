@@ -32,7 +32,6 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
       {/* OAuth */}
       <div className="mt-8 space-y-3">
         <OAuthButton provider="google" label="Google" />
-        <OAuthButton provider="apple" label="Apple" />
       </div>
 
       <div className="my-6 flex items-center gap-3 text-xs text-faint">

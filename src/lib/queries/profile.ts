@@ -46,7 +46,24 @@ export async function getCurrentUser(): Promise<UserProfile> {
     .eq("id", user.id)
     .single();
 
-  return data ? mapProfile(data) : mockUser;
+  if (data) return mapProfile(data);
+
+  // Authenticated but no profile row yet (e.g. the database migrations
+  // haven't been applied, so the handle_new_user trigger never ran). Return
+  // a blank profile derived from the auth record — a real signed-in user
+  // must never see the demo persona's stats.
+  return {
+    id: user.id,
+    name: user.user_metadata?.full_name ?? user.email?.split("@")[0] ?? "Athlete",
+    email: user.email ?? "",
+    avatarUrl: user.user_metadata?.avatar_url ?? undefined,
+    level: "beginner",
+    isPremium: false,
+    xp: 0,
+    streak: 0,
+    joinedAt: user.created_at,
+    identities: [],
+  };
 }
 
 /** Whether a real authenticated session exists (false in demo mode). */
