@@ -10,16 +10,17 @@ import { getChallenges, getChallengeLeaderboard } from "@/lib/queries/challenges
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 import type { Challenge } from "@/types";
+import type { DictionaryKey } from "@/i18n/dictionaries/en";
 
 export const metadata: Metadata = {
   title: "Challenges",
   description: "Personal, friend, and church challenges. Compete, encourage, and grow together.",
 };
 
-const typeMeta: Record<Challenge["type"], { icon: typeof Users; label: string }> = {
-  personal: { icon: UserRound, label: "Personal" },
-  friends: { icon: Users, label: "Friends" },
-  church: { icon: Church, label: "Church" },
+const typeMeta: Record<Challenge["type"], { icon: typeof Users; labelKey: DictionaryKey }> = {
+  personal: { icon: UserRound, labelKey: "challenges.personal" },
+  friends: { icon: Users, labelKey: "challenges.friends" },
+  church: { icon: Church, labelKey: "challenges.church" },
 };
 
 export default async function ChallengesPage() {
@@ -33,10 +34,7 @@ export default async function ChallengesPage() {
     <>
       <Topbar title="Challenges" />
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6">
-        <PageHeader
-          title="Challenges"
-          subtitle="Discipline is easier together. Join a challenge and keep the streak alive."
-        />
+        <PageHeader title={dict["challenges.title"]} subtitle={dict["challenges.subtitle"]} />
 
         <div className="grid gap-5 lg:grid-cols-3">
           <div className="space-y-4 lg:col-span-2">
@@ -59,7 +57,7 @@ export default async function ChallengesPage() {
                         <h3 className="font-serif text-lg font-semibold leading-tight">
                           {c.title}
                         </h3>
-                        <Badge variant="neutral">{meta.label}</Badge>
+                        <Badge variant="neutral">{dict[meta.labelKey]}</Badge>
                       </div>
                       <p className="mt-1 text-sm text-muted">{c.description}</p>
                     </div>
@@ -70,11 +68,11 @@ export default async function ChallengesPage() {
                     <div className="mt-2 flex items-center justify-between text-xs text-muted">
                       <span className="flex items-center gap-1.5">
                         <Users className="size-3.5" />
-                        {c.participants.toLocaleString()} joined
+                        {c.participants.toLocaleString()} {dict["challenges.joined"]}
                       </span>
                       <span className="flex items-center gap-1.5">
                         <Flame className="size-3.5 text-gold/70" />
-                        {c.daysLeft} days left
+                        {c.daysLeft} {dict["challenges.daysLeft"]}
                       </span>
                     </div>
                   </div>
@@ -85,13 +83,11 @@ export default async function ChallengesPage() {
             <Card className="flex items-center justify-between bg-gradient-to-br from-gold/10 to-surface">
               <div>
                 <h3 className="font-serif text-lg font-semibold">
-                  Start your own challenge
+                  {dict["challenges.startOwn"]}
                 </h3>
-                <p className="text-sm text-muted">
-                  Rally your friends or your whole church.
-                </p>
+                <p className="text-sm text-muted">{dict["challenges.startOwnSubtitle"]}</p>
               </div>
-              <Button>Create</Button>
+              <Button>{dict["challenges.create"]}</Button>
             </Card>
           </div>
 
@@ -101,7 +97,7 @@ export default async function ChallengesPage() {
               <CardHeader>
                 <CardTitle>
                   <span className="inline-flex items-center gap-2">
-                    <Trophy className="size-4 text-gold-bright" /> Leaderboard
+                    <Trophy className="size-4 text-gold-bright" /> {dict["challenges.leaderboard"]}
                   </span>
                 </CardTitle>
               </CardHeader>
@@ -135,7 +131,7 @@ export default async function ChallengesPage() {
                         {row.name}
                         {row.you && (
                           <span className="ml-1.5 text-xs text-gold-bright">
-                            (you)
+                            ({dict["challenges.you"]})
                           </span>
                         )}
                       </span>

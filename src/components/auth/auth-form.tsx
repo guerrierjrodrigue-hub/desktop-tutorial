@@ -64,7 +64,7 @@ export function AuthForm({ mode, dict }: { mode: "login" | "signup"; dict: Dicti
 
         {!isSignup && (
           <div className="text-right">
-            <Link href="#" className="text-xs text-gold-bright hover:underline">
+            <Link href="/forgot-password" className="text-xs text-gold-bright hover:underline">
               {dict["auth.forgotPassword"]}
             </Link>
           </div>

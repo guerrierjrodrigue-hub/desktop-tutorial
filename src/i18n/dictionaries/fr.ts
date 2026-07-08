@@ -33,6 +33,7 @@ const fr: Dictionary = {
   "common.loading": "Un instant…",
   "common.language": "Langue",
   "common.signOut": "Se déconnecter",
+  "common.all": "Tout",
 
   "auth.welcomeBack": "Content de vous revoir",
   "auth.createAccount": "Créez votre compte",
@@ -49,6 +50,16 @@ const fr: Dictionary = {
   "auth.fullName": "Nom complet",
   "auth.emailAddress": "Adresse e-mail",
   "auth.password": "Mot de passe",
+  "auth.forgotPasswordTitle": "Mot de passe oublié ?",
+  "auth.forgotPasswordSubtitle": "Entrez votre e-mail et nous vous enverrons un lien de réinitialisation.",
+  "auth.sendResetLink": "Envoyer le lien",
+  "auth.resetLinkSent": "Si un compte existe pour cet e-mail, un lien de réinitialisation est en route.",
+  "auth.backToLogin": "Retour à la connexion",
+  "auth.resetPasswordTitle": "Choisissez un nouveau mot de passe",
+  "auth.resetPasswordSubtitle": "Choisissez-en un dont vous vous souviendrez.",
+  "auth.newPassword": "Nouveau mot de passe",
+  "auth.confirmPassword": "Confirmer le mot de passe",
+  "auth.updatePassword": "Mettre à jour le mot de passe",
 
   "dashboard.progress": "Niveau et progression",
   "dashboard.todaysWorkout": "Entraînement du jour",
@@ -136,6 +147,38 @@ const fr: Dictionary = {
   "recommendations.focusDescription": "Une pause calme de 15 minutes peut relancer votre élan.",
   "recommendations.joinChallenge": "Rejoindre un défi",
   "recommendations.communityDescription": "Le fer aiguise le fer — trouvez du soutien dans la Communauté.",
+
+  "fitness.title": "Programmes",
+  "fitness.subtitle": "Entraîne-toi avec intention. Chaque programme est conçu autour de la progression, de la forme et du repos.",
+  "fitness.categoryAll": "Tous",
+  "fitness.categoryStrength": "Force",
+  "fitness.categoryFatLoss": "Perte de graisse",
+  "fitness.categoryRunning": "Course",
+  "fitness.categoryHiit": "HIIT",
+  "fitness.categoryMobility": "Mobilité",
+  "fitness.categoryBodyweight": "Poids du corps",
+
+  "community.title": "Communauté",
+  "community.subtitle": "Encourage et sois encouragé. Comme le fer aiguise le fer.",
+  "community.yourGroups": "Tes groupes",
+  "community.members": "membres",
+  "community.discoverGroups": "Découvrir des groupes",
+
+  "coach.pickerSubtitle": "Choisis le coach qui correspond à ton besoin du jour. Tu peux changer à tout moment.",
+
+  "challenges.title": "Défis",
+  "challenges.subtitle": "La discipline est plus facile à plusieurs. Rejoins un défi et garde la flamme.",
+  "challenges.joined": "participants",
+  "challenges.daysLeft": "jours restants",
+  "challenges.startOwn": "Lance ton propre défi",
+  "challenges.startOwnSubtitle": "Rallie tes amis ou toute ton église.",
+  "challenges.create": "Créer",
+  "challenges.leaderboard": "Classement",
+  "challenges.you": "toi",
+  "challenges.personal": "Personnel",
+  "challenges.friends": "Amis",
+  "challenges.church": "Église",
+  "challenges.percentComplete": "terminé",
 } as const;
 
 export default fr;
