@@ -29,7 +29,9 @@ Order matters: **Supabase → Stripe → OpenAI → Vercel**.
    (Or paste each file into the SQL editor in order: `0001` → `0002` → `0003`
    → `0004` → `0005` → `seed.sql`.)
    Then run `npm run exercises:enrich` to backfill exercise photos and
-   step-by-step instructions from the public-domain free-exercise-db.
+   step-by-step instructions from the public-domain free-exercise-db, and
+   `npm run programs:expand-weeks` to duplicate each program's week 1 across
+   its full advertised week count (seed.sql only ever seeds week 1).
 3. **Auth providers** — Authentication → Providers:
    - Enable **Email**.
    - Enable **Google** and **Apple** (add each provider's client id/secret).
@@ -91,7 +93,25 @@ replies — the coach still works, just scripted.
 
 ---
 
-## 4. Vercel — deploy
+## 4. Resend — welcome email
+
+Create an API key at [resend.com](https://resend.com) → `RESEND_API_KEY`.
+Without it, signup just skips the email — nothing breaks.
+
+**This one needs a custom domain to actually reach real users.** Resend's
+default sender (`onboarding@resend.dev`) can only deliver to your own Resend
+account email, not to real signups — sending to arbitrary recipients
+requires a domain verified with Resend (Domains → Add Domain → add the DNS
+records it gives you), which in turn requires a domain you control the DNS
+for. The shared `.vercel.app` domain doesn't qualify. Once you have a real
+domain pointed at the app:
+1. Verify it in Resend (Domains → Add Domain).
+2. Set `EMAIL_FROM` to something like `Kingdom Athlete <hello@yourdomain.com>`
+   (defaults to the resend.dev sandbox sender otherwise).
+
+---
+
+## 5. Vercel — deploy
 
 1. **Import** the GitHub repo into Vercel. Framework autodetects as Next.js
    (see `vercel.json`).
@@ -112,7 +132,8 @@ replies — the coach still works, just scripted.
    | `NEXT_PUBLIC_POSTHOG_KEY` | optional (analytics) |
    | `NEXT_PUBLIC_POSTHOG_HOST` | optional, e.g. `https://us.i.posthog.com` |
    | `NEXT_PUBLIC_SENTRY_DSN` | optional (monitoring) |
-   | `RESEND_API_KEY` | optional (email) |
+   | `RESEND_API_KEY` | optional (welcome email — needs a verified domain, see §4) |
+   | `EMAIL_FROM` | optional, e.g. `Kingdom Athlete <hello@yourdomain.com>` |
 
 3. **Deploy.** Then update:
    - Supabase redirect URL → your real Vercel domain + `/auth/callback`
@@ -120,7 +141,7 @@ replies — the coach still works, just scripted.
 
 ---
 
-## 5. Post-deploy smoke test
+## 6. Post-deploy smoke test
 
 - [ ] Sign up with email, confirm a profile row appears in `profiles`.
 - [ ] Google/Apple sign-in round-trips through `/auth/callback`.
@@ -130,6 +151,8 @@ replies — the coach still works, just scripted.
 - [ ] Billing portal opens from the profile.
 - [ ] `/admin` is reachable for your admin user, redirects others.
 - [ ] Barnabas returns live responses.
+- [ ] Welcome email arrives after signup (only once a domain is verified with
+      Resend — see §4).
 
 ---
 

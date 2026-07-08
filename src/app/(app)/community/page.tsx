@@ -4,7 +4,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PostFeed } from "@/components/community/post-feed";
-import { groups } from "@/data/community";
+import { getCommunityPosts, getGroups } from "@/lib/queries/community";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
@@ -14,7 +14,12 @@ export const metadata: Metadata = {
 };
 
 export default async function CommunityPage() {
-  const dict = await getDictionary(await getLocale());
+  const locale = await getLocale();
+  const [posts, groups, dict] = await Promise.all([
+    getCommunityPosts(),
+    getGroups(),
+    getDictionary(locale),
+  ]);
 
   return (
     <>
@@ -24,7 +29,7 @@ export default async function CommunityPage() {
 
         <div className="grid gap-5 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <PostFeed />
+            <PostFeed initial={posts} dict={dict} />
           </div>
 
           <div className="space-y-5">

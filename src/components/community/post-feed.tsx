@@ -6,9 +6,9 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
 import { PostComposer } from "@/components/community/post-composer";
-import { communityPosts } from "@/data/community";
 import { toggleLike } from "@/app/(app)/community/actions";
 import { cn } from "@/lib/utils";
+import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { CommunityPost } from "@/types";
 
 const kindMeta: Record<CommunityPost["kind"], { label: string; variant: "gold" | "green" | "premium" }> = {
@@ -17,8 +17,8 @@ const kindMeta: Record<CommunityPost["kind"], { label: string; variant: "gold" |
   prayer: { label: "Prayer request", variant: "premium" },
 };
 
-export function PostFeed() {
-  const [posts, setPosts] = useState(communityPosts);
+export function PostFeed({ initial, dict }: { initial: CommunityPost[]; dict: Dictionary }) {
+  const [posts, setPosts] = useState(initial);
   const [, startTransition] = useTransition();
 
   function prependPost(post: CommunityPost) {
@@ -42,6 +42,12 @@ export function PostFeed() {
   return (
     <div className="space-y-4">
       <PostComposer onPost={prependPost} />
+
+      {posts.length === 0 && (
+        <p className="rounded-xl border border-dashed border-border bg-surface-2 p-6 text-center text-sm text-muted">
+          {dict["community.noPostsYet"]}
+        </p>
+      )}
 
       {posts.map((post) => {
         const meta = kindMeta[post.kind];

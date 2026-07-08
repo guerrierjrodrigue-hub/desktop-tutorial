@@ -11,7 +11,8 @@
     "test:watch": "vitest",
     "e2e": "playwright test",
     "db:verify": "node --env-file=.env.local scripts/verify-schema.mjs",
-    "exercises:enrich": "node --env-file=.env.local scripts/enrich-exercise-media.mjs"
+    "exercises:enrich": "node --env-file=.env.local scripts/enrich-exercise-media.mjs",
+    "programs:expand-weeks": "node --env-file=.env.local scripts/expand-program-weeks.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.110.0",
@@ -26,6 +27,7 @@
     "posthog-js": "^1.396.5",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "resend": "^6.17.2",
     "stripe": "^22.3.0",
     "tailwind-merge": "^3.6.0"
   },
