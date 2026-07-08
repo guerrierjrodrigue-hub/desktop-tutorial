@@ -3,9 +3,11 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { getCurrentUser } from "@/lib/queries/profile";
 import { levelFromXp } from "@/lib/utils";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 
 export async function ProgressCard() {
-  const currentUser = await getCurrentUser();
+  const [currentUser, dict] = await Promise.all([getCurrentUser(), getDictionary(await getLocale())]);
   const { level, nextLevelXp, progress } = levelFromXp(currentUser.xp);
   const toNext = nextLevelXp - currentUser.xp;
 
@@ -14,17 +16,17 @@ export async function ProgressCard() {
       <div className="flex items-center justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-muted">
-            Level
+            {dict["dashboard.level"]}
           </p>
           <p className="font-serif text-4xl font-semibold text-gradient-gold">
             {level}
           </p>
         </div>
         <div className="flex gap-2">
-          <Stat icon={Flame} label="Day streak" value={currentUser.streak} />
+          <Stat icon={Flame} label={dict["dashboard.dayStreak"]} value={currentUser.streak} />
           <Stat
             icon={Zap}
-            label="Total XP"
+            label={dict["dashboard.totalXp"]}
             value={currentUser.xp.toLocaleString()}
           />
         </div>

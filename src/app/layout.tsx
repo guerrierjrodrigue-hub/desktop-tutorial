@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Fraunces } from "next/font/google";
 import "./globals.css";
 import { AnalyticsProvider } from "@/components/providers/analytics-provider";
+import { LocaleSync } from "@/components/providers/locale-sync";
 import {
   APP_NAME,
   APP_TAGLINE,
@@ -61,7 +62,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a0b0d",
+  themeColor: "#000000",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -78,6 +79,7 @@ export default function RootLayout({
       className={`${inter.variable} ${fraunces.variable} h-full antialiased`}
     >
       <body className="bg-ambient min-h-full">
+        <LocaleSync />
         <AnalyticsProvider>{children}</AnalyticsProvider>
       </body>
     </html>

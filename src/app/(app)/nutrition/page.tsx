@@ -8,20 +8,25 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { FoodLogger } from "@/components/nutrition/food-logger";
 import { recipes, macroTargets } from "@/data/nutrition";
-import { todayStats } from "@/data/dashboard";
+import { getTodayStats } from "@/lib/queries/stats";
+import { getFoodLogsToday } from "@/lib/queries/nutrition";
 
 export const metadata: Metadata = {
   title: "Nutrition",
   description: "Track calories, macros, and hydration. Fuel your body to honor God.",
 };
 
-const consumed = { calories: 1620, proteinG: 96, carbsG: 168, fatG: 52 };
+export default async function NutritionPage() {
+  const [todayStats, foodLogs] = await Promise.all([getTodayStats(), getFoodLogsToday()]);
+  const consumed = foodLogs.reduce(
+    (sum, e) => ({ calories: sum.calories + e.calories, proteinG: sum.proteinG + e.proteinG }),
+    { calories: 0, proteinG: 0 },
+  );
 
-export default function NutritionPage() {
   const macros = [
     { label: "Protein", icon: Beef, value: consumed.proteinG, goal: macroTargets.proteinG, color: "text-green-bright" },
-    { label: "Carbs", icon: Wheat, value: consumed.carbsG, goal: macroTargets.carbsG, color: "text-gold" },
-    { label: "Fat", icon: Droplet, value: consumed.fatG, goal: macroTargets.fatG, color: "text-bronze" },
+    { label: "Carbs", icon: Wheat, value: 0, goal: macroTargets.carbsG, color: "text-gold" },
+    { label: "Fat", icon: Droplet, value: 0, goal: macroTargets.fatG, color: "text-bronze" },
   ];
 
   return (
@@ -118,7 +123,7 @@ export default function NutritionPage() {
 
         {/* Food log */}
         <div className="mt-5">
-          <FoodLogger />
+          <FoodLogger initial={foodLogs} />
         </div>
 
         {/* Recipes */}

@@ -1,0 +1,92 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { Mail, MessageCircle, HelpCircle } from "lucide-react";
+import { MarketingNav } from "@/components/marketing/marketing-nav";
+import { MarketingFooter } from "@/components/marketing/marketing-footer";
+import { ContactForm } from "@/components/marketing/contact-form";
+import { Reveal } from "@/components/ui/reveal";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { APP_SUPPORT_EMAIL } from "@/lib/constants";
+
+export const metadata: Metadata = {
+  title: "Contact",
+  description: "Get in touch with the Kingdom Athlete team.",
+};
+
+export default function ContactPage() {
+  return (
+    <div className="flex min-h-svh flex-col">
+      <MarketingNav />
+      <main className="flex-1">
+        <section className="mx-auto max-w-3xl px-6 pb-8 pt-20 text-center">
+          <Reveal>
+            <Badge variant="gold">Contact</Badge>
+            <h1 className="mt-4 font-serif text-4xl font-semibold tracking-tight sm:text-5xl">
+              We&apos;d love to hear from you
+            </h1>
+            <p className="mx-auto mt-5 max-w-xl text-muted">
+              Questions, feedback, partnership ideas, or just want to say hi —
+              drop us a note and a real person will get back to you.
+            </p>
+          </Reveal>
+        </section>
+
+        <section className="mx-auto grid max-w-5xl gap-5 px-6 pb-24 lg:grid-cols-[1.2fr_1fr]">
+          <Reveal>
+            <Card>
+              <ContactForm />
+            </Card>
+          </Reveal>
+
+          <Reveal delay={0.05} className="space-y-4">
+            <Card className="flex items-start gap-3">
+              <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-gold/12 text-gold-bright">
+                <Mail className="size-4" />
+              </span>
+              <div>
+                <h3 className="font-semibold">Email us</h3>
+                <a
+                  href={`mailto:${APP_SUPPORT_EMAIL}`}
+                  className="text-sm text-gold-bright hover:underline"
+                >
+                  {APP_SUPPORT_EMAIL}
+                </a>
+                <p className="mt-1 text-xs text-faint">We reply within 1-2 business days.</p>
+              </div>
+            </Card>
+            <Card className="flex items-start gap-3">
+              <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-green/20 text-green-bright">
+                <MessageCircle className="size-4" />
+              </span>
+              <div>
+                <h3 className="font-semibold">Talk to Barnabas</h3>
+                <p className="text-sm text-muted">
+                  Product questions inside the app? Your AI coach can often
+                  answer faster than we can.
+                </p>
+              </div>
+            </Card>
+            <Card className="flex items-start gap-3">
+              <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-bronze/20 text-bronze">
+                <HelpCircle className="size-4" />
+              </span>
+              <div>
+                <h3 className="font-semibold">Common questions</h3>
+                <p className="text-sm text-muted">
+                  Billing, programs, and account questions are often answered
+                  in our{" "}
+                  <Link href="/help" className="text-gold-bright hover:underline">
+                    Help Center
+                  </Link>
+                  .
+                </p>
+              </div>
+            </Card>
+          </Reveal>
+        </section>
+      </main>
+      <MarketingFooter />
+    </div>
+  );
+}

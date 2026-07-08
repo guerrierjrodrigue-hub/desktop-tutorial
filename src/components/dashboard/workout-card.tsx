@@ -5,15 +5,18 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { workoutOfDay, programs } from "@/data/programs";
 import { formatDuration } from "@/lib/utils";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 
-export function WorkoutCard() {
+export async function WorkoutCard() {
   const program = programs[0];
+  const dict = await getDictionary(await getLocale());
   return (
     <Card className="relative overflow-hidden">
       <div className="pointer-events-none absolute -left-10 -bottom-10 size-40 rounded-full bg-green/15 blur-2xl" />
       <div className="relative">
         <div className="flex items-center justify-between">
-          <Badge variant="green">Today&apos;s workout</Badge>
+          <Badge variant="green">{dict["dashboard.todaysWorkout"]}</Badge>
           <span className="flex items-center gap-1.5 text-sm text-muted">
             <Clock className="size-4" />
             {formatDuration(workoutOfDay.durationMinutes)}
@@ -44,9 +47,12 @@ export function WorkoutCard() {
           ))}
         </ul>
 
-        <Link href={`/fitness/${program.id}`} className="mt-5 block">
+        <Link
+          href={`/fitness/${program.id}/session/${workoutOfDay.id}`}
+          className="mt-5 block"
+        >
           <Button className="w-full group">
-            Start workout
+            {dict["dashboard.startWorkout"]}
             <ArrowRight className="transition-transform group-hover:translate-x-0.5" />
           </Button>
         </Link>

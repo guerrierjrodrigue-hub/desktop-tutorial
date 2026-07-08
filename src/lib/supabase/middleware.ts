@@ -16,52 +16,70 @@ const PROTECTED = [
   "/admin",
 ];
 
+/** A well-formed `https://…` Supabase URL is required; anything else is ignored. */
+function hasValidConfig(): boolean {
+  if (!isSupabaseConfigured()) return false;
+  try {
+    const u = new URL(SUPABASE_URL);
+    return u.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Refresh the Supabase session cookie on each request and guard protected
- * routes. When Supabase is not configured, this is a pass-through so the demo
- * works without any environment variables.
+ * routes. Fully defensive: if Supabase is unconfigured, misconfigured, or
+ * temporarily unreachable, the request is allowed through instead of failing —
+ * a bad env var must never take the whole site down.
  */
 export async function updateSession(request: NextRequest) {
-  if (!isSupabaseConfigured()) return NextResponse.next();
+  if (!hasValidConfig()) return NextResponse.next();
 
   let response = NextResponse.next({ request });
 
-  const supabase = createServerClient<Database>(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value),
-          );
-          response = NextResponse.next({ request });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options),
-          );
+  try {
+    const supabase = createServerClient<Database>(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll();
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value }) =>
+              request.cookies.set(name, value),
+            );
+            response = NextResponse.next({ request });
+            cookiesToSet.forEach(({ name, value, options }) =>
+              response.cookies.set(name, value, options),
+            );
+          },
         },
       },
-    },
-  );
+    );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-  const path = request.nextUrl.pathname;
-  const needsAuth = PROTECTED.some(
-    (p) => path === p || path.startsWith(p + "/"),
-  );
+    const path = request.nextUrl.pathname;
+    const needsAuth = PROTECTED.some(
+      (p) => path === p || path.startsWith(p + "/"),
+    );
 
-  if (needsAuth && !user) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/login";
-    url.searchParams.set("redirect", path);
-    return NextResponse.redirect(url);
+    if (needsAuth && !user) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/login";
+      url.searchParams.set("redirect", path);
+      return NextResponse.redirect(url);
+    }
+
+    return response;
+  } catch {
+    // Auth backend hiccup or misconfiguration — let the request continue rather
+    // than returning a 500 for every page.
+    return response;
   }
-
-  return response;
 }

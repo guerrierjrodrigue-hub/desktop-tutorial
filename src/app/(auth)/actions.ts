@@ -27,7 +27,7 @@ export async function emailAuthAction(
   const name = String(formData.get("name") ?? "").trim();
 
   // Demo mode: no backend configured → straight to the app.
-  if (!isSupabaseConfigured()) redirect("/dashboard");
+  if (!isSupabaseConfigured()) redirect(mode === "signup" ? "/onboarding" : "/dashboard");
 
   if (!email || !password) {
     return { error: "Email and password are required." };
@@ -53,7 +53,7 @@ export async function emailAuthAction(
     if (error) return { error: error.message };
   }
 
-  redirect("/dashboard");
+  redirect(mode === "signup" ? "/onboarding" : "/dashboard");
 }
 
 /** Begin an OAuth flow (Google / Apple). Redirects to the provider. */

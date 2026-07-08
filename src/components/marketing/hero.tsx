@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { FilmModal } from "@/components/marketing/film-modal";
 import { ArrowRight, Play, Star } from "lucide-react";
 import { APP_TAGLINE } from "@/lib/constants";
 
@@ -16,6 +18,8 @@ const fadeUp = {
 };
 
 export function Hero() {
+  const [filmOpen, setFilmOpen] = useState(false);
+
   return (
     <section className="relative overflow-hidden px-6 pb-16 pt-20 sm:pt-28">
       <div className="mx-auto max-w-4xl text-center">
@@ -61,13 +65,13 @@ export function Hero() {
           animate="show"
           className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row"
         >
-          <Link href="/dashboard">
+          <Link href="/signup">
             <Button size="lg" className="group">
               Start your 7-day free trial
               <ArrowRight className="transition-transform group-hover:translate-x-0.5" />
             </Button>
           </Link>
-          <Button size="lg" variant="secondary">
+          <Button size="lg" variant="secondary" onClick={() => setFilmOpen(true)}>
             <Play className="fill-current" />
             Watch the film
           </Button>
@@ -86,6 +90,7 @@ export function Hero() {
       </div>
 
       <HeroPreview />
+      <FilmModal open={filmOpen} onClose={() => setFilmOpen(false)} />
     </section>
   );
 }

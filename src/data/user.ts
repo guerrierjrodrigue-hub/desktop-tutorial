@@ -15,4 +15,7 @@ export const currentUser: UserProfile = {
   xp: 4820,
   streak: 26,
   joinedAt: "2025-11-02",
+  identities: ["christian"],
+  primaryGoal: "Become More Disciplined",
+  onboardedAt: "2025-11-02",
 };

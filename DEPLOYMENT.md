@@ -72,10 +72,10 @@ stripe listen --forward-to localhost:3000/api/stripe/webhook
 
 ---
 
-## 3. OpenAI — Barnabas coach
+## 3. Anthropic — Barnabas coach
 
-Create an API key → `OPENAI_API_KEY`. Optionally set `OPENAI_MODEL`
-(default `gpt-4o-mini`). Without it, `/api/coach` falls back to warm offline
+Create an API key at [console.anthropic.com](https://console.anthropic.com) →
+`ANTHROPIC_API_KEY`. Without it, `/api/coach` falls back to warm offline
 replies — the coach still works, just scripted.
 
 ---
@@ -92,8 +92,7 @@ replies — the coach still works, just scripted.
    | `NEXT_PUBLIC_SUPABASE_URL` | Supabase → API |
    | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase → API |
    | `SUPABASE_SERVICE_ROLE_KEY` | Supabase → API (secret) |
-   | `OPENAI_API_KEY` | OpenAI |
-   | `OPENAI_MODEL` | optional |
+   | `ANTHROPIC_API_KEY` | Anthropic |
    | `STRIPE_SECRET_KEY` | Stripe |
    | `STRIPE_WEBHOOK_SECRET` | Stripe webhook |
    | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe |

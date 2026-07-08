@@ -1,13 +1,17 @@
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
-import { badges } from "@/data/dashboard";
+import { getBadges } from "@/lib/queries/badges";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 import { cn } from "@/lib/utils";
 
-export function BadgesCard() {
+export async function BadgesCard() {
+  const [badges, dict] = await Promise.all([getBadges(), getDictionary(await getLocale())]);
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Badges</CardTitle>
+        <CardTitle>{dict["dashboard.achievements"]}</CardTitle>
         <span className="text-xs text-muted">
           {badges.filter((b) => b.earned).length}/{badges.length} earned
         </span>

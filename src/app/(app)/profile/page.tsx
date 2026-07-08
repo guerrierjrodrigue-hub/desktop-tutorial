@@ -1,132 +1,50 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  Flame,
-  Zap,
-  Trophy,
-  Ruler,
-  Weight,
-  Target,
-  Church,
-  BookMarked,
-  Settings,
-  Crown,
-  LogOut,
-} from "lucide-react";
+import { Crown } from "lucide-react";
 import { Topbar } from "@/components/layout/topbar";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Avatar } from "@/components/ui/avatar";
-import { Progress } from "@/components/ui/progress";
 import { getCurrentUser } from "@/lib/queries/profile";
-import { badges } from "@/data/dashboard";
+import { getBadges } from "@/lib/queries/badges";
 import { Icon } from "@/components/ui/icon";
 import { levelFromXp } from "@/lib/utils";
 import { signOutAction } from "@/app/(auth)/actions";
 import { ManageBillingButton } from "@/components/billing/manage-billing-button";
+import { ProfileEditor } from "@/components/profile/profile-editor";
+import { LanguageSwitcher } from "@/components/settings/language-switcher";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 
 export const metadata: Metadata = {
   title: "Profile",
 };
 
 export default async function ProfilePage() {
-  const currentUser = await getCurrentUser();
+  const [currentUser, badges, locale] = await Promise.all([
+    getCurrentUser(),
+    getBadges(),
+    getLocale(),
+  ]);
+  const dict = await getDictionary(locale);
   const { level, progress, nextLevelXp } = levelFromXp(currentUser.xp);
   const earned = badges.filter((b) => b.earned);
-
-  const details = [
-    { icon: Ruler, label: "Height", value: currentUser.heightCm ? `${currentUser.heightCm} cm` : "—" },
-    { icon: Weight, label: "Weight", value: currentUser.weightKg ? `${currentUser.weightKg} kg` : "—" },
-    { icon: Target, label: "Goal", value: currentUser.goal ?? "—" },
-    { icon: Church, label: "Church", value: currentUser.church ?? "—" },
-    { icon: BookMarked, label: "Favorite verse", value: currentUser.favoriteVerse ?? "—" },
-  ];
 
   return (
     <>
       <Topbar title="Profile" />
       <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-6 sm:px-6">
-        {/* Header card */}
-        <Card className="relative overflow-hidden">
-          <div className="pointer-events-none absolute inset-x-0 -top-16 h-32 bg-gradient-to-b from-green/20 to-transparent" />
-          <div className="relative flex flex-col items-center gap-4 sm:flex-row sm:items-start">
-            <Avatar
-              name={currentUser.name}
-              color="var(--color-green)"
-              className="size-20 text-2xl"
-            />
-            <div className="flex-1 text-center sm:text-left">
-              <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
-                <h2 className="font-serif text-2xl font-semibold">
-                  {currentUser.name}
-                </h2>
-                {currentUser.isPremium ? (
-                  <Badge variant="premium">
-                    <Crown className="size-3" /> Premium
-                  </Badge>
-                ) : (
-                  <Badge variant="neutral" className="capitalize">
-                    {currentUser.level}
-                  </Badge>
-                )}
-              </div>
-              <p className="mt-1 text-sm text-muted">{currentUser.bio}</p>
-
-              <div className="mt-4 flex justify-center gap-2 sm:justify-start">
-                <Stat icon={Flame} label="Streak" value={currentUser.streak} />
-                <Stat icon={Zap} label="XP" value={currentUser.xp.toLocaleString()} />
-                <Stat icon={Trophy} label="Badges" value={earned.length} />
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <Button variant="secondary" size="icon" aria-label="Settings">
-                <Settings className="size-5" />
-              </Button>
-              <form action={signOutAction}>
-                <Button type="submit" variant="secondary" size="icon" aria-label="Sign out">
-                  <LogOut className="size-5" />
-                </Button>
-              </form>
-            </div>
-          </div>
-
-          <div className="relative mt-6">
-            <div className="mb-1.5 flex items-center justify-between text-sm">
-              <span className="font-semibold text-gold-bright">Level {level}</span>
-              <span className="text-muted">
-                {(nextLevelXp - currentUser.xp).toLocaleString()} XP to next
-              </span>
-            </div>
-            <Progress value={progress} />
-          </div>
-        </Card>
-
-        <div className="mt-5 grid gap-5 sm:grid-cols-2">
-          {/* Details */}
-          <Card>
-            <CardHeader>
-              <CardTitle>About</CardTitle>
-            </CardHeader>
-            <dl className="space-y-3">
-              {details.map((d) => (
-                <div key={d.label} className="flex items-center gap-3">
-                  <span className="grid size-9 place-items-center rounded-lg bg-surface-2 text-gold/70">
-                    <d.icon className="size-4" />
-                  </span>
-                  <div className="min-w-0">
-                    <dt className="text-xs text-faint">{d.label}</dt>
-                    <dd className="truncate text-sm font-medium">{d.value}</dd>
-                  </div>
-                </div>
-              ))}
-            </dl>
-          </Card>
-
+        <ProfileEditor
+          user={currentUser}
+          level={level}
+          progress={progress}
+          nextLevelXp={nextLevelXp}
+          earnedBadges={earned.length}
+          onSignOut={signOutAction}
+        >
           {/* Badges */}
           <Card>
             <CardHeader>
-              <CardTitle>Achievements</CardTitle>
+              <CardTitle>{dict["dashboard.achievements"]}</CardTitle>
               <span className="text-xs text-muted">
                 {earned.length}/{badges.length}
               </span>
@@ -158,6 +76,10 @@ export default async function ProfilePage() {
               ))}
             </div>
           </Card>
+        </ProfileEditor>
+
+        <div className="mt-5">
+          <LanguageSwitcher currentLocale={locale} dict={dict} />
         </div>
 
         {currentUser.isPremium ? (
@@ -193,23 +115,5 @@ export default async function ProfilePage() {
         )}
       </main>
     </>
-  );
-}
-
-function Stat({
-  icon: IconEl,
-  label,
-  value,
-}: {
-  icon: typeof Flame;
-  label: string;
-  value: string | number;
-}) {
-  return (
-    <div className="rounded-xl border border-border bg-surface-2 px-4 py-2 text-center">
-      <IconEl className="mx-auto size-4 text-gold/70" />
-      <p className="mt-1 text-sm font-semibold">{value}</p>
-      <p className="text-[10px] uppercase tracking-wide text-faint">{label}</p>
-    </div>
   );
 }

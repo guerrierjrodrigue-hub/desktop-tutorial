@@ -1,31 +1,12 @@
+import { getCoach } from "@/data/coaches";
 import type { ChatMessage } from "@/types";
 
-/** The persona and guardrails for Barnabas, the AI faith & fitness coach. */
-export const BARNABAS_SYSTEM_PROMPT = `You are Barnabas, an AI faith and fitness coach inside the Kingdom Athlete app.
-Your name means "son of encouragement." You help Christians steward their bodies and grow their faith.
-
-Voice & values:
-- Encourage and motivate; never shame or guilt.
-- Speak with love, wisdom, and humility. Never be preachy or moralizing.
-- Be biblically respectful and grounded; you may share a relevant verse when it genuinely helps, but do not force it.
-- Meet people where they are — adapt workouts to their energy, injuries, and level.
-- Give practical, safe fitness and nutrition guidance. Recommend seeing a professional for medical concerns.
-- Offer a short prayer or a moment of stillness when someone is discouraged, if they'd welcome it.
-- Keep replies warm and concise. Ask a gentle follow-up question when useful.`;
-
-export const SUGGESTED_PROMPTS = [
-  "I'm feeling unmotivated today.",
-  "Design a 20-minute home workout.",
-  "What should I eat after training?",
-  "Can you pray with me?",
-  "How do I honor God with my body?",
-];
-
 /**
- * Deterministic, warm fallback used when no OPENAI_API_KEY is configured, so the
- * coach always works in demos. Keeps Barnabas' voice without an external call.
+ * Barnabas's original, deterministic warm fallback — kept intact (not
+ * simplified) since he's the flagship persona. Used when no API key is
+ * configured, so the coach always works in demos.
  */
-export function offlineBarnabasReply(userText: string): string {
+function offlineBarnabasReply(userText: string): string {
   const t = userText.toLowerCase();
 
   if (/(pray|prayer)/.test(t)) {
@@ -34,8 +15,6 @@ export function offlineBarnabasReply(userText: string): string {
   if (/(unmotivat|tired|discourag|lazy|hard|struggl)/.test(t)) {
     return "First — thank you for showing up and being honest. That's already discipline. 🙌 Motivation comes and goes; faithfulness is what we're building. Let's make today small and winnable: 10 minutes of easy movement and a few deep breaths. “Those who hope in the Lord will renew their strength” (Isaiah 40:31). Want me to pick something gentle for you?";
   }
-  // Nutrition is checked before workouts so "what to eat after training"
-  // resolves to food guidance rather than a workout plan.
   if (/(eat|food|nutrition|meal|protein|diet|recipe)/.test(t)) {
     return "Great question. After training, aim for protein + carbs within an hour or so — something like grilled chicken and rice, or a berry-protein smoothie. Keep it whole-food and simple. Roughly 0.7–1g of protein per pound of bodyweight across the day is a solid target. Want a quick recipe idea?";
   }
@@ -48,9 +27,28 @@ export function offlineBarnabasReply(userText: string): string {
   return "I'm here for you — body and soul. Tell me how you're feeling today, or what you'd like to work on, and we'll take the next faithful step together. 💪✝️";
 }
 
-export function toOpenAIMessages(messages: ChatMessage[]) {
-  return [
-    { role: "system" as const, content: BARNABAS_SYSTEM_PROMPT },
-    ...messages.map((m) => ({ role: m.role, content: m.content })),
-  ];
+/**
+ * Deterministic, persona-flavored fallback used when no ANTHROPIC_API_KEY is
+ * configured. Barnabas keeps his original rich reply engine; the newer
+ * personas use a simpler, shared 4-branch match against their own voice.
+ */
+export function offlineCoachReply(coachId: string, userText: string): string {
+  const coach = getCoach(coachId);
+  if (coach.id === "barnabas") return offlineBarnabasReply(userText);
+
+  const t = userText.toLowerCase();
+  if (/(unmotivat|tired|discourag|lazy|hard|struggl|anxious|stress)/.test(t)) {
+    return coach.offline.encouragement;
+  }
+  if (/(workout|exercise|train|routine|eat|food|nutrition|meal)/.test(t)) {
+    return coach.offline.workout;
+  }
+  if (/(breath|sleep|calm|mind|wind down|relax)/.test(t)) {
+    return coach.offline.wellness;
+  }
+  return coach.offline.fallback;
+}
+
+export function toClaudeMessages(messages: ChatMessage[]) {
+  return messages.map((m) => ({ role: m.role, content: m.content }));
 }

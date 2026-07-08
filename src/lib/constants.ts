@@ -7,3 +7,5 @@ export const APP_DESCRIPTION =
 
 export const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL ?? "https://kingdomathlete.app";
+
+export const APP_SUPPORT_EMAIL = "hello@kingdomathlete.app";

@@ -2,7 +2,9 @@ import Link from "next/link";
 import { Users, Church, UserRound, ArrowRight } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { challenges } from "@/data/dashboard";
+import { getChallenges } from "@/lib/queries/challenges";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 
 const typeMeta = {
   personal: { icon: UserRound, label: "Personal" },
@@ -10,14 +12,32 @@ const typeMeta = {
   church: { icon: Church, label: "Church" },
 } as const;
 
-export function ChallengeCard() {
+export async function ChallengeCard() {
+  const [challenges, dict] = await Promise.all([getChallenges(), getDictionary(await getLocale())]);
   const featured = challenges[0];
+
+  if (!featured) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>{dict["dashboard.activeChallenge"]}</CardTitle>
+        </CardHeader>
+        <p className="text-sm text-muted">
+          {dict["empty.noChallengesYet"]}{" "}
+          <Link href="/challenges" className="font-semibold text-gold-bright hover:underline">
+            {dict["empty.browseChallenges"]} →
+          </Link>
+        </p>
+      </Card>
+    );
+  }
+
   const meta = typeMeta[featured.type];
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Active challenge</CardTitle>
+        <CardTitle>{dict["dashboard.activeChallenge"]}</CardTitle>
         <Link
           href="/challenges"
           className="inline-flex items-center gap-1 text-xs font-semibold text-gold-bright hover:underline"
