@@ -4,9 +4,17 @@ import { Avatar } from "@/components/ui/avatar";
 import { Logo } from "@/components/brand/logo";
 import { NotificationsBell } from "@/components/layout/notifications-bell";
 import { getCurrentUser } from "@/lib/queries/profile";
+import { getNotifications } from "@/lib/queries/notifications";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 
 export async function Topbar({ title }: { title?: string }) {
-  const currentUser = await getCurrentUser();
+  const locale = await getLocale();
+  const [currentUser, notifications, dict] = await Promise.all([
+    getCurrentUser(),
+    getNotifications(),
+    getDictionary(locale),
+  ]);
   return (
     <header className="glass sticky top-0 z-30 flex h-16 items-center justify-between gap-4 border-b border-border px-4 sm:px-6">
       <div className="flex items-center gap-3">
@@ -25,7 +33,7 @@ export async function Topbar({ title }: { title?: string }) {
           <Flame className="size-4" />
           {currentUser.streak}
         </span>
-        <NotificationsBell />
+        <NotificationsBell initial={notifications} dict={dict} />
         <Link href="/profile" aria-label="Your profile">
           <Avatar name={currentUser.name} color="var(--color-green)" />
         </Link>

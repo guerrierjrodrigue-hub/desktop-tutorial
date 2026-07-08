@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { Clock, CalendarDays, Dumbbell, ChevronLeft, Lock } from "lucide-react";
 import { Topbar } from "@/components/layout/topbar";
 import { Badge } from "@/components/ui/badge";
@@ -140,7 +141,18 @@ export default async function ProgramDetailPage({
                       className="flex items-center justify-between gap-3 bg-surface-2 px-4 py-3"
                     >
                       <div className="flex items-center gap-3">
-                        <Dumbbell className="size-4 shrink-0 text-gold/70" />
+                        {ex.imageUrl ? (
+                          <Image
+                            src={ex.imageUrl}
+                            alt={ex.name}
+                            width={36}
+                            height={36}
+                            className="size-9 shrink-0 rounded-md object-cover"
+                            unoptimized
+                          />
+                        ) : (
+                          <Dumbbell className="size-4 shrink-0 text-gold/70" />
+                        )}
                         <div>
                           <p className="text-sm font-medium">{ex.name}</p>
                           <p className="text-xs text-faint">

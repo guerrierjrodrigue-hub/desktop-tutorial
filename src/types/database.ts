@@ -74,6 +74,8 @@ export interface ExerciseRow {
   rest_seconds: number;
   notes: string | null;
   video_url: string | null;
+  instructions: string[];
+  image_url: string | null;
 }
 
 export interface WorkoutDayRow {

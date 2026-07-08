@@ -196,6 +196,11 @@ const en = {
   "challenges.friends": "Friends",
   "challenges.church": "Church",
   "challenges.percentComplete": "complete",
+
+  // Notifications
+  "notifications.title": "Notifications",
+  "notifications.markAllRead": "Mark all read",
+  "notifications.empty": "No notifications yet.",
 } as const;
 
 export default en;

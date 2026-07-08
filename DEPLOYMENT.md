@@ -27,7 +27,9 @@ Order matters: **Supabase → Stripe → OpenAI → Vercel**.
    supabase db execute --file supabase/seed.sql
    ```
    (Or paste each file into the SQL editor in order: `0001` → `0002` → `0003`
-   → `seed.sql`.)
+   → `0004` → `0005` → `seed.sql`.)
+   Then run `npm run exercises:enrich` to backfill exercise photos and
+   step-by-step instructions from the public-domain free-exercise-db.
 3. **Auth providers** — Authentication → Providers:
    - Enable **Email**.
    - Enable **Google** and **Apple** (add each provider's client id/secret).

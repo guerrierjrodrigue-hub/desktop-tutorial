@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Check, ChevronLeft, Clock, PartyPopper } from "lucide-react";
+import Image from "next/image";
+import { Check, ChevronDown, ChevronLeft, Clock, PartyPopper } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -158,6 +159,34 @@ export function WorkoutSession({
                 <p className="mt-2 text-xs font-medium text-gold-bright">
                   Resting… {resting.secondsLeft}s
                 </p>
+              )}
+
+              {(ex.instructions?.length || ex.imageUrl) && (
+                <details className="group mt-3 rounded-xl border border-border bg-surface-2">
+                  <summary className="flex cursor-pointer list-none items-center justify-between px-3 py-2 text-xs font-semibold text-muted">
+                    How to
+                    <ChevronDown className="size-3.5 transition group-open:rotate-180" />
+                  </summary>
+                  <div className="flex flex-col gap-3 px-3 pb-3 sm:flex-row">
+                    {ex.imageUrl && (
+                      <Image
+                        src={ex.imageUrl}
+                        alt={ex.name}
+                        width={160}
+                        height={160}
+                        className="h-32 w-full shrink-0 rounded-lg object-cover sm:w-32"
+                        unoptimized
+                      />
+                    )}
+                    {ex.instructions?.length ? (
+                      <ol className="list-decimal space-y-1 pl-4 text-xs text-muted">
+                        {ex.instructions.map((step, i) => (
+                          <li key={i}>{step}</li>
+                        ))}
+                      </ol>
+                    ) : null}
+                  </div>
+                </details>
               )}
             </Card>
           );

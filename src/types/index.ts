@@ -45,6 +45,8 @@ export interface Exercise {
   restSeconds: number;
   notes?: string;
   videoUrl?: string;
+  instructions?: string[];
+  imageUrl?: string;
 }
 
 export interface WorkoutDay {

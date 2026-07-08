@@ -179,6 +179,10 @@ const fr: Dictionary = {
   "challenges.friends": "Amis",
   "challenges.church": "Église",
   "challenges.percentComplete": "terminé",
+
+  "notifications.title": "Notifications",
+  "notifications.markAllRead": "Tout marquer comme lu",
+  "notifications.empty": "Aucune notification pour l'instant.",
 } as const;
 
 export default fr;
