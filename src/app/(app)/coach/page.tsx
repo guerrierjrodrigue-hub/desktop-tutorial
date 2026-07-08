@@ -4,20 +4,22 @@ import { Sparkles } from "lucide-react";
 import { Topbar } from "@/components/layout/topbar";
 import { Card } from "@/components/ui/card";
 import { COACHES } from "@/data/coaches";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 
 export const metadata: Metadata = {
   title: "Coach",
   description: "Choose your AI coach — each with a distinct voice and focus.",
 };
 
-export default function CoachPickerPage() {
+export default async function CoachPickerPage() {
+  const dict = await getDictionary(await getLocale());
+
   return (
     <>
       <Topbar title="Coach" />
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6">
-        <p className="mb-6 text-sm text-muted">
-          Pick the coach that fits what you need today. You can switch anytime.
-        </p>
+        <p className="mb-6 text-sm text-muted">{dict["coach.pickerSubtitle"]}</p>
         <div className="grid gap-4 sm:grid-cols-2">
           {COACHES.map((coach) => (
             <Link key={coach.id} href={`/coach/${coach.id}`}>

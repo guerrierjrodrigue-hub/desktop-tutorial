@@ -76,8 +76,24 @@ interface RawChapterResponse {
   };
 }
 
+/**
+ * Verse content items are usually plain strings, but poetic passages (Psalms,
+ * Isaiah, Proverbs, …) wrap each line in `{ text, poem }` objects separated by
+ * `{ lineBreak: true }` markers instead — without this, poetry verses render
+ * as empty text.
+ */
 function joinText(content: unknown[] | undefined): string {
-  return (content ?? []).filter((x): x is string => typeof x === "string").join(" ");
+  return (content ?? [])
+    .map((item) => {
+      if (typeof item === "string") return item;
+      if (item && typeof item === "object" && "text" in item) {
+        const text = (item as { text: unknown }).text;
+        if (typeof text === "string") return text;
+      }
+      return "";
+    })
+    .filter(Boolean)
+    .join(" ");
 }
 
 /** One chapter's content (headings + verses, in reading order). Returns null when unavailable. */

@@ -9,7 +9,8 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "db:verify": "node --env-file=.env.local scripts/verify-schema.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.110.0",

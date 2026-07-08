@@ -5,21 +5,22 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PostFeed } from "@/components/community/post-feed";
 import { groups } from "@/data/community";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 
 export const metadata: Metadata = {
   title: "Community",
   description: "Groups, testimonies, progress shares, and prayer requests. Iron sharpens iron.",
 };
 
-export default function CommunityPage() {
+export default async function CommunityPage() {
+  const dict = await getDictionary(await getLocale());
+
   return (
     <>
       <Topbar title="Community" />
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6">
-        <PageHeader
-          title="Community"
-          subtitle="Encourage and be encouraged. As iron sharpens iron."
-        />
+        <PageHeader title={dict["community.title"]} subtitle={dict["community.subtitle"]} />
 
         <div className="grid gap-5 lg:grid-cols-3">
           <div className="lg:col-span-2">
@@ -29,7 +30,7 @@ export default function CommunityPage() {
           <div className="space-y-5">
             <Card>
               <CardHeader>
-                <CardTitle>Your groups</CardTitle>
+                <CardTitle>{dict["community.yourGroups"]}</CardTitle>
               </CardHeader>
               <div className="space-y-2">
                 {groups.map((g) => (
@@ -43,14 +44,14 @@ export default function CommunityPage() {
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-semibold">{g.name}</p>
                       <p className="text-xs text-faint">
-                        {g.members.toLocaleString()} members
+                        {g.members.toLocaleString()} {dict["community.members"]}
                       </p>
                     </div>
                   </div>
                 ))}
               </div>
               <Button variant="secondary" className="mt-4 w-full" size="sm">
-                Discover groups
+                {dict["community.discoverGroups"]}
               </Button>
             </Card>
           </div>

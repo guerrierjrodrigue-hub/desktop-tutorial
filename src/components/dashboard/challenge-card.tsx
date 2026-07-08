@@ -42,7 +42,7 @@ export async function ChallengeCard() {
           href="/challenges"
           className="inline-flex items-center gap-1 text-xs font-semibold text-gold-bright hover:underline"
         >
-          All <ArrowRight className="size-3" />
+          {dict["common.all"]} <ArrowRight className="size-3" />
         </Link>
       </CardHeader>
 
@@ -61,8 +61,8 @@ export async function ChallengeCard() {
       <div className="mt-4">
         <Progress value={featured.progress} />
         <div className="mt-2 flex justify-between text-xs text-muted">
-          <span>{Math.round(featured.progress * 100)}% complete</span>
-          <span>{featured.daysLeft} days left</span>
+          <span>{Math.round(featured.progress * 100)}% {dict["challenges.percentComplete"]}</span>
+          <span>{featured.daysLeft} {dict["challenges.daysLeft"]}</span>
         </div>
       </div>
     </Card>

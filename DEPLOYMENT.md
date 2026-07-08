@@ -48,6 +48,15 @@ Order matters: **Supabase → Stripe → OpenAI → Vercel**.
    ```bash
    supabase gen types typescript --linked > src/types/database.ts
    ```
+7. **Verify the migrations actually applied** — `supabase db push` failing
+   silently (or being skipped) is how migration 0004 sat unapplied against
+   production for days without anyone noticing. After every migration change:
+   ```bash
+   npm run db:verify
+   ```
+   This checks the live database for every table/column the app's code
+   expects and fails loudly, listing exactly which migration is missing, if
+   anything is out of sync.
 
 ---
 

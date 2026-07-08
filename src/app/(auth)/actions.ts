@@ -56,6 +56,57 @@ export async function emailAuthAction(
   redirect(mode === "signup" ? "/onboarding" : "/dashboard");
 }
 
+export interface ForgotPasswordState {
+  error?: string;
+  sent?: boolean;
+}
+
+/** Email a password-reset link. Always reports success (never reveals whether the email exists). */
+export async function requestPasswordReset(
+  _prev: ForgotPasswordState,
+  formData: FormData,
+): Promise<ForgotPasswordState> {
+  const email = String(formData.get("email") ?? "").trim();
+  if (!email) return { error: "Email is required." };
+
+  if (!isSupabaseConfigured()) return { sent: true };
+
+  const supabase = await createSupabaseServerClient();
+  await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${await siteOrigin()}/auth/callback?redirect=/reset-password`,
+  });
+
+  return { sent: true };
+}
+
+export interface ResetPasswordState {
+  error?: string;
+}
+
+/** Set a new password from an active password-recovery session. */
+export async function resetPassword(
+  _prev: ResetPasswordState,
+  formData: FormData,
+): Promise<ResetPasswordState> {
+  const password = String(formData.get("password") ?? "");
+  const confirmPassword = String(formData.get("confirmPassword") ?? "");
+
+  if (password.length < 6) {
+    return { error: "Password must be at least 6 characters." };
+  }
+  if (password !== confirmPassword) {
+    return { error: "Passwords do not match." };
+  }
+
+  if (!isSupabaseConfigured()) redirect("/dashboard");
+
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) return { error: error.message };
+
+  redirect("/dashboard");
+}
+
 /** Begin an OAuth flow (Google / Apple). Redirects to the provider. */
 export async function oauthAction(formData: FormData): Promise<void> {
   const provider = String(formData.get("provider") ?? "google") as

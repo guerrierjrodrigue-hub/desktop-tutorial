@@ -37,6 +37,7 @@ const en = {
   "common.loading": "One moment…",
   "common.language": "Language",
   "common.signOut": "Sign out",
+  "common.all": "All",
 
   // Auth
   "auth.welcomeBack": "Welcome back",
@@ -54,6 +55,16 @@ const en = {
   "auth.fullName": "Full name",
   "auth.emailAddress": "Email address",
   "auth.password": "Password",
+  "auth.forgotPasswordTitle": "Forgot your password?",
+  "auth.forgotPasswordSubtitle": "Enter your email and we'll send you a reset link.",
+  "auth.sendResetLink": "Send reset link",
+  "auth.resetLinkSent": "If an account exists for that email, a reset link is on its way.",
+  "auth.backToLogin": "Back to sign in",
+  "auth.resetPasswordTitle": "Choose a new password",
+  "auth.resetPasswordSubtitle": "Make it something you'll remember.",
+  "auth.newPassword": "New password",
+  "auth.confirmPassword": "Confirm password",
+  "auth.updatePassword": "Update password",
 
   // Dashboard widget titles
   "dashboard.progress": "Level & progress",
@@ -149,6 +160,42 @@ const en = {
   "recommendations.focusDescription": "A quiet 15-minute reset can help momentum return.",
   "recommendations.joinChallenge": "Join a challenge",
   "recommendations.communityDescription": "Iron sharpens iron — find accountability in Community.",
+
+  // Fitness page
+  "fitness.title": "Programs",
+  "fitness.subtitle": "Train with intention. Every program is built around progression, form, and rest.",
+  "fitness.categoryAll": "All",
+  "fitness.categoryStrength": "Strength",
+  "fitness.categoryFatLoss": "Fat loss",
+  "fitness.categoryRunning": "Running",
+  "fitness.categoryHiit": "HIIT",
+  "fitness.categoryMobility": "Mobility",
+  "fitness.categoryBodyweight": "Bodyweight",
+
+  // Community page
+  "community.title": "Community",
+  "community.subtitle": "Encourage and be encouraged. As iron sharpens iron.",
+  "community.yourGroups": "Your groups",
+  "community.members": "members",
+  "community.discoverGroups": "Discover groups",
+
+  // Coach picker page
+  "coach.pickerSubtitle": "Pick the coach that fits what you need today. You can switch anytime.",
+
+  // Challenges page
+  "challenges.title": "Challenges",
+  "challenges.subtitle": "Discipline is easier together. Join a challenge and keep the streak alive.",
+  "challenges.joined": "joined",
+  "challenges.daysLeft": "days left",
+  "challenges.startOwn": "Start your own challenge",
+  "challenges.startOwnSubtitle": "Rally your friends or your whole church.",
+  "challenges.create": "Create",
+  "challenges.leaderboard": "Leaderboard",
+  "challenges.you": "you",
+  "challenges.personal": "Personal",
+  "challenges.friends": "Friends",
+  "challenges.church": "Church",
+  "challenges.percentComplete": "complete",
 } as const;
 
 export default en;
