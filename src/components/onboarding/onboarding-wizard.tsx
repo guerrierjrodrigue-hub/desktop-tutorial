@@ -8,22 +8,40 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { IDENTITY_OPTIONS, PRIMARY_GOAL_OPTIONS } from "@/lib/personalization";
 import { saveOnboarding } from "@/app/onboarding/actions";
+import { setLocale } from "@/app/actions/locale";
+import { LOCALES, type LocaleCode } from "@/i18n/locales";
 import { cn } from "@/lib/utils";
+import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { IdentityId } from "@/types";
 
+const TOTAL_STEPS = 4;
+
 export function OnboardingWizard({
+  locale,
+  dict,
   initialGoal,
   initialIdentities,
 }: {
+  locale: LocaleCode;
+  dict: Dictionary;
   initialGoal?: string;
   initialIdentities?: string[];
 }) {
   const router = useRouter();
   const [step, setStep] = useState(0);
+  const [language, setLanguage] = useState<LocaleCode>(locale);
   const [goal, setGoal] = useState(initialGoal ?? "");
   const [identities, setIdentities] = useState<string[]>(initialIdentities ?? []);
   const [saving, setSaving] = useState(false);
   const [, startTransition] = useTransition();
+
+  function chooseLanguage(code: LocaleCode) {
+    setLanguage(code);
+    startTransition(async () => {
+      await setLocale(code);
+      router.refresh();
+    });
+  }
 
   function toggleIdentity(id: IdentityId) {
     setIdentities((prev) =>
@@ -40,7 +58,7 @@ export function OnboardingWizard({
   }
 
   const canContinue =
-    step === 0 ? Boolean(goal) : step === 1 ? identities.length > 0 : true;
+    step === 0 ? Boolean(language) : step === 1 ? Boolean(goal) : step === 2 ? identities.length > 0 : true;
 
   return (
     <div className="w-full max-w-lg">
@@ -49,35 +67,37 @@ export function OnboardingWizard({
       </div>
 
       <div className="mb-6">
-        <Progress value={(step + 1) / 3} />
-        <p className="mt-2 text-center text-xs text-faint">Step {step + 1} of 3</p>
+        <Progress value={(step + 1) / TOTAL_STEPS} />
+        <p className="mt-2 text-center text-xs text-faint">
+          {dict["onboarding.step"]} {step + 1} {dict["onboarding.of"]} {TOTAL_STEPS}
+        </p>
       </div>
 
       <div className="glass rounded-3xl border border-border p-6 sm:p-8">
         {step === 0 && (
           <>
             <h1 className="text-center font-serif text-2xl font-semibold">
-              What is your primary goal?
+              {dict["onboarding.languageTitle"]}
             </h1>
             <p className="mt-2 text-center text-sm text-muted">
-              We&apos;ll shape your daily rhythm around this.
+              {dict["onboarding.languageSubtitle"]}
             </p>
-            <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2">
-              {PRIMARY_GOAL_OPTIONS.map((option) => (
+            <div className="mt-6 grid grid-cols-2 gap-2">
+              {LOCALES.map((l) => (
                 <button
-                  key={option}
+                  key={l.code}
                   type="button"
-                  onClick={() => setGoal(option)}
-                  aria-pressed={goal === option}
+                  onClick={() => chooseLanguage(l.code)}
+                  aria-pressed={language === l.code}
                   className={cn(
                     "flex items-center justify-between rounded-xl border px-4 py-3 text-left text-sm font-medium transition",
-                    goal === option
+                    language === l.code
                       ? "border-gold/50 bg-gold/10 text-foreground"
                       : "border-border bg-surface-2 text-muted hover:border-gold/30",
                   )}
                 >
-                  {option}
-                  {goal === option && <Check className="size-4 shrink-0 text-gold-bright" />}
+                  {l.nativeLabel}
+                  {language === l.code && <Check className="size-4 shrink-0 text-gold-bright" />}
                 </button>
               ))}
             </div>
@@ -87,10 +107,40 @@ export function OnboardingWizard({
         {step === 1 && (
           <>
             <h1 className="text-center font-serif text-2xl font-semibold">
-              Who do you want to become?
+              {dict["onboarding.goalTitle"]}
             </h1>
             <p className="mt-2 text-center text-sm text-muted">
-              Pick as many as resonate — the app adapts to each one.
+              {dict["onboarding.goalSubtitle"]}
+            </p>
+            <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2">
+              {PRIMARY_GOAL_OPTIONS.map((option) => (
+                <button
+                  key={option.id}
+                  type="button"
+                  onClick={() => setGoal(option.id)}
+                  aria-pressed={goal === option.id}
+                  className={cn(
+                    "flex items-center justify-between rounded-xl border px-4 py-3 text-left text-sm font-medium transition",
+                    goal === option.id
+                      ? "border-gold/50 bg-gold/10 text-foreground"
+                      : "border-border bg-surface-2 text-muted hover:border-gold/30",
+                  )}
+                >
+                  {dict[option.labelKey]}
+                  {goal === option.id && <Check className="size-4 shrink-0 text-gold-bright" />}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
+
+        {step === 2 && (
+          <>
+            <h1 className="text-center font-serif text-2xl font-semibold">
+              {dict["onboarding.identityTitle"]}
+            </h1>
+            <p className="mt-2 text-center text-sm text-muted">
+              {dict["onboarding.identitySubtitle"]}
             </p>
             <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-3">
               {IDENTITY_OPTIONS.map((option) => {
@@ -109,7 +159,7 @@ export function OnboardingWizard({
                     )}
                   >
                     {selected && <Check className="size-4 text-green-bright" />}
-                    {option.label}
+                    {dict[option.labelKey]}
                   </button>
                 );
               })}
@@ -117,24 +167,31 @@ export function OnboardingWizard({
           </>
         )}
 
-        {step === 2 && (
+        {step === 3 && (
           <>
             <h1 className="text-center font-serif text-2xl font-semibold">
-              You&apos;re all set
+              {dict["onboarding.summaryTitle"]}
             </h1>
             <p className="mt-2 text-center text-sm text-muted">
-              Here&apos;s the journey we&apos;re building for you.
+              {dict["onboarding.summarySubtitle"]}
             </p>
             <div className="mt-6 space-y-3 text-sm">
               <div className="rounded-xl border border-border bg-surface-2 px-4 py-3">
-                <p className="text-xs text-faint">Primary goal</p>
-                <p className="font-medium">{goal}</p>
+                <p className="text-xs text-faint">{dict["onboarding.primaryGoalLabel"]}</p>
+                <p className="font-medium">
+                  {PRIMARY_GOAL_OPTIONS.find((o) => o.id === goal)?.labelKey
+                    ? dict[PRIMARY_GOAL_OPTIONS.find((o) => o.id === goal)!.labelKey]
+                    : goal}
+                </p>
               </div>
               <div className="rounded-xl border border-border bg-surface-2 px-4 py-3">
-                <p className="text-xs text-faint">Identities</p>
+                <p className="text-xs text-faint">{dict["onboarding.identitiesLabel"]}</p>
                 <p className="font-medium">
                   {identities
-                    .map((id) => IDENTITY_OPTIONS.find((o) => o.id === id)?.label)
+                    .map((id) => {
+                      const option = IDENTITY_OPTIONS.find((o) => o.id === id);
+                      return option ? dict[option.labelKey] : id;
+                    })
                     .join(", ")}
                 </p>
               </div>
@@ -148,15 +205,15 @@ export function OnboardingWizard({
             onClick={() => setStep((s) => Math.max(0, s - 1))}
             disabled={step === 0}
           >
-            <ChevronLeft className="size-4" /> Back
+            <ChevronLeft className="size-4" /> {dict["onboarding.back"]}
           </Button>
-          {step < 2 ? (
+          {step < TOTAL_STEPS - 1 ? (
             <Button onClick={() => setStep((s) => s + 1)} disabled={!canContinue}>
-              Continue <ChevronRight className="size-4" />
+              {dict["common.continue"]} <ChevronRight className="size-4" />
             </Button>
           ) : (
             <Button onClick={finish} disabled={saving}>
-              Enter Kingdom Athlete
+              {dict["onboarding.enterApp"]}
             </Button>
           )}
         </div>

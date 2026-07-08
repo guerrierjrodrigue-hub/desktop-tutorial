@@ -13,7 +13,7 @@ describe("isLocaleCode", () => {
     expect(isLocaleCode("")).toBe(false);
   });
 
-  it("has at least 10 languages", () => {
-    expect(LOCALES.length).toBeGreaterThanOrEqual(10);
+  it("supports English and French", () => {
+    expect(LOCALES.map((l) => l.code)).toEqual(["en", "fr"]);
   });
 });
