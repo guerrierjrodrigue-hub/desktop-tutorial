@@ -12,7 +12,8 @@
     "e2e": "playwright test",
     "db:verify": "node --env-file=.env.local scripts/verify-schema.mjs",
     "exercises:enrich": "node --env-file=.env.local scripts/enrich-exercise-media.mjs",
-    "programs:expand-weeks": "node --env-file=.env.local scripts/expand-program-weeks.mjs"
+    "programs:expand-weeks": "node --env-file=.env.local scripts/expand-program-weeks.mjs",
+    "film:generate": "node --env-file=.env.local scripts/generate-vision-film.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.110.0",
@@ -37,11 +38,13 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "ai": "^7.0.19",
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
     "playwright-core": "^1.61.1",
     "tailwindcss": "^4",
     "typescript": "^5",
+    "undici": "^8.7.0",
     "vitest": "^4.1.9"
   }
 }
