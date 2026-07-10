@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import Link from "next/link";
-import { Mail, Lock, User, ArrowRight, AlertCircle } from "lucide-react";
+import { Mail, Lock, User, ArrowRight, AlertCircle, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   emailAuthAction,
@@ -28,57 +28,66 @@ export function AuthForm({ mode, dict }: { mode: "login" | "signup"; dict: Dicti
         {isSignup ? dict["auth.beginJourney"] : dict["auth.continueJourney"]}
       </p>
 
-      {/* OAuth */}
-      <div className="mt-8 space-y-3">
-        <OAuthButton provider="google" label={dict["auth.continueWithGoogle"]} />
-      </div>
-
-      <div className="my-6 flex items-center gap-3 text-xs text-faint">
-        <span className="h-px flex-1 bg-border" />
-        {dict["auth.orWithEmail"]}
-        <span className="h-px flex-1 bg-border" />
-      </div>
-
-      <form action={formAction} className="space-y-3">
-        <input type="hidden" name="mode" value={mode} />
-        {isSignup && (
-          <Field icon={User} name="name" type="text" placeholder={dict["auth.fullName"]} autoComplete="name" />
-        )}
-        <Field
-          icon={Mail}
-          name="email"
-          type="email"
-          placeholder={dict["auth.emailAddress"]}
-          autoComplete="email"
-          required
-        />
-        <Field
-          icon={Lock}
-          name="password"
-          type="password"
-          placeholder={dict["auth.password"]}
-          autoComplete={isSignup ? "new-password" : "current-password"}
-          minLength={6}
-          required
-        />
-
-        {!isSignup && (
-          <div className="text-right">
-            <Link href="/forgot-password" className="text-xs text-gold-bright hover:underline">
-              {dict["auth.forgotPassword"]}
-            </Link>
+      {state.confirmationSent ? (
+        <p className="mt-8 flex items-center gap-2 rounded-lg bg-green/10 px-3 py-2 text-sm text-green-bright">
+          <CheckCircle2 className="size-4 shrink-0" />
+          {dict["auth.confirmationSent"]}
+        </p>
+      ) : (
+        <>
+          {/* OAuth */}
+          <div className="mt-8 space-y-3">
+            <OAuthButton provider="google" label={dict["auth.continueWithGoogle"]} />
           </div>
-        )}
 
-        {state.error && (
-          <p className="flex items-center gap-2 rounded-lg bg-danger/10 px-3 py-2 text-sm text-danger">
-            <AlertCircle className="size-4 shrink-0" />
-            {state.error}
-          </p>
-        )}
+          <div className="my-6 flex items-center gap-3 text-xs text-faint">
+            <span className="h-px flex-1 bg-border" />
+            {dict["auth.orWithEmail"]}
+            <span className="h-px flex-1 bg-border" />
+          </div>
 
-        <SubmitButton isSignup={isSignup} dict={dict} />
-      </form>
+          <form action={formAction} className="space-y-3">
+            <input type="hidden" name="mode" value={mode} />
+            {isSignup && (
+              <Field icon={User} name="name" type="text" placeholder={dict["auth.fullName"]} autoComplete="name" />
+            )}
+            <Field
+              icon={Mail}
+              name="email"
+              type="email"
+              placeholder={dict["auth.emailAddress"]}
+              autoComplete="email"
+              required
+            />
+            <Field
+              icon={Lock}
+              name="password"
+              type="password"
+              placeholder={dict["auth.password"]}
+              autoComplete={isSignup ? "new-password" : "current-password"}
+              minLength={6}
+              required
+            />
+
+            {!isSignup && (
+              <div className="text-right">
+                <Link href="/forgot-password" className="text-xs text-gold-bright hover:underline">
+                  {dict["auth.forgotPassword"]}
+                </Link>
+              </div>
+            )}
+
+            {state.error && (
+              <p className="flex items-center gap-2 rounded-lg bg-danger/10 px-3 py-2 text-sm text-danger">
+                <AlertCircle className="size-4 shrink-0" />
+                {state.error}
+              </p>
+            )}
+
+            <SubmitButton isSignup={isSignup} dict={dict} />
+          </form>
+        </>
+      )}
 
       <p className="mt-6 text-center text-sm text-muted">
         {isSignup ? dict["auth.alreadyHaveAccount"] : dict["auth.newHere"]}{" "}

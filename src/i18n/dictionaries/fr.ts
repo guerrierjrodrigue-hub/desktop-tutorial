@@ -54,6 +54,7 @@ const fr: Dictionary = {
   "auth.forgotPasswordSubtitle": "Entrez votre e-mail et nous vous enverrons un lien de réinitialisation.",
   "auth.sendResetLink": "Envoyer le lien",
   "auth.resetLinkSent": "Si un compte existe pour cet e-mail, un lien de réinitialisation est en route.",
+  "auth.confirmationSent": "Vérifie ta boîte mail pour confirmer ton compte, puis connecte-toi.",
   "auth.backToLogin": "Retour à la connexion",
   "auth.resetPasswordTitle": "Choisissez un nouveau mot de passe",
   "auth.resetPasswordSubtitle": "Choisissez-en un dont vous vous souviendrez.",

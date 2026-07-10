@@ -8,6 +8,7 @@ import { sendWelcomeEmail } from "@/lib/email";
 
 export interface AuthState {
   error?: string;
+  confirmationSent?: boolean;
 }
 
 async function siteOrigin(): Promise<string> {
@@ -37,16 +38,18 @@ export async function emailAuthAction(
   const supabase = await createSupabaseServerClient();
 
   if (mode === "signup") {
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: { full_name: name || email.split("@")[0] },
-        emailRedirectTo: `${await siteOrigin()}/auth/callback`,
+        emailRedirectTo: `${await siteOrigin()}/auth/callback?redirect=/onboarding`,
       },
     });
     if (error) return { error: error.message };
     void sendWelcomeEmail(email, name || email.split("@")[0]);
+    // No session yet means Supabase requires email confirmation before sign-in.
+    if (!data.session) return { confirmationSent: true };
   } else {
     const { error } = await supabase.auth.signInWithPassword({
       email,
