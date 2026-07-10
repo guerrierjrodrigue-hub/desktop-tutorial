@@ -4,6 +4,12 @@
   "buildCommand": "next build",
   "installCommand": "npm ci",
   "regions": ["iad1"],
+  "crons": [
+    {
+      "path": "/api/cron/send-reminders",
+      "schedule": "*/15 * * * *"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

@@ -21,8 +21,8 @@ export function PremiumGate({
       </span>
       <h2 className="mt-4 font-serif text-2xl font-semibold">{title}</h2>
       <p className="mx-auto mt-2 max-w-md text-muted">
-        Unlock it with Kingdom Athlete Premium — and start with a 7-day free
-        trial.
+        Unlock it with Kingdom Athlete Premium — and start with 1 month
+        free.
       </p>
       <ul className="mx-auto mt-6 flex max-w-xs flex-col gap-2 text-left text-sm">
         {perks.map((p) => (

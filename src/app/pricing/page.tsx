@@ -19,7 +19,7 @@ const faqs = [
   },
   {
     q: "What does the free trial include?",
-    a: "The full Disciple experience for 7 days: every program, unlimited Barnabas coaching, nutrition tools, and reading plans. No card required to start.",
+    a: "The full Disciple experience for a full month: every program, unlimited Barnabas coaching, nutrition tools, and reading plans. No card required to start.",
   },
   {
     q: "Is my giving to my church separate?",

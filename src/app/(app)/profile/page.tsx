@@ -12,18 +12,25 @@ import { signOutAction } from "@/app/(auth)/actions";
 import { ManageBillingButton } from "@/components/billing/manage-billing-button";
 import { ProfileEditor } from "@/components/profile/profile-editor";
 import { LanguageSwitcher } from "@/components/settings/language-switcher";
+import { NotificationSettings } from "@/components/settings/notification-settings";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
+import {
+  getNotificationPreferences,
+  hasPushSubscription,
+} from "@/lib/queries/notification-preferences";
 
 export const metadata: Metadata = {
   title: "Profile",
 };
 
 export default async function ProfilePage() {
-  const [currentUser, badges, locale] = await Promise.all([
+  const [currentUser, badges, locale, notificationPreferences, subscribed] = await Promise.all([
     getCurrentUser(),
     getBadges(),
     getLocale(),
+    getNotificationPreferences(),
+    hasPushSubscription(),
   ]);
   const dict = await getDictionary(locale);
   const { level, progress, nextLevelXp } = levelFromXp(currentUser.xp);
@@ -78,8 +85,14 @@ export default async function ProfilePage() {
           </Card>
         </ProfileEditor>
 
-        <div className="mt-5">
+        <div className="mt-5 grid gap-5 sm:grid-cols-2">
           <LanguageSwitcher currentLocale={locale} dict={dict} />
+          <NotificationSettings
+            initial={notificationPreferences}
+            hasSubscription={subscribed}
+            dict={dict}
+            vapidPublicKey={process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? ""}
+          />
         </div>
 
         {currentUser.isPremium ? (

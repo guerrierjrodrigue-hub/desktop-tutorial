@@ -67,7 +67,7 @@ export function Hero() {
         >
           <Link href="/signup">
             <Button size="lg" className="group">
-              Start your 7-day free trial
+              Start your 1 month free trial
               <ArrowRight className="transition-transform group-hover:translate-x-0.5" />
             </Button>
           </Link>
@@ -84,7 +84,7 @@ export function Hero() {
           animate="show"
           className="mt-5 text-sm text-faint"
         >
-          Train with purpose · 7-day free trial · No card required
+          Train with purpose · 1 month free · No card required
         </motion.p>
       </div>
 

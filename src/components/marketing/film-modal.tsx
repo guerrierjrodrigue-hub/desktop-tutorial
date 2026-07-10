@@ -324,7 +324,7 @@ function LogoScene({ onClose, onReplay }: { onClose: () => void; onReplay: () =>
           onClick={onClose}
           className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-gold-bright to-gold-deep px-6 py-2.5 text-sm font-semibold text-background transition hover:opacity-90"
         >
-          Start your 7-day free trial
+          Start your 1 month free trial
         </Link>
         <button
           onClick={onReplay}
