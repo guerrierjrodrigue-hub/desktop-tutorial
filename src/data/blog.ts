@@ -14,7 +14,7 @@ export const blogPosts: BlogPost[] = [
     title: "Train Like It's Worship: 5 Ways to Reframe Your Workout",
     excerpt:
       "Your workout doesn't have to compete with your quiet time. Here's how to make the barbell part of the same act of devotion.",
-    author: "Naomi Fields",
+    author: "Kingdom Athlete Team",
     date: "2026-05-04",
     readMinutes: 5,
     content: [
@@ -33,7 +33,7 @@ export const blogPosts: BlogPost[] = [
     title: "The Strength Isaiah 40:31 Actually Promises",
     excerpt:
       "\"Those who hope in the Lord will renew their strength\" gets quoted at every finish line. Here's what it actually meant — and what it means for your next rest day.",
-    author: "Josh Ramirez",
+    author: "Kingdom Athlete Team",
     date: "2026-04-18",
     readMinutes: 4,
     content: [
@@ -45,20 +45,20 @@ export const blogPosts: BlogPost[] = [
     ],
   },
   {
-    slug: "10000-users-habit-that-sticks",
-    title: "What 10,000 People Taught Us About Building a Habit That Sticks",
+    slug: "building-a-habit-that-sticks",
+    title: "What the Research on Habit Formation Means for Your 40-Day Challenge",
     excerpt:
-      "We looked at completion data from the 40 Days of Discipline challenge. The people who finished didn't rely on motivation — they relied on something smaller.",
-    author: "Elias Wren",
+      "Motivation fades by design. Here's what behavioral science says actually keeps people showing up — and how our 40 Days of Discipline challenge is built around it.",
+    author: "Kingdom Athlete Team",
     date: "2026-03-02",
     readMinutes: 6,
     content: [
-      "Every January, thousands of people join our 40 Days of Discipline challenge — a workout and a devotional, every day, for forty days. Every January, most of them stop somewhere around day nine.",
-      "So we looked at the data behind the people who didn't stop. A few patterns showed up again and again.",
-      "First, finishers logged their habit at the same time of day, within about a 30-minute window, on over 80% of days. The people who \"found time whenever\" had a completion rate less than half as high. Consistency of timing mattered more than intensity of effort.",
-      "Second, finishers almost never had a perfect streak. The median finisher missed 3-4 days across the forty. What separated them wasn't flawlessness — it was that a missed day never turned into a missed week. They came back the next day, not \"next Monday.\"",
-      "Third, people training alongside at least one other person — a spouse, a small group, a church team on the leaderboard — were nearly twice as likely to finish as people going solo.",
-      "None of this is surprising once you say it out loud, but it's worth saying: discipline isn't a personality trait some people have and others don't. It's a handful of small, repeatable structures — a fixed time, a short memory for missed days, and someone else in the fight with you. Build those three things and the habit tends to build itself.",
+      "Every challenge season, people join our 40 Days of Discipline challenge — a workout and a devotional, every day, for forty days — full of motivation. And motivation, by its nature, doesn't last forty days. That's not a character flaw; it's how motivation works.",
+      "So what actually predicts whether a habit sticks? A few well-documented patterns from habit-formation research are worth building your own rhythm around.",
+      "First, consistency of timing beats intensity of effort. Anchoring a habit to a fixed time or an existing routine — \"implementation intentions,\" in the research literature — makes people dramatically more likely to follow through than a vague intention to \"find time somewhere.\"",
+      "Second, don't aim for a perfect streak — aim to never miss twice in a row. A single missed day barely dents long-term habit formation. A missed day that turns into a missed week is what actually breaks a habit. Plan for the slip; just don't let it compound.",
+      "Third, accountability changes outcomes. People pursuing a goal alongside someone else — a spouse, a small group, a church team on a shared leaderboard — consistently report higher follow-through than people going it alone.",
+      "None of this is surprising once you say it out loud, but it's worth saying: discipline isn't a personality trait some people have and others don't. It's a handful of small, repeatable structures — a fixed time, a short memory for missed days, and someone else in the fight with you. That's exactly why the 40 Days of Discipline challenge is built around a daily time, a forgiving streak, and a leaderboard — not willpower alone.",
     ],
   },
 ];

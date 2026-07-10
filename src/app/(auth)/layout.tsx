@@ -31,11 +31,11 @@ export default function AuthLayout({
         {children}
         <p className="mt-10 text-center text-xs text-faint">
           By continuing you agree to our{" "}
-          <Link href="#" className="underline hover:text-muted">
+          <Link href="/terms" className="underline hover:text-muted">
             Terms
           </Link>{" "}
           &{" "}
-          <Link href="#" className="underline hover:text-muted">
+          <Link href="/privacy" className="underline hover:text-muted">
             Privacy Policy
           </Link>
           .

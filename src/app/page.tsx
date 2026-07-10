@@ -52,10 +52,10 @@ const features = [
 ];
 
 const pillars = [
-  { value: "50K+", label: "Active believers" },
-  { value: "1.2M", label: "Workouts completed" },
-  { value: "480K", label: "Prayers logged" },
-  { value: "4.9★", label: "App store rating" },
+  { value: "6", label: "Guided programs" },
+  { value: "109", label: "Recipes across 5 goals" },
+  { value: "4", label: "Bible reading plans" },
+  { value: "4", label: "AI coach personas" },
 ];
 
 export default function LandingPage() {
@@ -162,18 +162,15 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Testimonial */}
+        {/* Conviction */}
         <section className="mx-auto max-w-4xl px-6 py-20 text-center">
           <Reveal>
             <Quote className="mx-auto size-8 text-gold/50" />
             <p className="mt-6 font-serif text-2xl font-medium leading-snug sm:text-3xl">
-              “For the first time, my workouts and my walk with God aren&apos;t
-              competing for time — they&apos;re the same habit. Kingdom Athlete
-              changed my mornings.”
+              “Do you not know that your bodies are temples of the Holy
+              Spirit? Therefore honor God with your bodies.”
             </p>
-            <p className="mt-6 text-sm text-muted">
-              Rachel K. · lost 24 lbs, memorized 40 verses
-            </p>
+            <p className="mt-6 text-sm text-muted">1 Corinthians 6:19–20</p>
           </Reveal>
         </section>
 
@@ -191,7 +188,7 @@ export default function LandingPage() {
               of soul.
             </p>
             <div className="mt-8 flex justify-center">
-              <Link href="/dashboard">
+              <Link href="/signup">
                 <Button size="lg">Begin your journey</Button>
               </Link>
             </div>

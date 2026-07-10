@@ -6,7 +6,6 @@ import { MarketingFooter } from "@/components/marketing/marketing-footer";
 import { Reveal } from "@/components/ui/reveal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Avatar } from "@/components/ui/avatar";
 import { APP_MISSION } from "@/lib/constants";
 
 export const metadata: Metadata = {
@@ -37,24 +36,6 @@ const pillars = [
   },
 ];
 
-const team = [
-  {
-    name: "Josh Ramirez",
-    role: "Co-founder & CEO",
-    bio: "Former college strength coach turned product builder. Started Kingdom Athlete after his own gym-vs-quiet-time tug of war.",
-  },
-  {
-    name: "Naomi Fields",
-    role: "Co-founder & Head of Discipleship",
-    bio: "Pastor's kid, dietitian, and the voice behind Barnabas's tone — warm, biblically grounded, never preachy.",
-  },
-  {
-    name: "Elias Wren",
-    role: "Head of Engineering",
-    bio: "Leads the team building the app you're using right now, one honest commit at a time.",
-  },
-];
-
 export default function AboutPage() {
   return (
     <div className="flex min-h-svh flex-col">
@@ -77,25 +58,22 @@ export default function AboutPage() {
         <section className="mx-auto max-w-3xl px-6 py-10">
           <Reveal className="glass space-y-4 rounded-3xl border border-border p-8 text-sm leading-relaxed text-muted sm:p-10">
             <p>
-              It began in a church gym in 2023. A small group of trainers,
-              a dietitian, and a couple of engineers kept having the same
-              conversation after early-morning workouts: their calendars had
-              a slot for the gym and a slot for devotions, and the two never
-              talked to each other. Fitness apps were secular and
+              It started with a simple, familiar frustration: our calendars
+              had a slot for the gym and a slot for devotions, and the two
+              never talked to each other. Fitness apps were secular and
               transactional. Devotional apps never touched a barbell.
             </p>
             <p>
               So we started sketching a different kind of app — one daily
               rhythm where a workout plan, a reading plan, and a coach who
               actually knows your name (or at least your streak) all live in
-              the same place. Eighteen months, a lot of prayer, and more
-              protein shakes than we can count later, Kingdom Athlete
-              launched.
+              the same place.
             </p>
             <p>
-              Today thousands of believers use it to train with discipline
-              and rest with grace — no guilt, no gimmicks, just steady
-              faithfulness in body and spirit.
+              We&apos;re still early — a small, independent team building this
+              one honest commit at a time. Our hope is that you&apos;ll train
+              with discipline and rest with grace here — no guilt, no
+              gimmicks, just steady faithfulness in body and spirit.
             </p>
           </Reveal>
         </section>
@@ -124,31 +102,6 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Team */}
-        <section className="mx-auto max-w-5xl px-6 py-16">
-          <Reveal className="mx-auto max-w-2xl text-center">
-            <h2 className="font-serif text-2xl font-semibold sm:text-3xl">
-              The people behind it
-            </h2>
-            <p className="mt-3 text-sm text-muted">
-              A small, mission-driven team of trainers, believers, and builders.
-            </p>
-          </Reveal>
-
-          <div className="mt-10 grid gap-5 sm:grid-cols-3">
-            {team.map((member, i) => (
-              <Reveal key={member.name} delay={i * 0.05}>
-                <div className="glass flex h-full flex-col items-center rounded-2xl border border-border p-6 text-center">
-                  <Avatar name={member.name} color="var(--color-green)" className="size-14 text-lg" />
-                  <h3 className="mt-3 font-semibold">{member.name}</h3>
-                  <p className="text-xs text-gold-bright">{member.role}</p>
-                  <p className="mt-2 text-sm text-muted">{member.bio}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </section>
-
         {/* CTA */}
         <section className="mx-auto max-w-5xl px-6 py-20">
           <Reveal className="glass ring-gold relative overflow-hidden rounded-3xl border border-gold/20 px-8 py-14 text-center sm:px-12">
@@ -156,12 +109,12 @@ export default function AboutPage() {
               Want to build this with us?
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-muted">
-              We&apos;re a small team looking for people who care about both
-              craft and calling.
+              We&apos;re a small, independent team — but we&apos;re always glad to
+              hear from people who care about both craft and calling.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Link href="/careers">
-                <Button size="lg">See open roles</Button>
+                <Button size="lg">Careers</Button>
               </Link>
               <Link href="/contact">
                 <Button size="lg" variant="secondary">
