@@ -59,6 +59,7 @@ const en = {
   "auth.forgotPasswordSubtitle": "Enter your email and we'll send you a reset link.",
   "auth.sendResetLink": "Send reset link",
   "auth.resetLinkSent": "If an account exists for that email, a reset link is on its way.",
+  "auth.confirmationSent": "Check your email to confirm your account, then sign in.",
   "auth.backToLogin": "Back to sign in",
   "auth.resetPasswordTitle": "Choose a new password",
   "auth.resetPasswordSubtitle": "Make it something you'll remember.",
