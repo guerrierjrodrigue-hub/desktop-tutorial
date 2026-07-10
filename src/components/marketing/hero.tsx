@@ -84,8 +84,7 @@ export function Hero() {
           animate="show"
           className="mt-5 text-sm text-faint"
         >
-          Join <span className="text-foreground">50,000+</span> believers training
-          with purpose · No card required
+          Train with purpose · 7-day free trial · No card required
         </motion.p>
       </div>
 
