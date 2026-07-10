@@ -199,3 +199,11 @@ export type IdentityId =
   | "wellness"
   | "parent"
   | "creator";
+
+export interface NotificationPreferences {
+  timezone: string;
+  verseReminderEnabled: boolean;
+  verseReminderTime: string | null;
+  workoutReminderEnabled: boolean;
+  workoutReminderTime: string | null;
+}

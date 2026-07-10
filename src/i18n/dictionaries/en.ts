@@ -91,6 +91,15 @@ const en = {
   "settings.languageTitle": "Language",
   "settings.languageSubtitle": "Choose the language Kingdom Athlete displays in.",
 
+  // Settings / reminders (push notifications)
+  "reminders.title": "Reminders",
+  "reminders.subtitle": "Get a daily nudge — a verse or quote, and a reminder for your workout.",
+  "reminders.unsupported": "Your browser doesn't support notifications.",
+  "reminders.blocked": "Notifications are blocked for this site — enable them in your browser settings to use reminders.",
+  "reminders.enable": "Enable notifications",
+  "reminders.verseReminder": "Daily verse & quote",
+  "reminders.workoutReminder": "Workout reminder",
+
   // Spiritual / Bible
   "spiritual.title": "Spiritual",
   "spiritual.subtitle": "Train the soul with the same discipline as the body.",

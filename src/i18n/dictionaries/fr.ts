@@ -84,6 +84,14 @@ const fr: Dictionary = {
   "settings.languageTitle": "Langue",
   "settings.languageSubtitle": "Choisissez la langue d'affichage de Kingdom Athlete.",
 
+  "reminders.title": "Rappels",
+  "reminders.subtitle": "Reçois un rappel quotidien — un verset ou une citation, et un rappel pour ton entraînement.",
+  "reminders.unsupported": "Ton navigateur ne prend pas en charge les notifications.",
+  "reminders.blocked": "Les notifications sont bloquées pour ce site — active-les dans les paramètres de ton navigateur pour utiliser les rappels.",
+  "reminders.enable": "Activer les notifications",
+  "reminders.verseReminder": "Verset & citation du jour",
+  "reminders.workoutReminder": "Rappel d'entraînement",
+
   "spiritual.title": "Spirituel",
   "spiritual.subtitle": "Entraînez l'âme avec la même discipline que le corps.",
   "spiritual.verseOfDay": "Verset du jour",

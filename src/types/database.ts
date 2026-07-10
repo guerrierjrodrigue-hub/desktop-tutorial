@@ -258,6 +258,28 @@ export interface JournalEntryRow {
   created_at: Timestamptz;
 }
 
+export interface PushSubscriptionRow {
+  id: string;
+  user_id: string;
+  endpoint: string;
+  p256dh: string;
+  auth: string;
+  created_at: Timestamptz;
+}
+
+export interface NotificationPreferencesRow {
+  user_id: string;
+  locale: string;
+  timezone: string;
+  verse_reminder_enabled: boolean;
+  verse_reminder_time: string | null;
+  workout_reminder_enabled: boolean;
+  workout_reminder_time: string | null;
+  last_verse_sent_date: DateStr | null;
+  last_workout_sent_date: DateStr | null;
+  updated_at: Timestamptz;
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -285,6 +307,8 @@ export interface Database {
       food_logs: T<FoodLogRow>;
       user_preferences: T<UserPreferencesRow>;
       journal_entries: T<JournalEntryRow>;
+      push_subscriptions: T<PushSubscriptionRow>;
+      notification_preferences: T<NotificationPreferencesRow>;
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

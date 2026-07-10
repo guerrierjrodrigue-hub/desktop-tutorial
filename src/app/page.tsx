@@ -184,7 +184,7 @@ export default function LandingPage() {
               <span className="text-gradient-gold">Train it like one.</span>
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-muted">
-              Start today with a 7-day free trial. Discipline of body, steadiness
+              Start today with 1 month free. Discipline of body, steadiness
               of soul.
             </p>
             <div className="mt-8 flex justify-center">
