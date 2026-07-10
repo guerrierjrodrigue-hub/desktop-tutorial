@@ -10,8 +10,15 @@ const VAPID_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? "";
 const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY ?? "";
 const VAPID_SUBJECT = process.env.VAPID_SUBJECT ?? "mailto:hello@kingdomathlete.app";
 
-/** How far past a user's target minute the cron will still fire (covers gaps between cron ticks). */
-const TOLERANCE_MINUTES = 20;
+/**
+ * How far past a user's target minute the cron will still fire, covering
+ * gaps between cron ticks. Vercel Hobby plans only allow one cron run per
+ * day, so this is intentionally generous (most of a day) — on Hobby, a
+ * reminder fires on the first run after its target time each day rather
+ * than at a precise minute. Tighten this (e.g. to 20) once the cron itself
+ * runs more often than daily (Vercel Pro or higher).
+ */
+const TOLERANCE_MINUTES = 20 * 60;
 
 function localTimeParts(date: Date, timeZone: string): { hhmm: string; dateStr: string } {
   const hhmm = (() => {
