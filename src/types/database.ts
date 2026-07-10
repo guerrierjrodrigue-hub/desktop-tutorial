@@ -35,6 +35,7 @@ export interface ProfileRow {
   xp: number;
   streak: number;
   primary_goal: string | null;
+  primary_goals: string[];
   identities: string[];
   onboarded_at: Timestamptz | null;
   joined_at: Timestamptz;

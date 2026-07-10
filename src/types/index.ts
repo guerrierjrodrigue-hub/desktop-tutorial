@@ -32,7 +32,7 @@ export interface UserProfile {
   streak: number;
   joinedAt: string;
   identities: string[];
-  primaryGoal?: string;
+  primaryGoals: string[];
   onboardedAt?: string;
 }
 

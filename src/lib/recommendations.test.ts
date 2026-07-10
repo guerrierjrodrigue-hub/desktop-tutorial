@@ -38,7 +38,7 @@ const habitsMostlyUndone: Habit[] = [
 describe("getRecommendations", () => {
   it("recommends a program matching the user's primary goal", () => {
     const recs = getRecommendations(
-      { primaryGoal: "build-muscle", identities: [] },
+      { primaryGoals: ["build-muscle"], identities: [] },
       programs,
       habitsMostlyDone,
       en,
@@ -46,28 +46,38 @@ describe("getRecommendations", () => {
     expect(recs.find((r) => r.id === "program")?.label).toBe("Strength Program");
   });
 
-  it("falls back to the first program when the goal has no direct match", () => {
+  it("falls back to the first program when no goal has a direct match", () => {
     const recs = getRecommendations(
-      { primaryGoal: "improve-mental-wellness", identities: [] },
+      { primaryGoals: ["improve-mental-wellness"], identities: [] },
       programs,
       habitsMostlyDone,
       en,
     );
     expect(recs.find((r) => r.id === "program")?.label).toBe("Strength Program");
+  });
+
+  it("matches on any selected goal, not just the first", () => {
+    const recs = getRecommendations(
+      { primaryGoals: ["improve-mental-wellness", "improve-endurance"], identities: [] },
+      programs,
+      habitsMostlyDone,
+      en,
+    );
+    expect(recs.find((r) => r.id === "program")?.label).toBe("Running Program");
   });
 
   it("nudges toward Focus when today's habit completion is low", () => {
-    const recs = getRecommendations({ identities: [] }, programs, habitsMostlyUndone, en);
+    const recs = getRecommendations({ primaryGoals: [], identities: [] }, programs, habitsMostlyUndone, en);
     expect(recs.some((r) => r.id === "focus")).toBe(true);
   });
 
   it("does not nudge toward Focus when habits are mostly done", () => {
-    const recs = getRecommendations({ identities: [] }, programs, habitsMostlyDone, en);
+    const recs = getRecommendations({ primaryGoals: [], identities: [] }, programs, habitsMostlyDone, en);
     expect(recs.some((r) => r.id === "focus")).toBe(false);
   });
 
   it("always includes a community suggestion, capped at 3 total", () => {
-    const recs = getRecommendations({ identities: [] }, programs, habitsMostlyUndone, en);
+    const recs = getRecommendations({ primaryGoals: [], identities: [] }, programs, habitsMostlyUndone, en);
     expect(recs.some((r) => r.id === "community")).toBe(true);
     expect(recs.length).toBeLessThanOrEqual(3);
   });
