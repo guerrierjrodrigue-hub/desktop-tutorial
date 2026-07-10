@@ -24,15 +24,18 @@ const GOAL_CATEGORY: Partial<Record<GoalId, ProgramCategory>> = {
  * habit completion into up to 3 suggestions.
  */
 export function getRecommendations(
-  user: { primaryGoal?: string; identities: string[] },
+  user: { primaryGoals: string[]; identities: string[] },
   programs: Program[],
   habits: Habit[],
   dict: Dictionary,
 ): Recommendation[] {
   const recs: Recommendation[] = [];
 
-  const goalOption = PRIMARY_GOAL_OPTIONS.find((g) => g.id === user.primaryGoal);
-  const category = goalOption ? GOAL_CATEGORY[goalOption.id] : undefined;
+  const goalOptions = user.primaryGoals
+    .map((id) => PRIMARY_GOAL_OPTIONS.find((g) => g.id === id))
+    .filter((g): g is (typeof PRIMARY_GOAL_OPTIONS)[number] => Boolean(g));
+  const matchedGoal = goalOptions.find((g) => GOAL_CATEGORY[g.id]);
+  const category = matchedGoal ? GOAL_CATEGORY[matchedGoal.id] : undefined;
   const categoryMatch = category ? programs.find((p) => p.category === category) : undefined;
   const suggestedProgram = categoryMatch ?? programs[0];
   if (suggestedProgram) {
@@ -40,8 +43,8 @@ export function getRecommendations(
       id: "program",
       label: suggestedProgram.title,
       description:
-        categoryMatch && goalOption
-          ? `${dict["recommendations.matchesGoal"]} ${dict[goalOption.labelKey]}.`
+        categoryMatch && matchedGoal
+          ? `${dict["recommendations.matchesGoal"]} ${dict[matchedGoal.labelKey]}.`
           : dict["recommendations.wellRounded"],
       href: `/fitness/${suggestedProgram.id}`,
     });

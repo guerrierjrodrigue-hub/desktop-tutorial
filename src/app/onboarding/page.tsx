@@ -26,7 +26,7 @@ export default async function OnboardingPage({
       <OnboardingWizard
         locale={locale}
         dict={dict}
-        initialGoal={user?.primaryGoal}
+        initialGoals={user?.primaryGoals}
         initialIdentities={user?.identities}
       />
     </div>

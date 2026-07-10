@@ -19,18 +19,18 @@ const TOTAL_STEPS = 4;
 export function OnboardingWizard({
   locale,
   dict,
-  initialGoal,
+  initialGoals,
   initialIdentities,
 }: {
   locale: LocaleCode;
   dict: Dictionary;
-  initialGoal?: string;
+  initialGoals?: string[];
   initialIdentities?: string[];
 }) {
   const router = useRouter();
   const [step, setStep] = useState(0);
   const [language, setLanguage] = useState<LocaleCode>(locale);
-  const [goal, setGoal] = useState(initialGoal ?? "");
+  const [goals, setGoals] = useState<string[]>(initialGoals ?? []);
   const [identities, setIdentities] = useState<string[]>(initialIdentities ?? []);
   const [saving, setSaving] = useState(false);
   const [, startTransition] = useTransition();
@@ -43,6 +43,10 @@ export function OnboardingWizard({
     });
   }
 
+  function toggleGoal(id: string) {
+    setGoals((prev) => (prev.includes(id) ? prev.filter((g) => g !== id) : [...prev, id]));
+  }
+
   function toggleIdentity(id: IdentityId) {
     setIdentities((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
@@ -52,13 +56,13 @@ export function OnboardingWizard({
   function finish() {
     setSaving(true);
     startTransition(async () => {
-      await saveOnboarding({ goal, identities });
+      await saveOnboarding({ goals, identities });
       router.push("/dashboard");
     });
   }
 
   const canContinue =
-    step === 0 ? Boolean(language) : step === 1 ? Boolean(goal) : step === 2 ? identities.length > 0 : true;
+    step === 0 ? Boolean(language) : step === 1 ? goals.length > 0 : step === 2 ? identities.length > 0 : true;
 
   return (
     <div className="w-full max-w-lg">
@@ -113,23 +117,26 @@ export function OnboardingWizard({
               {dict["onboarding.goalSubtitle"]}
             </p>
             <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2">
-              {PRIMARY_GOAL_OPTIONS.map((option) => (
-                <button
-                  key={option.id}
-                  type="button"
-                  onClick={() => setGoal(option.id)}
-                  aria-pressed={goal === option.id}
-                  className={cn(
-                    "flex items-center justify-between rounded-xl border px-4 py-3 text-left text-sm font-medium transition",
-                    goal === option.id
-                      ? "border-gold/50 bg-gold/10 text-foreground"
-                      : "border-border bg-surface-2 text-muted hover:border-gold/30",
-                  )}
-                >
-                  {dict[option.labelKey]}
-                  {goal === option.id && <Check className="size-4 shrink-0 text-gold-bright" />}
-                </button>
-              ))}
+              {PRIMARY_GOAL_OPTIONS.map((option) => {
+                const selected = goals.includes(option.id);
+                return (
+                  <button
+                    key={option.id}
+                    type="button"
+                    onClick={() => toggleGoal(option.id)}
+                    aria-pressed={selected}
+                    className={cn(
+                      "flex items-center justify-between rounded-xl border px-4 py-3 text-left text-sm font-medium transition",
+                      selected
+                        ? "border-gold/50 bg-gold/10 text-foreground"
+                        : "border-border bg-surface-2 text-muted hover:border-gold/30",
+                    )}
+                  >
+                    {dict[option.labelKey]}
+                    {selected && <Check className="size-4 shrink-0 text-gold-bright" />}
+                  </button>
+                );
+              })}
             </div>
           </>
         )}
@@ -179,9 +186,12 @@ export function OnboardingWizard({
               <div className="rounded-xl border border-border bg-surface-2 px-4 py-3">
                 <p className="text-xs text-faint">{dict["onboarding.primaryGoalLabel"]}</p>
                 <p className="font-medium">
-                  {PRIMARY_GOAL_OPTIONS.find((o) => o.id === goal)?.labelKey
-                    ? dict[PRIMARY_GOAL_OPTIONS.find((o) => o.id === goal)!.labelKey]
-                    : goal}
+                  {goals
+                    .map((id) => {
+                      const option = PRIMARY_GOAL_OPTIONS.find((o) => o.id === id);
+                      return option ? dict[option.labelKey] : id;
+                    })
+                    .join(", ")}
                 </p>
               </div>
               <div className="rounded-xl border border-border bg-surface-2 px-4 py-3">

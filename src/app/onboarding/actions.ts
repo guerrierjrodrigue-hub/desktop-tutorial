@@ -4,12 +4,15 @@ import { getAuthedContext } from "@/lib/supabase/auth";
 import { type ActionResult, demoOk } from "@/lib/actions/result";
 
 export interface OnboardingInput {
-  goal: string;
+  goals: string[];
   identities: string[];
 }
 
-/** Save the primary goal + identities chosen during onboarding. */
+/** Save the primary goals + identities chosen during onboarding. */
 export async function saveOnboarding(input: OnboardingInput): Promise<ActionResult> {
+  if (!input.goals.length) {
+    return { ok: false, error: "Choose at least one goal." };
+  }
   if (!input.identities.length) {
     return { ok: false, error: "Choose at least one identity." };
   }
@@ -20,7 +23,7 @@ export async function saveOnboarding(input: OnboardingInput): Promise<ActionResu
   const { error } = await ctx.supabase
     .from("profiles")
     .update({
-      primary_goal: input.goal,
+      primary_goals: input.goals,
       identities: input.identities,
       onboarded_at: new Date().toISOString(),
     })

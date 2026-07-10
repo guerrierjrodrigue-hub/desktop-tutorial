@@ -22,7 +22,7 @@ function mapProfile(row: ProfileRow): UserProfile {
     streak: row.streak,
     joinedAt: row.joined_at,
     identities: row.identities,
-    primaryGoal: row.primary_goal ?? undefined,
+    primaryGoals: row.primary_goals,
     onboardedAt: row.onboarded_at ?? undefined,
   };
 }
@@ -63,6 +63,7 @@ export async function getCurrentUser(): Promise<UserProfile> {
     streak: 0,
     joinedAt: user.created_at,
     identities: [],
+    primaryGoals: [],
   };
 }
 

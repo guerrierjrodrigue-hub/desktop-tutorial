@@ -16,6 +16,6 @@ export const currentUser: UserProfile = {
   streak: 26,
   joinedAt: "2025-11-02",
   identities: ["christian"],
-  primaryGoal: "become-disciplined",
+  primaryGoals: ["become-disciplined", "grow-spiritually"],
   onboardedAt: "2025-11-02",
 };
