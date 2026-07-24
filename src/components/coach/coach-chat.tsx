@@ -58,15 +58,60 @@ export function CoachChat({ coach }: { coach: Coach }) {
           messages: next.filter((m) => m.id !== "greeting"),
         }),
       });
-      const data = await res.json();
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: crypto.randomUUID(),
-          role: "assistant",
-          content: data.reply ?? "I'm here for you. Let's try that again.",
-        },
-      ]);
+
+      // Error responses come back as JSON, not a text stream.
+      const contentType = res.headers.get("content-type") ?? "";
+      if (!res.ok || contentType.includes("application/json") || !res.body) {
+        const data = await res.json().catch(() => ({}));
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: crypto.randomUUID(),
+            role: "assistant",
+            content: data.reply ?? "I'm here for you. Let's try that again.",
+          },
+        ]);
+        return;
+      }
+
+      // Stream the reply into a single bubble that fills in as tokens arrive.
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let assistantId: string | null = null;
+      let acc = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        acc += decoder.decode(value, { stream: true });
+        if (!acc) continue;
+
+        if (assistantId === null) {
+          assistantId = crypto.randomUUID();
+          const id = assistantId;
+          setLoading(false); // first token arrived — replace the typing indicator
+          setMessages((prev) => [
+            ...prev,
+            { id, role: "assistant", content: acc },
+          ]);
+        } else {
+          const id = assistantId;
+          setMessages((prev) =>
+            prev.map((m) => (m.id === id ? { ...m, content: acc } : m)),
+          );
+        }
+      }
+
+      if (assistantId === null) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: crypto.randomUUID(),
+            role: "assistant",
+            content: "I'm here for you. Let's try that again.",
+          },
+        ]);
+      }
     } catch {
       setMessages((prev) => [
         ...prev,
