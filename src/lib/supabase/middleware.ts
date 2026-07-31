@@ -13,6 +13,10 @@ const PROTECTED = [
   "/community",
   "/challenges",
   "/profile",
+  "/habits",
+  "/journal",
+  "/focus",
+  "/onboarding",
   "/admin",
 ];
 

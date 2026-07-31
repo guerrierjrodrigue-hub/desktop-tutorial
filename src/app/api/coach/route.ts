@@ -26,6 +26,27 @@ function isRateLimited(userId: string): boolean {
   return recent.length > RATE_LIMIT_MAX_REQUESTS;
 }
 
+/**
+ * Stream a plain-text reply in a single chunk. Used for offline / fallback
+ * answers so the client reads every response the same way (a text stream),
+ * regardless of whether it came from Claude or the deterministic fallback.
+ */
+function textResponse(text: string, source: string): Response {
+  const stream = new ReadableStream<Uint8Array>({
+    start(controller) {
+      controller.enqueue(new TextEncoder().encode(text));
+      controller.close();
+    },
+  });
+  return new Response(stream, {
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "X-Coach-Source": source,
+      "Cache-Control": "no-store",
+    },
+  });
+}
+
 export async function POST(req: Request) {
   let body: CoachRequest;
   try {
@@ -47,30 +68,62 @@ export async function POST(req: Request) {
   // No key configured, no signed-in user, or over the rate limit → deterministic,
   // in-voice fallback. Never spend the paid API on an anonymous or abusive caller.
   if (!apiKey || !ctx || isRateLimited(ctx.userId)) {
-    return NextResponse.json({
-      reply: offlineCoachReply(coach.id, lastUser.content),
-      source: "offline",
-    });
+    return textResponse(offlineCoachReply(coach.id, lastUser.content), "offline");
   }
 
   try {
     const client = new Anthropic({ apiKey });
-    const response = await client.messages.create({
+    const anthropicStream = await client.messages.create({
       model: "claude-opus-4-8",
       max_tokens: 1024,
       system: coach.systemPrompt,
       messages: toClaudeMessages(messages),
+      stream: true,
     });
 
-    const textBlock = response.content.find((block) => block.type === "text");
-    const reply = textBlock?.text.trim() || offlineCoachReply(coach.id, lastUser.content);
+    const encoder = new TextEncoder();
+    let streamedAny = false;
 
-    return NextResponse.json({ reply, source: "anthropic" });
+    const readable = new ReadableStream<Uint8Array>({
+      async start(controller) {
+        try {
+          for await (const event of anthropicStream) {
+            if (
+              event.type === "content_block_delta" &&
+              event.delta.type === "text_delta" &&
+              event.delta.text
+            ) {
+              streamedAny = true;
+              controller.enqueue(encoder.encode(event.delta.text));
+            }
+          }
+          // If Claude returned nothing usable, fall back so the bubble is never empty.
+          if (!streamedAny) {
+            controller.enqueue(
+              encoder.encode(offlineCoachReply(coach.id, lastUser.content)),
+            );
+          }
+        } catch {
+          if (!streamedAny) {
+            controller.enqueue(
+              encoder.encode(offlineCoachReply(coach.id, lastUser.content)),
+            );
+          }
+        } finally {
+          controller.close();
+        }
+      },
+    });
+
+    return new Response(readable, {
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+        "X-Coach-Source": "anthropic",
+        "Cache-Control": "no-store",
+      },
+    });
   } catch {
-    // Never leave the user without an answer.
-    return NextResponse.json({
-      reply: offlineCoachReply(coach.id, lastUser.content),
-      source: "fallback",
-    });
+    // Never leave the user without an answer (e.g. the request failed before streaming).
+    return textResponse(offlineCoachReply(coach.id, lastUser.content), "fallback");
   }
 }
