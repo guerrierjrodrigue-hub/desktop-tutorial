@@ -75,38 +75,41 @@ export function CoachChat({ coach }: { coach: Coach }) {
       }
 
       // Stream the reply into a single bubble that fills in as tokens arrive.
+      // The message id is fixed up front (never mutated) and each chunk is
+      // appended via the functional state updater, so no closure-captured
+      // variable is mutated — keeps the React Compiler immutability rule happy.
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
-      let assistantId: string | null = null;
-      let acc = "";
+      const assistantId = crypto.randomUUID();
+      let hasContent = false;
 
-      while (true) {
+      for (;;) {
         const { done, value } = await reader.read();
         if (done) break;
-        acc += decoder.decode(value, { stream: true });
-        if (!acc) continue;
+        const chunk = decoder.decode(value, { stream: true });
+        if (!chunk) continue;
 
-        if (assistantId === null) {
-          assistantId = crypto.randomUUID();
-          const id = assistantId;
+        if (!hasContent) {
+          hasContent = true;
           setLoading(false); // first token arrived — replace the typing indicator
           setMessages((prev) => [
             ...prev,
-            { id, role: "assistant", content: acc },
+            { id: assistantId, role: "assistant", content: chunk },
           ]);
         } else {
-          const id = assistantId;
           setMessages((prev) =>
-            prev.map((m) => (m.id === id ? { ...m, content: acc } : m)),
+            prev.map((m) =>
+              m.id === assistantId ? { ...m, content: m.content + chunk } : m,
+            ),
           );
         }
       }
 
-      if (assistantId === null) {
+      if (!hasContent) {
         setMessages((prev) => [
           ...prev,
           {
-            id: crypto.randomUUID(),
+            id: assistantId,
             role: "assistant",
             content: "I'm here for you. Let's try that again.",
           },
