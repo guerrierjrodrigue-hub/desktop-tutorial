@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Fraunces } from "next/font/google";
 import "./globals.css";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { AnalyticsProvider } from "@/components/providers/analytics-provider";
 import { LocaleSync } from "@/components/providers/locale-sync";
 import {
@@ -81,6 +82,7 @@ export default function RootLayout({
       <body className="bg-ambient min-h-full">
         <LocaleSync />
         <AnalyticsProvider>{children}</AnalyticsProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
