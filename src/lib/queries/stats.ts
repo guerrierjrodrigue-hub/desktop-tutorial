@@ -1,20 +1,7 @@
 import { getAuthedContext } from "@/lib/supabase/auth";
 import { todayStats as mockTodayStats } from "@/data/dashboard";
 import type { DailyStats } from "@/types";
-
-const BLANK_STATS: DailyStats = {
-  caloriesBurned: 0,
-  caloriesGoal: 650,
-  activeMinutes: 0,
-  activeMinutesGoal: 45,
-  proteinG: 0,
-  waterMl: 0,
-  waterGoalMl: 3000,
-};
-
-/** Rough estimate: no per-workout calorie source exists, so we approximate from
- * active minutes at a moderate ~8 kcal/min. Transparent and clearly an estimate. */
-const CALORIES_PER_ACTIVE_MINUTE = 8;
+import { composeTodayStats, type RawDailyStatsRow } from "./stats-compute";
 
 /**
  * The signed-in user's activity stats for today.
@@ -51,37 +38,17 @@ export async function getTodayStats(): Promise<DailyStats> {
       .gte("completed_at", startOfDay),
   ]);
 
-  const row = statsRes.data as {
-    calories_burned?: number;
-    calories_goal?: number;
-    active_minutes_goal?: number;
-    protein_g?: number;
-    water_ml?: number;
-    water_goal_ml?: number;
-  } | null;
+  const row = statsRes.data as RawDailyStatsRow | null;
 
-  const proteinG =
-    ((foodRes.data as { protein_g: number }[] | null) ?? []).reduce(
-      (sum, r) => sum + (r.protein_g ?? 0),
-      0,
-    ) || (row?.protein_g ?? 0);
+  const proteinSum = (
+    (foodRes.data as { protein_g: number }[] | null) ?? []
+  ).reduce((sum, r) => sum + (r.protein_g ?? 0), 0);
 
   const activeMinutes = (
     (workoutRes.data as { duration_minutes: number }[] | null) ?? []
   ).reduce((sum, r) => sum + (r.duration_minutes ?? 0), 0);
 
-  const caloriesBurned =
-    row?.calories_burned || activeMinutes * CALORIES_PER_ACTIVE_MINUTE;
-
-  return {
-    caloriesBurned,
-    caloriesGoal: row?.calories_goal ?? BLANK_STATS.caloriesGoal,
-    activeMinutes,
-    activeMinutesGoal: row?.active_minutes_goal ?? BLANK_STATS.activeMinutesGoal,
-    proteinG,
-    waterMl: row?.water_ml ?? 0,
-    waterGoalMl: row?.water_goal_ml ?? BLANK_STATS.waterGoalMl,
-  };
+  return composeTodayStats(row, proteinSum, activeMinutes);
 }
 
 /** Whether the signed-in user has logged a workout today (demo mode always false — quests never fake completion). */

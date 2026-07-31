@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { getAuthedContext } from "@/lib/supabase/auth";
 import { type ActionResult, demoOk } from "@/lib/actions/result";
+import { nextWaterMl, isValidWaterDelta } from "@/lib/hydration";
 
 /** Log a food entry for the signed-in user for today. */
 export async function createFoodLog(input: {
@@ -28,21 +29,16 @@ export async function createFoodLog(input: {
   return { ok: true };
 }
 
-/** New hydration total after a delta, never negative. Pure — unit-tested. */
-export function nextWaterMl(currentMl: number, deltaMl: number): number {
-  return Math.max(0, currentMl + Math.round(deltaMl));
-}
-
 /**
  * Adjust today's hydration total (ml) for the signed-in user. Positive to add
  * a glass, negative to undo. Stored on the existing `daily_stats` row so the
  * dashboard activity ring and the nutrition page stay in sync.
  */
 export async function addWater(amountMl: number): Promise<ActionResult> {
-  const amount = Math.round(amountMl);
-  if (!Number.isFinite(amount) || amount === 0) {
+  if (!isValidWaterDelta(amountMl)) {
     return { ok: false, error: "Invalid amount." };
   }
+  const amount = Math.round(amountMl);
 
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
