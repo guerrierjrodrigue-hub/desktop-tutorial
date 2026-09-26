@@ -74,7 +74,7 @@ export async function getChallengeLeaderboard(limit = 5): Promise<LeaderboardEnt
   }
 
   const { data: profiles } = await ctx.supabase
-    .from("profiles")
+    .from("profile_public")
     .select("id, name")
     .in("id", [...totals.keys()]);
   const nameById = new Map((profiles ?? []).map((p) => [p.id, p.name]));

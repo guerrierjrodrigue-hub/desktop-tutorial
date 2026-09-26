@@ -47,7 +47,6 @@ interface PostRow {
   content: string;
   kind: CommunityPost["kind"];
   created_at: string;
-  profiles: { name: string } | null;
 }
 
 /** The community feed — real posts across all users (demo data when unconfigured). */
@@ -57,11 +56,22 @@ export async function getCommunityPosts(): Promise<CommunityPost[]> {
 
   const postQuery = await ctx.supabase
     .from("community_posts")
-    .select("*, profiles(name)")
+    .select("*")
     .order("created_at", { ascending: false })
     .limit(50);
   const postRows = postQuery.data as PostRow[] | null;
   if (!postRows?.length) return [];
+
+  // Author names come from the safe public view — PostgREST can't embed a view
+  // across a foreign key, so resolve them with a separate keyed lookup.
+  const authorIds = [...new Set(postRows.map((p) => p.user_id))];
+  const { data: authorRows } = await ctx.supabase
+    .from("profile_public")
+    .select("id, name")
+    .in("id", authorIds);
+  const nameById = new Map(
+    ((authorRows ?? []) as { id: string; name: string }[]).map((a) => [a.id, a.name]),
+  );
 
   const postIds = postRows.map((p) => p.id);
   const [likeQuery, commentQuery] = await Promise.all([
@@ -84,7 +94,7 @@ export async function getCommunityPosts(): Promise<CommunityPost[]> {
 
   return postRows.map((row) => ({
     id: row.id,
-    author: row.profiles?.name ?? "Athlete",
+    author: nameById.get(row.user_id) ?? "Athlete",
     avatarColor: colorFor(row.user_id),
     timeAgo: timeAgo(row.created_at),
     content: row.content,
