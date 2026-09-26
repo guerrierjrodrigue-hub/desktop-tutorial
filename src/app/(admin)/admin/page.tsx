@@ -5,7 +5,7 @@ import { AdminHeader } from "@/components/admin/admin-header";
 import { Card } from "@/components/ui/card";
 import { DataTable } from "@/components/admin/data-table";
 import { StatusPill } from "@/components/admin/status-pill";
-import { adminStats, adminUsers, adminLogs } from "@/data/admin";
+import { getAdminStats, getRecentUsers, getAdminLogs } from "@/lib/queries/admin-stats";
 
 export const metadata: Metadata = { title: "Admin · Overview" };
 
@@ -15,7 +15,13 @@ const logColor: Record<string, string> = {
   error: "text-danger",
 };
 
-export default function AdminOverviewPage() {
+export default async function AdminOverviewPage() {
+  const [stats, users, logs] = await Promise.all([
+    getAdminStats(),
+    getRecentUsers(5),
+    getAdminLogs(8),
+  ]);
+
   return (
     <main className="px-4 py-6 sm:px-8">
       <AdminHeader
@@ -25,7 +31,7 @@ export default function AdminOverviewPage() {
 
       {/* KPIs */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {adminStats.map((s) => (
+        {stats.map((s) => (
           <Card key={s.label}>
             <p className="text-sm text-muted">{s.label}</p>
             <p className="mt-1 font-serif text-3xl font-semibold">{s.value}</p>
@@ -39,7 +45,7 @@ export default function AdminOverviewPage() {
               ) : (
                 <TrendingDown className="size-3.5" />
               )}
-              {s.delta} vs last month
+              {s.delta}
             </p>
           </Card>
         ))}
@@ -57,7 +63,7 @@ export default function AdminOverviewPage() {
             </Link>
           </div>
           <DataTable
-            rows={adminUsers.slice(0, 5)}
+            rows={users}
             columns={[
               { key: "name", header: "Name" },
               { key: "plan", header: "Plan" },
@@ -74,19 +80,23 @@ export default function AdminOverviewPage() {
         <div>
           <h2 className="mb-3 font-serif text-lg font-semibold">System logs</h2>
           <Card>
-            <ul className="space-y-3">
-              {adminLogs.map((log) => (
-                <li key={log.id} className="flex gap-3 text-sm">
-                  <span
-                    className={`mt-1.5 size-1.5 shrink-0 rounded-full bg-current ${logColor[log.level]}`}
-                  />
-                  <div>
-                    <p className="leading-snug text-foreground/90">{log.message}</p>
-                    <p className="text-xs text-faint">{log.time}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
+            {logs.length === 0 ? (
+              <p className="text-sm text-muted">No recent activity.</p>
+            ) : (
+              <ul className="space-y-3">
+                {logs.map((log) => (
+                  <li key={log.id} className="flex gap-3 text-sm">
+                    <span
+                      className={`mt-1.5 size-1.5 shrink-0 rounded-full bg-current ${logColor[log.level]}`}
+                    />
+                    <div>
+                      <p className="leading-snug text-foreground/90">{log.message}</p>
+                      <p className="text-xs text-faint">{log.time}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
           </Card>
         </div>
       </div>
