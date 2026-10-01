@@ -1,8 +1,20 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
+import { isFreeMode } from "@/lib/flags";
 import { currentUser as mockUser } from "@/data/user";
 import type { UserProfile } from "@/types";
 import type { ProfileRow } from "@/types/database";
+
+/**
+ * During the free-beta phase (APP_FREE_MODE), unlock everything gated behind
+ * `user.isPremium` by forcing it true on every returned profile — real or mock —
+ * regardless of the stored status. This single choke point means no premium
+ * gate elsewhere in the app needs touching. The real `is_premium` column is
+ * untouched, so admin KPIs still report true numbers.
+ */
+function applyFreeMode(user: UserProfile): UserProfile {
+  return isFreeMode() ? { ...user, isPremium: true } : user;
+}
 
 function mapProfile(row: ProfileRow): UserProfile {
   return {
@@ -32,13 +44,13 @@ function mapProfile(row: ProfileRow): UserProfile {
  * configured or no session exists, so every screen renders in any environment.
  */
 export async function getCurrentUser(): Promise<UserProfile> {
-  if (!isSupabaseConfigured()) return mockUser;
+  if (!isSupabaseConfigured()) return applyFreeMode(mockUser);
 
   const supabase = await createSupabaseServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return mockUser;
+  if (!user) return applyFreeMode(mockUser);
 
   const { data } = await supabase
     .from("profiles")
@@ -46,13 +58,13 @@ export async function getCurrentUser(): Promise<UserProfile> {
     .eq("id", user.id)
     .single();
 
-  if (data) return mapProfile(data);
+  if (data) return applyFreeMode(mapProfile(data));
 
   // Authenticated but no profile row yet (e.g. the database migrations
   // haven't been applied, so the handle_new_user trigger never ran). Return
   // a blank profile derived from the auth record — a real signed-in user
   // must never see the demo persona's stats.
-  return {
+  return applyFreeMode({
     id: user.id,
     name: user.user_metadata?.full_name ?? user.email?.split("@")[0] ?? "Athlete",
     email: user.email ?? "",
@@ -64,7 +76,7 @@ export async function getCurrentUser(): Promise<UserProfile> {
     joinedAt: user.created_at,
     identities: [],
     primaryGoals: [],
-  };
+  });
 }
 
 /** Whether a real authenticated session exists (false in demo mode). */

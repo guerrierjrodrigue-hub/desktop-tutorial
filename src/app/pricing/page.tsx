@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ShieldCheck } from "lucide-react";
 import { MarketingNav } from "@/components/marketing/marketing-nav";
 import { MarketingFooter } from "@/components/marketing/marketing-footer";
 import { PricingPlans } from "@/components/marketing/pricing-plans";
 import { Reveal } from "@/components/ui/reveal";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { isFreeMode } from "@/lib/flags";
 import type { DictionaryKey } from "@/i18n/dictionaries/en";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -44,12 +47,33 @@ export default async function PricingPage() {
         </section>
 
         <section className="mx-auto max-w-6xl px-6 pb-16">
-          <PricingPlans dict={dict} locale={locale} />
+          {isFreeMode() ? (
+            // FREE-BETA MODE: paid plans are replaced by a single free banner.
+            // Flip APP_FREE_MODE off to restore the real plans in the else branch.
+            <Reveal className="mx-auto max-w-2xl">
+              <div className="glass ring-gold rounded-3xl border border-gold/30 bg-gradient-to-b from-gold/8 to-transparent px-8 py-12 text-center sm:px-12">
+                <Badge variant="premium">{dict["mkt.freeMode.footerBadge"]}</Badge>
+                <h2 className="mt-5 font-serif text-2xl font-semibold leading-snug sm:text-3xl">
+                  {dict["mkt.freeMode.title"]}
+                </h2>
+                <div className="mt-8 flex justify-center">
+                  <Link href="/signup">
+                    <Button size="lg">{dict["mkt.freeMode.cta"]}</Button>
+                  </Link>
+                </div>
+              </div>
+            </Reveal>
+          ) : (
+            // Real paid plans (active whenever APP_FREE_MODE is off).
+            <>
+              <PricingPlans dict={dict} locale={locale} />
 
-          <p className="mt-6 flex items-center justify-center gap-2 text-sm text-muted">
-            <ShieldCheck className="size-4 text-green-bright" />
-            {dict["mkt.pricingPage.secure"]}
-          </p>
+              <p className="mt-6 flex items-center justify-center gap-2 text-sm text-muted">
+                <ShieldCheck className="size-4 text-green-bright" />
+                {dict["mkt.pricingPage.secure"]}
+              </p>
+            </>
+          )}
         </section>
 
         {/* FAQ */}

@@ -207,6 +207,12 @@ const fr: Dictionary = {
 
   // Marketing — shared
   "mkt.tagline": "Fortifiez votre corps. Grandissez dans la foi.",
+
+  // Mode bêta gratuite (APP_FREE_MODE) — temporaire, pendant les tests utilisateurs.
+  "mkt.freeMode.title":
+    "Essai gratuit illimité pendant notre phase de test — profite de tout sans limite.",
+  "mkt.freeMode.cta": "Commencer",
+  "mkt.freeMode.footerBadge": "Version bêta gratuite",
   "mkt.verse.short": "« Ne savez-vous pas que votre corps est le temple du Saint-Esprit ? »",
   "mkt.verse.shortRef": "1 Corinthiens 6.19",
   "mkt.verse.full": "« Ne savez-vous pas que votre corps est le temple du Saint-Esprit ? Glorifiez donc Dieu dans votre corps. »",
