@@ -17,6 +17,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckoutButton } from "@/components/billing/checkout-button";
 import { plans } from "@/data/pricing";
+import { programs } from "@/data/programs";
+import { readingPlans } from "@/data/spiritual";
+import { COACHES } from "@/data/coaches";
+import { testimonials } from "@/data/testimonials";
 
 const features = [
   {
@@ -51,11 +55,15 @@ const features = [
   },
 ];
 
+// Computed from the shipped content so the numbers can never drift from reality.
 const pillars = [
-  { value: "6", label: "Guided programs" },
-  { value: "109", label: "Recipes across 5 goals" },
-  { value: "4", label: "Bible reading plans" },
-  { value: "4", label: "AI coach personas" },
+  { value: programs.length, label: "Guided programs" },
+  {
+    value: programs.flatMap((p) => p.schedule.flatMap((w) => w.days)).length,
+    label: "Guided workout sessions",
+  },
+  { value: readingPlans.length, label: "Bible reading plans" },
+  { value: COACHES.length, label: "AI coach personas" },
 ];
 
 export default function LandingPage() {
@@ -65,9 +73,18 @@ export default function LandingPage() {
       <main className="flex-1">
         <Hero />
 
-        {/* Social proof */}
-        <section className="border-y border-border bg-surface/30 py-10">
-          <div className="mx-auto grid max-w-5xl grid-cols-2 gap-6 px-6 sm:grid-cols-4">
+        {/* Social proof: what's inside, in real numbers */}
+        <section
+          aria-labelledby="inside-heading"
+          className="border-y border-border bg-surface/30 py-10"
+        >
+          <h2
+            id="inside-heading"
+            className="text-center text-xs font-semibold uppercase tracking-widest text-muted"
+          >
+            Everything waiting for you inside
+          </h2>
+          <div className="mx-auto mt-6 grid max-w-5xl grid-cols-2 gap-6 px-6 sm:grid-cols-4">
             {pillars.map((p) => (
               <div key={p.label} className="text-center">
                 <p className="font-serif text-3xl font-semibold text-gradient-gold">
@@ -174,6 +191,8 @@ export default function LandingPage() {
           </Reveal>
         </section>
 
+        <Testimonials />
+
         <Pricing />
 
         {/* Final CTA */}
@@ -220,6 +239,37 @@ function ChatBubble({
         {children}
       </div>
     </div>
+  );
+}
+
+/** Hidden until real member quotes are added to src/data/testimonials.ts. */
+function Testimonials() {
+  if (testimonials.length === 0) return null;
+  return (
+    <section id="testimonials" className="mx-auto max-w-6xl px-6 py-16">
+      <Reveal className="mx-auto max-w-2xl text-center">
+        <Badge variant="gold">Testimonies</Badge>
+        <h2 className="mt-4 font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
+          Stronger in body and faith
+        </h2>
+      </Reveal>
+      <div className="mt-12 grid gap-5 md:grid-cols-3">
+        {testimonials.map((t, i) => (
+          <Reveal key={t.name} delay={i * 0.05}>
+            <figure className="glass flex h-full flex-col rounded-2xl border border-border p-6">
+              <Quote className="size-5 text-gold/50" />
+              <blockquote className="mt-3 flex-1 text-sm leading-relaxed text-foreground">
+                “{t.quote}”
+              </blockquote>
+              <figcaption className="mt-5 text-sm">
+                <span className="font-semibold">{t.name}</span>
+                {t.context && <span className="block text-muted">{t.context}</span>}
+              </figcaption>
+            </figure>
+          </Reveal>
+        ))}
+      </div>
+    </section>
   );
 }
 
