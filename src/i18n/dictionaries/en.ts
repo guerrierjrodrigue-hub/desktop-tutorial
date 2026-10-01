@@ -234,6 +234,12 @@ const en = {
     "Free unlimited access during our testing phase — enjoy everything, no limits.",
   "mkt.freeMode.cta": "Get started",
   "mkt.freeMode.footerBadge": "Free beta version",
+
+  // Legal pages chrome (privacy / terms / cookies)
+  "mkt.legal.badge": "Legal",
+  "mkt.legal.lastUpdated": "Last updated",
+  "mkt.legal.provisional":
+    "Interim version — in effect during the testing phase. A final version will be published before the public launch.",
   "mkt.verse.short": "“Do you not know that your bodies are temples of the Holy Spirit?”",
   "mkt.verse.shortRef": "1 Corinthians 6:19",
   "mkt.verse.full": "“Do you not know that your bodies are temples of the Holy Spirit? Therefore honor God with your bodies.”",
