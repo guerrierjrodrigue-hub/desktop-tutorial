@@ -80,6 +80,28 @@ body {
     var(--color-background);
 }
 
+/* Scroll reveal (see components/ui/reveal.tsx). Visible by default so content
+   never waits on hydration; JS marks off-screen elements "pending" to hide and
+   then animates them in on scroll. Reduced motion keeps everything visible. */
+.reveal {
+  transition:
+    opacity 0.6s cubic-bezier(0.21, 0.47, 0.32, 0.98),
+    transform 0.6s cubic-bezier(0.21, 0.47, 0.32, 0.98);
+}
+.reveal[data-reveal="pending"] {
+  opacity: 0;
+  transform: translateY(24px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transition: none;
+  }
+  .reveal[data-reveal="pending"] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Frosted surface used across cards and panels. */
 .glass {
   background: color-mix(in srgb, var(--color-surface) 82%, transparent);
