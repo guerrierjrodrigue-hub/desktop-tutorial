@@ -6,6 +6,7 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Ring } from "@/components/ui/ring";
 import { Progress } from "@/components/ui/progress";
 import { FoodLogger } from "@/components/nutrition/food-logger";
+import { HydrationTracker } from "@/components/nutrition/hydration-tracker";
 import { RecipesSection } from "@/components/nutrition/recipes-section";
 import { macroTargets } from "@/data/nutrition";
 import { getTodayStats } from "@/lib/queries/stats";
@@ -102,29 +103,10 @@ export default async function NutritionPage() {
             </div>
 
             {/* Hydration */}
-            <div className="mt-6 rounded-xl border border-border bg-surface-2 p-4">
-              <div className="mb-2 flex items-center justify-between text-sm">
-                <span className="flex items-center gap-2 font-medium">
-                  <Droplet className="size-4 text-bronze" /> Hydration
-                </span>
-                <span className="text-muted">
-                  {(todayStats.waterMl / 1000).toFixed(1)}L /{" "}
-                  {todayStats.waterGoalMl / 1000}L
-                </span>
-              </div>
-              <div className="flex gap-1.5">
-                {Array.from({ length: 8 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className={`h-8 flex-1 rounded-md ${
-                      i < Math.round((todayStats.waterMl / todayStats.waterGoalMl) * 8)
-                        ? "bg-gradient-to-t from-bronze to-gold"
-                        : "bg-elevated"
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
+            <HydrationTracker
+              initialMl={todayStats.waterMl}
+              goalMl={todayStats.waterGoalMl}
+            />
           </Card>
         </div>
 

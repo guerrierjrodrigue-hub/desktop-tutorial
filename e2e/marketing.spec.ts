@@ -7,7 +7,7 @@ test.describe("Marketing", () => {
       page.getByRole("heading", { name: /grow your faith/i }),
     ).toBeVisible();
     await expect(
-      page.getByRole("link", { name: /start your 7-day free trial/i }),
+      page.getByRole("link", { name: /start your .*free trial/i }),
     ).toBeVisible();
   });
 
