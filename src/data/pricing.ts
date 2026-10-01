@@ -49,7 +49,7 @@ export const plans: Plan[] = [
     description: "Best value — commit for the year.",
     features: [
       "Everything in Disciple",
-      "2 months free",
+      "3 months free",
       "Early access to new programs",
       "Exclusive challenges",
     ],
