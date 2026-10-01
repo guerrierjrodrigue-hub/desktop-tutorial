@@ -228,6 +228,12 @@ const en = {
 
   // Marketing — shared
   "mkt.tagline": "Strengthen Your Body. Grow Your Faith.",
+
+  // Free-beta mode (APP_FREE_MODE) — temporary, during user testing.
+  "mkt.freeMode.title":
+    "Free unlimited access during our testing phase — enjoy everything, no limits.",
+  "mkt.freeMode.cta": "Get started",
+  "mkt.freeMode.footerBadge": "Free beta version",
   "mkt.verse.short": "“Do you not know that your bodies are temples of the Holy Spirit?”",
   "mkt.verse.shortRef": "1 Corinthians 6:19",
   "mkt.verse.full": "“Do you not know that your bodies are temples of the Holy Spirit? Therefore honor God with your bodies.”",

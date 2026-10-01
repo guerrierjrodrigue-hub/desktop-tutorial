@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { isFreeMode } from "@/lib/flags";
 import type { DictionaryKey } from "@/i18n/dictionaries/en";
 
 export const footerColumns: {
@@ -77,6 +78,13 @@ export async function MarketingFooter() {
           <p>
             © {new Date().getFullYear()} Kingdom Athlete. {dict["mkt.footer.rights"]}
           </p>
+          {/* Visible only in APP_FREE_MODE — a reminder to disable it before the
+              real paid launch. */}
+          {isFreeMode() && (
+            <span className="rounded-full border border-gold/30 bg-gold/10 px-2.5 py-0.5 text-[11px] font-medium text-gold-bright">
+              {dict["mkt.freeMode.footerBadge"]}
+            </span>
+          )}
           <p className="italic">{dict["mkt.tagline"]}</p>
         </div>
       </div>
