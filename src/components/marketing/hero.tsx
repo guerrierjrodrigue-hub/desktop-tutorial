@@ -18,16 +18,16 @@ const fadeUp = {
   }),
 };
 
-export function Hero({ dict }: { dict: Dictionary }) {
+export function Hero({ dict, freeMode = false }: { dict: Dictionary; freeMode?: boolean }) {
   // reducedMotion="user": no movement at all for prefers-reduced-motion.
   return (
     <MotionConfig reducedMotion="user">
-      <HeroContent dict={dict} />
+      <HeroContent dict={dict} freeMode={freeMode} />
     </MotionConfig>
   );
 }
 
-function HeroContent({ dict }: { dict: Dictionary }) {
+function HeroContent({ dict, freeMode }: { dict: Dictionary; freeMode: boolean }) {
   const [filmOpen, setFilmOpen] = useState(false);
 
   return (
@@ -75,7 +75,7 @@ function HeroContent({ dict }: { dict: Dictionary }) {
         >
           <Link href="/signup">
             <Button size="lg" className="group">
-              {dict["mkt.hero.cta"]}
+              {dict[freeMode ? "mkt.hero.ctaFree" : "mkt.hero.cta"]}
               <ArrowRight className="transition-transform group-hover:translate-x-0.5" />
             </Button>
           </Link>
@@ -92,7 +92,7 @@ function HeroContent({ dict }: { dict: Dictionary }) {
           animate="show"
           className="mt-5 text-sm text-faint"
         >
-          {dict["mkt.hero.footnote"]}
+          {dict[freeMode ? "mkt.hero.footnoteFree" : "mkt.hero.footnote"]}
         </motion.p>
       </div>
 
