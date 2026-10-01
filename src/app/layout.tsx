@@ -4,6 +4,7 @@ import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { AnalyticsProvider } from "@/components/providers/analytics-provider";
 import { LocaleSync } from "@/components/providers/locale-sync";
+import { DEFAULT_LOCALE } from "@/i18n/locales";
 import {
   APP_NAME,
   APP_TAGLINE,
@@ -76,7 +77,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang={DEFAULT_LOCALE}
       className={`${inter.variable} ${fraunces.variable} h-full antialiased`}
     >
       <body className="bg-ambient min-h-full">

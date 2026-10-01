@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Flame, RotateCcw, X } from "lucide-react";
-import { APP_NAME, APP_TAGLINE } from "@/lib/constants";
+import { APP_NAME } from "@/lib/constants";
+import type { Dictionary } from "@/i18n/dictionaries/en";
 
 type Scene =
   | { kind: "statement"; eyebrow?: string; title: string; caption?: string; duration: number }
@@ -18,131 +19,139 @@ type Scene =
     }
   | { kind: "logo"; duration: number };
 
-const SCENES: Scene[] = [
-  {
-    kind: "statement",
-    eyebrow: "Kingdom Athlete",
-    title: "There's a story older than any app.",
-    caption: "It says the body isn't separate from the spirit.",
-    duration: 3800,
-  },
-  {
-    kind: "statement",
-    title: "“Do you not know that your bodies are temples of the Holy Spirit?”",
-    caption: "1 Corinthians 6:19",
-    duration: 4200,
-  },
-  {
-    kind: "statement",
-    title: "Kingdom Athlete exists for one purpose:",
-    caption: "to help you steward both — body and spirit, together.",
-    duration: 3800,
-  },
-  {
-    kind: "feature",
-    eyebrow: "Chapter 1",
-    title: "Train with purpose.",
-    caption: "Guided programs that adapt to your level, your goals, your day.",
-    duration: 4500,
-    render: () => (
-      <div className="rounded-2xl border border-border bg-surface-2 p-6 text-left">
-        <p className="text-xs font-semibold uppercase tracking-wide text-muted">
-          Today&apos;s workout
-        </p>
-        <p className="mt-2 font-serif text-2xl">Lower Body Power</p>
-        <p className="mt-1 text-sm text-muted">4 exercises · 45 min</p>
-        <div className="mt-4 h-2 overflow-hidden rounded-full bg-black/30">
-          <div className="h-full w-2/3 rounded-full bg-gradient-to-r from-gold to-gold-bright" />
+function buildScenes(dict: Dictionary): Scene[] {
+  const chapter = (n: number) => dict["mkt.film.chapter"].replace("{n}", String(n));
+  return [
+    {
+      kind: "statement",
+      eyebrow: APP_NAME,
+      title: dict["mkt.film.intro.title"],
+      caption: dict["mkt.film.intro.caption"],
+      duration: 3800,
+    },
+    {
+      kind: "statement",
+      title: dict["mkt.verse.short"],
+      caption: dict["mkt.verse.shortRef"],
+      duration: 4200,
+    },
+    {
+      kind: "statement",
+      title: dict["mkt.film.purpose.title"],
+      caption: dict["mkt.film.purpose.caption"],
+      duration: 3800,
+    },
+    {
+      kind: "feature",
+      eyebrow: chapter(1),
+      title: dict["mkt.film.train.title"],
+      caption: dict["mkt.film.train.caption"],
+      duration: 4500,
+      render: () => (
+        <div className="rounded-2xl border border-border bg-surface-2 p-6 text-left">
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted">
+            {dict["mkt.todaysWorkout"]}
+          </p>
+          <p className="mt-2 font-serif text-2xl">{dict["mkt.workout.name"]}</p>
+          <p className="mt-1 text-sm text-muted">{dict["mkt.workout.meta"]}</p>
+          <div className="mt-4 h-2 overflow-hidden rounded-full bg-black/30">
+            <div className="h-full w-2/3 rounded-full bg-gradient-to-r from-gold to-gold-bright" />
+          </div>
         </div>
-      </div>
-    ),
-  },
-  {
-    kind: "feature",
-    eyebrow: "Chapter 2",
-    title: "Never train alone.",
-    caption: "Barnabas and your AI coaches — always ready, never judging.",
-    duration: 4500,
-    render: () => (
-      <div className="space-y-2 rounded-2xl border border-border bg-surface-2 p-6">
-        <div className="ml-auto max-w-[80%] rounded-2xl bg-surface px-3 py-2 text-right text-sm">
-          Feeling unmotivated today.
+      ),
+    },
+    {
+      kind: "feature",
+      eyebrow: chapter(2),
+      title: dict["mkt.film.alone.title"],
+      caption: dict["mkt.film.alone.caption"],
+      duration: 4500,
+      render: () => (
+        <div className="space-y-2 rounded-2xl border border-border bg-surface-2 p-6">
+          <div className="ml-auto max-w-[80%] rounded-2xl bg-surface px-3 py-2 text-right text-sm">
+            {dict["mkt.film.alone.user"]}
+          </div>
+          <div className="max-w-[80%] rounded-2xl bg-gradient-to-br from-green-deep to-green/30 px-3 py-2 text-sm">
+            {dict["mkt.film.alone.coach"]}
+          </div>
         </div>
-        <div className="max-w-[80%] rounded-2xl bg-gradient-to-br from-green-deep to-green/30 px-3 py-2 text-sm">
-          That&apos;s already discipline — showing up honest. Let&apos;s make today small
-          and winnable. 🙌
+      ),
+    },
+    {
+      kind: "feature",
+      eyebrow: chapter(3),
+      title: dict["mkt.hero.title2"],
+      caption: dict["mkt.film.faith.caption"],
+      duration: 4500,
+      render: () => (
+        <div className="rounded-2xl border border-border bg-surface-2 p-6 text-left">
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted">
+            {dict["mkt.verseOfDay"]}
+          </p>
+          <p className="mt-2 font-serif text-lg leading-snug">{dict["mkt.verse.short"]}</p>
+          <p className="mt-2 text-sm text-gold-bright">{dict["mkt.verse.shortRef"]}</p>
         </div>
-      </div>
-    ),
-  },
-  {
-    kind: "feature",
-    eyebrow: "Chapter 3",
-    title: "Grow your faith.",
-    caption: "Scripture, prayer, and devotionals woven into every day.",
-    duration: 4500,
-    render: () => (
-      <div className="rounded-2xl border border-border bg-surface-2 p-6 text-left">
-        <p className="text-xs font-semibold uppercase tracking-wide text-muted">
-          Verse of the day
-        </p>
-        <p className="mt-2 font-serif text-lg leading-snug">
-          “Do you not know that your bodies are temples of the Holy Spirit?”
-        </p>
-        <p className="mt-2 text-sm text-gold-bright">1 Corinthians 6:19</p>
-      </div>
-    ),
-  },
-  {
-    kind: "feature",
-    eyebrow: "Chapter 4",
-    title: "Build unbreakable habits.",
-    caption: "Daily quests, streaks, and a transformation score that keeps you honest.",
-    duration: 4500,
-    render: () => (
-      <div className="rounded-2xl border border-border bg-surface-2 p-6 text-left">
-        <div className="flex items-center justify-between text-sm">
-          <span className="flex items-center gap-1.5 font-semibold text-gold-bright">
-            <Flame className="size-4" /> 26-day streak
-          </span>
-          <span className="text-muted">Level 13</span>
+      ),
+    },
+    {
+      kind: "feature",
+      eyebrow: chapter(4),
+      title: dict["mkt.film.habits.title"],
+      caption: dict["mkt.film.habits.caption"],
+      duration: 4500,
+      render: () => (
+        <div className="rounded-2xl border border-border bg-surface-2 p-6 text-left">
+          <div className="flex items-center justify-between text-sm">
+            <span className="flex items-center gap-1.5 font-semibold text-gold-bright">
+              <Flame className="size-4" /> {dict["mkt.film.habits.streak"]}
+            </span>
+            <span className="text-muted">{dict["mkt.film.habits.level"]}</span>
+          </div>
+          <div className="mt-3 h-2 overflow-hidden rounded-full bg-black/30">
+            <div className="h-full w-3/4 rounded-full bg-gradient-to-r from-gold to-gold-bright" />
+          </div>
         </div>
-        <div className="mt-3 h-2 overflow-hidden rounded-full bg-black/30">
-          <div className="h-full w-3/4 rounded-full bg-gradient-to-r from-gold to-gold-bright" />
+      ),
+    },
+    {
+      kind: "feature",
+      eyebrow: chapter(5),
+      title: dict["mkt.film.people.title"],
+      caption: dict["mkt.film.people.caption"],
+      duration: 4500,
+      render: () => (
+        <div className="rounded-2xl border border-border bg-surface-2 p-6 text-left">
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted">
+            {dict["mkt.film.people.challenge"]}
+          </p>
+          <p className="mt-2 font-serif text-lg">{dict["mkt.film.people.count"]}</p>
+          <div className="mt-3 h-2 overflow-hidden rounded-full bg-black/30">
+            <div className="h-full w-[65%] rounded-full bg-gradient-to-r from-green-deep to-green-bright" />
+          </div>
         </div>
-      </div>
-    ),
-  },
-  {
-    kind: "feature",
-    eyebrow: "Chapter 5",
-    title: "Find your people.",
-    caption: "Join a church, a small group, or a friend circle — iron sharpens iron.",
-    duration: 4500,
-    render: () => (
-      <div className="rounded-2xl border border-border bg-surface-2 p-6 text-left">
-        <p className="text-xs font-semibold uppercase tracking-wide text-muted">
-          40 Days of Discipline
-        </p>
-        <p className="mt-2 font-serif text-lg">1,284 believers training together</p>
-        <div className="mt-3 h-2 overflow-hidden rounded-full bg-black/30">
-          <div className="h-full w-[65%] rounded-full bg-gradient-to-r from-green-deep to-green-bright" />
-        </div>
-      </div>
-    ),
-  },
-  {
-    kind: "statement",
-    title: "This is more than fitness.",
-    caption: "It's discipleship for the whole self — body, mind, and spirit.",
-    duration: 4000,
-  },
-  { kind: "logo", duration: 0 },
-];
+      ),
+    },
+    {
+      kind: "statement",
+      title: dict["mkt.film.outro.title"],
+      caption: dict["mkt.film.outro.caption"],
+      duration: 4000,
+    },
+    { kind: "logo", duration: 0 },
+  ];
+}
 
-const LAST_INDEX = SCENES.length - 1;
-
-export function FilmModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function FilmModal({
+  dict,
+  open,
+  onClose,
+}: {
+  dict: Dictionary;
+  open: boolean;
+  onClose: () => void;
+}) {
+  const SCENES = useMemo(() => buildScenes(dict), [dict]);
+  const LAST_INDEX = SCENES.length - 1;
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -157,7 +166,7 @@ export function FilmModal({ open, onClose }: { open: boolean; onClose: () => voi
     if (index >= LAST_INDEX || scene.duration <= 0) return;
     const t = setTimeout(() => setIndex((i) => Math.min(i + 1, LAST_INDEX)), scene.duration);
     return () => clearTimeout(t);
-  }, [open, index]);
+  }, [open, index, SCENES, LAST_INDEX]);
 
   useEffect(() => {
     if (!open) return;
@@ -193,7 +202,7 @@ export function FilmModal({ open, onClose }: { open: boolean; onClose: () => voi
 
         <button
           onClick={onClose}
-          aria-label="Close"
+          aria-label={dict["mkt.film.close"]}
           className="absolute right-5 top-5 z-10 grid size-9 place-items-center rounded-full text-white/70 transition hover:bg-white/10 hover:text-white"
         >
           <X className="size-4" />
@@ -205,7 +214,7 @@ export function FilmModal({ open, onClose }: { open: boolean; onClose: () => voi
             <button
               key={i}
               onClick={() => goTo(i)}
-              aria-label={`Go to scene ${i + 1}`}
+              aria-label={dict["mkt.film.goToScene"].replace("{n}", String(i + 1))}
               className="h-1 flex-1 overflow-hidden rounded-full bg-white/15"
             >
               <motion.span
@@ -239,7 +248,7 @@ export function FilmModal({ open, onClose }: { open: boolean; onClose: () => voi
               transition={{ duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] }}
               className="mx-auto w-full max-w-lg text-center"
             >
-              {scene.kind === "logo" ? <LogoScene onClose={onClose} onReplay={() => goTo(0)} /> : null}
+              {scene.kind === "logo" ? <LogoScene dict={dict} onClose={onClose} onReplay={() => goTo(0)} /> : null}
 
               {scene.kind === "statement" && (
                 <>
@@ -281,14 +290,14 @@ export function FilmModal({ open, onClose }: { open: boolean; onClose: () => voi
             <button
               onClick={() => goTo(index - 1)}
               disabled={index === 0}
-              aria-label="Previous scene"
+              aria-label={dict["mkt.film.previous"]}
               className="grid size-10 place-items-center rounded-full border border-white/15 text-white/70 transition hover:bg-white/10 hover:text-white disabled:opacity-30"
             >
               <ChevronLeft className="size-4" />
             </button>
             <button
               onClick={() => goTo(index + 1)}
-              aria-label="Next scene"
+              aria-label={dict["mkt.film.next"]}
               className="grid size-10 place-items-center rounded-full border border-white/15 text-white/70 transition hover:bg-white/10 hover:text-white"
             >
               <ChevronRight className="size-4" />
@@ -300,7 +309,15 @@ export function FilmModal({ open, onClose }: { open: boolean; onClose: () => voi
   );
 }
 
-function LogoScene({ onClose, onReplay }: { onClose: () => void; onReplay: () => void }) {
+function LogoScene({
+  dict,
+  onClose,
+  onReplay,
+}: {
+  dict: Dictionary;
+  onClose: () => void;
+  onReplay: () => void;
+}) {
   return (
     <div className="flex flex-col items-center">
       <motion.span
@@ -316,7 +333,7 @@ function LogoScene({ onClose, onReplay }: { onClose: () => void; onReplay: () =>
       <h2 className="mt-6 font-serif text-4xl font-semibold tracking-tight text-white sm:text-5xl">
         Kingdom<span className="text-gold-bright"> Athlete</span>
       </h2>
-      <p className="mt-3 text-base text-white/60">{APP_TAGLINE}</p>
+      <p className="mt-3 text-base text-white/60">{dict["mkt.tagline"]}</p>
 
       <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row">
         <Link
@@ -324,14 +341,14 @@ function LogoScene({ onClose, onReplay }: { onClose: () => void; onReplay: () =>
           onClick={onClose}
           className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-gold-bright to-gold-deep px-6 py-2.5 text-sm font-semibold text-background transition hover:opacity-90"
         >
-          Start your 1 month free trial
+          {dict["mkt.hero.cta"]}
         </Link>
         <button
           onClick={onReplay}
           className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-5 py-2.5 text-sm text-white/70 transition hover:bg-white/10 hover:text-white"
         >
           <RotateCcw className="size-3.5" />
-          Watch again
+          {dict["mkt.film.watchAgain"]}
         </button>
       </div>
       <span className="sr-only">{APP_NAME}</span>

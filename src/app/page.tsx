@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   Dumbbell,
@@ -12,66 +13,64 @@ import {
 import { MarketingNav } from "@/components/marketing/marketing-nav";
 import { MarketingFooter } from "@/components/marketing/marketing-footer";
 import { Hero } from "@/components/marketing/hero";
+import { PricingPlans } from "@/components/marketing/pricing-plans";
 import { Reveal } from "@/components/ui/reveal";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CheckoutButton } from "@/components/billing/checkout-button";
-import { plans } from "@/data/pricing";
 import { programs } from "@/data/programs";
 import { readingPlans } from "@/data/spiritual";
 import { COACHES } from "@/data/coaches";
 import { testimonials } from "@/data/testimonials";
+import { APP_NAME } from "@/lib/constants";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
+import type { Dictionary, DictionaryKey } from "@/i18n/dictionaries/en";
+import type { LocaleCode } from "@/i18n/locales";
 
-const features = [
-  {
-    icon: Dumbbell,
-    title: "Guided Programs",
-    body: "Strength, HIIT, running, mobility & bodyweight plans for every level — with video, sets, reps, and rest built in.",
-  },
-  {
-    icon: Apple,
-    title: "Smart Nutrition",
-    body: "Calorie & macro tracking, hydration, curated Christian-friendly recipes, and an effortless food journal.",
-  },
-  {
-    icon: BookOpen,
-    title: "Scripture & Prayer",
-    body: "An integrated Bible, daily reading plans, devotionals, a prayer journal, and verse memorization.",
-  },
-  {
-    icon: Sparkles,
-    title: "Barnabas AI Coach",
-    body: "A wise, encouraging coach that adapts your workouts, answers questions, and prays with you.",
-  },
-  {
-    icon: Trophy,
-    title: "Gamified Growth",
-    body: "XP, levels, badges, streaks and challenges — including church-vs-church and friend competitions.",
-  },
-  {
-    icon: Users,
-    title: "Community",
-    body: "Groups, testimonies, progress shares, and prayer requests. Iron sharpens iron.",
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary(await getLocale());
+  return {
+    title: { absolute: `${APP_NAME} — ${dict["mkt.tagline"]}` },
+    description: dict["mkt.meta.homeDescription"],
+  };
+}
+
+const features: { icon: typeof Dumbbell; title: DictionaryKey; body: DictionaryKey }[] = [
+  { icon: Dumbbell, title: "mkt.features.programs.title", body: "mkt.features.programs.body" },
+  { icon: Apple, title: "mkt.features.nutrition.title", body: "mkt.features.nutrition.body" },
+  { icon: BookOpen, title: "mkt.features.scripture.title", body: "mkt.features.scripture.body" },
+  { icon: Sparkles, title: "mkt.features.coach.title", body: "mkt.features.coach.body" },
+  { icon: Trophy, title: "mkt.features.gamified.title", body: "mkt.features.gamified.body" },
+  { icon: Users, title: "mkt.features.community.title", body: "mkt.features.community.body" },
 ];
 
 // Computed from the shipped content so the numbers can never drift from reality.
-const pillars = [
-  { value: programs.length, label: "Guided programs" },
+const pillars: { value: number; label: DictionaryKey }[] = [
+  { value: programs.length, label: "mkt.inside.programs" },
   {
     value: programs.flatMap((p) => p.schedule.flatMap((w) => w.days)).length,
-    label: "Guided workout sessions",
+    label: "mkt.inside.sessions",
   },
-  { value: readingPlans.length, label: "Bible reading plans" },
-  { value: COACHES.length, label: "AI coach personas" },
+  { value: readingPlans.length, label: "mkt.inside.readingPlans" },
+  { value: COACHES.length, label: "mkt.inside.coaches" },
 ];
 
-export default function LandingPage() {
+const barnabasPoints: DictionaryKey[] = [
+  "mkt.barnabas.point1",
+  "mkt.barnabas.point2",
+  "mkt.barnabas.point3",
+  "mkt.barnabas.point4",
+];
+
+export default async function LandingPage() {
+  const locale = await getLocale();
+  const dict = await getDictionary(locale);
+
   return (
     <div className="flex min-h-svh flex-col">
       <MarketingNav />
       <main className="flex-1">
-        <Hero />
+        <Hero dict={dict} />
 
         {/* Social proof: what's inside, in real numbers */}
         <section
@@ -82,15 +81,15 @@ export default function LandingPage() {
             id="inside-heading"
             className="text-center text-xs font-semibold uppercase tracking-widest text-muted"
           >
-            Everything waiting for you inside
+            {dict["mkt.inside.heading"]}
           </h2>
           <div className="mx-auto mt-6 grid max-w-5xl grid-cols-2 gap-6 px-6 sm:grid-cols-4">
             {pillars.map((p) => (
               <div key={p.label} className="text-center">
                 <p className="font-serif text-3xl font-semibold text-gradient-gold">
-                  {p.value}
+                  {p.value.toLocaleString(locale)}
                 </p>
-                <p className="mt-1 text-sm text-muted">{p.label}</p>
+                <p className="mt-1 text-sm text-muted">{dict[p.label]}</p>
               </div>
             ))}
           </div>
@@ -99,15 +98,11 @@ export default function LandingPage() {
         {/* Features */}
         <section id="features" className="mx-auto max-w-6xl px-6 py-24">
           <Reveal className="mx-auto max-w-2xl text-center">
-            <Badge variant="gold">Everything in one place</Badge>
+            <Badge variant="gold">{dict["mkt.features.badge"]}</Badge>
             <h2 className="mt-4 font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
-              One daily rhythm for body and soul
+              {dict["mkt.features.title"]}
             </h2>
-            <p className="mt-4 text-muted">
-              Most apps train the body. Kingdom Athlete disciples the whole
-              person — strength, nutrition, and spirit — in a single, beautiful
-              flow.
-            </p>
+            <p className="mt-4 text-muted">{dict["mkt.features.intro"]}</p>
           </Reveal>
 
           <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -118,10 +113,10 @@ export default function LandingPage() {
                     <f.icon className="size-5" />
                   </div>
                   <h3 className="mt-4 font-serif text-xl font-semibold">
-                    {f.title}
+                    {dict[f.title]}
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted">
-                    {f.body}
+                    {dict[f.body]}
                   </p>
                 </div>
               </Reveal>
@@ -134,26 +129,16 @@ export default function LandingPage() {
           <div className="glass overflow-hidden rounded-3xl border border-border">
             <div className="grid items-center gap-10 p-8 sm:p-12 lg:grid-cols-2">
               <Reveal>
-                <Badge variant="premium">Meet Barnabas</Badge>
+                <Badge variant="premium">{dict["mkt.barnabas.badge"]}</Badge>
                 <h2 className="mt-4 font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
-                  Your AI coach for faith &amp; fitness
+                  {dict["mkt.barnabas.title"]}
                 </h2>
-                <p className="mt-4 text-muted">
-                  Named after the “son of encouragement,” Barnabas motivates
-                  without shame, adapts your training to how you feel, offers
-                  nutrition wisdom, and meets you with a prayer when the day is
-                  heavy. Always biblically grounded. Never preachy.
-                </p>
+                <p className="mt-4 text-muted">{dict["mkt.barnabas.body"]}</p>
                 <ul className="mt-6 space-y-3 text-sm">
-                  {[
-                    "Adapts workouts to your energy and injuries",
-                    "Answers fitness, nutrition & faith questions",
-                    "Suggests prayers, devotions & meditations",
-                    "Encourages with love, wisdom, and humility",
-                  ].map((item) => (
-                    <li key={item} className="flex items-start gap-2.5">
+                  {barnabasPoints.map((key) => (
+                    <li key={key} className="flex items-start gap-2.5">
                       <Check className="mt-0.5 size-4 shrink-0 text-green-bright" />
-                      <span className="text-muted">{item}</span>
+                      <span className="text-muted">{dict[key]}</span>
                     </li>
                   ))}
                 </ul>
@@ -161,18 +146,9 @@ export default function LandingPage() {
 
               <Reveal delay={0.1}>
                 <div className="rounded-2xl border border-border bg-surface p-5">
-                  <ChatBubble role="assistant">
-                    Good morning, David. You&apos;re on a 26-day streak — that&apos;s
-                    real discipline. 🙌 How&apos;s your energy today?
-                  </ChatBubble>
-                  <ChatBubble role="user">
-                    Honestly pretty tired, didn&apos;t sleep well.
-                  </ChatBubble>
-                  <ChatBubble role="assistant">
-                    Then let&apos;s honor your body with recovery. I&apos;ll swap
-                    today for a 20-min mobility flow and breath prayer from Psalm
-                    23. Rest is faithful too. Want me to start it?
-                  </ChatBubble>
+                  <ChatBubble role="assistant">{dict["mkt.chat.coach1"]}</ChatBubble>
+                  <ChatBubble role="user">{dict["mkt.chat.user1"]}</ChatBubble>
+                  <ChatBubble role="assistant">{dict["mkt.chat.coach2"]}</ChatBubble>
                 </div>
               </Reveal>
             </div>
@@ -184,31 +160,27 @@ export default function LandingPage() {
           <Reveal>
             <Quote className="mx-auto size-8 text-gold/50" />
             <p className="mt-6 font-serif text-2xl font-medium leading-snug sm:text-3xl">
-              “Do you not know that your bodies are temples of the Holy
-              Spirit? Therefore honor God with your bodies.”
+              {dict["mkt.verse.full"]}
             </p>
-            <p className="mt-6 text-sm text-muted">1 Corinthians 6:19–20</p>
+            <p className="mt-6 text-sm text-muted">{dict["mkt.verse.fullRef"]}</p>
           </Reveal>
         </section>
 
-        <Testimonials />
+        <Testimonials dict={dict} />
 
-        <Pricing />
+        <Pricing dict={dict} locale={locale} />
 
         {/* Final CTA */}
         <section className="mx-auto max-w-5xl px-6 py-20">
           <Reveal className="glass ring-gold relative overflow-hidden rounded-3xl border border-gold/20 px-8 py-14 text-center sm:px-12">
             <h2 className="font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
-              Your body is a temple.{" "}
-              <span className="text-gradient-gold">Train it like one.</span>
+              {dict["mkt.cta.title1"]}{" "}
+              <span className="text-gradient-gold">{dict["mkt.cta.title2"]}</span>
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-muted">
-              Start today with 1 month free. Discipline of body, steadiness
-              of soul.
-            </p>
+            <p className="mx-auto mt-4 max-w-xl text-muted">{dict["mkt.cta.body"]}</p>
             <div className="mt-8 flex justify-center">
               <Link href="/signup">
-                <Button size="lg">Begin your journey</Button>
+                <Button size="lg">{dict["mkt.cta.button"]}</Button>
               </Link>
             </div>
           </Reveal>
@@ -243,14 +215,14 @@ function ChatBubble({
 }
 
 /** Hidden until real member quotes are added to src/data/testimonials.ts. */
-function Testimonials() {
+function Testimonials({ dict }: { dict: Dictionary }) {
   if (testimonials.length === 0) return null;
   return (
     <section id="testimonials" className="mx-auto max-w-6xl px-6 py-16">
       <Reveal className="mx-auto max-w-2xl text-center">
-        <Badge variant="gold">Testimonies</Badge>
+        <Badge variant="gold">{dict["mkt.testimonials.badge"]}</Badge>
         <h2 className="mt-4 font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
-          Stronger in body and faith
+          {dict["mkt.testimonials.title"]}
         </h2>
       </Reveal>
       <div className="mt-12 grid gap-5 md:grid-cols-3">
@@ -273,59 +245,19 @@ function Testimonials() {
   );
 }
 
-function Pricing() {
+function Pricing({ dict, locale }: { dict: Dictionary; locale: LocaleCode }) {
   return (
     <section id="pricing" className="mx-auto max-w-6xl px-6 py-24">
       <Reveal className="mx-auto max-w-2xl text-center">
-        <Badge variant="gold">Simple pricing</Badge>
+        <Badge variant="gold">{dict["mkt.pricing.badge"]}</Badge>
         <h2 className="mt-4 font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
-          Invest in discipline that lasts
+          {dict["mkt.pricing.title"]}
         </h2>
-        <p className="mt-4 text-muted">
-          Start free. Upgrade when you&apos;re ready. Cancel anytime.
-        </p>
+        <p className="mt-4 text-muted">{dict["mkt.pricing.subtitle"]}</p>
       </Reveal>
 
-      <div className="mt-14 grid gap-5 lg:grid-cols-3">
-        {plans.map((plan, i) => (
-          <Reveal key={plan.name} delay={i * 0.06}>
-            <div
-              className={`relative flex h-full flex-col rounded-2xl border p-7 ${
-                plan.highlighted
-                  ? "border-gold/40 bg-gradient-to-b from-gold/8 to-transparent ring-gold"
-                  : "glass border-border"
-              }`}
-            >
-              {plan.highlighted && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <Badge variant="premium">Most popular</Badge>
-                </span>
-              )}
-              <h3 className="font-serif text-xl font-semibold">{plan.name}</h3>
-              <p className="mt-1 text-sm text-muted">{plan.description}</p>
-              <p className="mt-5 flex items-baseline gap-1">
-                <span className="font-serif text-4xl font-semibold">
-                  {plan.price}
-                </span>
-                <span className="text-muted">{plan.period}</span>
-              </p>
-              <ul className="mt-6 flex-1 space-y-3 text-sm">
-                {plan.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2.5">
-                    <Check className="mt-0.5 size-4 shrink-0 text-gold-bright" />
-                    <span className="text-muted">{f}</span>
-                  </li>
-                ))}
-              </ul>
-              <CheckoutButton
-                plan={plan.plan}
-                label={plan.cta}
-                className="mt-7 w-full"
-                variant={plan.highlighted ? "primary" : "secondary"}
-              />
-            </div>
-          </Reveal>
-        ))}
+      <div className="mt-14">
+        <PricingPlans dict={dict} locale={locale} />
       </div>
     </section>
   );
