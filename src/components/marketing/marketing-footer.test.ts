@@ -26,7 +26,7 @@ const links = footerColumns.flatMap((col) => col.links);
 
 // Guards against shipping a footer link that 404s in production.
 describe("marketing footer links", () => {
-  it.each(links.map((l) => [l.label, l.href]))("%s (%s) has a page", (_label, href) => {
+  it.each(links.map((l) => [l.labelKey, l.href]))("%s (%s) has a page", (_label, href) => {
     const [path, hash] = href.split("#");
     const page = routes.get(path || "/");
     expect(page, `no page.tsx for ${path}`).toBeDefined();

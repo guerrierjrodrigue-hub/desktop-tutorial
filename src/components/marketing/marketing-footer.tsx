@@ -1,61 +1,70 @@
 import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
-import { APP_MISSION } from "@/lib/constants";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
+import type { DictionaryKey } from "@/i18n/dictionaries/en";
 
-export const footerColumns = [
+export const footerColumns: {
+  titleKey: DictionaryKey;
+  links: { labelKey: DictionaryKey; href: string }[];
+}[] = [
   {
-    title: "Product",
+    titleKey: "mkt.footer.product",
     links: [
-      { label: "Features", href: "/#features" },
-      { label: "Programs", href: "/fitness" },
-      { label: "Barnabas AI", href: "/#barnabas" },
-      { label: "Pricing", href: "/pricing" },
+      { labelKey: "mkt.nav.features", href: "/#features" },
+      { labelKey: "mkt.footer.programs", href: "/fitness" },
+      { labelKey: "mkt.nav.barnabas", href: "/#barnabas" },
+      { labelKey: "mkt.nav.pricing", href: "/pricing" },
     ],
   },
   {
-    title: "Company",
+    titleKey: "mkt.footer.company",
     links: [
-      { label: "About", href: "/about" },
-      { label: "Mission", href: "/about#mission" },
-      { label: "Careers", href: "/careers" },
-      { label: "Contact", href: "/contact" },
+      { labelKey: "mkt.footer.about", href: "/about" },
+      { labelKey: "mkt.footer.mission", href: "/about#mission" },
+      { labelKey: "mkt.footer.careers", href: "/careers" },
+      { labelKey: "mkt.footer.contact", href: "/contact" },
     ],
   },
   {
-    title: "Resources",
+    titleKey: "mkt.footer.resources",
     links: [
-      { label: "Blog", href: "/blog" },
-      { label: "Devotionals", href: "/spiritual" },
-      { label: "Help Center", href: "/help" },
-      { label: "Community", href: "/community" },
+      { labelKey: "mkt.footer.blog", href: "/blog" },
+      { labelKey: "mkt.footer.devotionals", href: "/spiritual" },
+      { labelKey: "mkt.footer.help", href: "/help" },
+      { labelKey: "mkt.footer.community", href: "/community" },
     ],
   },
   {
-    title: "Legal",
+    titleKey: "mkt.footer.legal",
     links: [
-      { label: "Privacy", href: "/privacy" },
-      { label: "Terms", href: "/terms" },
-      { label: "Cookies", href: "/cookies" },
+      { labelKey: "mkt.footer.privacy", href: "/privacy" },
+      { labelKey: "mkt.footer.terms", href: "/terms" },
+      { labelKey: "mkt.footer.cookies", href: "/cookies" },
     ],
   },
 ];
 
-export function MarketingFooter() {
+export async function MarketingFooter() {
+  const dict = await getDictionary(await getLocale());
+
   return (
     <footer className="mt-24 border-t border-border">
       <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-5">
         <div className="lg:col-span-1">
           <Logo />
-          <p className="mt-4 max-w-xs text-sm text-muted">{APP_MISSION}</p>
+          <p className="mt-4 max-w-xs text-sm text-muted">
+            {dict["mkt.footer.missionStatement"]}
+          </p>
         </div>
         {footerColumns.map((col) => (
-          <div key={col.title}>
-            <h4 className="text-sm font-semibold text-foreground">{col.title}</h4>
+          <div key={col.titleKey}>
+            <h4 className="text-sm font-semibold text-foreground">{dict[col.titleKey]}</h4>
             <ul className="mt-4 space-y-2.5 text-sm text-muted">
               {col.links.map((link) => (
-                <li key={link.label}>
+                <li key={link.href}>
                   <Link href={link.href} className="transition hover:text-gold-bright">
-                    {link.label}
+                    {dict[link.labelKey]}
                   </Link>
                 </li>
               ))}
@@ -65,8 +74,10 @@ export function MarketingFooter() {
       </div>
       <div className="border-t border-border">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-6 py-6 text-xs text-faint sm:flex-row">
-          <p>© {new Date().getFullYear()} Kingdom Athlete. All rights reserved.</p>
-          <p className="italic">Strengthen Your Body. Grow Your Faith.</p>
+          <p>
+            © {new Date().getFullYear()} Kingdom Athlete. {dict["mkt.footer.rights"]}
+          </p>
+          <p className="italic">{dict["mkt.tagline"]}</p>
         </div>
       </div>
     </footer>

@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
-import { APP_TAGLINE } from "@/lib/constants";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 
-export default function AuthLayout({
+export default async function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const dict = await getDictionary(await getLocale());
+
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       {/* Brand panel */}
@@ -15,12 +18,11 @@ export default function AuthLayout({
         <Logo />
         <div className="relative">
           <blockquote className="max-w-md font-serif text-3xl font-medium leading-snug">
-            “Do you not know that your bodies are temples of the Holy Spirit?
-            Therefore honor God with your bodies.”
+            {dict["mkt.verse.full"]}
           </blockquote>
-          <p className="mt-4 text-sm text-gold-bright">1 Corinthians 6:19–20</p>
+          <p className="mt-4 text-sm text-gold-bright">{dict["mkt.verse.fullRef"]}</p>
         </div>
-        <p className="relative text-sm text-muted">{APP_TAGLINE}</p>
+        <p className="relative text-sm text-muted">{dict["mkt.tagline"]}</p>
       </div>
 
       {/* Form panel */}
@@ -30,13 +32,13 @@ export default function AuthLayout({
         </div>
         {children}
         <p className="mt-10 text-center text-xs text-faint">
-          By continuing you agree to our{" "}
+          {dict["mkt.auth.agreePrefix"]}{" "}
           <Link href="/terms" className="underline hover:text-muted">
-            Terms
+            {dict["mkt.footer.terms"]}
           </Link>{" "}
-          &{" "}
+          {dict["mkt.auth.and"]}{" "}
           <Link href="/privacy" className="underline hover:text-muted">
-            Privacy Policy
+            {dict["mkt.auth.privacyPolicy"]}
           </Link>
           .
         </p>

@@ -6,6 +6,7 @@ import { motion, MotionConfig } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { FilmModal } from "@/components/marketing/film-modal";
 import { ArrowRight, Play, Star } from "lucide-react";
+import type { Dictionary } from "@/i18n/dictionaries/en";
 
 // Above the fold: animate position only, never opacity, so the hero is
 // readable in the server HTML before JS hydrates (no blank first paint).
@@ -17,16 +18,16 @@ const fadeUp = {
   }),
 };
 
-export function Hero() {
+export function Hero({ dict }: { dict: Dictionary }) {
   // reducedMotion="user": no movement at all for prefers-reduced-motion.
   return (
     <MotionConfig reducedMotion="user">
-      <HeroContent />
+      <HeroContent dict={dict} />
     </MotionConfig>
   );
 }
 
-function HeroContent() {
+function HeroContent({ dict }: { dict: Dictionary }) {
   const [filmOpen, setFilmOpen] = useState(false);
 
   return (
@@ -40,7 +41,7 @@ function HeroContent() {
           className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-gold/25 bg-gold/8 px-4 py-1.5 text-sm text-gold-bright"
         >
           <Star className="size-3.5 fill-gold-bright" />
-          Faith-driven fitness, reimagined
+          {dict["mkt.hero.badge"]}
         </motion.div>
 
         <motion.h1
@@ -50,9 +51,9 @@ function HeroContent() {
           animate="show"
           className="font-serif text-4xl font-semibold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl"
         >
-          Strengthen your body.
+          {dict["mkt.hero.title1"]}
           <br />
-          <span className="text-gradient-gold">Grow your faith.</span>
+          <span className="text-gradient-gold">{dict["mkt.hero.title2"]}</span>
         </motion.h1>
 
         <motion.p
@@ -62,9 +63,7 @@ function HeroContent() {
           animate="show"
           className="mx-auto mt-6 max-w-2xl text-lg text-muted"
         >
-          Kingdom Athlete unites guided training, nutrition,
-          Scripture, and prayer into one daily rhythm — with Barnabas, your
-          AI faith &amp; fitness coach, by your side.
+          {dict["mkt.hero.subtitle"]}
         </motion.p>
 
         <motion.div
@@ -76,13 +75,13 @@ function HeroContent() {
         >
           <Link href="/signup">
             <Button size="lg" className="group">
-              Start your 1 month free trial
+              {dict["mkt.hero.cta"]}
               <ArrowRight className="transition-transform group-hover:translate-x-0.5" />
             </Button>
           </Link>
           <Button size="lg" variant="secondary" onClick={() => setFilmOpen(true)}>
             <Play className="fill-current" />
-            Watch the film
+            {dict["mkt.hero.watchFilm"]}
           </Button>
         </motion.div>
 
@@ -93,17 +92,17 @@ function HeroContent() {
           animate="show"
           className="mt-5 text-sm text-faint"
         >
-          Train with purpose · 1 month free · No card required
+          {dict["mkt.hero.footnote"]}
         </motion.p>
       </div>
 
-      <HeroPreview />
-      <FilmModal open={filmOpen} onClose={() => setFilmOpen(false)} />
+      <HeroPreview dict={dict} />
+      <FilmModal dict={dict} open={filmOpen} onClose={() => setFilmOpen(false)} />
     </section>
   );
 }
 
-function HeroPreview() {
+function HeroPreview({ dict }: { dict: Dictionary }) {
   return (
     <motion.div
       initial={{ y: 60, scale: 0.96 }}
@@ -115,27 +114,26 @@ function HeroPreview() {
       <div className="glass ring-gold overflow-hidden rounded-3xl border border-border p-2">
         <div className="rounded-2xl bg-surface p-6 sm:p-8">
           <div className="grid gap-4 sm:grid-cols-3">
-            <PreviewStat label="Day streak" value="26" accent />
-            <PreviewStat label="Workouts" value="148" />
-            <PreviewStat label="Verses memorized" value="37" />
+            <PreviewStat label={dict["mkt.preview.streak"]} value="26" accent />
+            <PreviewStat label={dict["mkt.preview.workouts"]} value="148" />
+            <PreviewStat label={dict["mkt.preview.verses"]} value="37" />
           </div>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             <div className="rounded-xl border border-border bg-surface-2 p-5 text-left">
               <p className="text-xs font-semibold uppercase tracking-wide text-muted">
-                Verse of the day
+                {dict["mkt.verseOfDay"]}
               </p>
               <p className="mt-2 font-serif text-lg leading-snug">
-                “Do you not know that your bodies are temples of the Holy
-                Spirit?”
+                {dict["mkt.verse.short"]}
               </p>
-              <p className="mt-2 text-sm text-gold-bright">1 Corinthians 6:19</p>
+              <p className="mt-2 text-sm text-gold-bright">{dict["mkt.verse.shortRef"]}</p>
             </div>
             <div className="rounded-xl border border-border bg-gradient-to-br from-green-deep to-surface-2 p-5 text-left">
               <p className="text-xs font-semibold uppercase tracking-wide text-muted">
-                Today&apos;s workout
+                {dict["mkt.todaysWorkout"]}
               </p>
-              <p className="mt-2 font-serif text-lg">Lower Body Power</p>
-              <p className="mt-1 text-sm text-muted">4 exercises · 45 min</p>
+              <p className="mt-2 font-serif text-lg">{dict["mkt.workout.name"]}</p>
+              <p className="mt-1 text-sm text-muted">{dict["mkt.workout.meta"]}</p>
               <div className="mt-4 h-2 overflow-hidden rounded-full bg-black/30">
                 <div className="h-full w-2/3 rounded-full bg-gradient-to-r from-gold to-gold-bright" />
               </div>

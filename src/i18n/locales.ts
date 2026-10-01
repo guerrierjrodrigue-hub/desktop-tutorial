@@ -5,7 +5,7 @@ export const LOCALES = [
 
 export type LocaleCode = (typeof LOCALES)[number]["code"];
 
-export const DEFAULT_LOCALE: LocaleCode = "en";
+export const DEFAULT_LOCALE: LocaleCode = "fr";
 export const LOCALE_COOKIE = "ka_locale";
 
 export function isLocaleCode(value: string): value is LocaleCode {
