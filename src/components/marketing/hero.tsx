@@ -2,22 +2,32 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, MotionConfig } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { FilmModal } from "@/components/marketing/film-modal";
 import { ArrowRight, Play, Star } from "lucide-react";
 import { APP_TAGLINE } from "@/lib/constants";
 
+// Above the fold: animate position only, never opacity, so the hero is
+// readable in the server HTML before JS hydrates (no blank first paint).
 const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { y: 24 },
   show: (i: number) => ({
-    opacity: 1,
     y: 0,
     transition: { delay: 0.08 * i, duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] as const },
   }),
 };
 
 export function Hero() {
+  // reducedMotion="user": no movement at all for prefers-reduced-motion.
+  return (
+    <MotionConfig reducedMotion="user">
+      <HeroContent />
+    </MotionConfig>
+  );
+}
+
+function HeroContent() {
   const [filmOpen, setFilmOpen] = useState(false);
 
   return (
@@ -97,8 +107,8 @@ export function Hero() {
 function HeroPreview() {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 60, scale: 0.96 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
+      initial={{ y: 60, scale: 0.96 }}
+      animate={{ y: 0, scale: 1 }}
       transition={{ delay: 0.5, duration: 0.9, ease: [0.21, 0.47, 0.32, 0.98] }}
       className="relative mx-auto mt-16 max-w-4xl"
     >

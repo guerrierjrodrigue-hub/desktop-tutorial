@@ -141,7 +141,26 @@ body {
   animation: shimmer 1.5s infinite;
 }
 
+/* Scroll reveal (<Reveal>). Visible by default; only below-the-fold elements
+ * are set to "hidden" by JS after hydration, then transitioned to "shown". */
+[data-reveal] {
+  transition:
+    opacity 0.6s cubic-bezier(0.21, 0.47, 0.32, 0.98),
+    transform 0.6s cubic-bezier(0.21, 0.47, 0.32, 0.98);
+  transition-delay: var(--reveal-delay, 0s);
+}
+[data-reveal="hidden"] {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
 @media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
   *,
   *::before,
   *::after {
