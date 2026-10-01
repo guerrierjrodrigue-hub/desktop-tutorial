@@ -278,6 +278,9 @@ const en = {
   "mkt.hero.cta": "Start your 1 month free trial",
   "mkt.hero.watchFilm": "Watch the film",
   "mkt.hero.footnote": "Train with purpose · 1 month free · No card required",
+  // Free-beta variants (shown when APP_FREE_MODE is on) — no time-limited trial.
+  "mkt.hero.ctaFree": "Try it free, no limits",
+  "mkt.hero.footnoteFree": "Train with purpose · Free during our beta · No card required",
   "mkt.preview.streak": "Day streak",
   "mkt.preview.workouts": "Workouts",
   "mkt.preview.verses": "Verses memorized",
@@ -345,6 +348,7 @@ const en = {
   "mkt.cta.title1": "Your body is a temple.",
   "mkt.cta.title2": "Train it like one.",
   "mkt.cta.body": "Start today with 1 month free. Discipline of body, steadiness of soul.",
+  "mkt.cta.bodyFree": "Start today, free and unlimited. Discipline of body, steadiness of soul.",
   "mkt.cta.button": "Begin your journey",
 
   // Marketing — pricing

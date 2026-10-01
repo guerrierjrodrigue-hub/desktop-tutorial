@@ -24,6 +24,7 @@ import { testimonials } from "@/data/testimonials";
 import { APP_NAME } from "@/lib/constants";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { isFreeMode } from "@/lib/flags";
 import type { Dictionary, DictionaryKey } from "@/i18n/dictionaries/en";
 import type { LocaleCode } from "@/i18n/locales";
 
@@ -65,12 +66,13 @@ const barnabasPoints: DictionaryKey[] = [
 export default async function LandingPage() {
   const locale = await getLocale();
   const dict = await getDictionary(locale);
+  const freeMode = isFreeMode();
 
   return (
     <div className="flex min-h-svh flex-col">
       <MarketingNav />
       <main className="flex-1">
-        <Hero dict={dict} />
+        <Hero dict={dict} freeMode={freeMode} />
 
         {/* Social proof: what's inside, in real numbers */}
         <section
@@ -177,7 +179,9 @@ export default async function LandingPage() {
               {dict["mkt.cta.title1"]}{" "}
               <span className="text-gradient-gold">{dict["mkt.cta.title2"]}</span>
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-muted">{dict["mkt.cta.body"]}</p>
+            <p className="mx-auto mt-4 max-w-xl text-muted">
+              {dict[freeMode ? "mkt.cta.bodyFree" : "mkt.cta.body"]}
+            </p>
             <div className="mt-8 flex justify-center">
               <Link href="/signup">
                 <Button size="lg">{dict["mkt.cta.button"]}</Button>

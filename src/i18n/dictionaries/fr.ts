@@ -257,6 +257,9 @@ const fr: Dictionary = {
   "mkt.hero.cta": "Commencez votre essai gratuit d'un mois",
   "mkt.hero.watchFilm": "Voir le film",
   "mkt.hero.footnote": "Entraînez-vous avec un but · 1 mois offert · Sans carte bancaire",
+  // Variantes bêta gratuite (affichées quand APP_FREE_MODE est actif) — pas d'essai limité dans le temps.
+  "mkt.hero.ctaFree": "Essayez gratuitement, sans limite",
+  "mkt.hero.footnoteFree": "Entraînez-vous avec un but · Gratuit pendant notre bêta · Sans carte bancaire",
   "mkt.preview.streak": "Jours d'affilée",
   "mkt.preview.workouts": "Séances",
   "mkt.preview.verses": "Versets mémorisés",
@@ -324,6 +327,7 @@ const fr: Dictionary = {
   "mkt.cta.title1": "Votre corps est un temple.",
   "mkt.cta.title2": "Entraînez-le comme tel.",
   "mkt.cta.body": "Commencez aujourd'hui avec 1 mois offert. Discipline du corps, constance de l'âme.",
+  "mkt.cta.bodyFree": "Commencez aujourd'hui, gratuitement et sans limite. Discipline du corps, constance de l'âme.",
   "mkt.cta.button": "Commencer le parcours",
 
   // Marketing — pricing
