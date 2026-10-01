@@ -5,16 +5,18 @@ import { DataTable } from "@/components/admin/data-table";
 import { StatusPill } from "@/components/admin/status-pill";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { adminUsers } from "@/data/admin";
+import { getRecentUsers } from "@/lib/queries/admin-stats";
 
 export const metadata: Metadata = { title: "Admin · Users" };
 
-export default function AdminUsersPage() {
+export default async function AdminUsersPage() {
+  const users = await getRecentUsers(50);
+
   return (
     <main className="px-4 py-6 sm:px-8">
       <AdminHeader
         title="Users"
-        subtitle={`${adminUsers.length.toLocaleString()} members shown · manage accounts and plans.`}
+        subtitle={`${users.length.toLocaleString()} members shown · manage accounts and plans.`}
       />
 
       <div className="mb-4 flex items-center gap-2">
@@ -32,7 +34,7 @@ export default function AdminUsersPage() {
       </div>
 
       <DataTable
-        rows={adminUsers}
+        rows={users}
         columns={[
           {
             key: "name",

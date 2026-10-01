@@ -74,7 +74,7 @@ export async function POST(req: Request) {
   try {
     const client = new Anthropic({ apiKey });
     const anthropicStream = await client.messages.create({
-      model: "claude-opus-4-8",
+      model: "claude-sonnet-5",
       max_tokens: 1024,
       system: coach.systemPrompt,
       messages: toClaudeMessages(messages),
