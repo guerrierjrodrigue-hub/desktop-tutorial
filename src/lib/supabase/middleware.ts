@@ -31,14 +31,38 @@ function hasValidConfig(): boolean {
   }
 }
 
+function redirectToLogin(request: NextRequest, path: string) {
+  const url = request.nextUrl.clone();
+  url.pathname = "/login";
+  url.searchParams.set("redirect", path);
+  return NextResponse.redirect(url);
+}
+
 /**
  * Refresh the Supabase session cookie on each request and guard protected
- * routes. Fully defensive: if Supabase is unconfigured, misconfigured, or
- * temporarily unreachable, the request is allowed through instead of failing —
- * a bad env var must never take the whole site down.
+ * routes.
+ *
+ * SECURITY — two failure modes are handled differently on purpose:
+ *
+ * 1. Supabase NOT configured (hasValidConfig() === false): fail OPEN. This is
+ *    the intentional zero-config demo mode running on mock data; there is no
+ *    real user data to protect.
+ *
+ * 2. Supabase configured but auth.getUser() throws (network failure, Supabase
+ *    down, …): fail CLOSED on PROTECTED routes (redirect to /login). Public
+ *    routes still pass through so the marketing site stays up during an outage.
+ *
+ * Do not merge these into a single "let it through" catch: an outage would
+ * otherwise expose every protected page to anonymous visitors.
+ * Covered by src/lib/supabase/middleware.test.ts.
  */
 export async function updateSession(request: NextRequest) {
   if (!hasValidConfig()) return NextResponse.next();
+
+  const path = request.nextUrl.pathname;
+  const needsAuth = PROTECTED.some(
+    (p) => path === p || path.startsWith(p + "/"),
+  );
 
   let response = NextResponse.next({ request });
 
@@ -68,22 +92,13 @@ export async function updateSession(request: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser();
 
-    const path = request.nextUrl.pathname;
-    const needsAuth = PROTECTED.some(
-      (p) => path === p || path.startsWith(p + "/"),
-    );
-
-    if (needsAuth && !user) {
-      const url = request.nextUrl.clone();
-      url.pathname = "/login";
-      url.searchParams.set("redirect", path);
-      return NextResponse.redirect(url);
-    }
+    if (needsAuth && !user) return redirectToLogin(request, path);
 
     return response;
   } catch {
-    // Auth backend hiccup or misconfiguration — let the request continue rather
-    // than returning a 500 for every page.
+    // Supabase IS configured but unreachable. Fail closed on protected routes
+    // (see the SECURITY note above); public routes continue normally.
+    if (needsAuth) return redirectToLogin(request, path);
     return response;
   }
 }
