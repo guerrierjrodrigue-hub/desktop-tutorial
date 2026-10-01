@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { FilmModal } from "@/components/marketing/film-modal";
 import { ArrowRight, Play, Star } from "lucide-react";
-import { APP_TAGLINE } from "@/lib/constants";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -53,9 +52,9 @@ export function Hero() {
           animate="show"
           className="mx-auto mt-6 max-w-2xl text-lg text-muted"
         >
-          {APP_TAGLINE} Kingdom Athlete unites guided training, nutrition,
-          Scripture, and prayer into one daily rhythm — with Barnabas, your
-          AI faith &amp; fitness coach, by your side.
+          Kingdom Athlete unites guided training, nutrition, Scripture, and
+          prayer into one daily rhythm — with Barnabas, your AI faith &amp;
+          fitness coach, by your side.
         </motion.p>
 
         <motion.div
