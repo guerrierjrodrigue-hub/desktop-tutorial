@@ -213,6 +213,12 @@ const fr: Dictionary = {
     "Essai gratuit illimité pendant notre phase de test — profite de tout sans limite.",
   "mkt.freeMode.cta": "Commencer",
   "mkt.freeMode.footerBadge": "Version bêta gratuite",
+
+  // Chrome des pages légales (confidentialité / conditions / cookies)
+  "mkt.legal.badge": "Légal",
+  "mkt.legal.lastUpdated": "Dernière mise à jour",
+  "mkt.legal.provisional":
+    "Version provisoire — en vigueur pendant la phase d'essai. Une version finale sera publiée avant le lancement public.",
   "mkt.verse.short": "« Ne savez-vous pas que votre corps est le temple du Saint-Esprit ? »",
   "mkt.verse.shortRef": "1 Corinthiens 6.19",
   "mkt.verse.full": "« Ne savez-vous pas que votre corps est le temple du Saint-Esprit ? Glorifiez donc Dieu dans votre corps. »",

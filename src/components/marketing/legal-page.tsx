@@ -2,13 +2,15 @@ import { MarketingNav } from "@/components/marketing/marketing-nav";
 import { MarketingFooter } from "@/components/marketing/marketing-footer";
 import { Reveal } from "@/components/ui/reveal";
 import { Badge } from "@/components/ui/badge";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 
 interface LegalSection {
   heading: string;
   body: string[];
 }
 
-export function LegalPage({
+export async function LegalPage({
   title,
   updated,
   intro,
@@ -19,25 +21,27 @@ export function LegalPage({
   intro: string;
   sections: LegalSection[];
 }) {
+  const dict = await getDictionary(await getLocale());
+
   return (
     <div className="flex min-h-svh flex-col">
       <MarketingNav />
       <main className="flex-1">
         <section className="mx-auto max-w-3xl px-6 pb-8 pt-20 text-center">
           <Reveal>
-            <Badge variant="neutral">Legal</Badge>
+            <Badge variant="neutral">{dict["mkt.legal.badge"]}</Badge>
             <h1 className="mt-4 font-serif text-4xl font-semibold tracking-tight sm:text-5xl">
               {title}
             </h1>
-            <p className="mt-3 text-sm text-faint">Last updated {updated}</p>
+            <p className="mt-3 text-sm text-faint">
+              {dict["mkt.legal.lastUpdated"]} {updated}
+            </p>
           </Reveal>
         </section>
 
         <section className="mx-auto max-w-3xl px-6 pb-24">
           <Reveal className="glass rounded-2xl border border-gold/20 bg-gold/5 p-5 text-sm text-muted">
-            This is placeholder legal content written for demo purposes. Replace
-            it with policies reviewed by a qualified lawyer before using this
-            for real users.
+            {dict["mkt.legal.provisional"]}
           </Reveal>
 
           <Reveal delay={0.05} className="mt-6 text-sm leading-relaxed text-muted">
