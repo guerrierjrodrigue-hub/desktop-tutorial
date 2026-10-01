@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
 import { APP_MISSION } from "@/lib/constants";
 
-const columns = [
+export const footerColumns = [
   {
     title: "Product",
     links: [
@@ -48,7 +48,7 @@ export function MarketingFooter() {
           <Logo />
           <p className="mt-4 max-w-xs text-sm text-muted">{APP_MISSION}</p>
         </div>
-        {columns.map((col) => (
+        {footerColumns.map((col) => (
           <div key={col.title}>
             <h4 className="text-sm font-semibold text-foreground">{col.title}</h4>
             <ul className="mt-4 space-y-2.5 text-sm text-muted">
