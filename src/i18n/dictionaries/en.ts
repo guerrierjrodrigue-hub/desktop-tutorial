@@ -181,6 +181,26 @@ const en = {
   "fitness.categoryHiit": "HIIT",
   "fitness.categoryMobility": "Mobility",
   "fitness.categoryBodyweight": "Bodyweight",
+  // Program detail + workout session pages
+  "fitness.backToPrograms": "Back to programs",
+  "fitness.premium": "Premium",
+  "fitness.weeksDaysPerWeek": "{weeks} weeks · {days} days/week",
+  "fitness.perSession": "/ session",
+  "fitness.startWeek": "Start week {week}",
+  "fitness.week": "Week {week}",
+  "fitness.progressiveOverload": "{weeks} weeks of progressive overload — increase weight or reps each week as it gets easier.",
+  "fitness.start": "Start",
+  "fitness.restSeconds": "{seconds}s rest",
+  "fitness.workoutFallback": "Workout",
+
+  // Bible page (text translation handled separately by BIBLE_TRANSLATIONS)
+  "bible.metaTitle": "Bible",
+  "bible.metaDescription": "Read the complete Bible in French (Louis Segond 1910) or English (World English Bible).",
+  "bible.title": "Bible",
+  "bible.subtitle": "The complete Bible, free to read — Louis Segond 1910 (French) and the World English Bible.",
+  "bible.error": "The Bible couldn't be loaded right now — check your connection and try again.",
+  "bible.previous": "Previous",
+  "bible.next": "Next",
 
   // Nutrition page — recipe categories
   "nutrition.categoryAll": "All",
@@ -199,6 +219,10 @@ const en = {
 
   // Coach picker page
   "coach.pickerSubtitle": "Pick the coach that fits what you need today. You can switch anytime.",
+  // Coach chat (detail) page
+  "coach.chooseAnother": "Choose a different coach",
+  "coach.metaSuffix": "AI Coach",
+  "coach.metaFallback": "Coach",
 
   // Challenges page
   "challenges.title": "Challenges",

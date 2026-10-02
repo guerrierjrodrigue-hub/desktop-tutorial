@@ -5,6 +5,8 @@ import { ChevronLeft, Sparkles } from "lucide-react";
 import { Topbar } from "@/components/layout/topbar";
 import { CoachChat } from "@/components/coach/coach-chat";
 import { COACHES, getCoach } from "@/data/coaches";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 
 export function generateStaticParams() {
   return COACHES.map((c) => ({ coachId: c.id }));
@@ -16,9 +18,10 @@ export async function generateMetadata({
   params: Promise<{ coachId: string }>;
 }): Promise<Metadata> {
   const { coachId } = await params;
+  const dict = await getDictionary(await getLocale());
   const coach = COACHES.find((c) => c.id === coachId);
   return {
-    title: coach ? `${coach.name} — AI Coach` : "Coach",
+    title: coach ? `${coach.name} — ${dict["coach.metaSuffix"]}` : dict["coach.metaFallback"],
     description: coach?.tagline,
   };
 }
@@ -31,6 +34,7 @@ export default async function CoachChatPage({
   const { coachId } = await params;
   if (!COACHES.some((c) => c.id === coachId)) notFound();
   const coach = getCoach(coachId);
+  const dict = await getDictionary(await getLocale());
 
   return (
     <>
@@ -40,7 +44,7 @@ export default async function CoachChatPage({
           href="/coach"
           className="mb-4 inline-flex items-center gap-1 text-sm text-muted transition hover:text-foreground"
         >
-          <ChevronLeft className="size-4" /> Choose a different coach
+          <ChevronLeft className="size-4" /> {dict["coach.chooseAnother"]}
         </Link>
         <div className="mb-4 flex items-center gap-3">
           <span

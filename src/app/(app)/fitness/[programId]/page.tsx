@@ -12,6 +12,8 @@ import { programs } from "@/data/programs";
 import { getProgramBySlug } from "@/lib/queries/programs";
 import { getCurrentUser } from "@/lib/queries/profile";
 import { formatDuration } from "@/lib/utils";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 
 export function generateStaticParams() {
   return programs.map((p) => ({ programId: p.id }));
@@ -43,6 +45,7 @@ export default async function ProgramDetailPage({
   if (!program) notFound();
 
   const user = await getCurrentUser();
+  const dict = await getDictionary(await getLocale());
   const locked = program.premium && !user.isPremium;
 
   const requestedWeek = Number(week) || 1;
@@ -57,7 +60,7 @@ export default async function ProgramDetailPage({
           href="/fitness"
           className="inline-flex items-center gap-1 text-sm text-muted transition hover:text-foreground"
         >
-          <ChevronLeft className="size-4" /> Back to programs
+          <ChevronLeft className="size-4" /> {dict["fitness.backToPrograms"]}
         </Link>
 
         {/* Hero */}
@@ -73,7 +76,7 @@ export default async function ProgramDetailPage({
             </Badge>
             {program.premium && (
               <Badge variant="premium" className="bg-black/30 backdrop-blur">
-                <Lock className="size-3" /> Premium
+                <Lock className="size-3" /> {dict["fitness.premium"]}
               </Badge>
             )}
           </div>
@@ -86,16 +89,20 @@ export default async function ProgramDetailPage({
           <div className="mt-5 flex flex-wrap gap-5 text-sm">
             <span className="flex items-center gap-2">
               <CalendarDays className="size-4" />
-              {program.weeks} weeks · {program.daysPerWeek} days/week
+              {dict["fitness.weeksDaysPerWeek"]
+                .replace("{weeks}", String(program.weeks))
+                .replace("{days}", String(program.daysPerWeek))}
             </span>
             <span className="flex items-center gap-2">
               <Clock className="size-4" />
-              {formatDuration(program.durationMinutes)} / session
+              {formatDuration(program.durationMinutes)} {dict["fitness.perSession"]}
             </span>
           </div>
           {!locked && activeWeek?.days[0] && (
             <Link href={`/fitness/${program.id}/session/${activeWeek.days[0].id}`}>
-              <Button className="mt-6">Start week {activeWeek.week}</Button>
+              <Button className="mt-6">
+                {dict["fitness.startWeek"].replace("{week}", String(activeWeek.week))}
+              </Button>
             </Link>
           )}
         </div>
@@ -111,7 +118,7 @@ export default async function ProgramDetailPage({
                     variant={w.week === activeWeek?.week ? "gold" : "neutral"}
                     className="cursor-pointer px-3 py-1.5"
                   >
-                    Week {w.week}
+                    {dict["fitness.week"].replace("{week}", String(w.week))}
                   </Badge>
                 </Link>
               ))}
@@ -119,11 +126,10 @@ export default async function ProgramDetailPage({
           )}
 
           <h2 className="font-serif text-xl font-semibold">
-            Week {activeWeek?.week}
+            {dict["fitness.week"].replace("{week}", String(activeWeek?.week ?? 1))}
           </h2>
           <p className="text-sm text-muted">
-            {program.weeks} weeks of progressive overload — increase weight or
-            reps each week as it gets easier.
+            {dict["fitness.progressiveOverload"].replace("{weeks}", String(program.weeks))}
           </p>
 
           <div className="mt-4 space-y-4">
@@ -148,7 +154,7 @@ export default async function ProgramDetailPage({
                     </span>
                     <Link href={`/fitness/${program.id}/session/${day.id}`}>
                       <Button size="sm" variant="secondary">
-                        Start
+                        {dict["fitness.start"]}
                       </Button>
                     </Link>
                   </div>
@@ -184,7 +190,9 @@ export default async function ProgramDetailPage({
                         <p className="font-semibold">
                           {ex.sets} × {ex.reps}
                         </p>
-                        <p className="text-xs text-faint">{ex.restSeconds}s rest</p>
+                        <p className="text-xs text-faint">
+                          {dict["fitness.restSeconds"].replace("{seconds}", String(ex.restSeconds))}
+                        </p>
                       </div>
                     </li>
                   ))}
