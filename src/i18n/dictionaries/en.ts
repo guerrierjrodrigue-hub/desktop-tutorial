@@ -240,6 +240,61 @@ const en = {
   "mkt.legal.lastUpdated": "Last updated",
   "mkt.legal.provisional":
     "Interim version — in effect during the testing phase. A final version will be published before the public launch.",
+
+  // Contact page
+  "mkt.contact.metaTitle": "Contact",
+  "mkt.contact.metaDescription": "Get in touch with the Kingdom Athlete team.",
+  "mkt.contact.badge": "Contact",
+  "mkt.contact.title": "We'd love to hear from you",
+  "mkt.contact.subtitle":
+    "Questions, feedback, partnership ideas, or just want to say hi — drop us a note and a real person will get back to you.",
+  "mkt.contact.emailTitle": "Email us",
+  "mkt.contact.replyTime": "We reply within 1-2 business days.",
+  "mkt.contact.barnabasTitle": "Talk to Barnabas",
+  "mkt.contact.barnabasBody":
+    "Product questions inside the app? Your AI coach can often answer faster than we can.",
+  "mkt.contact.faqTitle": "Common questions",
+  "mkt.contact.faqBody":
+    "Billing, programs, and account questions are often answered in our ",
+  "mkt.contact.form.name": "Your name",
+  "mkt.contact.form.email": "Email",
+  "mkt.contact.form.message": "Message",
+  "mkt.contact.form.subjectFallback": "the Kingdom Athlete site",
+  "mkt.contact.form.hint":
+    "Sending opens your email app with this message ready to go to",
+  "mkt.contact.form.send": "Send message",
+
+  // About page
+  "mkt.about.metaTitle": "About",
+  "mkt.about.metaDescription": "The story and mission behind Kingdom Athlete.",
+  "mkt.about.badge": "Our story",
+  "mkt.about.title": "Faith and fitness were never meant to compete",
+  "mkt.about.subtitle":
+    "Kingdom Athlete started with a simple frustration: every app made us choose between training our bodies and tending our souls. We built the one that refuses to choose.",
+  "mkt.about.story1":
+    "It started with a simple, familiar frustration: our calendars had a slot for the gym and a slot for devotions, and the two never talked to each other. Fitness apps were secular and transactional. Devotional apps never touched a barbell.",
+  "mkt.about.story2":
+    "So we started sketching a different kind of app — one daily rhythm where a workout plan, a reading plan, and a coach who actually knows your name (or at least your streak) all live in the same place.",
+  "mkt.about.story3":
+    "We're still early — a small, independent team building this one honest commit at a time. Our hope is that you'll train with discipline and rest with grace here — no guilt, no gimmicks, just steady faithfulness in body and spirit.",
+  "mkt.about.missionBadge": "Our mission",
+  "mkt.about.pillar.discipline.title": "Discipline",
+  "mkt.about.pillar.discipline.body":
+    "Consistency in the small things — a workout, a meal, a quiet moment — builds a life that honors God.",
+  "mkt.about.pillar.grace.title": "Grace",
+  "mkt.about.pillar.grace.body":
+    "Progress over perfection. Barnabas encourages; it never shames. Missed a day? Start again tomorrow.",
+  "mkt.about.pillar.community.title": "Community",
+  "mkt.about.pillar.community.body":
+    "Faith and fitness both grow best in company. We build for groups, churches, and accountability.",
+  "mkt.about.pillar.stewardship.title": "Stewardship",
+  "mkt.about.pillar.stewardship.body":
+    "Your body is a temple, not a project. We help you care for it as an act of worship, not vanity.",
+  "mkt.about.ctaTitle": "Want to build this with us?",
+  "mkt.about.ctaBody":
+    "We're a small, independent team — but we're always glad to hear from people who care about both craft and calling.",
+  "mkt.about.ctaContact": "Get in touch",
+
   "mkt.verse.short": "“Do you not know that your bodies are temples of the Holy Spirit?”",
   "mkt.verse.shortRef": "1 Corinthians 6:19",
   "mkt.verse.full": "“Do you not know that your bodies are temples of the Holy Spirit? Therefore honor God with your bodies.”",

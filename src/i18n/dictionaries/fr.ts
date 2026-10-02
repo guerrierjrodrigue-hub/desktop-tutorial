@@ -219,6 +219,61 @@ const fr: Dictionary = {
   "mkt.legal.lastUpdated": "Dernière mise à jour",
   "mkt.legal.provisional":
     "Version provisoire — en vigueur pendant la phase d'essai. Une version finale sera publiée avant le lancement public.",
+
+  // Page Contact
+  "mkt.contact.metaTitle": "Contact",
+  "mkt.contact.metaDescription": "Contactez l'équipe Kingdom Athlete.",
+  "mkt.contact.badge": "Contact",
+  "mkt.contact.title": "Nous aimerions avoir de vos nouvelles",
+  "mkt.contact.subtitle":
+    "Questions, retours, idées de partenariat, ou simplement envie de dire bonjour — écrivez-nous et une vraie personne vous répondra.",
+  "mkt.contact.emailTitle": "Écrivez-nous",
+  "mkt.contact.replyTime": "Nous répondons sous 1 à 2 jours ouvrés.",
+  "mkt.contact.barnabasTitle": "Parlez à Barnabas",
+  "mkt.contact.barnabasBody":
+    "Des questions sur le produit dans l'application ? Votre coach IA répond souvent plus vite que nous.",
+  "mkt.contact.faqTitle": "Questions fréquentes",
+  "mkt.contact.faqBody":
+    "Facturation, programmes, compte — la plupart des réponses se trouvent dans notre ",
+  "mkt.contact.form.name": "Votre nom",
+  "mkt.contact.form.email": "E-mail",
+  "mkt.contact.form.message": "Message",
+  "mkt.contact.form.subjectFallback": "le site Kingdom Athlete",
+  "mkt.contact.form.hint":
+    "L'envoi ouvre votre application e-mail avec ce message prêt à envoyer à",
+  "mkt.contact.form.send": "Envoyer le message",
+
+  // Page À propos
+  "mkt.about.metaTitle": "À propos",
+  "mkt.about.metaDescription": "L'histoire et la mission derrière Kingdom Athlete.",
+  "mkt.about.badge": "Notre histoire",
+  "mkt.about.title": "La foi et le fitness n'ont jamais été faits pour s'opposer",
+  "mkt.about.subtitle":
+    "Kingdom Athlete est né d'une frustration simple : chaque application nous forçait à choisir entre entraîner notre corps et nourrir notre âme. Nous avons bâti celle qui refuse de choisir.",
+  "mkt.about.story1":
+    "Tout a commencé par une frustration simple et familière : notre agenda avait un créneau pour la salle de sport et un pour les dévotions, et les deux ne se parlaient jamais. Les applis de fitness étaient laïques et transactionnelles. Les applis de dévotion ne touchaient jamais une barre de musculation.",
+  "mkt.about.story2":
+    "Nous avons donc imaginé une application différente — un seul rythme quotidien où un plan d'entraînement, un plan de lecture et un coach qui connaît vraiment votre nom (ou du moins votre série) vivent au même endroit.",
+  "mkt.about.story3":
+    "Nous en sommes encore aux débuts — une petite équipe indépendante qui construit ceci un commit honnête à la fois. Notre souhait : que vous vous entraîniez avec discipline et vous reposiez avec grâce ici — sans culpabilité, sans gadgets, juste une fidélité constante du corps et de l'esprit.",
+  "mkt.about.missionBadge": "Notre mission",
+  "mkt.about.pillar.discipline.title": "Discipline",
+  "mkt.about.pillar.discipline.body":
+    "La constance dans les petites choses — une séance, un repas, un moment de calme — bâtit une vie qui honore Dieu.",
+  "mkt.about.pillar.grace.title": "Grâce",
+  "mkt.about.pillar.grace.body":
+    "Le progrès plutôt que la perfection. Barnabas encourage ; il ne fait jamais honte. Un jour manqué ? On recommence demain.",
+  "mkt.about.pillar.community.title": "Communauté",
+  "mkt.about.pillar.community.body":
+    "La foi et le fitness grandissent mieux à plusieurs. Nous concevons pour les groupes, les églises et la responsabilité mutuelle.",
+  "mkt.about.pillar.stewardship.title": "Intendance",
+  "mkt.about.pillar.stewardship.body":
+    "Votre corps est un temple, pas un projet. Nous vous aidons à en prendre soin comme un acte d'adoration, non par vanité.",
+  "mkt.about.ctaTitle": "Envie de construire ceci avec nous ?",
+  "mkt.about.ctaBody":
+    "Nous sommes une petite équipe indépendante — mais toujours ravis d'échanger avec des personnes qui tiennent à la fois au travail bien fait et à la vocation.",
+  "mkt.about.ctaContact": "Nous contacter",
+
   "mkt.verse.short": "« Ne savez-vous pas que votre corps est le temple du Saint-Esprit ? »",
   "mkt.verse.shortRef": "1 Corinthiens 6.19",
   "mkt.verse.full": "« Ne savez-vous pas que votre corps est le temple du Saint-Esprit ? Glorifiez donc Dieu dans votre corps. »",

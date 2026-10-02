@@ -8,26 +8,32 @@ import { Reveal } from "@/components/ui/reveal";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { APP_SUPPORT_EMAIL } from "@/lib/constants";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 
-export const metadata: Metadata = {
-  title: "Contact",
-  description: "Get in touch with the Kingdom Athlete team.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary(await getLocale());
+  return {
+    title: dict["mkt.contact.metaTitle"],
+    description: dict["mkt.contact.metaDescription"],
+  };
+}
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const dict = await getDictionary(await getLocale());
+
   return (
     <div className="flex min-h-svh flex-col">
       <MarketingNav />
       <main className="flex-1">
         <section className="mx-auto max-w-3xl px-6 pb-8 pt-20 text-center">
           <Reveal>
-            <Badge variant="gold">Contact</Badge>
+            <Badge variant="gold">{dict["mkt.contact.badge"]}</Badge>
             <h1 className="mt-4 font-serif text-4xl font-semibold tracking-tight sm:text-5xl">
-              We&apos;d love to hear from you
+              {dict["mkt.contact.title"]}
             </h1>
             <p className="mx-auto mt-5 max-w-xl text-muted">
-              Questions, feedback, partnership ideas, or just want to say hi —
-              drop us a note and a real person will get back to you.
+              {dict["mkt.contact.subtitle"]}
             </p>
           </Reveal>
         </section>
@@ -35,7 +41,7 @@ export default function ContactPage() {
         <section className="mx-auto grid max-w-5xl gap-5 px-6 pb-24 lg:grid-cols-[1.2fr_1fr]">
           <Reveal>
             <Card>
-              <ContactForm />
+              <ContactForm dict={dict} />
             </Card>
           </Reveal>
 
@@ -45,14 +51,14 @@ export default function ContactPage() {
                 <Mail className="size-4" />
               </span>
               <div>
-                <h3 className="font-semibold">Email us</h3>
+                <h3 className="font-semibold">{dict["mkt.contact.emailTitle"]}</h3>
                 <a
                   href={`mailto:${APP_SUPPORT_EMAIL}`}
                   className="text-sm text-gold-bright hover:underline"
                 >
                   {APP_SUPPORT_EMAIL}
                 </a>
-                <p className="mt-1 text-xs text-faint">We reply within 1-2 business days.</p>
+                <p className="mt-1 text-xs text-faint">{dict["mkt.contact.replyTime"]}</p>
               </div>
             </Card>
             <Card className="flex items-start gap-3">
@@ -60,11 +66,8 @@ export default function ContactPage() {
                 <MessageCircle className="size-4" />
               </span>
               <div>
-                <h3 className="font-semibold">Talk to Barnabas</h3>
-                <p className="text-sm text-muted">
-                  Product questions inside the app? Your AI coach can often
-                  answer faster than we can.
-                </p>
+                <h3 className="font-semibold">{dict["mkt.contact.barnabasTitle"]}</h3>
+                <p className="text-sm text-muted">{dict["mkt.contact.barnabasBody"]}</p>
               </div>
             </Card>
             <Card className="flex items-start gap-3">
@@ -72,12 +75,11 @@ export default function ContactPage() {
                 <HelpCircle className="size-4" />
               </span>
               <div>
-                <h3 className="font-semibold">Common questions</h3>
+                <h3 className="font-semibold">{dict["mkt.contact.faqTitle"]}</h3>
                 <p className="text-sm text-muted">
-                  Billing, programs, and account questions are often answered
-                  in our{" "}
+                  {dict["mkt.contact.faqBody"]}
                   <Link href="/help" className="text-gold-bright hover:underline">
-                    Help Center
+                    {dict["mkt.footer.help"]}
                   </Link>
                   .
                 </p>
