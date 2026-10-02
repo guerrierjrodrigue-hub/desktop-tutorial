@@ -4,15 +4,16 @@ import { useState } from "react";
 import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { APP_SUPPORT_EMAIL } from "@/lib/constants";
+import type { Dictionary } from "@/i18n/dictionaries/en";
 
-export function ContactForm() {
+export function ContactForm({ dict }: { dict: Dictionary }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const subject = `Message from ${name || "the Kingdom Athlete site"}`;
+    const subject = `Message from ${name || dict["mkt.contact.form.subjectFallback"]}`;
     const body = `${message}\n\n— ${name} (${email})`;
     window.location.href = `mailto:${APP_SUPPORT_EMAIL}?subject=${encodeURIComponent(
       subject,
@@ -23,7 +24,7 @@ export function ContactForm() {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="block">
-          <span className="text-xs text-faint">Your name</span>
+          <span className="text-xs text-faint">{dict["mkt.contact.form.name"]}</span>
           <input
             required
             value={name}
@@ -32,7 +33,7 @@ export function ContactForm() {
           />
         </label>
         <label className="block">
-          <span className="text-xs text-faint">Email</span>
+          <span className="text-xs text-faint">{dict["mkt.contact.form.email"]}</span>
           <input
             required
             type="email"
@@ -43,7 +44,7 @@ export function ContactForm() {
         </label>
       </div>
       <label className="block">
-        <span className="text-xs text-faint">Message</span>
+        <span className="text-xs text-faint">{dict["mkt.contact.form.message"]}</span>
         <textarea
           required
           rows={5}
@@ -53,11 +54,10 @@ export function ContactForm() {
         />
       </label>
       <p className="text-xs text-faint">
-        Sending opens your email app with this message ready to go to{" "}
-        {APP_SUPPORT_EMAIL}.
+        {dict["mkt.contact.form.hint"]} {APP_SUPPORT_EMAIL}.
       </p>
       <Button type="submit" className="w-full sm:w-auto">
-        <Send className="size-4" /> Send message
+        <Send className="size-4" /> {dict["mkt.contact.form.send"]}
       </Button>
     </form>
   );

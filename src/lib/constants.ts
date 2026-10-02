@@ -8,4 +8,7 @@ export const APP_DESCRIPTION =
 export const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL ?? "https://kingdomathlete.app";
 
-export const APP_SUPPORT_EMAIL = "hello@kingdomathlete.app";
+// Interim support address during the closed beta. kingdomathlete.app email is
+// not set up yet, so point contact at a monitored inbox. Switch this back to a
+// branded address once kingdomathlete.app mail is configured.
+export const APP_SUPPORT_EMAIL = "guerrierrodrigue98@gmail.com";
