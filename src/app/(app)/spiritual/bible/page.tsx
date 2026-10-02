@@ -12,11 +12,16 @@ import {
   isBibleTranslationId,
   type BibleTranslationId,
 } from "@/lib/bible";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 
-export const metadata: Metadata = {
-  title: "Bible",
-  description: "Read the complete Bible in French (Louis Segond 1910) or English (World English Bible).",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary(await getLocale());
+  return {
+    title: dict["bible.metaTitle"],
+    description: dict["bible.metaDescription"],
+  };
+}
 
 function hrefFor(t: BibleTranslationId, b: string, c: number) {
   return `/spiritual/bible?t=${t}&b=${b}&c=${c}`;
@@ -28,6 +33,7 @@ export default async function BiblePage({
   searchParams: Promise<{ t?: string; b?: string; c?: string }>;
 }) {
   const params = await searchParams;
+  const dict = await getDictionary(await getLocale());
   const translationId: BibleTranslationId =
     params.t && isBibleTranslationId(params.t) ? params.t : BIBLE_TRANSLATIONS[0].id;
 
@@ -59,11 +65,11 @@ export default async function BiblePage({
 
   return (
     <>
-      <Topbar title="Bible" />
+      <Topbar title={dict["bible.title"]} />
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6">
         <PageHeader
-          title="Bible"
-          subtitle="The complete Bible, free to read — Louis Segond 1910 (French) and the World English Bible."
+          title={dict["bible.title"]}
+          subtitle={dict["bible.subtitle"]}
         />
 
         <Card>
@@ -80,9 +86,7 @@ export default async function BiblePage({
           {!books.length || !chapter ? (
             <div className="flex flex-col items-center gap-2 py-8 text-center">
               <BookOpen className="size-6 text-faint" />
-              <p className="text-sm text-muted">
-                The Bible couldn&apos;t be loaded right now — check your connection and try again.
-              </p>
+              <p className="text-sm text-muted">{dict["bible.error"]}</p>
             </div>
           ) : (
             <>
@@ -113,7 +117,7 @@ export default async function BiblePage({
                     href={prev}
                     className="inline-flex items-center gap-1 text-sm font-semibold text-gold-bright hover:underline"
                   >
-                    <ChevronLeft className="size-4" /> Previous
+                    <ChevronLeft className="size-4" /> {dict["bible.previous"]}
                   </Link>
                 ) : (
                   <span />
@@ -123,7 +127,7 @@ export default async function BiblePage({
                     href={next}
                     className="inline-flex items-center gap-1 text-sm font-semibold text-gold-bright hover:underline"
                   >
-                    Next <ChevronRight className="size-4" />
+                    {dict["bible.next"]} <ChevronRight className="size-4" />
                   </Link>
                 ) : (
                   <span />

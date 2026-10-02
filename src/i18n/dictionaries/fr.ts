@@ -166,6 +166,26 @@ const fr: Dictionary = {
   "fitness.categoryHiit": "HIIT",
   "fitness.categoryMobility": "Mobilité",
   "fitness.categoryBodyweight": "Poids du corps",
+  // Pages détail de programme + séance d'entraînement
+  "fitness.backToPrograms": "Retour aux programmes",
+  "fitness.premium": "Premium",
+  "fitness.weeksDaysPerWeek": "{weeks} semaines · {days} jours/semaine",
+  "fitness.perSession": "/ séance",
+  "fitness.startWeek": "Commencer la semaine {week}",
+  "fitness.week": "Semaine {week}",
+  "fitness.progressiveOverload": "{weeks} semaines de surcharge progressive — augmentez la charge ou les répétitions chaque semaine à mesure que cela devient plus facile.",
+  "fitness.start": "Commencer",
+  "fitness.restSeconds": "{seconds}s de repos",
+  "fitness.workoutFallback": "Séance",
+
+  // Page Bible (la traduction du texte est gérée séparément par BIBLE_TRANSLATIONS)
+  "bible.metaTitle": "Bible",
+  "bible.metaDescription": "Lisez la Bible complète en français (Louis Segond 1910) ou en anglais (World English Bible).",
+  "bible.title": "Bible",
+  "bible.subtitle": "La Bible complète, en lecture libre — Louis Segond 1910 (français) et la World English Bible.",
+  "bible.error": "La Bible n'a pas pu être chargée pour le moment — vérifiez votre connexion et réessayez.",
+  "bible.previous": "Précédent",
+  "bible.next": "Suivant",
 
   "nutrition.categoryAll": "Tous",
   "nutrition.categoryWeightLoss": "Perte de poids",
@@ -181,6 +201,10 @@ const fr: Dictionary = {
   "community.discoverGroups": "Découvrir des groupes",
 
   "coach.pickerSubtitle": "Choisis le coach qui correspond à ton besoin du jour. Tu peux changer à tout moment.",
+  // Page de discussion coach (détail)
+  "coach.chooseAnother": "Choisir un autre coach",
+  "coach.metaSuffix": "Coach IA",
+  "coach.metaFallback": "Coach",
 
   "challenges.title": "Défis",
   "challenges.subtitle": "La discipline est plus facile à plusieurs. Rejoins un défi et garde la flamme.",

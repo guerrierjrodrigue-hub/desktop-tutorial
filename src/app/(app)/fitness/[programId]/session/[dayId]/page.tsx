@@ -4,6 +4,8 @@ import { Topbar } from "@/components/layout/topbar";
 import { WorkoutSession } from "@/components/fitness/workout-session";
 import { getProgramBySlug } from "@/lib/queries/programs";
 import { getCurrentUser } from "@/lib/queries/profile";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 
 function findDay(program: Awaited<ReturnType<typeof getProgramBySlug>>, dayId: string) {
   return program?.schedule.flatMap((w) => w.days).find((d) => d.id === dayId);
@@ -17,7 +19,9 @@ export async function generateMetadata({
   const { programId, dayId } = await params;
   const program = await getProgramBySlug(programId);
   const day = findDay(program, dayId);
-  return { title: day ? `${day.title} · ${program?.title}` : "Workout" };
+  if (day) return { title: `${day.title} · ${program?.title}` };
+  const dict = await getDictionary(await getLocale());
+  return { title: dict["fitness.workoutFallback"] };
 }
 
 export default async function WorkoutSessionPage({
