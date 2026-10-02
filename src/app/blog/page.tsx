@@ -6,34 +6,42 @@ import { MarketingFooter } from "@/components/marketing/marketing-footer";
 import { Reveal } from "@/components/ui/reveal";
 import { Badge } from "@/components/ui/badge";
 import { blogPosts } from "@/data/blog";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
+import type { LocaleCode } from "@/i18n/locales";
 
-export const metadata: Metadata = {
-  title: "Blog",
-  description: "Reflections on training, discipline, and faith from the Kingdom Athlete team.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary(await getLocale());
+  return {
+    title: dict["mkt.blog.metaTitle"],
+    description: dict["mkt.blog.metaDescription"],
+  };
+}
 
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-US", {
+function formatDate(iso: string, locale: LocaleCode) {
+  return new Date(iso).toLocaleDateString(locale, {
     year: "numeric",
     month: "long",
     day: "numeric",
   });
 }
 
-export default function BlogIndexPage() {
+export default async function BlogIndexPage() {
+  const locale = await getLocale();
+  const dict = await getDictionary(locale);
+
   return (
     <div className="flex min-h-svh flex-col">
       <MarketingNav />
       <main className="flex-1">
         <section className="mx-auto max-w-3xl px-6 pb-8 pt-20 text-center">
           <Reveal>
-            <Badge variant="gold">The blog</Badge>
+            <Badge variant="gold">{dict["mkt.blog.badge"]}</Badge>
             <h1 className="mt-4 font-serif text-4xl font-semibold tracking-tight sm:text-5xl">
-              Training notes for body and soul
+              {dict["mkt.blog.title"]}
             </h1>
             <p className="mx-auto mt-5 max-w-xl text-muted">
-              Practical reflections on discipline, nutrition, and faith from
-              the team building Kingdom Athlete.
+              {dict["mkt.blog.subtitle"]}
             </p>
           </Reveal>
         </section>
@@ -45,14 +53,14 @@ export default function BlogIndexPage() {
                 <Link href={`/blog/${post.slug}`} className="group block">
                   <article className="glass rounded-2xl border border-border p-6 transition hover:border-gold/30 sm:p-8">
                     <p className="text-xs text-faint">
-                      {formatDate(post.date)} · {post.readMinutes} min read · {post.author}
+                      {formatDate(post.date, locale)} · {post.readMinutes} {dict["mkt.blog.minRead"]} · {post.author}
                     </p>
                     <h2 className="mt-2 font-serif text-2xl font-semibold transition group-hover:text-gold-bright">
                       {post.title}
                     </h2>
                     <p className="mt-2 text-sm leading-relaxed text-muted">{post.excerpt}</p>
                     <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-gold-bright">
-                      Read more
+                      {dict["mkt.blog.readMore"]}
                       <ArrowRight className="size-4 transition group-hover:translate-x-0.5" />
                     </span>
                   </article>

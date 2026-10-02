@@ -5,82 +5,69 @@ import { MarketingFooter } from "@/components/marketing/marketing-footer";
 import { Reveal } from "@/components/ui/reveal";
 import { Badge } from "@/components/ui/badge";
 import { APP_SUPPORT_EMAIL } from "@/lib/constants";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
+import type { Dictionary, DictionaryKey } from "@/i18n/dictionaries/en";
 
-export const metadata: Metadata = {
-  title: "Help Center",
-  description: "Answers to common questions about Kingdom Athlete.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary(await getLocale());
+  return {
+    title: dict["mkt.help.metaTitle"],
+    description: dict["mkt.help.metaDescription"],
+  };
+}
 
-const categories = [
+const categories: {
+  titleKey: DictionaryKey;
+  faqs: { q: DictionaryKey; a: DictionaryKey }[];
+}[] = [
   {
-    title: "Getting started",
+    titleKey: "mkt.help.cat1.title",
     faqs: [
-      {
-        q: "How do I choose my first program?",
-        a: "Head to Fitness in the app and filter by level and category. Not sure? Barnabas can recommend one based on your goal and schedule in a single chat message.",
-      },
-      {
-        q: "Do I need any equipment?",
-        a: "No. Several programs (like our bodyweight and mobility plans) need zero equipment. Others use a barbell or dumbbells — each program lists what you'll need before you start.",
-      },
+      { q: "mkt.help.cat1.q1", a: "mkt.help.cat1.a1" },
+      { q: "mkt.help.cat1.q2", a: "mkt.help.cat1.a2" },
     ],
   },
   {
-    title: "Billing & subscription",
+    titleKey: "mkt.help.cat2.title",
     faqs: [
-      {
-        q: "How do I cancel my subscription?",
-        a: "Go to Profile → Manage billing. You'll keep access until the end of your current billing period — no calls, no retention flow.",
-      },
-      {
-        q: "Can I switch between monthly and annual plans?",
-        a: "Yes, anytime from the billing portal. Switching to annual applies a prorated credit for time remaining on your current plan.",
-      },
+      { q: "mkt.help.cat2.q1", a: "mkt.help.cat2.a1" },
+      { q: "mkt.help.cat2.q2", a: "mkt.help.cat2.a2" },
     ],
   },
   {
-    title: "Barnabas AI coach",
+    titleKey: "mkt.help.cat3.title",
     faqs: [
-      {
-        q: "Is Barnabas a real person?",
-        a: "No — Barnabas is an AI coach built to encourage you, adapt workouts, and answer fitness, nutrition, and faith questions with a consistent, biblically grounded voice.",
-      },
-      {
-        q: "Can Barnabas replace medical or pastoral advice?",
-        a: "No. Barnabas is a supportive coach, not a substitute for a doctor, therapist, or pastor. For medical concerns, always consult a qualified professional.",
-      },
+      { q: "mkt.help.cat3.q1", a: "mkt.help.cat3.a1" },
+      { q: "mkt.help.cat3.q2", a: "mkt.help.cat3.a2" },
     ],
   },
   {
-    title: "Account & privacy",
+    titleKey: "mkt.help.cat4.title",
     faqs: [
-      {
-        q: "How do I update my profile details?",
-        a: "Go to Profile and tap the settings icon next to your name — you can edit your name, bio, stats, and more from there.",
-      },
-      {
-        q: "How is my data handled?",
-        a: "See our Privacy Policy for the full details on what we collect and how it's used.",
-      },
+      { q: "mkt.help.cat4.q1", a: "mkt.help.cat4.a1" },
+      { q: "mkt.help.cat4.q2", a: "mkt.help.cat4.a2" },
     ],
   },
 ];
 
-export default function HelpPage() {
+export default async function HelpPage() {
+  const dict: Dictionary = await getDictionary(await getLocale());
+
   return (
     <div className="flex min-h-svh flex-col">
       <MarketingNav />
       <main className="flex-1">
         <section className="mx-auto max-w-3xl px-6 pb-8 pt-20 text-center">
           <Reveal>
-            <Badge variant="gold">Help Center</Badge>
+            <Badge variant="gold">{dict["mkt.footer.help"]}</Badge>
             <h1 className="mt-4 font-serif text-4xl font-semibold tracking-tight sm:text-5xl">
-              How can we help?
+              {dict["mkt.help.title"]}
             </h1>
             <p className="mx-auto mt-5 max-w-xl text-muted">
-              Answers to the questions we hear most. Can&apos;t find yours?{" "}
+              {dict["mkt.help.subtitlePre"]}
               <Link href="/contact" className="text-gold-bright hover:underline">
-                Reach out directly
+                {dict["mkt.help.subtitleLink"]}
               </Link>
               .
             </p>
@@ -89,13 +76,13 @@ export default function HelpPage() {
 
         <section className="mx-auto max-w-3xl space-y-10 px-6 pb-24">
           {categories.map((cat, ci) => (
-            <Reveal key={cat.title} delay={ci * 0.05}>
-              <h2 className="mb-4 font-serif text-xl font-semibold">{cat.title}</h2>
+            <Reveal key={cat.titleKey} delay={ci * 0.05}>
+              <h2 className="mb-4 font-serif text-xl font-semibold">{dict[cat.titleKey]}</h2>
               <div className="space-y-3">
                 {cat.faqs.map((f) => (
                   <div key={f.q} className="glass rounded-2xl border border-border p-5">
-                    <h3 className="font-semibold">{f.q}</h3>
-                    <p className="mt-2 text-sm text-muted">{f.a}</p>
+                    <h3 className="font-semibold">{dict[f.q]}</h3>
+                    <p className="mt-2 text-sm text-muted">{dict[f.a]}</p>
                   </div>
                 ))}
               </div>
@@ -104,11 +91,11 @@ export default function HelpPage() {
 
           <Reveal className="glass rounded-2xl border border-border p-6 text-center">
             <p className="text-sm text-muted">
-              Still stuck? Email{" "}
+              {dict["mkt.help.stuckPre"]}
               <a href={`mailto:${APP_SUPPORT_EMAIL}`} className="text-gold-bright hover:underline">
                 {APP_SUPPORT_EMAIL}
-              </a>{" "}
-              and we&apos;ll help you sort it out.
+              </a>
+              {dict["mkt.help.stuckPost"]}
             </p>
           </Reveal>
         </section>
