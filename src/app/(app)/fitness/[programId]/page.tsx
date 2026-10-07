@@ -27,7 +27,7 @@ export async function generateMetadata({
   params: Promise<{ programId: string }>;
 }): Promise<Metadata> {
   const { programId } = await params;
-  const program = await getProgramBySlug(programId);
+  const program = await getProgramBySlug(programId, await getLocale());
   return {
     title: program?.title ?? "Program",
     description: program?.description,
@@ -43,11 +43,12 @@ export default async function ProgramDetailPage({
 }) {
   const { programId } = await params;
   const { week } = await searchParams;
-  const program = await getProgramBySlug(programId);
+  const locale = await getLocale();
+  const program = await getProgramBySlug(programId, locale);
   if (!program) notFound();
 
   const user = await getCurrentUser();
-  const dict = await getDictionary(await getLocale());
+  const dict = await getDictionary(locale);
   const locked = program.premium && !user.isPremium;
 
   const requestedWeek = Number(week) || 1;
@@ -70,11 +71,11 @@ export default async function ProgramDetailPage({
           className={`mt-4 overflow-hidden rounded-3xl border border-border bg-gradient-to-br ${program.coverColor} p-8`}
         >
           <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="neutral" className="bg-black/30 text-foreground capitalize backdrop-blur">
-              {program.level}
+            <Badge variant="neutral" className="bg-black/30 text-foreground backdrop-blur">
+              {dict[`level.${program.level}`]}
             </Badge>
-            <Badge variant="neutral" className="bg-black/30 text-foreground capitalize backdrop-blur">
-              {program.category.replace("-", " ")}
+            <Badge variant="neutral" className="bg-black/30 text-foreground backdrop-blur">
+              {dict[`category.${program.category}`]}
             </Badge>
             {showPremiumLock(isFreeMode(), program.premium) && (
               <Badge variant="premium" className="bg-black/30 backdrop-blur">

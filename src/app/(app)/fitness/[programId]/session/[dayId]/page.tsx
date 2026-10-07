@@ -17,7 +17,7 @@ export async function generateMetadata({
   params: Promise<{ programId: string; dayId: string }>;
 }): Promise<Metadata> {
   const { programId, dayId } = await params;
-  const program = await getProgramBySlug(programId);
+  const program = await getProgramBySlug(programId, await getLocale());
   const day = findDay(program, dayId);
   if (day) return { title: `${day.title} · ${program?.title}` };
   const dict = await getDictionary(await getLocale());
@@ -30,7 +30,7 @@ export default async function WorkoutSessionPage({
   params: Promise<{ programId: string; dayId: string }>;
 }) {
   const { programId, dayId } = await params;
-  const program = await getProgramBySlug(programId);
+  const program = await getProgramBySlug(programId, await getLocale());
   if (!program) notFound();
 
   const user = await getCurrentUser();

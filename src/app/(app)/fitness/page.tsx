@@ -25,7 +25,8 @@ const categories: { key: ProgramCategory | "all"; labelKey: DictionaryKey }[] = 
 ];
 
 export default async function FitnessPage() {
-  const [programs, dict] = await Promise.all([getPrograms(), getDictionary(await getLocale())]);
+  const locale = await getLocale();
+  const [programs, dict] = await Promise.all([getPrograms(locale), getDictionary(locale)]);
   return (
     <>
       <Topbar title="Fitness" />
@@ -46,7 +47,7 @@ export default async function FitnessPage() {
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {programs.map((program) => (
-            <ProgramCard key={program.id} program={program} />
+            <ProgramCard key={program.id} program={program} dict={dict} />
           ))}
         </div>
       </main>
