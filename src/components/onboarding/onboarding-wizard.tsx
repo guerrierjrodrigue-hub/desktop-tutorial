@@ -6,7 +6,12 @@ import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { IDENTITY_OPTIONS, PRIMARY_GOAL_OPTIONS } from "@/lib/personalization";
+import {
+  IDENTITY_OPTIONS,
+  PRIMARY_GOAL_OPTIONS,
+  LEVEL_OPTIONS,
+  EQUIPMENT_OPTIONS,
+} from "@/lib/personalization";
 import { saveOnboarding } from "@/app/onboarding/actions";
 import { setLocale } from "@/app/actions/locale";
 import { LOCALES, type LocaleCode } from "@/i18n/locales";
@@ -14,7 +19,8 @@ import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { IdentityId } from "@/types";
 
-const TOTAL_STEPS = 4;
+const TOTAL_STEPS = 5;
+const DAY_OPTIONS = [2, 3, 4, 5, 6];
 
 export function OnboardingWizard({
   locale,
@@ -32,6 +38,14 @@ export function OnboardingWizard({
   const [language, setLanguage] = useState<LocaleCode>(locale);
   const [goals, setGoals] = useState<string[]>(initialGoals ?? []);
   const [identities, setIdentities] = useState<string[]>(initialIdentities ?? []);
+  const [level, setLevel] = useState<"beginner" | "intermediate" | "advanced">("beginner");
+  const [equipment, setEquipment] = useState<"none" | "home" | "gym">("home");
+  const [trainingDays, setTrainingDays] = useState(3);
+  const [reminderTime, setReminderTime] = useState("07:00");
+  const [heightCm, setHeightCm] = useState("");
+  const [weightKg, setWeightKg] = useState("");
+  const [birthDate, setBirthDate] = useState("");
+  const [ageError, setAgeError] = useState(false);
   const [saving, setSaving] = useState(false);
   const [, startTransition] = useTransition();
 
@@ -55,8 +69,25 @@ export function OnboardingWizard({
 
   function finish() {
     setSaving(true);
+    setAgeError(false);
     startTransition(async () => {
-      await saveOnboarding({ goals, identities });
+      const result = await saveOnboarding({
+        goals,
+        identities,
+        level,
+        equipment,
+        trainingDays,
+        reminderTime,
+        heightCm: heightCm ? Number(heightCm) : null,
+        weightKg: weightKg ? Number(weightKg) : null,
+        birthDate: birthDate || null,
+      });
+      if (result && !result.ok && result.error === "age") {
+        setAgeError(true);
+        setSaving(false);
+        setStep(3);
+        return;
+      }
       router.push("/dashboard");
     });
   }
@@ -175,6 +206,126 @@ export function OnboardingWizard({
         )}
 
         {step === 3 && (
+          <>
+            <h1 className="text-center font-serif text-2xl font-semibold">
+              {dict["onboarding.trainingTitle"]}
+            </h1>
+            <p className="mt-2 text-center text-sm text-muted">
+              {dict["onboarding.trainingSubtitle"]}
+            </p>
+            <div className="mt-6 space-y-4 text-sm">
+              <div>
+                <p className="mb-1.5 text-xs font-semibold text-muted">{dict["onboarding.levelLabel"]}</p>
+                <div className="flex flex-wrap gap-2">
+                  {LEVEL_OPTIONS.map((o) => (
+                    <button
+                      key={o.id}
+                      type="button"
+                      onClick={() => setLevel(o.id)}
+                      aria-pressed={level === o.id}
+                      className={cn(
+                        "rounded-full border px-3 py-1.5 text-sm transition",
+                        level === o.id
+                          ? "border-gold/50 bg-gold/10 text-foreground"
+                          : "border-border bg-surface-2 text-muted hover:border-gold/30",
+                      )}
+                    >
+                      {dict[o.labelKey]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="mb-1.5 text-xs font-semibold text-muted">{dict["onboarding.equipmentLabel"]}</p>
+                <div className="flex flex-wrap gap-2">
+                  {EQUIPMENT_OPTIONS.map((o) => (
+                    <button
+                      key={o.id}
+                      type="button"
+                      onClick={() => setEquipment(o.id)}
+                      aria-pressed={equipment === o.id}
+                      className={cn(
+                        "rounded-full border px-3 py-1.5 text-sm transition",
+                        equipment === o.id
+                          ? "border-gold/50 bg-gold/10 text-foreground"
+                          : "border-border bg-surface-2 text-muted hover:border-gold/30",
+                      )}
+                    >
+                      {dict[o.labelKey]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                <label className="text-xs font-semibold text-muted" htmlFor="ob-days">
+                  {dict["onboarding.daysLabel"]}
+                </label>
+                <select
+                  id="ob-days"
+                  value={trainingDays}
+                  onChange={(e) => setTrainingDays(Number(e.target.value))}
+                  className="h-10 rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-gold/40"
+                >
+                  {DAY_OPTIONS.map((d) => (
+                    <option key={d} value={d}>{d}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                <label className="text-xs font-semibold text-muted" htmlFor="ob-reminder">
+                  {dict["onboarding.reminderLabel"]}
+                </label>
+                <input
+                  id="ob-reminder"
+                  type="time"
+                  value={reminderTime}
+                  onChange={(e) => setReminderTime(e.target.value)}
+                  className="h-10 rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-gold/40"
+                />
+              </div>
+
+              <details className="rounded-xl border border-border bg-surface-2 p-3">
+                <summary className="cursor-pointer text-xs font-semibold text-muted">
+                  {dict["onboarding.optionalMetrics"]}
+                </summary>
+                <p className="mt-2 text-xs text-faint">{dict["onboarding.whyWeAsk"]}</p>
+                <div className="mt-3 grid grid-cols-2 gap-2">
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    value={heightCm}
+                    onChange={(e) => setHeightCm(e.target.value)}
+                    placeholder={dict["onboarding.heightCm"]}
+                    aria-label={dict["onboarding.heightCm"]}
+                    className="h-10 rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-gold/40"
+                  />
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    value={weightKg}
+                    onChange={(e) => setWeightKg(e.target.value)}
+                    placeholder={dict["onboarding.weightKg"]}
+                    aria-label={dict["onboarding.weightKg"]}
+                    className="h-10 rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-gold/40"
+                  />
+                  <label className="col-span-2 flex items-center justify-between gap-2 text-xs text-muted">
+                    {dict["onboarding.birthDate"]}
+                    <input
+                      type="date"
+                      value={birthDate}
+                      onChange={(e) => setBirthDate(e.target.value)}
+                      aria-label={dict["onboarding.birthDate"]}
+                      className="h-10 rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-gold/40"
+                    />
+                  </label>
+                </div>
+                {ageError && <p className="mt-2 text-xs text-danger">{dict["onboarding.ageError"]}</p>}
+              </details>
+            </div>
+          </>
+        )}
+
+        {step === 4 && (
           <>
             <h1 className="text-center font-serif text-2xl font-semibold">
               {dict["onboarding.summaryTitle"]}

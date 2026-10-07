@@ -12,6 +12,10 @@ export interface ProfileUpdateInput {
   goal: string;
   church: string;
   favoriteVerse: string;
+  level?: "beginner" | "intermediate" | "advanced";
+  equipment?: string;
+  trainingDays?: number;
+  reminderTime?: string;
 }
 
 /** Update the signed-in user's profile details. */
@@ -33,6 +37,10 @@ export async function updateProfileAction(
       goal: input.goal.trim() || null,
       church: input.church.trim() || null,
       favorite_verse: input.favoriteVerse.trim() || null,
+      ...(input.level ? { level: input.level } : {}),
+      ...(input.equipment ? { equipment: input.equipment } : {}),
+      ...(input.trainingDays ? { training_days: input.trainingDays } : {}),
+      ...(input.reminderTime ? { reminder_time: input.reminderTime } : {}),
     })
     .eq("id", ctx.userId);
   if (error) return { ok: false, error: error.message };

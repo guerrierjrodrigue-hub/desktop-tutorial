@@ -1,6 +1,7 @@
 import type { Dictionary } from "@/i18n/dictionaries/en";
-import { PRIMARY_GOAL_OPTIONS, type GoalId } from "@/lib/personalization";
-import type { Habit, Program, ProgramCategory } from "@/types";
+import { PRIMARY_GOAL_OPTIONS } from "@/lib/personalization";
+import { buildWeekPlan } from "@/lib/week-plan";
+import type { Habit, Program, FitnessLevel } from "@/types";
 
 export interface Recommendation {
   id: string;
@@ -9,43 +10,42 @@ export interface Recommendation {
   href: string;
 }
 
-const GOAL_CATEGORY: Partial<Record<GoalId, ProgramCategory>> = {
-  "build-muscle": "strength",
-  "lose-weight": "fat-loss",
-  "improve-endurance": "running",
-  "live-healthier": "walking",
-  "build-habits": "bodyweight",
-  "increase-productivity": "mobility",
-};
-
 /**
  * Small, explainable rule-based recommendations — not a behavioral/ML
- * engine. Combines the user's stated goal, program catalog, and today's
- * habit completion into up to 3 suggestions.
+ * engine. The suggested program now comes from the same plan builder as the
+ * dashboard's 7-day plan, so it respects the user's level, equipment and
+ * goals. Combined with today's habit completion into up to 3 suggestions.
  */
 export function getRecommendations(
-  user: { primaryGoals: string[]; identities: string[] },
-  programs: Program[],
+  user: {
+    primaryGoals: string[];
+    identities: string[];
+    level?: FitnessLevel;
+    equipment?: string;
+    trainingDays?: number;
+  },
+  programs: Omit<Program, "schedule">[],
   habits: Habit[],
   dict: Dictionary,
 ): Recommendation[] {
   const recs: Recommendation[] = [];
 
-  const goalOptions = user.primaryGoals
+  const matchedGoal = user.primaryGoals
     .map((id) => PRIMARY_GOAL_OPTIONS.find((g) => g.id === id))
-    .filter((g): g is (typeof PRIMARY_GOAL_OPTIONS)[number] => Boolean(g));
-  const matchedGoal = goalOptions.find((g) => GOAL_CATEGORY[g.id]);
-  const category = matchedGoal ? GOAL_CATEGORY[matchedGoal.id] : undefined;
-  const categoryMatch = category ? programs.find((p) => p.category === category) : undefined;
-  const suggestedProgram = categoryMatch ?? programs[0];
+    .find((g): g is (typeof PRIMARY_GOAL_OPTIONS)[number] => Boolean(g));
+  const { program: suggestedProgram } = buildWeekPlan(programs, {
+    level: user.level,
+    equipment: user.equipment,
+    trainingDays: user.trainingDays,
+    goals: user.primaryGoals,
+  });
   if (suggestedProgram) {
     recs.push({
       id: "program",
       label: suggestedProgram.title,
-      description:
-        categoryMatch && matchedGoal
-          ? `${dict["recommendations.matchesGoal"]} ${dict[matchedGoal.labelKey]}.`
-          : dict["recommendations.wellRounded"],
+      description: matchedGoal
+        ? `${dict["recommendations.matchesGoal"]} ${dict[matchedGoal.labelKey]}.`
+        : dict["recommendations.wellRounded"],
       href: `/fitness/${suggestedProgram.id}`,
     });
   }

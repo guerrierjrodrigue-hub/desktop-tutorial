@@ -30,6 +30,9 @@ export interface ProfileRow {
   goal: string | null;
   gender: string | null;
   birth_date: DateStr | null;
+  equipment: string | null;
+  training_days: number | null;
+  reminder_time: string | null;
   is_premium: boolean;
   is_admin: boolean;
   xp: number;

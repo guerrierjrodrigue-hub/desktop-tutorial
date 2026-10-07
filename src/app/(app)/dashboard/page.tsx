@@ -3,6 +3,7 @@ import { Topbar } from "@/components/layout/topbar";
 import { Greeting } from "@/components/dashboard/greeting";
 import { DevotionalCard } from "@/components/dashboard/devotional-card";
 import { WorkoutCard } from "@/components/dashboard/workout-card";
+import { WeekPlanCard } from "@/components/dashboard/week-plan-card";
 import { HabitsCard } from "@/components/dashboard/habits-card";
 import { StatsCard } from "@/components/dashboard/stats-card";
 import { ProgressCard } from "@/components/dashboard/progress-card";
@@ -29,6 +30,7 @@ export default async function DashboardPage() {
 
   const widgets = [
     { id: "progress", label: dict["dashboard.progress"], node: <ProgressCard /> },
+    { id: "week-plan", label: dict["dashboard.weekPlan"], node: <WeekPlanCard /> },
     { id: "workout", label: dict["dashboard.todaysWorkout"], node: <WorkoutCard /> },
     { id: "habits", label: dict["dashboard.todaysHabits"], node: <HabitsCard /> },
     { id: "stats", label: dict["dashboard.todaysActivity"], node: <StatsCard /> },
