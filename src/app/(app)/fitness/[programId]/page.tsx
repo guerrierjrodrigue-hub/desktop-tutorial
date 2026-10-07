@@ -14,6 +14,8 @@ import { getCurrentUser } from "@/lib/queries/profile";
 import { formatDuration } from "@/lib/utils";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { isFreeMode } from "@/lib/flags";
+import { showPremiumLock } from "@/lib/premium-ui";
 
 export function generateStaticParams() {
   return programs.map((p) => ({ programId: p.id }));
@@ -74,7 +76,7 @@ export default async function ProgramDetailPage({
             <Badge variant="neutral" className="bg-black/30 text-foreground capitalize backdrop-blur">
               {program.category.replace("-", " ")}
             </Badge>
-            {program.premium && (
+            {showPremiumLock(isFreeMode(), program.premium) && (
               <Badge variant="premium" className="bg-black/30 backdrop-blur">
                 <Lock className="size-3" /> {dict["fitness.premium"]}
               </Badge>

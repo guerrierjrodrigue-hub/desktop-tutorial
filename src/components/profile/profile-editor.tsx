@@ -33,6 +33,8 @@ interface ProfileEditorProps {
   nextLevelXp: number;
   earnedBadges: number;
   onSignOut: () => Promise<void>;
+  /** Hide the "Premium" badge during the free beta (everyone is unlocked). */
+  freeMode?: boolean;
   /** Achievements card — rendered as the second column of the grid below. */
   children: React.ReactNode;
 }
@@ -44,6 +46,7 @@ export function ProfileEditor({
   nextLevelXp,
   earnedBadges,
   onSignOut,
+  freeMode = false,
   children,
 }: ProfileEditorProps) {
   const [user, setUser] = useState(initialUser);
@@ -109,7 +112,7 @@ export function ProfileEditor({
               ) : (
                 <h2 className="font-serif text-2xl font-semibold">{user.name}</h2>
               )}
-              {user.isPremium ? (
+              {user.isPremium && !freeMode ? (
                 <Badge variant="premium">
                   <Crown className="size-3" /> Premium
                 </Badge>

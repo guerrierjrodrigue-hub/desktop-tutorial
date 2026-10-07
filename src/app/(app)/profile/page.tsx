@@ -15,6 +15,8 @@ import { LanguageSwitcher } from "@/components/settings/language-switcher";
 import { NotificationSettings } from "@/components/settings/notification-settings";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { isFreeMode } from "@/lib/flags";
+import { profilePlanCard } from "@/lib/premium-ui";
 import {
   getNotificationPreferences,
   hasPushSubscription,
@@ -47,6 +49,7 @@ export default async function ProfilePage() {
           nextLevelXp={nextLevelXp}
           earnedBadges={earned.length}
           onSignOut={signOutAction}
+          freeMode={isFreeMode()}
         >
           {/* Badges */}
           <Card>
@@ -95,7 +98,16 @@ export default async function ProfilePage() {
           />
         </div>
 
-        {currentUser.isPremium ? (
+        {profilePlanCard(isFreeMode(), currentUser.isPremium) === "free-beta" ? (
+          <Card className="mt-5 flex flex-col items-center justify-between gap-4 bg-gradient-to-br from-gold/12 to-surface sm:flex-row">
+            <div className="text-center sm:text-left">
+              <h3 className="font-serif text-lg font-semibold">
+                {dict["profile.freeBeta.title"]}
+              </h3>
+              <p className="text-sm text-muted">{dict["profile.freeBeta.body"]}</p>
+            </div>
+          </Card>
+        ) : profilePlanCard(isFreeMode(), currentUser.isPremium) === "premium-member" ? (
           <Card className="mt-5 flex flex-col items-center justify-between gap-4 bg-gradient-to-br from-gold/12 to-surface sm:flex-row">
             <div className="text-center sm:text-left">
               <h3 className="font-serif text-lg font-semibold">
