@@ -27,6 +27,14 @@ export interface UserProfile {
   heightCm?: number;
   weightKg?: number;
   goal?: string;
+  gender?: string;
+  birthDate?: string;
+  /** Equipment access: "none" | "home" | "gym". */
+  equipment?: string;
+  /** Planned training days per week (1–7). */
+  trainingDays?: number;
+  /** Preferred daily reminder time, "HH:MM". */
+  reminderTime?: string;
   isPremium: boolean;
   xp: number;
   streak: number;

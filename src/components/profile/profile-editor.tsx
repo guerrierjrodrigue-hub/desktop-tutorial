@@ -72,6 +72,10 @@ export function ProfileEditor({
         goal: draft.goal ?? "",
         church: draft.church ?? "",
         favoriteVerse: draft.favoriteVerse ?? "",
+        level: draft.level,
+        equipment: draft.equipment,
+        trainingDays: draft.trainingDays,
+        reminderTime: draft.reminderTime,
       });
       if (!result.ok) {
         setError(result.error ?? "Couldn't save your changes.");
@@ -230,6 +234,45 @@ export function ProfileEditor({
                 label="Favorite verse"
                 value={draft.favoriteVerse ?? ""}
                 onChange={(v) => setDraft((d) => ({ ...d, favoriteVerse: v }))}
+              />
+              <label className="block">
+                <span className="text-xs text-faint">Experience level</span>
+                <select
+                  value={draft.level}
+                  onChange={(e) =>
+                    setDraft((d) => ({ ...d, level: e.target.value as typeof d.level }))
+                  }
+                  className="mt-1 h-10 w-full rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-gold/40"
+                >
+                  <option value="beginner">Beginner</option>
+                  <option value="intermediate">Intermediate</option>
+                  <option value="advanced">Advanced</option>
+                </select>
+              </label>
+              <label className="block">
+                <span className="text-xs text-faint">Equipment</span>
+                <select
+                  value={draft.equipment ?? "home"}
+                  onChange={(e) => setDraft((d) => ({ ...d, equipment: e.target.value }))}
+                  className="mt-1 h-10 w-full rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-gold/40"
+                >
+                  <option value="none">No equipment</option>
+                  <option value="home">Home / basic</option>
+                  <option value="gym">Full gym</option>
+                </select>
+              </label>
+              <EditField
+                label="Training days / week"
+                type="number"
+                value={draft.trainingDays ?? ""}
+                onChange={(v) =>
+                  setDraft((d) => ({ ...d, trainingDays: v ? Number(v) : undefined }))
+                }
+              />
+              <EditField
+                label="Reminder time (HH:MM)"
+                value={draft.reminderTime ?? ""}
+                onChange={(v) => setDraft((d) => ({ ...d, reminderTime: v }))}
               />
             </div>
           ) : (

@@ -15,6 +15,20 @@ export const IDENTITY_OPTIONS: { id: IdentityId; labelKey: DictionaryKey }[] = [
   { id: "creator", labelKey: "identity.creator" },
 ];
 
+/** Fitness level options for the training-profile step. */
+export const LEVEL_OPTIONS: { id: "beginner" | "intermediate" | "advanced"; labelKey: DictionaryKey }[] = [
+  { id: "beginner", labelKey: "level.beginner" },
+  { id: "intermediate", labelKey: "level.intermediate" },
+  { id: "advanced", labelKey: "level.advanced" },
+];
+
+/** Equipment-access options for the training-profile step. */
+export const EQUIPMENT_OPTIONS: { id: "none" | "home" | "gym"; labelKey: DictionaryKey }[] = [
+  { id: "none", labelKey: "equipment.none" },
+  { id: "home", labelKey: "equipment.home" },
+  { id: "gym", labelKey: "equipment.gym" },
+];
+
 export type GoalId =
   | "build-muscle"
   | "lose-weight"
