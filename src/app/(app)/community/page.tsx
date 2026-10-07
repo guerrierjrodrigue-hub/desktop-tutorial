@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Topbar } from "@/components/layout/topbar";
 import { PageHeader } from "@/components/layout/page-header";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { PostFeed } from "@/components/community/post-feed";
+import { GroupsPanel } from "@/components/community/groups-panel";
 import { getCommunityPosts, getGroups } from "@/lib/queries/community";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
@@ -33,32 +32,7 @@ export default async function CommunityPage() {
           </div>
 
           <div className="space-y-5">
-            <Card>
-              <CardHeader>
-                <CardTitle>{dict["community.yourGroups"]}</CardTitle>
-              </CardHeader>
-              <div className="space-y-2">
-                {groups.map((g) => (
-                  <div
-                    key={g.id}
-                    className="flex items-center gap-3 rounded-xl border border-border bg-surface-2 p-3"
-                  >
-                    <span className="grid size-10 place-items-center rounded-lg bg-elevated text-lg">
-                      {g.emoji}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-semibold">{g.name}</p>
-                      <p className="text-xs text-faint">
-                        {g.members.toLocaleString()} {dict["community.members"]}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <Button variant="secondary" className="mt-4 w-full" size="sm">
-                {dict["community.discoverGroups"]}
-              </Button>
-            </Card>
+            <GroupsPanel initial={groups} dict={dict} />
           </div>
         </div>
       </main>

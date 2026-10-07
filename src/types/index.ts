@@ -111,7 +111,12 @@ export interface Challenge {
   title: string;
   description: string;
   participants: number;
+  /** Total length of the challenge window (shown as "Lasts N days" before joining). */
+  durationDays: number;
+  /** Days remaining in the user's own window; only meaningful once `joined`. */
   daysLeft: number;
+  /** Whether the signed-in user has joined (window runs from their join date). */
+  joined: boolean;
   progress: number; // 0..1
   type: "personal" | "friends" | "church";
 }

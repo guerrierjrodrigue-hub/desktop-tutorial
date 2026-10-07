@@ -8,9 +8,11 @@ export interface CommunityGroup {
   name: string;
   emoji: string;
   members: number;
+  /** Whether the signed-in user is a member (drives "Your groups" vs "Discover"). */
+  joined: boolean;
 }
 
-/** The group catalog with real member counts (demo data when unconfigured). */
+/** The group catalog with real member counts and the user's membership (demo data when unconfigured). */
 export async function getGroups(): Promise<CommunityGroup[]> {
   const ctx = await getAuthedContext();
   if (!ctx) return mockGroups;
@@ -18,10 +20,14 @@ export async function getGroups(): Promise<CommunityGroup[]> {
   const { data: groupRows } = await ctx.supabase.from("groups").select("*");
   if (!groupRows?.length) return [];
 
-  const { data: memberRows } = await ctx.supabase.from("group_members").select("group_id");
+  const { data: memberRows } = await ctx.supabase
+    .from("group_members")
+    .select("group_id, user_id");
   const countByGroup = new Map<string, number>();
-  for (const row of (memberRows ?? []) as { group_id: string }[]) {
+  const mine = new Set<string>();
+  for (const row of (memberRows ?? []) as { group_id: string; user_id: string }[]) {
     countByGroup.set(row.group_id, (countByGroup.get(row.group_id) ?? 0) + 1);
+    if (row.user_id === ctx.userId) mine.add(row.group_id);
   }
 
   return groupRows.map((g) => ({
@@ -29,6 +35,7 @@ export async function getGroups(): Promise<CommunityGroup[]> {
     name: g.name,
     emoji: g.emoji,
     members: countByGroup.get(g.id) ?? 0,
+    joined: mine.has(g.id),
   }));
 }
 

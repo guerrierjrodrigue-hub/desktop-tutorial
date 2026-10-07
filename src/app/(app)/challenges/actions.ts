@@ -48,3 +48,27 @@ export async function createChallenge(input: CreateChallengeInput): Promise<Acti
   revalidatePath("/dashboard");
   return { ok: true };
 }
+
+/**
+ * Join an existing challenge. The user's own window starts now (their
+ * `joined_at`), so "days left" is computed from this moment onward.
+ * Idempotent — re-joining is a no-op.
+ */
+export async function joinChallenge(challengeId: string): Promise<ActionResult> {
+  if (!challengeId) return { ok: false, error: "A challenge is required." };
+
+  const ctx = await getAuthedContext();
+  if (!ctx) return demoOk;
+
+  const { error } = await ctx.supabase
+    .from("challenge_participants")
+    .upsert(
+      { challenge_id: challengeId, user_id: ctx.userId, progress: 0, points: 0 },
+      { onConflict: "challenge_id,user_id", ignoreDuplicates: true },
+    );
+  if (error) return { ok: false, error: error.message };
+
+  revalidatePath("/challenges");
+  revalidatePath("/dashboard");
+  return { ok: true };
+}
