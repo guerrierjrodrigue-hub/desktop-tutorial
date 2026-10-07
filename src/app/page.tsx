@@ -63,15 +63,28 @@ const barnabasPoints: DictionaryKey[] = [
   "mkt.barnabas.point4",
 ];
 
-export default async function LandingPage() {
+export default async function LandingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ deleted?: string }>;
+}) {
   const locale = await getLocale();
   const dict = await getDictionary(locale);
   const freeMode = isFreeMode();
+  const { deleted } = await searchParams;
 
   return (
     <div className="flex min-h-svh flex-col">
       <MarketingNav />
       <main className="flex-1">
+        {deleted && (
+          <p
+            role="status"
+            className="mx-auto mt-4 max-w-2xl rounded-xl border border-green-bright/30 bg-green/10 px-4 py-3 text-center text-sm text-green-bright"
+          >
+            {dict["account.deletedBanner"]}
+          </p>
+        )}
         <Hero dict={dict} freeMode={freeMode} />
 
         {/* Social proof: what's inside, in real numbers */}

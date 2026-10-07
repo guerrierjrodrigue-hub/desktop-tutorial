@@ -11,6 +11,7 @@ import { levelFromXp } from "@/lib/utils";
 import { signOutAction } from "@/app/(auth)/actions";
 import { ManageBillingButton } from "@/components/billing/manage-billing-button";
 import { ProfileEditor } from "@/components/profile/profile-editor";
+import { PrivacySection } from "@/components/profile/privacy-section";
 import { LanguageSwitcher } from "@/components/settings/language-switcher";
 import { NotificationSettings } from "@/components/settings/notification-settings";
 import { getLocale } from "@/lib/locale";
@@ -138,6 +139,8 @@ export default async function ProfilePage() {
             </Link>
           </Card>
         )}
+
+        <PrivacySection dict={dict} />
       </main>
     </>
   );
