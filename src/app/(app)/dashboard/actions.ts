@@ -1,6 +1,8 @@
 "use server";
 
 import { getAuthedContext } from "@/lib/supabase/auth";
+import { getUserToday } from "@/lib/date";
+import { getUserTimezone } from "@/lib/timezone";
 import { type ActionResult, demoOk } from "@/lib/actions/result";
 
 /**
@@ -14,7 +16,7 @@ export async function toggleHabit(
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = getUserToday(await getUserTimezone());
   const { error } = await ctx.supabase
     .from("habit_logs")
     .upsert(

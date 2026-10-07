@@ -1,4 +1,6 @@
 import { getAuthedContext } from "@/lib/supabase/auth";
+import { getUserToday, startOfLocalDayUTC } from "@/lib/date";
+import { getUserTimezone } from "@/lib/timezone";
 import { todayStats as mockTodayStats } from "@/data/dashboard";
 import type { DailyStats } from "@/types";
 import { composeTodayStats, type RawDailyStatsRow } from "./stats-compute";
@@ -16,8 +18,9 @@ export async function getTodayStats(): Promise<DailyStats> {
   const ctx = await getAuthedContext();
   if (!ctx) return mockTodayStats;
 
-  const todayStr = new Date().toISOString().slice(0, 10);
-  const startOfDay = `${todayStr}T00:00:00.000Z`;
+  const tz = await getUserTimezone();
+  const todayStr = getUserToday(tz);
+  const startOfDay = startOfLocalDayUTC(tz);
 
   const [statsRes, foodRes, workoutRes] = await Promise.all([
     ctx.supabase

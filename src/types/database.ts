@@ -40,6 +40,7 @@ export interface ProfileRow {
   onboarded_at: Timestamptz | null;
   joined_at: Timestamptz;
   updated_at: Timestamptz;
+  timezone: string;
 }
 
 export interface ProgramRow {

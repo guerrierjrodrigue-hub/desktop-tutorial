@@ -2,6 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { getAuthedContext } from "@/lib/supabase/auth";
+import { getUserToday } from "@/lib/date";
+import { getUserTimezone } from "@/lib/timezone";
 import { type ActionResult, demoOk } from "@/lib/actions/result";
 import { nextWaterMl, isValidWaterDelta } from "@/lib/hydration";
 
@@ -22,6 +24,7 @@ export async function createFoodLog(input: {
     name,
     calories: Math.max(0, Math.round(input.calories) || 0),
     protein_g: Math.max(0, Math.round(input.proteinG) || 0),
+    log_date: getUserToday(await getUserTimezone()),
   });
   if (error) return { ok: false, error: error.message };
 
@@ -43,7 +46,7 @@ export async function addWater(amountMl: number): Promise<ActionResult> {
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = getUserToday(await getUserTimezone());
 
   const { data } = await ctx.supabase
     .from("daily_stats")
