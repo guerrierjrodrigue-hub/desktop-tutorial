@@ -4,18 +4,15 @@ import { Badge } from "@/components/ui/badge";
 import { formatDuration } from "@/lib/utils";
 import { isFreeMode } from "@/lib/flags";
 import { showPremiumLock } from "@/lib/premium-ui";
+import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { Program } from "@/types";
-
-const levelLabel: Record<Program["level"], string> = {
-  beginner: "Beginner",
-  intermediate: "Intermediate",
-  advanced: "Advanced",
-};
 
 export function ProgramCard({
   program,
+  dict,
 }: {
   program: Omit<Program, "schedule">;
+  dict: Dictionary;
 }) {
   return (
     <Link
@@ -27,7 +24,7 @@ export function ProgramCard({
       >
         <div className="flex items-start justify-between">
           <Badge variant="neutral" className="bg-black/30 text-foreground backdrop-blur">
-            {levelLabel[program.level]}
+            {dict[`level.${program.level}`]}
           </Badge>
           {showPremiumLock(isFreeMode(), program.premium) && (
             <Badge variant="premium" className="bg-black/30 backdrop-blur">

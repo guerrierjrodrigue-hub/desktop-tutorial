@@ -9,10 +9,11 @@ import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
 export async function WorkoutCard() {
-  const dict = await getDictionary(await getLocale());
-  const programs = await getPrograms();
+  const locale = await getLocale();
+  const dict = await getDictionary(locale);
+  const programs = await getPrograms(locale);
   const summary = programs[0];
-  const program = summary ? await getProgramBySlug(summary.id) : undefined;
+  const program = summary ? await getProgramBySlug(summary.id, locale) : undefined;
   const day = program?.schedule[0]?.days[0];
 
   if (!program || !day) return null;

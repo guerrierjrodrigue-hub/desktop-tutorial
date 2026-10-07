@@ -47,7 +47,9 @@ export interface ProgramRow {
   id: string;
   slug: string;
   title: string;
+  title_fr: string | null;
   description: string;
+  description_fr: string | null;
   category:
     | "strength"
     | "fat-loss"
@@ -70,6 +72,7 @@ export interface ExerciseRow {
   workout_day_id: string;
   exercise_order: number;
   name: string;
+  name_fr: string | null;
   muscles: string[];
   sets: number;
   reps: string;
@@ -77,6 +80,7 @@ export interface ExerciseRow {
   notes: string | null;
   video_url: string | null;
   instructions: string[];
+  instructions_fr: string[] | null;
   image_url: string | null;
 }
 
@@ -85,7 +89,9 @@ export interface WorkoutDayRow {
   program_week_id: string;
   day_order: number;
   title: string;
+  title_fr: string | null;
   focus: string;
+  focus_fr: string | null;
   duration_minutes: number;
 }
 

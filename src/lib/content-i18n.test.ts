@@ -1,5 +1,15 @@
 import { describe, it, expect } from "vitest";
-import { pick, BADGE_FR, CHALLENGE_FR, localizeHabitLabel } from "./content-i18n";
+import {
+  pick,
+  BADGE_FR,
+  CHALLENGE_FR,
+  localizeHabitLabel,
+  localizeMuscles,
+  localizeProgramText,
+  localizeDayTitle,
+  localizeDayFocus,
+  localizeExerciseName,
+} from "./content-i18n";
 import { localizeCoach } from "./coaches";
 import { getCoach } from "@/data/coaches";
 
@@ -28,6 +38,22 @@ describe("demo translation maps", () => {
   it("covers every seeded badge and challenge title shown in demo mode", () => {
     expect(BADGE_FR["First Steps"].name).toBe("Premiers pas");
     expect(CHALLENGE_FR["40 Days of Discipline"].title).toBe("40 jours de discipline");
+  });
+});
+
+describe("fitness content localization", () => {
+  it("translates muscles, keeping unknown ones", () => {
+    expect(localizeMuscles(["Chest", "Triceps"], "fr")).toEqual(["Pectoraux", "Triceps"]);
+    expect(localizeMuscles(["Chest", "Unknownium"], "fr")).toEqual(["Pectoraux", "Unknownium"]);
+    expect(localizeMuscles(["Chest"], "en")).toEqual(["Chest"]);
+  });
+  it("translates program text, day titles, focus and exercise names", () => {
+    expect(localizeProgramText("Warrior HIIT", "x", "fr").title).toBe("HIIT du guerrier");
+    expect(localizeProgramText("Warrior HIIT", "x", "en")).toEqual({ title: "Warrior HIIT", description: "x" });
+    expect(localizeDayTitle("Push Focus", "fr")).toBe("Focus poussée");
+    expect(localizeDayFocus("Whole body", "fr")).toBe("Corps entier");
+    expect(localizeExerciseName("Back Squat", "fr")).toBe("Squat arrière");
+    expect(localizeExerciseName("Totally Custom Move", "fr")).toBe("Totally Custom Move");
   });
 });
 
