@@ -6,6 +6,7 @@ import { Topbar } from "@/components/layout/topbar";
 import { CoachChat } from "@/components/coach/coach-chat";
 import { COACHES, getCoach } from "@/data/coaches";
 import { localizeCoach } from "@/lib/coaches";
+import { getCoachHistory } from "@/lib/queries/coach";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
@@ -37,6 +38,7 @@ export default async function CoachChatPage({
   const locale = await getLocale();
   const coach = localizeCoach(getCoach(coachId), locale);
   const dict = await getDictionary(locale);
+  const history = await getCoachHistory(coachId);
 
   return (
     <>
@@ -59,7 +61,7 @@ export default async function CoachChatPage({
             <p className="text-sm text-muted">{coach.tagline}</p>
           </div>
         </div>
-        <CoachChat key={coach.id} coach={coach} />
+        <CoachChat key={coach.id} coach={coach} history={history} dict={dict} />
       </main>
     </>
   );

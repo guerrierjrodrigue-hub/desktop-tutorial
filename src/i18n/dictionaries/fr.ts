@@ -280,6 +280,9 @@ const fr: Dictionary = {
   "coach.pickerSubtitle": "Choisis le coach qui correspond à ton besoin du jour. Tu peux changer à tout moment.",
   // Page de discussion coach (détail)
   "coach.chooseAnother": "Choisir un autre coach",
+  "coach.clear": "Effacer la conversation",
+  "coach.tooLong": "Ton message est trop long (2000 caractères max). Raccourcis-le, s'il te plaît.",
+  "coach.limitReached": "Tu as atteint la limite de {n} messages du coach pour aujourd'hui (bêta gratuite). Reviens demain.",
   "coach.metaSuffix": "Coach IA",
   "coach.metaFallback": "Coach",
 

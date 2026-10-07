@@ -1,6 +1,10 @@
 import { getCoach, type Coach } from "@/data/coaches";
+import { detectCrisis, crisisReply } from "@/lib/coach-safety";
 import type { LocaleCode } from "@/i18n/locales";
 import type { ChatMessage } from "@/types";
+
+/** The coach model id — overridable via COACH_MODEL for easy rollout/rollback. */
+export const COACH_MODEL = process.env.COACH_MODEL ?? "claude-sonnet-5";
 
 /** The subset of coach fields that are user-facing content and get translated. */
 interface CoachText {
@@ -186,6 +190,10 @@ export function offlineCoachReply(
   userText: string,
   locale: LocaleCode = "en",
 ): string {
+  // Safety always comes first, before any persona voice.
+  const crisis = detectCrisis(userText);
+  if (crisis) return crisisReply(crisis, locale);
+
   const coach = localizeCoach(getCoach(coachId), locale);
   if (coach.id === "barnabas") return offlineBarnabasReply(userText, locale);
 
