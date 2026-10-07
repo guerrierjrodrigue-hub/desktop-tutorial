@@ -13,7 +13,8 @@ const typeMeta = {
 } as const;
 
 export async function ChallengeCard() {
-  const [challenges, dict] = await Promise.all([getChallenges(), getDictionary(await getLocale())]);
+  const locale = await getLocale();
+  const [challenges, dict] = await Promise.all([getChallenges(locale), getDictionary(locale)]);
   const featured = challenges[0];
 
   if (!featured) {

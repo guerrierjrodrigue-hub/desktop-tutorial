@@ -3,7 +3,10 @@ import type { Habit } from "@/types";
 
 export interface Quest {
   id: string;
+  /** English label; the UI prefers a localized string built from `id`/`target`. */
   label: string;
+  /** For the habits quest: how many habits count toward "done" (for i18n labels). */
+  target?: number;
   done: boolean;
   xp: number;
 }
@@ -24,6 +27,7 @@ export function getDailyQuests(
     {
       id: "habits",
       label: `Complete ${habitTarget} habit${habitTarget > 1 ? "s" : ""} today`,
+      target: habitTarget,
       done: habitsDone >= habitTarget,
       xp: 30,
     },
@@ -44,13 +48,16 @@ export function getDailyQuests(
 
 export interface TransformationScore {
   score: number;
+  /** English tier label. */
   tier: string;
+  /** Stable id so the UI can show a localized tier name. */
+  tierId: "transformed" | "disciplined" | "momentum";
 }
 
-const TIERS: { min: number; label: string }[] = [
-  { min: 75, label: "Transformed" },
-  { min: 40, label: "Disciplined" },
-  { min: 0, label: "Building Momentum" },
+const TIERS: { min: number; label: string; id: TransformationScore["tierId"] }[] = [
+  { min: 75, label: "Transformed", id: "transformed" },
+  { min: 40, label: "Disciplined", id: "disciplined" },
+  { min: 0, label: "Building Momentum", id: "momentum" },
 ];
 
 /**
@@ -67,7 +74,7 @@ export function getTransformationScore(
   const habitRatio = habits.length ? habits.filter((h) => h.done).length / habits.length : 0;
 
   const score = Math.round((streakScore * 0.4 + progress * 0.3 + habitRatio * 0.3) * 100);
-  const tier = TIERS.find((t) => score >= t.min)!.label;
+  const matched = TIERS.find((t) => score >= t.min)!;
 
-  return { score, tier };
+  return { score, tier: matched.label, tierId: matched.id };
 }

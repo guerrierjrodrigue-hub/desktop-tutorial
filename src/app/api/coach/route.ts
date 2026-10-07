@@ -4,6 +4,7 @@ import type { ChatMessage } from "@/types";
 import { offlineCoachReply, toClaudeMessages } from "@/lib/coaches";
 import { getCoach } from "@/data/coaches";
 import { getAuthedContext } from "@/lib/supabase/auth";
+import { getLocale } from "@/lib/locale";
 
 interface CoachRequest {
   coachId?: string;
@@ -64,11 +65,12 @@ export async function POST(req: Request) {
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
   const ctx = await getAuthedContext();
+  const locale = await getLocale();
 
   // No key configured, no signed-in user, or over the rate limit → deterministic,
   // in-voice fallback. Never spend the paid API on an anonymous or abusive caller.
   if (!apiKey || !ctx || isRateLimited(ctx.userId)) {
-    return textResponse(offlineCoachReply(coach.id, lastUser.content), "offline");
+    return textResponse(offlineCoachReply(coach.id, lastUser.content, locale), "offline");
   }
 
   try {
@@ -76,7 +78,9 @@ export async function POST(req: Request) {
     const anthropicStream = await client.messages.create({
       model: "claude-sonnet-5",
       max_tokens: 1024,
-      system: coach.systemPrompt,
+      system:
+        coach.systemPrompt +
+        (locale === "fr" ? "\n\nRespond in French (the user's language)." : ""),
       messages: toClaudeMessages(messages),
       stream: true,
     });
@@ -100,13 +104,13 @@ export async function POST(req: Request) {
           // If Claude returned nothing usable, fall back so the bubble is never empty.
           if (!streamedAny) {
             controller.enqueue(
-              encoder.encode(offlineCoachReply(coach.id, lastUser.content)),
+              encoder.encode(offlineCoachReply(coach.id, lastUser.content, locale)),
             );
           }
         } catch {
           if (!streamedAny) {
             controller.enqueue(
-              encoder.encode(offlineCoachReply(coach.id, lastUser.content)),
+              encoder.encode(offlineCoachReply(coach.id, lastUser.content, locale)),
             );
           }
         } finally {
@@ -124,6 +128,6 @@ export async function POST(req: Request) {
     });
   } catch {
     // Never leave the user without an answer (e.g. the request failed before streaming).
-    return textResponse(offlineCoachReply(coach.id, lastUser.content), "fallback");
+    return textResponse(offlineCoachReply(coach.id, lastUser.content, locale), "fallback");
   }
 }

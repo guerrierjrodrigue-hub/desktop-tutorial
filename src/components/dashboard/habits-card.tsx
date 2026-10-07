@@ -5,7 +5,8 @@ import { getDictionary } from "@/i18n/get-dictionary";
 import { HabitsCardClient } from "./habits-card-client";
 
 export async function HabitsCard() {
-  const [habits, dict] = await Promise.all([getHabits(), getDictionary(await getLocale())]);
+  const locale = await getLocale();
+  const [habits, dict] = await Promise.all([getHabits(locale), getDictionary(locale)]);
 
   if (!habits.length) {
     return (

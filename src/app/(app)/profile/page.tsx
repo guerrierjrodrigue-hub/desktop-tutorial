@@ -27,10 +27,10 @@ export const metadata: Metadata = {
 };
 
 export default async function ProfilePage() {
-  const [currentUser, badges, locale, notificationPreferences, subscribed] = await Promise.all([
+  const locale = await getLocale();
+  const [currentUser, badges, notificationPreferences, subscribed] = await Promise.all([
     getCurrentUser(),
-    getBadges(),
-    getLocale(),
+    getBadges(locale),
     getNotificationPreferences(),
     hasPushSubscription(),
   ]);

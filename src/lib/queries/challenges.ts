@@ -2,7 +2,9 @@ import { getAuthedContext } from "@/lib/supabase/auth";
 import { getUserToday } from "@/lib/date";
 import { getUserTimezone } from "@/lib/timezone";
 import { daysLeftFor, workoutProgress } from "@/lib/challenge-progress";
+import { pick, CHALLENGE_FR } from "@/lib/content-i18n";
 import { challenges as mockChallenges } from "@/data/dashboard";
+import type { LocaleCode } from "@/i18n/locales";
 import type { Challenge } from "@/types";
 
 /**
@@ -12,14 +14,19 @@ import type { Challenge } from "@/types";
  * Workout-metric challenges derive progress from the user's real workout_logs.
  * Demo data when Supabase isn't configured.
  */
-export async function getChallenges(): Promise<Challenge[]> {
+export async function getChallenges(locale: LocaleCode = "en"): Promise<Challenge[]> {
   const ctx = await getAuthedContext();
-  if (!ctx) return mockChallenges;
+  if (!ctx) {
+    return mockChallenges.map((c) => {
+      const fr = locale === "fr" ? CHALLENGE_FR[c.title] : undefined;
+      return fr ? { ...c, title: fr.title, description: fr.description } : c;
+    });
+  }
 
   const [challengeRes, participantRes] = await Promise.all([
     ctx.supabase
       .from("challenges")
-      .select("id, title, description, type, duration_days, metric")
+      .select("id, title, title_fr, description, description_fr, type, duration_days, metric")
       .order("created_at", { ascending: true }),
     ctx.supabase
       .from("challenge_participants")
@@ -58,8 +65,8 @@ export async function getChallenges(): Promise<Challenge[]> {
 
       return {
         id: row.id,
-        title: row.title,
-        description: row.description,
+        title: pick(locale, row.title, row.title_fr),
+        description: pick(locale, row.description, row.description_fr),
         participants: counts.get(row.id) ?? 0,
         durationDays,
         daysLeft: joined && mine

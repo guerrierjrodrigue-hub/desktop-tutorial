@@ -1,7 +1,9 @@
 import { getAuthedContext } from "@/lib/supabase/auth";
 import { getUserToday, addDaysToDateStr } from "@/lib/date";
 import { getUserTimezone } from "@/lib/timezone";
+import { localizeHabitLabel } from "@/lib/content-i18n";
 import { habits as mockHabits } from "@/data/dashboard";
+import type { LocaleCode } from "@/i18n/locales";
 import type { Habit } from "@/types";
 
 /**
@@ -22,10 +24,16 @@ export function computeStreak(doneDates: Set<string>, todayStr: string): number 
   return streak;
 }
 
-/** The signed-in user's habits with today's completion + running streak (demo data when unconfigured). */
-export async function getHabits(): Promise<Habit[]> {
+/**
+ * The signed-in user's habits with today's completion + running streak, with
+ * default habit labels localized to `locale` (custom labels kept as typed).
+ * Demo data when Supabase is unconfigured.
+ */
+export async function getHabits(locale: LocaleCode = "en"): Promise<Habit[]> {
   const ctx = await getAuthedContext();
-  if (!ctx) return mockHabits;
+  if (!ctx) {
+    return mockHabits.map((h) => ({ ...h, label: localizeHabitLabel(h.label, locale) }));
+  }
 
   const { data: habitRows } = await ctx.supabase
     .from("habits")
@@ -53,7 +61,7 @@ export async function getHabits(): Promise<Habit[]> {
     const doneDates = logsByHabit.get(row.id) ?? new Set<string>();
     return {
       id: row.id,
-      label: row.label,
+      label: localizeHabitLabel(row.label, locale),
       icon: row.icon,
       done: doneDates.has(todayStr),
       streak: computeStreak(doneDates, todayStr),

@@ -115,7 +115,9 @@ export interface BadgeRow {
   id: string;
   slug: string;
   name: string;
+  name_fr: string | null;
   description: string;
+  description_fr: string | null;
   icon: string;
 }
 
@@ -209,11 +211,15 @@ export interface UserBadgeRow {
 export interface ChallengeRow {
   id: string;
   title: string;
+  title_fr: string | null;
   description: string;
+  description_fr: string | null;
   type: "personal" | "friends" | "church";
   ends_at: DateStr | null;
   created_at: Timestamptz;
   created_by: string | null;
+  duration_days: number;
+  metric: string;
 }
 
 export interface ChallengeParticipantRow {

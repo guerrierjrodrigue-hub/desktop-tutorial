@@ -4,6 +4,7 @@ import { Sparkles } from "lucide-react";
 import { Topbar } from "@/components/layout/topbar";
 import { Card } from "@/components/ui/card";
 import { COACHES } from "@/data/coaches";
+import { localizeCoach } from "@/lib/coaches";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
@@ -13,7 +14,9 @@ export const metadata: Metadata = {
 };
 
 export default async function CoachPickerPage() {
-  const dict = await getDictionary(await getLocale());
+  const locale = await getLocale();
+  const dict = await getDictionary(locale);
+  const coaches = COACHES.map((c) => localizeCoach(c, locale));
 
   return (
     <>
@@ -21,7 +24,7 @@ export default async function CoachPickerPage() {
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6">
         <p className="mb-6 text-sm text-muted">{dict["coach.pickerSubtitle"]}</p>
         <div className="grid gap-4 sm:grid-cols-2">
-          {COACHES.map((coach) => (
+          {coaches.map((coach) => (
             <Link key={coach.id} href={`/coach/${coach.id}`}>
               <Card className="h-full transition hover:border-gold/30">
                 <span
