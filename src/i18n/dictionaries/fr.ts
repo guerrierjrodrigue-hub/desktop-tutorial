@@ -62,6 +62,10 @@ const fr: Dictionary = {
   "auth.confirmPassword": "Confirmer le mot de passe",
   "auth.updatePassword": "Mettre à jour le mot de passe",
 
+  "greeting.morning": "Bonjour",
+  "greeting.afternoon": "Bon après-midi",
+  "greeting.evening": "Bonsoir",
+  "greeting.subtitle": "Honorons Dieu avec ton corps aujourd'hui.",
   "dashboard.progress": "Niveau et progression",
   "dashboard.todaysWorkout": "Entraînement du jour",
   "dashboard.todaysHabits": "Habitudes du jour",

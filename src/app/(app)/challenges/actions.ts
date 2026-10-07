@@ -2,6 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { getAuthedContext } from "@/lib/supabase/auth";
+import { getUserToday, addDaysToDateStr } from "@/lib/date";
+import { getUserTimezone } from "@/lib/timezone";
 import { type ActionResult, demoOk } from "@/lib/actions/result";
 
 export interface CreateChallengeInput {
@@ -19,8 +21,8 @@ export async function createChallenge(input: CreateChallengeInput): Promise<Acti
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
 
-  const endsAt = new Date();
-  endsAt.setDate(endsAt.getDate() + Math.max(1, input.endsInDays));
+  const today = getUserToday(await getUserTimezone());
+  const endsAt = addDaysToDateStr(today, Math.max(1, input.endsInDays));
 
   const { data, error } = await ctx.supabase
     .from("challenges")
@@ -28,7 +30,7 @@ export async function createChallenge(input: CreateChallengeInput): Promise<Acti
       title,
       description: input.description.trim(),
       type: input.type,
-      ends_at: endsAt.toISOString().slice(0, 10),
+      ends_at: endsAt,
       created_by: ctx.userId,
     })
     .select("id")

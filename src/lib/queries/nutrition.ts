@@ -1,4 +1,6 @@
 import { getAuthedContext } from "@/lib/supabase/auth";
+import { getUserToday } from "@/lib/date";
+import { getUserTimezone } from "@/lib/timezone";
 import { recipes as mockRecipes } from "@/data/nutrition";
 import type { FoodLogEntry, Recipe } from "@/types";
 
@@ -12,7 +14,7 @@ export async function getFoodLogsToday(): Promise<FoodLogEntry[]> {
   const ctx = await getAuthedContext();
   if (!ctx) return MOCK_ENTRIES;
 
-  const todayStr = new Date().toISOString().slice(0, 10);
+  const todayStr = getUserToday(await getUserTimezone());
   const { data } = await ctx.supabase
     .from("food_logs")
     .select("*")

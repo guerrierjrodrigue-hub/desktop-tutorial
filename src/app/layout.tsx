@@ -4,6 +4,7 @@ import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { AnalyticsProvider } from "@/components/providers/analytics-provider";
 import { LocaleSync } from "@/components/providers/locale-sync";
+import { TimezoneSync } from "@/components/providers/timezone-sync";
 import { DEFAULT_LOCALE } from "@/i18n/locales";
 import {
   APP_NAME,
@@ -82,6 +83,7 @@ export default function RootLayout({
     >
       <body className="bg-ambient min-h-full">
         <LocaleSync />
+        <TimezoneSync />
         <AnalyticsProvider>{children}</AnalyticsProvider>
         <SpeedInsights />
       </body>

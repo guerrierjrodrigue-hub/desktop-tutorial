@@ -68,6 +68,10 @@ const en = {
   "auth.updatePassword": "Update password",
 
   // Dashboard widget titles
+  "greeting.morning": "Good morning",
+  "greeting.afternoon": "Good afternoon",
+  "greeting.evening": "Good evening",
+  "greeting.subtitle": "Let's honor God with your body today.",
   "dashboard.progress": "Level & progress",
   "dashboard.todaysWorkout": "Today's workout",
   "dashboard.todaysHabits": "Today's habits",

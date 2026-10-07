@@ -1,22 +1,23 @@
 import { getAuthedContext } from "@/lib/supabase/auth";
+import { getUserToday, addDaysToDateStr } from "@/lib/date";
+import { getUserTimezone } from "@/lib/timezone";
 import { habits as mockHabits } from "@/data/dashboard";
 import type { Habit } from "@/types";
 
-function toDateStr(d: Date): string {
-  return d.toISOString().slice(0, 10);
-}
-
-/** Consecutive done-days ending today (or ending yesterday if today isn't done yet). */
-function computeStreak(doneDates: Set<string>, today: Date): number {
-  const cursor = new Date(today);
-  if (!doneDates.has(toDateStr(cursor))) {
-    cursor.setDate(cursor.getDate() - 1);
-    if (!doneDates.has(toDateStr(cursor))) return 0;
+/**
+ * Consecutive done-days ending on `todayStr` (or ending yesterday if today
+ * isn't done yet). Works on YYYY-MM-DD strings so it's timezone-correct.
+ */
+export function computeStreak(doneDates: Set<string>, todayStr: string): number {
+  let cursor = todayStr;
+  if (!doneDates.has(cursor)) {
+    cursor = addDaysToDateStr(cursor, -1);
+    if (!doneDates.has(cursor)) return 0;
   }
   let streak = 0;
-  while (doneDates.has(toDateStr(cursor))) {
+  while (doneDates.has(cursor)) {
     streak++;
-    cursor.setDate(cursor.getDate() - 1);
+    cursor = addDaysToDateStr(cursor, -1);
   }
   return streak;
 }
@@ -33,13 +34,13 @@ export async function getHabits(): Promise<Habit[]> {
     .order("created_at", { ascending: true });
   if (!habitRows) return [];
 
-  const since = new Date();
-  since.setDate(since.getDate() - 90);
+  const tz = await getUserTimezone();
+  const todayStr = getUserToday(tz);
   const { data: logRows } = await ctx.supabase
     .from("habit_logs")
     .select("*")
     .eq("user_id", ctx.userId)
-    .gte("log_date", toDateStr(since));
+    .gte("log_date", addDaysToDateStr(todayStr, -90));
 
   const logsByHabit = new Map<string, Set<string>>();
   for (const log of logRows ?? []) {
@@ -48,9 +49,6 @@ export async function getHabits(): Promise<Habit[]> {
     logsByHabit.get(log.habit_id)!.add(log.log_date);
   }
 
-  const today = new Date();
-  const todayStr = toDateStr(today);
-
   return habitRows.map((row) => {
     const doneDates = logsByHabit.get(row.id) ?? new Set<string>();
     return {
@@ -58,7 +56,7 @@ export async function getHabits(): Promise<Habit[]> {
       label: row.label,
       icon: row.icon,
       done: doneDates.has(todayStr),
-      streak: computeStreak(doneDates, today),
+      streak: computeStreak(doneDates, todayStr),
     };
   });
 }
