@@ -10,7 +10,8 @@ export const metadata: Metadata = {
 };
 
 export default async function HabitsPage() {
-  const [habits, dict] = await Promise.all([getHabits(), getDictionary(await getLocale())]);
+  const locale = await getLocale();
+  const [habits, dict] = await Promise.all([getHabits(locale), getDictionary(locale)]);
 
   return (
     <>

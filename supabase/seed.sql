@@ -5,13 +5,13 @@
 -- ============================================================================
 
 -- Badges ---------------------------------------------------------------------
-insert into badges (slug, name, description, icon) values
-  ('first-steps', 'First Steps', 'Completed your first workout', 'Footprints'),
-  ('seven-day-fire', 'Seven-Day Fire', '7-day streak', 'Flame'),
-  ('word-warrior', 'Word Warrior', 'Read Scripture 30 days', 'Sword'),
-  ('iron-discipline', 'Iron Discipline', '50 workouts logged', 'Dumbbell'),
-  ('marathon-soul', 'Marathon Soul', '100-day streak', 'Trophy'),
-  ('prayer-pillar', 'Prayer Pillar', 'Logged 100 prayers', 'HandHeart')
+insert into badges (slug, name, name_fr, description, description_fr, icon) values
+  ('first-steps', 'First Steps', 'Premiers pas', 'Completed your first workout', 'A terminé son premier entraînement', 'Footprints'),
+  ('seven-day-fire', 'Seven-Day Fire', 'Feu de sept jours', '7-day streak', 'Série de 7 jours', 'Flame'),
+  ('word-warrior', 'Word Warrior', 'Guerrier de la Parole', 'Read Scripture 30 days', 'A lu les Écritures 30 jours', 'Sword'),
+  ('iron-discipline', 'Iron Discipline', 'Discipline de fer', '50 workouts logged', '50 entraînements enregistrés', 'Dumbbell'),
+  ('marathon-soul', 'Marathon Soul', 'Âme de marathonien', '100-day streak', 'Série de 100 jours', 'Trophy'),
+  ('prayer-pillar', 'Prayer Pillar', 'Pilier de prière', 'Logged 100 prayers', '100 prières enregistrées', 'HandHeart')
 on conflict (slug) do nothing;
 
 -- Verses ---------------------------------------------------------------------
@@ -168,11 +168,11 @@ insert into groups (name, emoji) values
   ('Marathon Disciples', '🏃');
 
 -- Challenges -----------------------------------------------------------------
-insert into challenges (title, description, type, ends_at, duration_days, metric) values
-  ('40 Days of Discipline', 'Complete a workout and a devotional every day for 40 days.', 'personal', current_date + 40, 40, 'manual'),
-  ('Church vs. Church: 30 workouts this month', 'Your church against the rest — log 30 workouts in 30 days. Measured from your real workout log.', 'church', current_date + 30, 30, 'workouts'),
-  ('Iron Sharpens Iron', 'You & 3 friends: 12 workouts in 2 weeks.', 'friends', current_date + 14, 14, 'manual'),
-  ('Sabbath Rest Challenge', 'Protect one full day of rest each week for a month.', 'personal', current_date + 28, 28, 'manual');
+insert into challenges (title, title_fr, description, description_fr, type, ends_at, duration_days, metric) values
+  ('40 Days of Discipline', '40 jours de discipline', 'Complete a workout and a devotional every day for 40 days.', 'Fais un entraînement et une méditation chaque jour pendant 40 jours.', 'personal', current_date + 40, 40, 'manual'),
+  ('Church vs. Church: 30 workouts this month', 'Église contre Église : 30 entraînements ce mois-ci', 'Your church against the rest — log 30 workouts in 30 days. Measured from your real workout log.', 'Ton église contre les autres — enregistre 30 entraînements en 30 jours. Mesuré à partir de ton journal d''entraînement réel.', 'church', current_date + 30, 30, 'workouts'),
+  ('Iron Sharpens Iron', 'Le fer aiguise le fer', 'You & 3 friends: 12 workouts in 2 weeks.', 'Toi et 3 amis : 12 entraînements en 2 semaines.', 'friends', current_date + 14, 14, 'manual'),
+  ('Sabbath Rest Challenge', 'Défi du repos du sabbat', 'Protect one full day of rest each week for a month.', 'Protège une journée complète de repos chaque semaine pendant un mois.', 'personal', current_date + 28, 28, 'manual');
 
 -- Programs + nested weeks/days/exercises -------------------------------------
 -- "Foundations of Strength": full week 1 with three training days.

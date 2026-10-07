@@ -12,7 +12,8 @@ export async function TransformationScoreCard() {
     getHabits(),
     getDictionary(await getLocale()),
   ]);
-  const { score, tier } = getTransformationScore(user, habits);
+  const { score, tierId } = getTransformationScore(user, habits);
+  const tier = dict[`score.tier.${tierId}`];
 
   return (
     <Card className="flex items-center gap-5">
@@ -24,9 +25,7 @@ export async function TransformationScoreCard() {
           {dict["dashboard.transformationScore"]}
         </p>
         <p className="mt-1 font-serif text-xl font-semibold text-gold-bright">{tier}</p>
-        <p className="mt-1 text-xs text-faint">
-          Blends your streak, level progress, and today&apos;s habits.
-        </p>
+        <p className="mt-1 text-xs text-faint">{dict["score.blurb"]}</p>
       </div>
     </Card>
   );

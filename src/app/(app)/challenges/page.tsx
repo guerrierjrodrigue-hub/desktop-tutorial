@@ -14,10 +14,11 @@ export const metadata: Metadata = {
 };
 
 export default async function ChallengesPage() {
+  const locale = await getLocale();
   const [challenges, leaderboard, dict] = await Promise.all([
-    getChallenges(),
+    getChallenges(locale),
     getChallengeLeaderboard(),
-    getDictionary(await getLocale()),
+    getDictionary(locale),
   ]);
 
   return (

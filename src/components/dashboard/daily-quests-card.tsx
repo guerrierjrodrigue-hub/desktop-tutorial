@@ -1,17 +1,31 @@
 import { Check, Circle } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { getDailyQuests } from "@/lib/quests";
+import { getDailyQuests, type Quest } from "@/lib/quests";
 import { getHabits } from "@/lib/queries/habits";
 import { getWorkoutDoneToday } from "@/lib/queries/stats";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
+import type { Dictionary } from "@/i18n/dictionaries/en";
 import { cn } from "@/lib/utils";
 
+/** The localized label for a quest, built from its stable id (+ target). */
+function questLabel(quest: Quest, dict: Dictionary): string {
+  if (quest.id === "habits") {
+    const n = quest.target ?? 3;
+    const template = n === 1 ? dict["quests.habitSingular"] : dict["quests.habitsPlural"];
+    return template.replace("{n}", String(n));
+  }
+  if (quest.id === "workout") return dict["quests.workout"];
+  if (quest.id === "devotional") return dict["quests.devotional"];
+  return quest.label;
+}
+
 export async function DailyQuestsCard() {
+  const locale = await getLocale();
   const [habits, workoutDone, dict] = await Promise.all([
-    getHabits(),
+    getHabits(locale),
     getWorkoutDoneToday(),
-    getDictionary(await getLocale()),
+    getDictionary(locale),
   ]);
   const devotionalDone = false; // no per-day devotional-completion tracking yet
   const quests = getDailyQuests(habits, workoutDone, devotionalDone);
@@ -21,7 +35,9 @@ export async function DailyQuestsCard() {
     <Card>
       <CardHeader>
         <CardTitle>{dict["dashboard.dailyQuests"]}</CardTitle>
-        <span className="text-xs font-semibold text-gold-bright">+{earnedXp} XP today</span>
+        <span className="text-xs font-semibold text-gold-bright">
+          +{earnedXp} {dict["quests.xpToday"]}
+        </span>
       </CardHeader>
       <ul className="space-y-2">
         {quests.map((quest) => (
@@ -38,7 +54,7 @@ export async function DailyQuestsCard() {
               <Circle className="size-4 shrink-0 text-faint" />
             )}
             <span className={cn("flex-1 text-sm font-medium", quest.done && "text-muted line-through")}>
-              {quest.label}
+              {questLabel(quest, dict)}
             </span>
             <span className="text-xs text-faint">+{quest.xp} XP</span>
           </li>

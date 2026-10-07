@@ -6,7 +6,8 @@ import { getDictionary } from "@/i18n/get-dictionary";
 import { cn } from "@/lib/utils";
 
 export async function BadgesCard() {
-  const [badges, dict] = await Promise.all([getBadges(), getDictionary(await getLocale())]);
+  const locale = await getLocale();
+  const [badges, dict] = await Promise.all([getBadges(locale), getDictionary(locale)]);
 
   return (
     <Card>

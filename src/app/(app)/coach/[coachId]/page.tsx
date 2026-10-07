@@ -5,6 +5,7 @@ import { ChevronLeft, Sparkles } from "lucide-react";
 import { Topbar } from "@/components/layout/topbar";
 import { CoachChat } from "@/components/coach/coach-chat";
 import { COACHES, getCoach } from "@/data/coaches";
+import { localizeCoach } from "@/lib/coaches";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
@@ -33,8 +34,9 @@ export default async function CoachChatPage({
 }) {
   const { coachId } = await params;
   if (!COACHES.some((c) => c.id === coachId)) notFound();
-  const coach = getCoach(coachId);
-  const dict = await getDictionary(await getLocale());
+  const locale = await getLocale();
+  const coach = localizeCoach(getCoach(coachId), locale);
+  const dict = await getDictionary(locale);
 
   return (
     <>
