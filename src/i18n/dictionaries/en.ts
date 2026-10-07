@@ -298,6 +298,9 @@ const en = {
   "coach.pickerSubtitle": "Pick the coach that fits what you need today. You can switch anytime.",
   // Coach chat (detail) page
   "coach.chooseAnother": "Choose a different coach",
+  "coach.clear": "Clear conversation",
+  "coach.tooLong": "Your message is too long (2000 characters max). Please shorten it.",
+  "coach.limitReached": "You've reached today's limit of {n} coach messages (free beta). Please come back tomorrow.",
   "coach.metaSuffix": "AI Coach",
   "coach.metaFallback": "Coach",
 

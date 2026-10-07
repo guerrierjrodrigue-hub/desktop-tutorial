@@ -1,26 +1,44 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useTransition } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Sparkles } from "lucide-react";
+import { Send, Sparkles, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
-import { setActiveCoach } from "@/app/(app)/coach/actions";
+import { setActiveCoach, clearCoachConversation } from "@/app/(app)/coach/actions";
 import type { Coach } from "@/data/coaches";
+import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { ChatMessage } from "@/types";
 
 /**
  * Rendered with `key={coach.id}` by its parent so switching coaches remounts
  * this component fresh instead of needing an effect to reset local state.
  */
-export function CoachChat({ coach }: { coach: Coach }) {
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    { id: "greeting", role: "assistant", content: coach.greeting },
-  ]);
+export function CoachChat({
+  coach,
+  history = [],
+  dict,
+}: {
+  coach: Coach;
+  history?: ChatMessage[];
+  dict: Dictionary;
+}) {
+  const greeting: ChatMessage = { id: "greeting", role: "assistant", content: coach.greeting };
+  const [messages, setMessages] = useState<ChatMessage[]>(
+    history.length ? history : [greeting],
+  );
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [clearing, startClearing] = useTransition();
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  function clearConversation() {
+    startClearing(async () => {
+      await clearCoachConversation(coach.id);
+      setMessages([greeting]);
+    });
+  }
 
   // Remember which coach the user is talking to.
   useEffect(() => {
@@ -132,6 +150,18 @@ export function CoachChat({ coach }: { coach: Coach }) {
 
   return (
     <div className="glass flex h-[calc(100svh-9rem)] flex-col overflow-hidden rounded-2xl border border-border">
+      {messages.some((m) => m.id !== "greeting") && (
+        <div className="flex items-center justify-end border-b border-border px-3 py-2">
+          <button
+            type="button"
+            onClick={clearConversation}
+            disabled={clearing}
+            className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs text-muted transition hover:text-danger disabled:opacity-50"
+          >
+            <Trash2 className="size-3.5" /> {dict["coach.clear"]}
+          </button>
+        </div>
+      )}
       {/* Messages */}
       <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto p-4 sm:p-6">
         {messages.map((m) => (
