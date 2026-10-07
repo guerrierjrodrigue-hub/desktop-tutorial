@@ -140,6 +140,7 @@ export type RecipeCategory = "weight-loss" | "muscle-gain" | "fasting" | "breakf
 export interface RecipeRow {
   id: string;
   name: string;
+  name_fr: string | null;
   calories: number;
   protein_g: number;
   carbs_g: number;

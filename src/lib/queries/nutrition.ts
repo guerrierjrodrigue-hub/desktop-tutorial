@@ -1,7 +1,9 @@
 import { getAuthedContext } from "@/lib/supabase/auth";
 import { getUserToday } from "@/lib/date";
 import { getUserTimezone } from "@/lib/timezone";
+import { pick, localizeTags, localizeRecipeName } from "@/lib/content-i18n";
 import { recipes as mockRecipes } from "@/data/nutrition";
+import type { LocaleCode } from "@/i18n/locales";
 import type { FoodLogEntry, Recipe } from "@/types";
 
 const MOCK_ENTRIES: FoodLogEntry[] = [
@@ -30,23 +32,29 @@ export async function getFoodLogsToday(): Promise<FoodLogEntry[]> {
   }));
 }
 
-/** The recipe catalog (demo data when unconfigured). */
-export async function getRecipes(): Promise<Recipe[]> {
+/** The recipe catalog, localized by `locale` (demo data when unconfigured). */
+export async function getRecipes(locale: LocaleCode = "en"): Promise<Recipe[]> {
   const ctx = await getAuthedContext();
-  if (!ctx) return mockRecipes;
+  if (!ctx) {
+    return mockRecipes.map((r) => ({
+      ...r,
+      name: localizeRecipeName(r.name, locale),
+      tags: localizeTags(r.tags, locale),
+    }));
+  }
 
   const { data } = await ctx.supabase.from("recipes").select("*").order("name", { ascending: true });
   if (!data) return [];
 
   return data.map((row) => ({
     id: row.id,
-    name: row.name,
+    name: pick(locale, row.name, row.name_fr),
     calories: row.calories,
     proteinG: row.protein_g,
     carbsG: row.carbs_g,
     fatG: row.fat_g,
     minutes: row.minutes,
-    tags: row.tags,
+    tags: localizeTags(row.tags, locale),
     category: row.category,
   }));
 }

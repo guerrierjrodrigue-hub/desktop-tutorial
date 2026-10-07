@@ -20,11 +20,12 @@ export const metadata: Metadata = {
 };
 
 export default async function NutritionPage() {
+  const locale = await getLocale();
   const [todayStats, foodLogs, recipes, dict] = await Promise.all([
     getTodayStats(),
     getFoodLogsToday(),
-    getRecipes(),
-    getDictionary(await getLocale()),
+    getRecipes(locale),
+    getDictionary(locale),
   ]);
   const consumed = foodLogs.reduce(
     (sum, e) => ({ calories: sum.calories + e.calories, proteinG: sum.proteinG + e.proteinG }),

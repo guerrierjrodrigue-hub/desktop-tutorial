@@ -212,6 +212,9 @@ const fr: Dictionary = {
   "bible.previous": "Précédent",
   "bible.next": "Suivant",
 
+  "nutrition.recipesTitle": "Recettes",
+  "nutrition.recipesSubtitle": "Des repas riches en protéines et en aliments complets pour nourrir ton entraînement.",
+  "nutrition.noRecipesInCategory": "Aucune recette dans cette catégorie pour l'instant.",
   "nutrition.categoryAll": "Tous",
   "nutrition.categoryWeightLoss": "Perte de poids",
   "nutrition.categoryMuscleGain": "Prise de muscle",
