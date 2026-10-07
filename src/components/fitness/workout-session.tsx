@@ -12,14 +12,17 @@ import { Progress } from "@/components/ui/progress";
 import { logWorkoutCompletion } from "@/app/(app)/fitness/actions";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
+import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { WorkoutDay } from "@/types";
 
 export function WorkoutSession({
   programId,
   day,
+  dict,
 }: {
   programId: string;
   day: WorkoutDay;
+  dict: Dictionary;
 }) {
   const router = useRouter();
   const [setsDone, setSetsDone] = useState<Record<string, number>>(() =>
@@ -79,12 +82,15 @@ export function WorkoutSession({
         <span className="grid size-16 place-items-center rounded-full bg-gradient-to-br from-gold-bright to-gold-deep text-background">
           <PartyPopper className="size-8" />
         </span>
-        <h1 className="font-serif text-2xl font-semibold">Workout complete!</h1>
+        <h1 className="font-serif text-2xl font-semibold">{dict["session.complete"]}</h1>
         <p className="max-w-sm text-sm text-muted">
-          Great work finishing <span className="text-foreground">{day.title}</span> —{" "}
-          {completedSets} of {totalSets} sets logged in about {day.durationMinutes} minutes.
+          {dict["session.greatWorkPre"]} <span className="text-foreground">{day.title}</span> —{" "}
+          {dict["session.setsSummary"]
+            .replace("{done}", String(completedSets))
+            .replace("{total}", String(totalSets))
+            .replace("{min}", String(day.durationMinutes))}
         </p>
-        <Button onClick={() => router.push("/dashboard")}>Back to dashboard</Button>
+        <Button onClick={() => router.push("/dashboard")}>{dict["session.backToDashboard"]}</Button>
       </motion.div>
     );
   }
@@ -95,17 +101,17 @@ export function WorkoutSession({
         href={`/fitness/${programId}`}
         className="inline-flex items-center gap-1 text-sm text-muted transition hover:text-foreground"
       >
-        <ChevronLeft className="size-4" /> Exit workout
+        <ChevronLeft className="size-4" /> {dict["session.exit"]}
       </Link>
 
       <Card>
         <div className="mb-2 flex items-center justify-between text-sm text-muted">
           <span>
-            {completedSets} / {totalSets} sets
+            {completedSets} / {totalSets} {dict["session.sets"]}
           </span>
           <span className="flex items-center gap-1.5">
             <Clock className="size-4" />
-            {day.durationMinutes} min
+            {day.durationMinutes} {dict["session.minUnit"]}
           </span>
         </div>
         <Progress value={progress} />
@@ -126,7 +132,7 @@ export function WorkoutSession({
                     {ex.name}
                   </h3>
                   <p className="mt-0.5 text-xs text-muted">
-                    {ex.muscles.join(" · ")} · {ex.reps} reps · {ex.restSeconds}s rest
+                    {ex.muscles.join(" · ")} · {ex.reps} {dict["session.repsUnit"]} · {ex.restSeconds}s {dict["session.restUnit"]}
                   </p>
                 </div>
                 {complete && <Check className="size-5 shrink-0 text-green-bright" />}
@@ -141,7 +147,9 @@ export function WorkoutSession({
                       type="button"
                       onClick={() => toggleSet(ex.id, i, ex.restSeconds)}
                       aria-pressed={setComplete}
-                      aria-label={`Set ${i + 1} of ${ex.name}`}
+                      aria-label={dict["session.setAria"]
+                        .replace("{i}", String(i + 1))
+                        .replace("{name}", ex.name)}
                       className={cn(
                         "grid size-10 place-items-center rounded-xl border text-sm font-semibold transition",
                         setComplete
@@ -157,14 +165,14 @@ export function WorkoutSession({
 
               {resting?.exerciseId === ex.id && (
                 <p className="mt-2 text-xs font-medium text-gold-bright">
-                  Resting… {resting.secondsLeft}s
+                  {dict["session.resting"]} {resting.secondsLeft}s
                 </p>
               )}
 
               {(ex.instructions?.length || ex.imageUrl) && (
                 <details className="group mt-3 rounded-xl border border-border bg-surface-2">
                   <summary className="flex cursor-pointer list-none items-center justify-between px-3 py-2 text-xs font-semibold text-muted">
-                    How to
+                    {dict["session.howTo"]}
                     <ChevronDown className="size-3.5 transition group-open:rotate-180" />
                   </summary>
                   <div className="flex flex-col gap-3 px-3 pb-3 sm:flex-row">
@@ -195,8 +203,10 @@ export function WorkoutSession({
 
       <Button className="w-full" size="lg" onClick={finish} disabled={saving}>
         {completedSets >= totalSets
-          ? "Finish workout"
-          : `Finish workout (${completedSets}/${totalSets} sets)`}
+          ? dict["session.finish"]
+          : dict["session.finishPartial"]
+              .replace("{done}", String(completedSets))
+              .replace("{total}", String(totalSets))}
       </Button>
     </div>
   );

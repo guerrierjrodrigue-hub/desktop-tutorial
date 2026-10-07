@@ -15,7 +15,7 @@ export default async function FocusPage() {
     <>
       <Topbar title={dict["nav.focus"]} />
       <main className="mx-auto w-full max-w-lg flex-1 px-4 py-6 sm:px-6">
-        <FocusTimer />
+        <FocusTimer dict={dict} />
       </main>
     </>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { BIBLE_TRANSLATIONS, type BibleTranslationId, type BibleBookSummary } from "@/lib/bible";
+import type { Dictionary } from "@/i18n/dictionaries/en";
 
 function autoSubmit(e: React.ChangeEvent<HTMLSelectElement>) {
   e.currentTarget.form?.requestSubmit();
@@ -12,12 +13,14 @@ export function BibleControls({
   bookId,
   chapterNumber,
   numberOfChapters,
+  dict,
 }: {
   translationId: BibleTranslationId;
   books: BibleBookSummary[];
   bookId: string;
   chapterNumber: number;
   numberOfChapters: number;
+  dict: Dictionary;
 }) {
   const chapters = Array.from({ length: numberOfChapters }, (_, i) => i + 1);
 
@@ -67,7 +70,7 @@ export function BibleControls({
           type="submit"
           className="h-10 rounded-lg border border-gold/40 bg-gold/10 px-4 text-sm font-semibold text-gold-bright"
         >
-          Go
+          {dict["bible.go"]}
         </button>
       </noscript>
     </form>

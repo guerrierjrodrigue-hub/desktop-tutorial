@@ -79,6 +79,7 @@ export default async function BiblePage({
             bookId={bookId}
             chapterNumber={chapterNumber}
             numberOfChapters={numberOfChapters}
+            dict={dict}
           />
         </Card>
 
