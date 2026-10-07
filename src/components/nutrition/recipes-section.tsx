@@ -28,10 +28,8 @@ export function RecipesSection({ recipes, dict }: { recipes: Recipe[]; dict: Dic
     <div className="mt-8">
       <div className="mb-4 flex items-end justify-between">
         <div>
-          <h2 className="font-serif text-xl font-semibold">Recipes</h2>
-          <p className="text-sm text-muted">
-            High-protein, whole-food meals to fuel your training.
-          </p>
+          <h2 className="font-serif text-xl font-semibold">{dict["nutrition.recipesTitle"]}</h2>
+          <p className="text-sm text-muted">{dict["nutrition.recipesSubtitle"]}</p>
         </div>
       </div>
 
@@ -76,7 +74,7 @@ export function RecipesSection({ recipes, dict }: { recipes: Recipe[]; dict: Dic
           </Card>
         ))}
         {filtered.length === 0 && (
-          <p className="col-span-full py-8 text-center text-sm text-muted">No recipes in this category yet.</p>
+          <p className="col-span-full py-8 text-center text-sm text-muted">{dict["nutrition.noRecipesInCategory"]}</p>
         )}
       </div>
     </div>

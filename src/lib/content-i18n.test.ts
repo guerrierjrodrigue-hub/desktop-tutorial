@@ -9,6 +9,8 @@ import {
   localizeDayTitle,
   localizeDayFocus,
   localizeExerciseName,
+  localizeTags,
+  localizeRecipeName,
 } from "./content-i18n";
 import { localizeCoach } from "./coaches";
 import { getCoach } from "@/data/coaches";
@@ -54,6 +56,24 @@ describe("fitness content localization", () => {
     expect(localizeDayFocus("Whole body", "fr")).toBe("Corps entier");
     expect(localizeExerciseName("Back Squat", "fr")).toBe("Squat arrière");
     expect(localizeExerciseName("Totally Custom Move", "fr")).toBe("Totally Custom Move");
+  });
+});
+
+describe("recipe localization", () => {
+  it("translates recipe names and keeps 'Daniel Fast' as jeûne de Daniel", () => {
+    expect(localizeRecipeName("Turkey Chili", "fr")).toBe("Chili à la dinde");
+    expect(localizeRecipeName("Daniel Fast Lentil Stew", "fr")).toBe(
+      "Ragoût de lentilles du jeûne de Daniel",
+    );
+    expect(localizeRecipeName("Turkey Chili", "en")).toBe("Turkey Chili");
+    expect(localizeRecipeName("Nonexistent Dish", "fr")).toBe("Nonexistent Dish");
+  });
+  it("translates tags, keeping unknown ones", () => {
+    expect(localizeTags(["High protein", "Quick"], "fr")).toEqual([
+      "Riche en protéines",
+      "Rapide",
+    ]);
+    expect(localizeTags(["High protein"], "en")).toEqual(["High protein"]);
   });
 });
 

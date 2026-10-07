@@ -228,6 +228,9 @@ const en = {
   "bible.next": "Next",
 
   // Nutrition page — recipe categories
+  "nutrition.recipesTitle": "Recipes",
+  "nutrition.recipesSubtitle": "High-protein, whole-food meals to fuel your training.",
+  "nutrition.noRecipesInCategory": "No recipes in this category yet.",
   "nutrition.categoryAll": "All",
   "nutrition.categoryWeightLoss": "Weight loss",
   "nutrition.categoryMuscleGain": "Muscle gain",
