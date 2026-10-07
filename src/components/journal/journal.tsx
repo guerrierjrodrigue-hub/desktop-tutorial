@@ -5,13 +5,24 @@ import { NotebookPen, Plus, X } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { createJournalEntry } from "@/app/(app)/journal/actions";
+import type { Dictionary } from "@/i18n/dictionaries/en";
+import type { LocaleCode } from "@/i18n/locales";
 import type { JournalEntry } from "@/types";
 
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+function formatDate(iso: string, locale: LocaleCode) {
+  const tag = locale === "fr" ? "fr-CA" : "en-US";
+  return new Date(iso).toLocaleDateString(tag, { month: "short", day: "numeric" });
 }
 
-export function Journal({ initial }: { initial: JournalEntry[] }) {
+export function Journal({
+  initial,
+  dict,
+  locale,
+}: {
+  initial: JournalEntry[];
+  dict: Dictionary;
+  locale: LocaleCode;
+}) {
   const [entries, setEntries] = useState(initial);
   const [composing, setComposing] = useState(false);
   const [title, setTitle] = useState("");
@@ -42,7 +53,7 @@ export function Journal({ initial }: { initial: JournalEntry[] }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Journal</CardTitle>
+        <CardTitle>{dict["journal.title"]}</CardTitle>
         <Button
           size="sm"
           variant="ghost"
@@ -50,7 +61,7 @@ export function Journal({ initial }: { initial: JournalEntry[] }) {
           aria-expanded={composing}
         >
           {composing ? <X className="size-4" /> : <Plus className="size-4" />}
-          {composing ? "Cancel" : "New"}
+          {composing ? dict["common.cancel"] : dict["journal.new"]}
         </Button>
       </CardHeader>
 
@@ -59,28 +70,28 @@ export function Journal({ initial }: { initial: JournalEntry[] }) {
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="What's on your mind?"
-            aria-label="Entry title"
+            placeholder={dict["journal.titlePlaceholder"]}
+            aria-label={dict["journal.titleAria"]}
             autoFocus
             className="h-10 w-full rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-gold/40 focus:ring-2 focus:ring-gold/20"
           />
           <textarea
             value={body}
             onChange={(e) => setBody(e.target.value)}
-            placeholder="Write a little more (optional)"
-            aria-label="Entry body"
+            placeholder={dict["journal.bodyPlaceholder"]}
+            aria-label={dict["journal.bodyAria"]}
             rows={3}
             className="w-full resize-none rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm outline-none focus:border-gold/40 focus:ring-2 focus:ring-gold/20"
           />
           <Button type="submit" size="sm" className="w-full" disabled={!title.trim()}>
-            Add to journal
+            {dict["journal.add"]}
           </Button>
         </form>
       )}
 
       {entries.length === 0 ? (
         <p className="rounded-xl border border-dashed border-border bg-surface-2 p-6 text-center text-sm text-muted">
-          No entries yet. Write your first reflection above.
+          {dict["journal.empty"]}
         </p>
       ) : (
         <div className="space-y-3">
@@ -92,7 +103,7 @@ export function Journal({ initial }: { initial: JournalEntry[] }) {
                   <div className="flex items-center justify-between gap-2">
                     <h3 className="text-sm font-semibold leading-tight">{entry.title}</h3>
                     <span className="shrink-0 text-[11px] text-faint">
-                      {formatDate(entry.createdAt)}
+                      {formatDate(entry.createdAt, locale)}
                     </span>
                   </div>
                   {entry.body && <p className="mt-1 text-xs text-muted">{entry.body}</p>}

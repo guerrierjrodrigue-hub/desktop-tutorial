@@ -5,6 +5,7 @@ import { Pause, Play, RotateCcw, Timer } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import type { Dictionary } from "@/i18n/dictionaries/en";
 
 const PRESETS_MIN = [15, 25, 45];
 
@@ -16,7 +17,7 @@ function formatTime(totalSeconds: number): string {
   return `${m}:${s}`;
 }
 
-export function FocusTimer() {
+export function FocusTimer({ dict }: { dict: Dictionary }) {
   const [durationMin, setDurationMin] = useState(PRESETS_MIN[1]);
   const [remainingSec, setRemainingSec] = useState(PRESETS_MIN[1] * 60);
   const [running, setRunning] = useState(false);
@@ -53,7 +54,7 @@ export function FocusTimer() {
     <div className="space-y-5">
       <Card className="flex flex-col items-center py-10 text-center">
         <span className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-muted">
-          <Timer className="size-4" /> Focus session
+          <Timer className="size-4" /> {dict["focus.session"]}
         </span>
         <p className="mt-4 font-serif text-6xl font-semibold tabular-nums">
           {formatTime(remainingSec)}
@@ -69,10 +70,10 @@ export function FocusTimer() {
         <div className="mt-8 flex gap-3">
           <Button size="lg" onClick={() => setRunning((r) => !r)}>
             {running ? <Pause className="size-4" /> : <Play className="size-4" />}
-            {running ? "Pause" : "Start"}
+            {running ? dict["focus.pause"] : dict["focus.start"]}
           </Button>
           <Button size="lg" variant="secondary" onClick={reset}>
-            <RotateCcw className="size-4" /> Reset
+            <RotateCcw className="size-4" /> {dict["focus.reset"]}
           </Button>
         </div>
 
@@ -90,7 +91,7 @@ export function FocusTimer() {
                   : "border-border bg-surface-2 text-muted hover:border-gold/30",
               )}
             >
-              {min} min
+              {min} {dict["focus.minUnit"]}
             </button>
           ))}
         </div>
@@ -98,8 +99,8 @@ export function FocusTimer() {
 
       <Card className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-semibold">Sessions today</p>
-          <p className="text-xs text-muted">Each completed session builds your streak.</p>
+          <p className="text-sm font-semibold">{dict["focus.sessionsToday"]}</p>
+          <p className="text-xs text-muted">{dict["focus.sessionsSubtitle"]}</p>
         </div>
         <p className="font-serif text-3xl font-semibold text-gold-bright">{sessionsToday}</p>
       </Card>

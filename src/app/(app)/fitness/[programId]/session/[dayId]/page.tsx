@@ -30,7 +30,8 @@ export default async function WorkoutSessionPage({
   params: Promise<{ programId: string; dayId: string }>;
 }) {
   const { programId, dayId } = await params;
-  const program = await getProgramBySlug(programId, await getLocale());
+  const locale = await getLocale();
+  const program = await getProgramBySlug(programId, locale);
   if (!program) notFound();
 
   const user = await getCurrentUser();
@@ -39,11 +40,13 @@ export default async function WorkoutSessionPage({
   const day = findDay(program, dayId);
   if (!day) notFound();
 
+  const dict = await getDictionary(locale);
+
   return (
     <>
       <Topbar title={day.title} />
       <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-6 sm:px-6">
-        <WorkoutSession programId={program.id} day={day} />
+        <WorkoutSession programId={program.id} day={day} dict={dict} />
       </main>
     </>
   );
