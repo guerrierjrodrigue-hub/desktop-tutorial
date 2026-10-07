@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Clock, CalendarDays, Lock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { formatDuration } from "@/lib/utils";
+import { isFreeMode } from "@/lib/flags";
+import { showPremiumLock } from "@/lib/premium-ui";
 import type { Program } from "@/types";
 
 const levelLabel: Record<Program["level"], string> = {
@@ -27,7 +29,7 @@ export function ProgramCard({
           <Badge variant="neutral" className="bg-black/30 text-foreground backdrop-blur">
             {levelLabel[program.level]}
           </Badge>
-          {program.premium && (
+          {showPremiumLock(isFreeMode(), program.premium) && (
             <Badge variant="premium" className="bg-black/30 backdrop-blur">
               <Lock className="size-3" /> Premium
             </Badge>

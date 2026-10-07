@@ -44,7 +44,15 @@ function NavLink({ item, active, dict }: { item: NavItem; active: boolean; dict:
   );
 }
 
-export function Sidebar({ identities, dict }: { identities: string[]; dict: Dictionary }) {
+export function Sidebar({
+  identities,
+  dict,
+  freeMode = false,
+}: {
+  identities: string[];
+  dict: Dictionary;
+  freeMode?: boolean;
+}) {
   const pathname = usePathname();
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + "/");
@@ -79,19 +87,21 @@ export function Sidebar({ identities, dict }: { identities: string[]; dict: Dict
         </div>
       </nav>
 
-      <div className="mt-4 rounded-2xl border border-gold/20 bg-gradient-to-b from-gold/10 to-transparent p-4">
-        <div className="mb-1 flex items-center gap-2 text-gold-bright">
-          <Sparkles className="size-4" />
-          <span className="text-sm font-semibold">{dict["nav.goPremium"]}</span>
+      {!freeMode && (
+        <div className="mt-4 rounded-2xl border border-gold/20 bg-gradient-to-b from-gold/10 to-transparent p-4">
+          <div className="mb-1 flex items-center gap-2 text-gold-bright">
+            <Sparkles className="size-4" />
+            <span className="text-sm font-semibold">{dict["nav.goPremium"]}</span>
+          </div>
+          <p className="text-xs text-muted">{dict["nav.goPremiumBlurb"]}</p>
+          <Link
+            href="/pricing"
+            className="mt-3 inline-flex h-9 w-full items-center justify-center rounded-full bg-gradient-to-b from-gold-bright to-gold text-sm font-semibold text-background transition hover:brightness-105"
+          >
+            {dict["nav.startFreeTrial"]}
+          </Link>
         </div>
-        <p className="text-xs text-muted">{dict["nav.goPremiumBlurb"]}</p>
-        <Link
-          href="/pricing"
-          className="mt-3 inline-flex h-9 w-full items-center justify-center rounded-full bg-gradient-to-b from-gold-bright to-gold text-sm font-semibold text-background transition hover:brightness-105"
-        >
-          {dict["nav.startFreeTrial"]}
-        </Link>
-      </div>
+      )}
 
       <Link
         href="/admin"

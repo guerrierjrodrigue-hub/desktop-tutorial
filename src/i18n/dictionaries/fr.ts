@@ -66,6 +66,8 @@ const fr: Dictionary = {
   "greeting.afternoon": "Bon après-midi",
   "greeting.evening": "Bonsoir",
   "greeting.subtitle": "Honorons Dieu avec ton corps aujourd'hui.",
+  "profile.freeBeta.title": "Bêta gratuite — merci de nous aider à tester",
+  "profile.freeBeta.body": "Tu as un accès complet à tout pendant notre phase bêta. Aucun paiement, aucune limite — aide-nous simplement à améliorer Kingdom Athlete.",
   "dashboard.progress": "Niveau et progression",
   "dashboard.todaysWorkout": "Entraînement du jour",
   "dashboard.todaysHabits": "Habitudes du jour",

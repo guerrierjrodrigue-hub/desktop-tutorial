@@ -72,6 +72,8 @@ const en = {
   "greeting.afternoon": "Good afternoon",
   "greeting.evening": "Good evening",
   "greeting.subtitle": "Let's honor God with your body today.",
+  "profile.freeBeta.title": "Free beta — thanks for helping us test",
+  "profile.freeBeta.body": "You have full access to everything while we're in beta. No payment, no limits — just help us make Kingdom Athlete better.",
   "dashboard.progress": "Level & progress",
   "dashboard.todaysWorkout": "Today's workout",
   "dashboard.todaysHabits": "Today's habits",
