@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 import Link from "next/link";
 import { Mail, Lock, User, ArrowRight, AlertCircle, CheckCircle2 } from "lucide-react";
@@ -18,6 +18,11 @@ export function AuthForm({ mode, dict }: { mode: "login" | "signup"; dict: Dicti
     emailAuthAction,
     {},
   );
+  // Signup requires explicit consent (age 16+, Terms, Privacy). It gates both
+  // the OAuth button and the email form.
+  const [consented, setConsented] = useState(false);
+  const consentValue = !isSignup || consented ? "on" : "";
+  const gateOff = isSignup && !consented;
 
   return (
     <div className="w-full max-w-sm">
@@ -35,9 +40,37 @@ export function AuthForm({ mode, dict }: { mode: "login" | "signup"; dict: Dicti
         </p>
       ) : (
         <>
+          {isSignup && (
+            <label className="mt-8 flex cursor-pointer items-start gap-2.5 text-xs text-muted">
+              <input
+                type="checkbox"
+                checked={consented}
+                onChange={(e) => setConsented(e.target.checked)}
+                className="mt-0.5 size-4 shrink-0 rounded border-border accent-gold-bright"
+              />
+              <span>
+                {dict["auth.consentPre"]}{" "}
+                <Link href="/terms" className="text-gold-bright hover:underline" target="_blank">
+                  {dict["auth.consentTerms"]}
+                </Link>{" "}
+                {dict["auth.consentAnd"]}{" "}
+                <Link href="/privacy" className="text-gold-bright hover:underline" target="_blank">
+                  {dict["auth.consentPrivacy"]}
+                </Link>
+                .
+              </span>
+            </label>
+          )}
+
           {/* OAuth */}
-          <div className="mt-8 space-y-3">
-            <OAuthButton provider="google" label={dict["auth.continueWithGoogle"]} />
+          <div className={isSignup ? "mt-4 space-y-3" : "mt-8 space-y-3"}>
+            <OAuthButton
+              provider="google"
+              label={dict["auth.continueWithGoogle"]}
+              mode={mode}
+              consentValue={consentValue}
+              disabled={gateOff}
+            />
           </div>
 
           <div className="my-6 flex items-center gap-3 text-xs text-faint">
@@ -48,6 +81,7 @@ export function AuthForm({ mode, dict }: { mode: "login" | "signup"; dict: Dicti
 
           <form action={formAction} className="space-y-3">
             <input type="hidden" name="mode" value={mode} />
+            <input type="hidden" name="consent" value={consentValue} />
             {isSignup && (
               <Field icon={User} name="name" type="text" placeholder={dict["auth.fullName"]} autoComplete="name" />
             )}
@@ -80,11 +114,11 @@ export function AuthForm({ mode, dict }: { mode: "login" | "signup"; dict: Dicti
             {state.error && (
               <p className="flex items-center gap-2 rounded-lg bg-danger/10 px-3 py-2 text-sm text-danger">
                 <AlertCircle className="size-4 shrink-0" />
-                {state.error}
+                {state.error === "consent" ? dict["auth.consentRequired"] : state.error}
               </p>
             )}
 
-            <SubmitButton isSignup={isSignup} dict={dict} />
+            <SubmitButton isSignup={isSignup} dict={dict} disabled={gateOff} />
           </form>
         </>
       )}
@@ -102,10 +136,18 @@ export function AuthForm({ mode, dict }: { mode: "login" | "signup"; dict: Dicti
   );
 }
 
-function SubmitButton({ isSignup, dict }: { isSignup: boolean; dict: Dictionary }) {
+function SubmitButton({
+  isSignup,
+  dict,
+  disabled,
+}: {
+  isSignup: boolean;
+  dict: Dictionary;
+  disabled?: boolean;
+}) {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" className="mt-2 w-full group" disabled={pending}>
+    <Button type="submit" className="mt-2 w-full group" disabled={pending || disabled}>
       {pending ? dict["common.loading"] : isSignup ? dict["auth.signUp"] : dict["auth.signIn"]}
       {!pending && (
         <ArrowRight className="transition-transform group-hover:translate-x-0.5" />
@@ -132,16 +174,25 @@ function Field({
 function OAuthButton({
   provider,
   label,
+  mode,
+  consentValue,
+  disabled,
 }: {
   provider: "google" | "apple";
   label: string;
+  mode: "login" | "signup";
+  consentValue: string;
+  disabled?: boolean;
 }) {
   return (
     <form action={oauthAction}>
       <input type="hidden" name="provider" value={provider} />
+      <input type="hidden" name="mode" value={mode} />
+      <input type="hidden" name="consent" value={consentValue} />
       <button
         type="submit"
-        className="flex h-12 w-full items-center justify-center gap-3 rounded-xl border border-border bg-surface-2 text-sm font-medium transition hover:bg-elevated"
+        disabled={disabled}
+        className="flex h-12 w-full items-center justify-center gap-3 rounded-xl border border-border bg-surface-2 text-sm font-medium transition hover:bg-elevated disabled:cursor-not-allowed disabled:opacity-50"
       >
         {provider === "google" ? <GoogleGlyph /> : <AppleGlyph />}
         {label}

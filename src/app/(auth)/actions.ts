@@ -27,6 +27,12 @@ export async function emailAuthAction(
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
   const name = String(formData.get("name") ?? "").trim();
+  const consent = String(formData.get("consent") ?? "");
+
+  // Signup requires explicit consent (age 16+, Terms, Privacy — Loi 25).
+  if (mode === "signup" && consent !== "on") {
+    return { error: "consent" };
+  }
 
   // Demo mode: no backend configured → straight to the app.
   if (!isSupabaseConfigured()) redirect(mode === "signup" ? "/onboarding" : "/dashboard");
@@ -117,6 +123,12 @@ export async function oauthAction(formData: FormData): Promise<void> {
   const provider = String(formData.get("provider") ?? "google") as
     | "google"
     | "apple";
+  const mode = String(formData.get("mode") ?? "login");
+  const consent = String(formData.get("consent") ?? "");
+
+  // Signup via OAuth needs the same consent as email signup (Loi 25 backstop;
+  // the UI already gates the button).
+  if (mode === "signup" && consent !== "on") redirect("/signup?error=consent");
 
   if (!isSupabaseConfigured()) redirect("/dashboard");
 

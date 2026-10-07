@@ -38,6 +38,7 @@ export default async function PrivacyPage() {
         section(dict, "mkt.privacy.s5.h", "mkt.privacy.s5.b"),
         section(dict, "mkt.privacy.s6.h", "mkt.privacy.s6.b"),
         section(dict, "mkt.privacy.s7.h", "mkt.privacy.s7.b"),
+        section(dict, "mkt.privacy.s9.h", "mkt.privacy.s9.b"),
         section(dict, "mkt.privacy.s8.h", "mkt.privacy.s8.b"),
       ]}
     />
