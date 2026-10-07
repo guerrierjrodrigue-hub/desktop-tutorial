@@ -155,6 +155,13 @@ export interface ReadingPlan {
   completedDays: number;
 }
 
+export interface MemoryVerse {
+  key: string;
+  reference: string;
+  text: string;
+  mastery: number;
+}
+
 export interface PrayerRequest {
   id: string;
   title: string;

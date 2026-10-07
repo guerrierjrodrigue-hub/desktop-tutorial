@@ -10,8 +10,11 @@ import { Button } from "@/components/ui/button";
 import { PrayerJournal } from "@/components/spiritual/prayer-journal";
 import { ReadingPlans } from "@/components/spiritual/reading-plans";
 import { getDailyDevotional } from "@/data/devotional";
-import { readingPlans, memoryVerses } from "@/data/spiritual";
-import { getPrayerRequests } from "@/lib/queries/spiritual";
+import {
+  getPrayerRequests,
+  getReadingPlans,
+  getMemoryVerses,
+} from "@/lib/queries/spiritual";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
@@ -22,7 +25,12 @@ export const metadata: Metadata = {
 
 export default async function SpiritualPage() {
   const locale = await getLocale();
-  const [prayers, dict] = await Promise.all([getPrayerRequests(), getDictionary(locale)]);
+  const [prayers, dict, plans, verses] = await Promise.all([
+    getPrayerRequests(),
+    getDictionary(locale),
+    getReadingPlans(),
+    getMemoryVerses(locale),
+  ]);
   const { verse, reflection, prayer } = getDailyDevotional(locale);
 
   return (
@@ -79,7 +87,7 @@ export default async function SpiritualPage() {
         <div className="mt-6 grid gap-5 lg:grid-cols-3">
           {/* Reading plans */}
           <div className="space-y-5 lg:col-span-2">
-            <ReadingPlans initial={readingPlans} />
+            <ReadingPlans initial={plans} />
 
             {/* Memory verses */}
             <Card>
@@ -91,9 +99,9 @@ export default async function SpiritualPage() {
                 </CardTitle>
               </CardHeader>
               <div className="space-y-3">
-                {memoryVerses.map((v) => (
+                {verses.map((v) => (
                   <div
-                    key={v.reference}
+                    key={v.key}
                     className="rounded-xl border border-border bg-surface-2 p-4"
                   >
                     <div className="flex items-center justify-between">
