@@ -40,8 +40,8 @@ export const communityPosts: CommunityPost[] = [
 ];
 
 export const groups = [
-  { id: "g1", name: "Grace Community Athletes", members: 312, emoji: "⛪" },
-  { id: "g2", name: "5AM Warriors", members: 1840, emoji: "🌅" },
-  { id: "g3", name: "Strong Moms in Christ", members: 967, emoji: "💪" },
-  { id: "g4", name: "Marathon Disciples", members: 428, emoji: "🏃" },
+  { id: "g1", name: "Grace Community Athletes", members: 312, emoji: "⛪", joined: true },
+  { id: "g2", name: "5AM Warriors", members: 1840, emoji: "🌅", joined: false },
+  { id: "g3", name: "Strong Moms in Christ", members: 967, emoji: "💪", joined: false },
+  { id: "g4", name: "Marathon Disciples", members: 428, emoji: "🏃", joined: false },
 ];

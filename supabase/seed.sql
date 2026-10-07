@@ -168,11 +168,11 @@ insert into groups (name, emoji) values
   ('Marathon Disciples', '🏃');
 
 -- Challenges -----------------------------------------------------------------
-insert into challenges (title, description, type, ends_at) values
-  ('40 Days of Discipline', 'Complete a workout and a devotional every day for 40 days.', 'personal', current_date + 14),
-  ('Grace Community Step Challenge', 'Your church vs. others — log 200k steps this month.', 'church', current_date + 9),
-  ('Iron Sharpens Iron', 'You & 3 friends: 12 workouts in 2 weeks.', 'friends', current_date + 5),
-  ('Sabbath Rest Challenge', 'Protect one full day of rest each week for a month.', 'personal', current_date + 21);
+insert into challenges (title, description, type, ends_at, duration_days, metric) values
+  ('40 Days of Discipline', 'Complete a workout and a devotional every day for 40 days.', 'personal', current_date + 40, 40, 'manual'),
+  ('Church vs. Church: 30 workouts this month', 'Your church against the rest — log 30 workouts in 30 days. Measured from your real workout log.', 'church', current_date + 30, 30, 'workouts'),
+  ('Iron Sharpens Iron', 'You & 3 friends: 12 workouts in 2 weeks.', 'friends', current_date + 14, 14, 'manual'),
+  ('Sabbath Rest Challenge', 'Protect one full day of rest each week for a month.', 'personal', current_date + 28, 28, 'manual');
 
 -- Programs + nested weeks/days/exercises -------------------------------------
 -- "Foundations of Strength": full week 1 with three training days.

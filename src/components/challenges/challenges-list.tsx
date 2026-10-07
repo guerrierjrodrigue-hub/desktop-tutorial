@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { createChallenge } from "@/app/(app)/challenges/actions";
+import { createChallenge, joinChallenge } from "@/app/(app)/challenges/actions";
 import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { Challenge } from "@/types";
@@ -45,7 +45,9 @@ export function ChallengesList({
       description: description.trim(),
       type,
       participants: 1,
+      durationDays: days,
       daysLeft: days,
+      joined: true,
       progress: 0,
     };
     setChallenges((prev) => [optimistic, ...prev]);
@@ -54,6 +56,20 @@ export function ChallengesList({
     setComposing(false);
     startTransition(async () => {
       await createChallenge({ title: trimmed, description: description.trim(), type, endsInDays: days });
+    });
+  }
+
+  function join(id: string) {
+    // The window starts now, so a freshly joined challenge shows its full duration.
+    setChallenges((prev) =>
+      prev.map((c) =>
+        c.id === id
+          ? { ...c, joined: true, participants: c.participants + 1, daysLeft: c.durationDays }
+          : c,
+      ),
+    );
+    startTransition(async () => {
+      await joinChallenge(id);
     });
   }
 
@@ -80,18 +96,30 @@ export function ChallengesList({
                 </div>
                 <p className="mt-1 text-sm text-muted">{c.description}</p>
               </div>
+              {!c.joined && (
+                <Button size="sm" onClick={() => join(c.id)} disabled={pending}>
+                  {dict["challenges.join"]}
+                </Button>
+              )}
             </div>
 
             <div className="mt-4">
-              <Progress value={c.progress} />
-              <div className="mt-2 flex items-center justify-between text-xs text-muted">
+              {c.joined && <Progress value={c.progress} />}
+              <div
+                className={cn(
+                  "flex items-center justify-between text-xs text-muted",
+                  c.joined && "mt-2",
+                )}
+              >
                 <span className="flex items-center gap-1.5">
                   <Users className="size-3.5" />
                   {c.participants.toLocaleString()} {dict["challenges.joined"]}
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Flame className="size-3.5 text-gold/70" />
-                  {c.daysLeft} {dict["challenges.daysLeft"]}
+                  {c.joined
+                    ? `${c.daysLeft} ${dict["challenges.daysLeft"]}`
+                    : `${dict["challenges.lasts"]} ${c.durationDays} ${dict["challenges.daysUnit"]}`}
                 </span>
               </div>
             </div>

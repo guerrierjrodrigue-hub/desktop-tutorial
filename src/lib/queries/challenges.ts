@@ -1,46 +1,76 @@
 import { getAuthedContext } from "@/lib/supabase/auth";
+import { getUserToday } from "@/lib/date";
+import { getUserTimezone } from "@/lib/timezone";
+import { daysLeftFor, workoutProgress } from "@/lib/challenge-progress";
 import { challenges as mockChallenges } from "@/data/dashboard";
 import type { Challenge } from "@/types";
 
-/** The challenge catalog with participant counts and the signed-in user's own progress (demo data when unconfigured). */
+/**
+ * The challenge catalog with real participant counts and the signed-in user's
+ * own window + progress. Each user's window runs from the day they joined for
+ * `duration_days` days, so "days left" is personal (not a stale seeded date).
+ * Workout-metric challenges derive progress from the user's real workout_logs.
+ * Demo data when Supabase isn't configured.
+ */
 export async function getChallenges(): Promise<Challenge[]> {
   const ctx = await getAuthedContext();
   if (!ctx) return mockChallenges;
 
-  const { data: challengeRows } = await ctx.supabase
-    .from("challenges")
-    .select("*")
-    .order("created_at", { ascending: true });
+  const [challengeRes, participantRes] = await Promise.all([
+    ctx.supabase
+      .from("challenges")
+      .select("id, title, description, type, duration_days, metric")
+      .order("created_at", { ascending: true }),
+    ctx.supabase
+      .from("challenge_participants")
+      .select("challenge_id, user_id, progress, joined_at"),
+  ]);
+  const challengeRows = challengeRes.data;
   if (!challengeRows) return [];
 
-  const { data: participantRows } = await ctx.supabase
-    .from("challenge_participants")
-    .select("*");
-
-  const byChallenge = new Map<string, { user_id: string; progress: number }[]>();
-  for (const p of participantRows ?? []) {
-    if (!byChallenge.has(p.challenge_id)) byChallenge.set(p.challenge_id, []);
-    byChallenge.get(p.challenge_id)!.push(p);
+  const counts = new Map<string, number>();
+  const mineByChallenge = new Map<string, { progress: number; joined_at: string }>();
+  for (const p of participantRes.data ?? []) {
+    counts.set(p.challenge_id, (counts.get(p.challenge_id) ?? 0) + 1);
+    if (p.user_id === ctx.userId) {
+      mineByChallenge.set(p.challenge_id, { progress: p.progress, joined_at: p.joined_at });
+    }
   }
 
-  const today = Date.now();
-  return challengeRows.map((row) => {
-    const participants = byChallenge.get(row.id) ?? [];
-    const mine = participants.find((p) => p.user_id === ctx.userId);
-    const daysLeft = row.ends_at
-      ? Math.max(0, Math.ceil((new Date(row.ends_at).getTime() - today) / 86_400_000))
-      : 0;
+  const tz = await getUserTimezone();
+  const todayStr = getUserToday(tz);
 
-    return {
-      id: row.id,
-      title: row.title,
-      description: row.description,
-      participants: participants.length,
-      daysLeft,
-      progress: mine?.progress ?? 0,
-      type: row.type,
-    };
-  });
+  return Promise.all(
+    challengeRows.map(async (row) => {
+      const mine = mineByChallenge.get(row.id);
+      const joined = Boolean(mine);
+      const durationDays = row.duration_days ?? 30;
+
+      let progress = mine?.progress ?? 0;
+      if (joined && mine && row.metric === "workouts") {
+        const { count } = await ctx.supabase
+          .from("workout_logs")
+          .select("*", { count: "exact", head: true })
+          .eq("user_id", ctx.userId)
+          .gte("completed_at", mine.joined_at);
+        progress = workoutProgress(count ?? 0);
+      }
+
+      return {
+        id: row.id,
+        title: row.title,
+        description: row.description,
+        participants: counts.get(row.id) ?? 0,
+        durationDays,
+        daysLeft: joined && mine
+          ? daysLeftFor(getUserToday(tz, new Date(mine.joined_at)), durationDays, todayStr)
+          : durationDays,
+        joined,
+        progress,
+        type: row.type,
+      };
+    }),
+  );
 }
 
 export interface LeaderboardEntry {

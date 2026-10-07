@@ -222,6 +222,8 @@ const en = {
   "community.yourGroups": "Your groups",
   "community.members": "members",
   "community.discoverGroups": "Discover groups",
+  "community.join": "Join",
+  "community.noGroupsYet": "You haven't joined any groups yet.",
 
   // Coach picker page
   "coach.pickerSubtitle": "Pick the coach that fits what you need today. You can switch anytime.",
@@ -235,6 +237,8 @@ const en = {
   "challenges.subtitle": "Discipline is easier together. Join a challenge and keep the streak alive.",
   "challenges.joined": "joined",
   "challenges.daysLeft": "days left",
+  "challenges.lasts": "Lasts",
+  "challenges.join": "Join",
   "challenges.startOwn": "Start your own challenge",
   "challenges.startOwnSubtitle": "Rally your friends or your whole church.",
   "challenges.create": "Create",

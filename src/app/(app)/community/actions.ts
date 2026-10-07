@@ -48,3 +48,22 @@ export async function toggleLike(
   if (error) return { ok: false, error: error.message };
   return { ok: true };
 }
+
+/** Join a community group. Idempotent — re-joining is a no-op. */
+export async function joinGroup(groupId: string): Promise<ActionResult> {
+  if (!groupId) return { ok: false, error: "A group is required." };
+
+  const ctx = await getAuthedContext();
+  if (!ctx) return demoOk;
+
+  const { error } = await ctx.supabase
+    .from("group_members")
+    .upsert(
+      { group_id: groupId, user_id: ctx.userId },
+      { onConflict: "group_id,user_id", ignoreDuplicates: true },
+    );
+  if (error) return { ok: false, error: error.message };
+
+  revalidatePath("/community");
+  return { ok: true };
+}

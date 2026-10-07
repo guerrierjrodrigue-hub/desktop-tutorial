@@ -205,6 +205,8 @@ const fr: Dictionary = {
   "community.yourGroups": "Tes groupes",
   "community.members": "membres",
   "community.discoverGroups": "Découvrir des groupes",
+  "community.join": "Rejoindre",
+  "community.noGroupsYet": "Tu n'as rejoint aucun groupe pour l'instant.",
 
   "coach.pickerSubtitle": "Choisis le coach qui correspond à ton besoin du jour. Tu peux changer à tout moment.",
   // Page de discussion coach (détail)
@@ -216,6 +218,8 @@ const fr: Dictionary = {
   "challenges.subtitle": "La discipline est plus facile à plusieurs. Rejoins un défi et garde la flamme.",
   "challenges.joined": "participants",
   "challenges.daysLeft": "jours restants",
+  "challenges.lasts": "Dure",
+  "challenges.join": "Rejoindre",
   "challenges.startOwn": "Lance ton propre défi",
   "challenges.startOwnSubtitle": "Rallie tes amis ou toute ton église.",
   "challenges.create": "Créer",
