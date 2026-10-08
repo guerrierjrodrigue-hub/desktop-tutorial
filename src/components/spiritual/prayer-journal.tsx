@@ -5,9 +5,10 @@ import { CheckCircle2, Circle, Plus, X } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { createPrayerRequest, setPrayerAnswered } from "@/app/(app)/spiritual/actions";
+import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { PrayerRequest } from "@/types";
 
-export function PrayerJournal({ initial }: { initial: PrayerRequest[] }) {
+export function PrayerJournal({ initial, dict }: { initial: PrayerRequest[]; dict: Dictionary }) {
   const [prayers, setPrayers] = useState(initial);
   const [composing, setComposing] = useState(false);
   const [title, setTitle] = useState("");
@@ -50,7 +51,7 @@ export function PrayerJournal({ initial }: { initial: PrayerRequest[] }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Prayer journal</CardTitle>
+        <CardTitle>{dict["spiritual.prayerJournalTitle"]}</CardTitle>
         <Button
           size="sm"
           variant="ghost"
@@ -58,7 +59,7 @@ export function PrayerJournal({ initial }: { initial: PrayerRequest[] }) {
           aria-expanded={composing}
         >
           {composing ? <X className="size-4" /> : <Plus className="size-4" />}
-          {composing ? "Cancel" : "New"}
+          {composing ? dict["common.cancel"] : dict["journal.new"]}
         </Button>
       </CardHeader>
 
@@ -67,28 +68,28 @@ export function PrayerJournal({ initial }: { initial: PrayerRequest[] }) {
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="What are you praying for?"
-            aria-label="Prayer title"
+            placeholder={dict["spiritual.prayerTitlePlaceholder"]}
+            aria-label={dict["spiritual.prayerTitleAria"]}
             autoFocus
             className="h-10 w-full rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-gold/40 focus:ring-2 focus:ring-gold/20"
           />
           <textarea
             value={body}
             onChange={(e) => setBody(e.target.value)}
-            placeholder="Add a note (optional)"
-            aria-label="Prayer note"
+            placeholder={dict["spiritual.prayerNotePlaceholder"]}
+            aria-label={dict["spiritual.prayerNoteAria"]}
             rows={2}
             className="w-full resize-none rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm outline-none focus:border-gold/40 focus:ring-2 focus:ring-gold/20"
           />
           <Button type="submit" size="sm" className="w-full" disabled={!title.trim()}>
-            Add to journal
+            {dict["journal.add"]}
           </Button>
         </form>
       )}
 
       {prayers.length === 0 ? (
         <p className="rounded-xl border border-dashed border-border bg-surface-2 p-6 text-center text-sm text-muted">
-          No prayers yet. Add your first request above.
+          {dict["spiritual.noPrayers"]}
         </p>
       ) : (
         <div className="space-y-3">
@@ -101,7 +102,7 @@ export function PrayerJournal({ initial }: { initial: PrayerRequest[] }) {
                 <button
                   onClick={() => toggleAnswered(p.id)}
                   aria-pressed={p.answered}
-                  aria-label={p.answered ? "Mark unanswered" : "Mark answered"}
+                  aria-label={p.answered ? dict["spiritual.markUnanswered"] : dict["spiritual.markAnswered"]}
                   className="mt-0.5 shrink-0 transition hover:scale-110"
                 >
                   {p.answered ? (
@@ -115,7 +116,7 @@ export function PrayerJournal({ initial }: { initial: PrayerRequest[] }) {
                   {p.body && <p className="mt-1 text-xs text-muted">{p.body}</p>}
                   {p.answered && (
                     <span className="mt-2 inline-block text-xs font-semibold text-green-bright">
-                      Answered · Praise God
+                      {dict["spiritual.answeredPraise"]}
                     </span>
                   )}
                 </div>

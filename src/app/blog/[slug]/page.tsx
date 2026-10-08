@@ -5,7 +5,10 @@ import { ChevronLeft } from "lucide-react";
 import { MarketingNav } from "@/components/marketing/marketing-nav";
 import { MarketingFooter } from "@/components/marketing/marketing-footer";
 import { Reveal } from "@/components/ui/reveal";
-import { blogPosts, getBlogPost } from "@/data/blog";
+import { blogPosts, getBlogPost, localizeBlogPost } from "@/data/blog";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
+import type { LocaleCode } from "@/i18n/locales";
 
 export function generateStaticParams() {
   return blogPosts.map((p) => ({ slug: p.slug }));
@@ -17,12 +20,14 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = getBlogPost(slug);
-  return { title: post?.title ?? "Blog", description: post?.excerpt };
+  const raw = getBlogPost(slug);
+  if (!raw) return { title: "Blog" };
+  const post = localizeBlogPost(raw, await getLocale());
+  return { title: post.title, description: post.excerpt };
 }
 
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-US", {
+function formatDate(iso: string, locale: LocaleCode) {
+  return new Date(iso).toLocaleDateString(locale, {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -35,8 +40,12 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = getBlogPost(slug);
-  if (!post) notFound();
+  const raw = getBlogPost(slug);
+  if (!raw) notFound();
+
+  const locale = await getLocale();
+  const dict = await getDictionary(locale);
+  const post = localizeBlogPost(raw, locale);
 
   return (
     <div className="flex min-h-svh flex-col">
@@ -48,11 +57,11 @@ export default async function BlogPostPage({
               href="/blog"
               className="inline-flex items-center gap-1 text-sm text-muted transition hover:text-foreground"
             >
-              <ChevronLeft className="size-4" /> Back to blog
+              <ChevronLeft className="size-4" /> {dict["mkt.blog.back"]}
             </Link>
 
             <p className="mt-6 text-xs text-faint">
-              {formatDate(post.date)} · {post.readMinutes} min read · {post.author}
+              {formatDate(post.date, locale)} · {post.readMinutes} {dict["mkt.blog.minRead"]} · {post.author}
             </p>
             <h1 className="mt-2 font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
               {post.title}

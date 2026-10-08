@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 import { updateProfileAction } from "@/app/(app)/profile/actions";
+import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { UserProfile } from "@/types";
 
 interface ProfileEditorProps {
@@ -33,6 +34,7 @@ interface ProfileEditorProps {
   nextLevelXp: number;
   earnedBadges: number;
   onSignOut: () => Promise<void>;
+  dict: Dictionary;
   /** Hide the "Premium" badge during the free beta (everyone is unlocked). */
   freeMode?: boolean;
   /** Achievements card — rendered as the second column of the grid below. */
@@ -46,6 +48,7 @@ export function ProfileEditor({
   nextLevelXp,
   earnedBadges,
   onSignOut,
+  dict,
   freeMode = false,
   children,
 }: ProfileEditorProps) {
@@ -78,7 +81,7 @@ export function ProfileEditor({
         reminderTime: draft.reminderTime,
       });
       if (!result.ok) {
-        setError(result.error ?? "Couldn't save your changes.");
+        setError(result.error ?? dict["profile.saveError"]);
         return;
       }
       setUser(draft);
@@ -87,11 +90,11 @@ export function ProfileEditor({
   }
 
   const details = [
-    { icon: Ruler, label: "Height", value: user.heightCm ? `${user.heightCm} cm` : "—" },
-    { icon: Weight, label: "Weight", value: user.weightKg ? `${user.weightKg} kg` : "—" },
-    { icon: Target, label: "Goal", value: user.goal ?? "—" },
-    { icon: Church, label: "Church", value: user.church ?? "—" },
-    { icon: BookMarked, label: "Favorite verse", value: user.favoriteVerse ?? "—" },
+    { icon: Ruler, label: dict["profile.height"], value: user.heightCm ? `${user.heightCm} cm` : "—" },
+    { icon: Weight, label: dict["profile.weight"], value: user.weightKg ? `${user.weightKg} kg` : "—" },
+    { icon: Target, label: dict["profile.goal"], value: user.goal ?? "—" },
+    { icon: Church, label: dict["profile.church"], value: user.church ?? "—" },
+    { icon: BookMarked, label: dict["profile.favoriteVerse"], value: user.favoriteVerse ?? "—" },
   ];
 
   return (
@@ -110,7 +113,7 @@ export function ProfileEditor({
                 <input
                   value={draft.name}
                   onChange={(e) => setDraft((d) => ({ ...d, name: e.target.value }))}
-                  aria-label="Name"
+                  aria-label={dict["profile.nameAria"]}
                   className="w-full max-w-xs rounded-lg border border-border bg-surface-2 px-3 py-1.5 font-serif text-lg font-semibold outline-none focus:border-gold/40"
                 />
               ) : (
@@ -121,8 +124,8 @@ export function ProfileEditor({
                   <Crown className="size-3" /> Premium
                 </Badge>
               ) : (
-                <Badge variant="neutral" className="capitalize">
-                  {user.level}
+                <Badge variant="neutral">
+                  {dict[`level.${user.level}`]}
                 </Badge>
               )}
             </div>
@@ -132,8 +135,8 @@ export function ProfileEditor({
                 value={draft.bio ?? ""}
                 onChange={(e) => setDraft((d) => ({ ...d, bio: e.target.value }))}
                 rows={2}
-                placeholder="A short bio…"
-                aria-label="Bio"
+                placeholder={dict["profile.bioPlaceholder"]}
+                aria-label={dict["profile.bioAria"]}
                 className="mt-2 w-full rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm outline-none focus:border-gold/40"
               />
             ) : (
@@ -141,9 +144,9 @@ export function ProfileEditor({
             )}
 
             <div className="mt-4 flex justify-center gap-2 sm:justify-start">
-              <Stat icon={Flame} label="Streak" value={user.streak} />
+              <Stat icon={Flame} label={dict["profile.statStreak"]} value={user.streak} />
               <Stat icon={Zap} label="XP" value={user.xp.toLocaleString("en-US")} />
-              <Stat icon={Trophy} label="Badges" value={earnedBadges} />
+              <Stat icon={Trophy} label={dict["profile.statBadges"]} value={earnedBadges} />
             </div>
           </div>
 
@@ -153,33 +156,33 @@ export function ProfileEditor({
                 <Button
                   variant="secondary"
                   size="icon"
-                  aria-label="Cancel"
+                  aria-label={dict["common.cancel"]}
                   onClick={() => setEditing(false)}
                   disabled={pending}
                 >
                   <X className="size-5" />
                 </Button>
-                <Button size="icon" aria-label="Save profile" onClick={save} disabled={pending}>
+                <Button size="icon" aria-label={dict["profile.saveAria"]} onClick={save} disabled={pending}>
                   <Check className="size-5" />
                 </Button>
               </>
             ) : (
               <>
                 <Link href="/onboarding?edit=1">
-                  <Button variant="secondary" size="icon" aria-label="Edit your identities">
+                  <Button variant="secondary" size="icon" aria-label={dict["profile.editIdentitiesAria"]}>
                     <Compass className="size-5" />
                   </Button>
                 </Link>
                 <Button
                   variant="secondary"
                   size="icon"
-                  aria-label="Edit profile"
+                  aria-label={dict["profile.editProfileAria"]}
                   onClick={startEdit}
                 >
                   <Settings className="size-5" />
                 </Button>
                 <form action={onSignOut}>
-                  <Button type="submit" variant="secondary" size="icon" aria-label="Sign out">
+                  <Button type="submit" variant="secondary" size="icon" aria-label={dict["common.signOut"]}>
                     <LogOut className="size-5" />
                   </Button>
                 </form>
@@ -192,9 +195,11 @@ export function ProfileEditor({
 
         <div className="relative mt-6">
           <div className="mb-1.5 flex items-center justify-between text-sm">
-            <span className="font-semibold text-gold-bright">Level {level}</span>
+            <span className="font-semibold text-gold-bright">
+              {dict["profile.levelPrefix"]} {level}
+            </span>
             <span className="text-muted">
-              {(nextLevelXp - user.xp).toLocaleString("en-US")} XP to next
+              {(nextLevelXp - user.xp).toLocaleString("en-US")} {dict["profile.xpToNext"]}
             </span>
           </div>
           <Progress value={progress} />
@@ -204,39 +209,39 @@ export function ProfileEditor({
       <div className="mt-5 grid gap-5 sm:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>About</CardTitle>
+            <CardTitle>{dict["profile.about"]}</CardTitle>
           </CardHeader>
           {editing ? (
             <div className="space-y-3">
               <EditField
-                label="Height (cm)"
+                label={dict["profile.heightCm"]}
                 type="number"
                 value={draft.heightCm ?? ""}
                 onChange={(v) => setDraft((d) => ({ ...d, heightCm: v ? Number(v) : undefined }))}
               />
               <EditField
-                label="Weight (kg)"
+                label={dict["profile.weightKg"]}
                 type="number"
                 value={draft.weightKg ?? ""}
                 onChange={(v) => setDraft((d) => ({ ...d, weightKg: v ? Number(v) : undefined }))}
               />
               <EditField
-                label="Goal"
+                label={dict["profile.goal"]}
                 value={draft.goal ?? ""}
                 onChange={(v) => setDraft((d) => ({ ...d, goal: v }))}
               />
               <EditField
-                label="Church"
+                label={dict["profile.church"]}
                 value={draft.church ?? ""}
                 onChange={(v) => setDraft((d) => ({ ...d, church: v }))}
               />
               <EditField
-                label="Favorite verse"
+                label={dict["profile.favoriteVerse"]}
                 value={draft.favoriteVerse ?? ""}
                 onChange={(v) => setDraft((d) => ({ ...d, favoriteVerse: v }))}
               />
               <label className="block">
-                <span className="text-xs text-faint">Experience level</span>
+                <span className="text-xs text-faint">{dict["onboarding.levelLabel"]}</span>
                 <select
                   value={draft.level}
                   onChange={(e) =>
@@ -244,25 +249,25 @@ export function ProfileEditor({
                   }
                   className="mt-1 h-10 w-full rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-gold/40"
                 >
-                  <option value="beginner">Beginner</option>
-                  <option value="intermediate">Intermediate</option>
-                  <option value="advanced">Advanced</option>
+                  <option value="beginner">{dict["level.beginner"]}</option>
+                  <option value="intermediate">{dict["level.intermediate"]}</option>
+                  <option value="advanced">{dict["level.advanced"]}</option>
                 </select>
               </label>
               <label className="block">
-                <span className="text-xs text-faint">Equipment</span>
+                <span className="text-xs text-faint">{dict["onboarding.equipmentLabel"]}</span>
                 <select
                   value={draft.equipment ?? "home"}
                   onChange={(e) => setDraft((d) => ({ ...d, equipment: e.target.value }))}
                   className="mt-1 h-10 w-full rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-gold/40"
                 >
-                  <option value="none">No equipment</option>
-                  <option value="home">Home / basic</option>
-                  <option value="gym">Full gym</option>
+                  <option value="none">{dict["equipment.none"]}</option>
+                  <option value="home">{dict["equipment.home"]}</option>
+                  <option value="gym">{dict["equipment.gym"]}</option>
                 </select>
               </label>
               <EditField
-                label="Training days / week"
+                label={dict["profile.trainingDays"]}
                 type="number"
                 value={draft.trainingDays ?? ""}
                 onChange={(v) =>
@@ -270,7 +275,7 @@ export function ProfileEditor({
                 }
               />
               <EditField
-                label="Reminder time (HH:MM)"
+                label={dict["profile.reminderTime"]}
                 value={draft.reminderTime ?? ""}
                 onChange={(v) => setDraft((d) => ({ ...d, reminderTime: v }))}
               />

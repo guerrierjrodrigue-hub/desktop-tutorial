@@ -87,7 +87,7 @@ export default async function SpiritualPage() {
         <div className="mt-6 grid gap-5 lg:grid-cols-3">
           {/* Reading plans */}
           <div className="space-y-5 lg:col-span-2">
-            <ReadingPlans initial={plans} />
+            <ReadingPlans initial={plans} dict={dict} />
 
             {/* Memory verses */}
             <Card>
@@ -128,7 +128,7 @@ export default async function SpiritualPage() {
 
           {/* Prayer journal */}
           <div>
-            <PrayerJournal initial={prayers} />
+            <PrayerJournal initial={prayers} dict={dict} />
           </div>
         </div>
       </main>

@@ -2,7 +2,21 @@
 
 import { useEffect } from "react";
 import * as Sentry from "@sentry/nextjs";
+import { readClientLocale } from "@/i18n/client-locale";
 import "./globals.css";
+
+const COPY = {
+  en: {
+    heading: "Something went wrong",
+    body: "An unexpected error occurred. Please try again.",
+    retry: "Try again",
+  },
+  fr: {
+    heading: "Une erreur est survenue",
+    body: "Une erreur inattendue s'est produite. Réessaie, s'il te plaît.",
+    retry: "Réessayer",
+  },
+};
 
 /**
  * Root error boundary — catches errors thrown in the root layout itself, where
@@ -20,8 +34,11 @@ export default function GlobalError({
     Sentry.captureException(error);
   }, [error]);
 
+  const locale = readClientLocale();
+  const t = COPY[locale];
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body>
         <div
           style={{
@@ -36,12 +53,8 @@ export default function GlobalError({
           }}
         >
           <div>
-            <h1 style={{ fontSize: "1.75rem", fontWeight: 600 }}>
-              Something went wrong
-            </h1>
-            <p style={{ marginTop: "0.5rem", opacity: 0.7, maxWidth: "24rem" }}>
-              An unexpected error occurred. Please try again.
-            </p>
+            <h1 style={{ fontSize: "1.75rem", fontWeight: 600 }}>{t.heading}</h1>
+            <p style={{ marginTop: "0.5rem", opacity: 0.7, maxWidth: "24rem" }}>{t.body}</p>
             <button
               onClick={reset}
               style={{
@@ -55,7 +68,7 @@ export default function GlobalError({
                 cursor: "pointer",
               }}
             >
-              Try again
+              {t.retry}
             </button>
           </div>
         </div>

@@ -29,12 +29,15 @@ export async function Topbar({ title }: { title?: string }) {
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3">
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-gold/25 bg-gold/10 px-3 py-1.5 text-sm font-semibold text-gold-bright">
+        <span
+          className="inline-flex items-center gap-1.5 rounded-full border border-gold/25 bg-gold/10 px-3 py-1.5 text-sm font-semibold text-gold-bright"
+          aria-label={dict["topbar.streakAria"]}
+        >
           <Flame className="size-4" />
           {currentUser.streak}
         </span>
         <NotificationsBell initial={notifications} dict={dict} />
-        <Link href="/profile" aria-label="Your profile">
+        <Link href="/profile" aria-label={dict["topbar.profileAria"]}>
           <Avatar name={currentUser.name} color="var(--color-green)" />
         </Link>
       </div>

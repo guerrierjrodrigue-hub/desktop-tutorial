@@ -5,9 +5,10 @@ import { Plus, Flame, X, UtensilsCrossed } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { createFoodLog } from "@/app/(app)/nutrition/actions";
+import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { FoodLogEntry } from "@/types";
 
-export function FoodLogger({ initial }: { initial: FoodLogEntry[] }) {
+export function FoodLogger({ initial, dict }: { initial: FoodLogEntry[]; dict: Dictionary }) {
   const [entries, setEntries] = useState<FoodLogEntry[]>(initial);
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
@@ -45,10 +46,10 @@ export function FoodLogger({ initial }: { initial: FoodLogEntry[] }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Today&apos;s food log</CardTitle>
+        <CardTitle>{dict["nutrition.foodLogTitle"]}</CardTitle>
         <Button size="sm" variant="ghost" onClick={() => setOpen((v) => !v)}>
           {open ? <X className="size-4" /> : <Plus className="size-4" />}
-          {open ? "Cancel" : "Add"}
+          {open ? dict["common.cancel"] : dict["common.add"]}
         </Button>
       </CardHeader>
 
@@ -57,8 +58,8 @@ export function FoodLogger({ initial }: { initial: FoodLogEntry[] }) {
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="What did you eat?"
-            aria-label="Food name"
+            placeholder={dict["nutrition.foodNamePlaceholder"]}
+            aria-label={dict["nutrition.foodNameAria"]}
             autoFocus
             className="h-10 w-full rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-gold/40 focus:ring-2 focus:ring-gold/20"
           />
@@ -66,24 +67,24 @@ export function FoodLogger({ initial }: { initial: FoodLogEntry[] }) {
             <input
               value={calories}
               onChange={(e) => setCalories(e.target.value)}
-              placeholder="kcal"
+              placeholder={dict["nutrition.kcalPlaceholder"]}
               type="number"
               min={0}
-              aria-label="Calories"
+              aria-label={dict["nutrition.caloriesAria"]}
               className="h-10 w-full rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-gold/40 focus:ring-2 focus:ring-gold/20"
             />
             <input
               value={protein}
               onChange={(e) => setProtein(e.target.value)}
-              placeholder="protein (g)"
+              placeholder={dict["nutrition.proteinPlaceholder"]}
               type="number"
               min={0}
-              aria-label="Protein grams"
+              aria-label={dict["nutrition.proteinAria"]}
               className="h-10 w-full rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-gold/40 focus:ring-2 focus:ring-gold/20"
             />
           </div>
           <Button type="submit" size="sm" className="w-full" disabled={!name.trim()}>
-            Log it
+            {dict["nutrition.logIt"]}
           </Button>
         </form>
       )}
@@ -91,7 +92,7 @@ export function FoodLogger({ initial }: { initial: FoodLogEntry[] }) {
       {entries.length === 0 ? (
         <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-border bg-surface-2 p-6 text-center">
           <UtensilsCrossed className="size-5 text-faint" />
-          <p className="text-sm text-muted">No meals logged yet today.</p>
+          <p className="text-sm text-muted">{dict["nutrition.noMeals"]}</p>
         </div>
       ) : (
         <>
@@ -113,7 +114,7 @@ export function FoodLogger({ initial }: { initial: FoodLogEntry[] }) {
             ))}
           </ul>
           <div className="mt-3 flex justify-between border-t border-border pt-3 text-sm">
-            <span className="text-muted">Total</span>
+            <span className="text-muted">{dict["nutrition.total"]}</span>
             <span className="font-semibold">{total} kcal</span>
           </div>
         </>

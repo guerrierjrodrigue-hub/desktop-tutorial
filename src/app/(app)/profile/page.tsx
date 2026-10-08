@@ -50,6 +50,7 @@ export default async function ProfilePage() {
           nextLevelXp={nextLevelXp}
           earnedBadges={earned.length}
           onSignOut={signOutAction}
+          dict={dict}
           freeMode={isFreeMode()}
         >
           {/* Badges */}

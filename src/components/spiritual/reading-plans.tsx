@@ -7,9 +7,10 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { advanceReadingPlan } from "@/app/(app)/spiritual/actions";
+import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { ReadingPlan } from "@/types";
 
-export function ReadingPlans({ initial }: { initial: ReadingPlan[] }) {
+export function ReadingPlans({ initial, dict }: { initial: ReadingPlan[]; dict: Dictionary }) {
   const [plans, setPlans] = useState(initial);
   const [, startTransition] = useTransition();
 
@@ -30,7 +31,7 @@ export function ReadingPlans({ initial }: { initial: ReadingPlan[] }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Reading plans</CardTitle>
+        <CardTitle>{dict["spiritual.readingPlansTitle"]}</CardTitle>
       </CardHeader>
       <div className="space-y-3">
         {plans.map((plan) => {
@@ -49,7 +50,7 @@ export function ReadingPlans({ initial }: { initial: ReadingPlan[] }) {
                 </div>
                 {done && (
                   <Badge variant="green">
-                    <CheckCircle2 className="size-3" /> Done
+                    <CheckCircle2 className="size-3" /> {dict["spiritual.planDone"]}
                   </Badge>
                 )}
               </div>
@@ -57,7 +58,7 @@ export function ReadingPlans({ initial }: { initial: ReadingPlan[] }) {
                 <Progress value={plan.completedDays / plan.totalDays} />
                 <div className="mt-2 flex items-center justify-between">
                   <p className="text-xs text-muted">
-                    {plan.completedDays}/{plan.totalDays} days
+                    {plan.completedDays}/{plan.totalDays} {dict["spiritual.daysUnit"]}
                   </p>
                   {!done && (
                     <Button
@@ -66,7 +67,7 @@ export function ReadingPlans({ initial }: { initial: ReadingPlan[] }) {
                       onClick={() => advance(plan.id)}
                       className="h-7 px-3 text-xs"
                     >
-                      <BookOpen className="size-3.5" /> Log today
+                      <BookOpen className="size-3.5" /> {dict["spiritual.logToday"]}
                     </Button>
                   )}
                 </div>

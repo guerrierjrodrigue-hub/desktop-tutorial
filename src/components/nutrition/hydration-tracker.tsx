@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { Droplet, Plus, Undo2 } from "lucide-react";
 import { addWater } from "@/app/(app)/nutrition/actions";
+import type { Dictionary } from "@/i18n/dictionaries/en";
 
 const SEGMENTS = 8;
 
@@ -14,9 +15,11 @@ const SEGMENTS = 8;
 export function HydrationTracker({
   initialMl,
   goalMl,
+  dict,
 }: {
   initialMl: number;
   goalMl: number;
+  dict: Dictionary;
 }) {
   const [ml, setMl] = useState(initialMl);
   const [pending, startTransition] = useTransition();
@@ -36,7 +39,7 @@ export function HydrationTracker({
     <div className="mt-6 rounded-xl border border-border bg-surface-2 p-4">
       <div className="mb-2 flex items-center justify-between text-sm">
         <span className="flex items-center gap-2 font-medium">
-          <Droplet className="size-4 text-bronze" /> Hydration
+          <Droplet className="size-4 text-bronze" /> {dict["hydration.title"]}
         </span>
         <span className="text-muted">
           {(ml / 1000).toFixed(1)}L / {(goalMl / 1000).toFixed(1)}L
@@ -72,7 +75,7 @@ export function HydrationTracker({
         <button
           onClick={() => change(-250)}
           disabled={pending || ml === 0}
-          aria-label="Undo — remove 250 ml"
+          aria-label={dict["hydration.undoAria"]}
           className="grid size-9 place-items-center rounded-lg border border-border bg-elevated text-muted transition hover:border-gold/40 disabled:opacity-40"
         >
           <Undo2 className="size-3.5" />

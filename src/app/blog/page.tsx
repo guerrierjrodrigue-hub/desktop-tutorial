@@ -5,7 +5,7 @@ import { MarketingNav } from "@/components/marketing/marketing-nav";
 import { MarketingFooter } from "@/components/marketing/marketing-footer";
 import { Reveal } from "@/components/ui/reveal";
 import { Badge } from "@/components/ui/badge";
-import { blogPosts } from "@/data/blog";
+import { blogPosts, localizeBlogPost } from "@/data/blog";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 import type { LocaleCode } from "@/i18n/locales";
@@ -29,6 +29,7 @@ function formatDate(iso: string, locale: LocaleCode) {
 export default async function BlogIndexPage() {
   const locale = await getLocale();
   const dict = await getDictionary(locale);
+  const posts = blogPosts.map((p) => localizeBlogPost(p, locale));
 
   return (
     <div className="flex min-h-svh flex-col">
@@ -48,7 +49,7 @@ export default async function BlogIndexPage() {
 
         <section className="mx-auto max-w-4xl px-6 pb-24">
           <div className="space-y-5">
-            {blogPosts.map((post, i) => (
+            {posts.map((post, i) => (
               <Reveal key={post.slug} delay={i * 0.05}>
                 <Link href={`/blog/${post.slug}`} className="group block">
                   <article className="glass rounded-2xl border border-border p-6 transition hover:border-gold/30 sm:p-8">

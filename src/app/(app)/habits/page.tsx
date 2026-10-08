@@ -17,7 +17,7 @@ export default async function HabitsPage() {
     <>
       <Topbar title="Habits" />
       <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-6 sm:px-6">
-        <HabitsList initial={habits} title={dict["dashboard.todaysHabits"]} />
+        <HabitsList initial={habits} title={dict["dashboard.todaysHabits"]} dict={dict} />
       </main>
     </>
   );
