@@ -41,7 +41,7 @@ export function PostFeed({ initial, dict }: { initial: CommunityPost[]; dict: Di
 
   return (
     <div className="space-y-4">
-      <PostComposer onPost={prependPost} />
+      <PostComposer onPost={prependPost} dict={dict} />
 
       {posts.length === 0 && (
         <p className="rounded-xl border border-dashed border-border bg-surface-2 p-6 text-center text-sm text-muted">

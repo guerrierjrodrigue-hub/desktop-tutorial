@@ -8,11 +8,20 @@ import { Icon } from "@/components/ui/icon";
 import { toggleHabit } from "@/app/(app)/dashboard/actions";
 import { createHabit } from "@/app/(app)/habits/actions";
 import { cn } from "@/lib/utils";
+import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { Habit } from "@/types";
 
 const ICON_CHOICES = ["Check", "Dumbbell", "BookOpen", "Droplet", "Moon", "Sun", "Heart", "Brain"];
 
-export function HabitsList({ initial, title }: { initial: Habit[]; title: string }) {
+export function HabitsList({
+  initial,
+  title,
+  dict,
+}: {
+  initial: Habit[];
+  title: string;
+  dict: Dictionary;
+}) {
   const [habits, setHabits] = useState(initial);
   const [composing, setComposing] = useState(false);
   const [label, setLabel] = useState("");
@@ -103,7 +112,7 @@ export function HabitsList({ initial, title }: { initial: Habit[]; title: string
             autoFocus
             value={label}
             onChange={(e) => setLabel(e.target.value)}
-            placeholder="Habit name…"
+            placeholder={dict["habits.namePlaceholder"]}
             className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-gold/40"
           />
           <div className="flex flex-wrap gap-2">
@@ -126,16 +135,16 @@ export function HabitsList({ initial, title }: { initial: Habit[]; title: string
           </div>
           <div className="flex justify-end gap-2">
             <Button type="button" variant="ghost" size="sm" onClick={() => setComposing(false)}>
-              Cancel
+              {dict["common.cancel"]}
             </Button>
             <Button type="submit" size="sm" disabled={!label.trim()}>
-              Add habit
+              {dict["habits.addHabit"]}
             </Button>
           </div>
         </form>
       ) : (
         <Button variant="secondary" className="mt-4 w-full" onClick={() => setComposing(true)}>
-          <Plus className="size-4" /> Add custom habit
+          <Plus className="size-4" /> {dict["habits.addCustom"]}
         </Button>
       )}
     </Card>

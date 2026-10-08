@@ -122,13 +122,14 @@ export default async function NutritionPage() {
             <HydrationTracker
               initialMl={todayStats.waterMl}
               goalMl={targets.waterMl}
+              dict={dict}
             />
           </Card>
         </div>
 
         {/* Food log */}
         <div className="mt-5">
-          <FoodLogger initial={foodLogs} />
+          <FoodLogger initial={foodLogs} dict={dict} />
         </div>
 
         {/* Recipes */}

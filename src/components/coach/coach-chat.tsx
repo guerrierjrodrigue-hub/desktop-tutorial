@@ -86,7 +86,7 @@ export function CoachChat({
           {
             id: crypto.randomUUID(),
             role: "assistant",
-            content: data.reply ?? "I'm here for you. Let's try that again.",
+            content: data.reply ?? dict["coach.fallbackRetry"],
           },
         ]);
         return;
@@ -129,7 +129,7 @@ export function CoachChat({
           {
             id: assistantId,
             role: "assistant",
-            content: "I'm here for you. Let's try that again.",
+            content: dict["coach.fallbackRetry"],
           },
         ]);
       }
@@ -139,8 +139,7 @@ export function CoachChat({
         {
           id: crypto.randomUUID(),
           role: "assistant",
-          content:
-            "I couldn't reach my thoughts just now — but I'm still with you. Take a breath, and let's try again in a moment.",
+          content: dict["coach.fallbackUnreachable"],
         },
       ]);
     } finally {
@@ -196,11 +195,11 @@ export function CoachChat({
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder={`Message ${coach.name}…`}
-          aria-label={`Message ${coach.name}`}
+          placeholder={dict["coach.messagePlaceholder"].replace("{name}", coach.name)}
+          aria-label={dict["coach.messagePlaceholder"].replace("{name}", coach.name)}
           className="h-11 flex-1 rounded-full border border-border bg-surface-2 px-4 text-sm outline-none transition focus:border-gold/40 focus:ring-2 focus:ring-gold/20"
         />
-        <Button type="submit" size="icon" disabled={!input.trim() || loading} aria-label="Send">
+        <Button type="submit" size="icon" disabled={!input.trim() || loading} aria-label={dict["coach.sendAria"]}>
           <Send className="size-4" />
         </Button>
       </form>

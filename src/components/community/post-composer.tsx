@@ -6,18 +6,21 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { createPost } from "@/app/(app)/community/actions";
+import type { Dictionary, DictionaryKey } from "@/i18n/dictionaries/en";
 import type { CommunityPost } from "@/types";
 
-const kinds: { value: CommunityPost["kind"]; label: string }[] = [
-  { value: "progress", label: "Progress" },
-  { value: "testimony", label: "Testimony" },
-  { value: "prayer", label: "Prayer request" },
+const kinds: { value: CommunityPost["kind"]; labelKey: DictionaryKey }[] = [
+  { value: "progress", labelKey: "community.shareProgress" },
+  { value: "testimony", labelKey: "community.shareTestimony" },
+  { value: "prayer", labelKey: "community.sharePrayer" },
 ];
 
 export function PostComposer({
   onPost,
+  dict,
 }: {
   onPost: (post: CommunityPost) => void;
+  dict: Dictionary;
 }) {
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState("");
@@ -31,9 +34,9 @@ export function PostComposer({
 
     onPost({
       id: crypto.randomUUID(),
-      author: "You",
+      author: dict["community.you"],
       avatarColor: "var(--color-green)",
-      timeAgo: "just now",
+      timeAgo: dict["community.justNow"],
       content: text,
       kind,
       likes: 0,
@@ -50,7 +53,7 @@ export function PostComposer({
   if (!open) {
     return (
       <Button size="sm" onClick={() => setOpen(true)}>
-        <PenSquare className="size-4" /> Share
+        <PenSquare className="size-4" /> {dict["community.share"]}
       </Button>
     );
   }
@@ -61,8 +64,8 @@ export function PostComposer({
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          placeholder="Share a testimony, progress, or prayer request…"
-          aria-label="Post content"
+          placeholder={dict["community.postPlaceholder"]}
+          aria-label={dict["community.postAria"]}
           rows={3}
           autoFocus
           className="w-full resize-none rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm outline-none focus:border-gold/40 focus:ring-2 focus:ring-gold/20"
@@ -76,16 +79,16 @@ export function PostComposer({
               aria-pressed={kind === k.value}
             >
               <Badge variant={kind === k.value ? "gold" : "neutral"} className="cursor-pointer px-3 py-1.5">
-                {k.label}
+                {dict[k.labelKey]}
               </Badge>
             </button>
           ))}
           <div className="ml-auto flex gap-2">
             <Button type="button" size="sm" variant="ghost" onClick={() => setOpen(false)}>
-              Cancel
+              {dict["common.cancel"]}
             </Button>
             <Button type="submit" size="sm" disabled={!content.trim() || pending}>
-              Post
+              {dict["community.post"]}
             </Button>
           </div>
         </div>
