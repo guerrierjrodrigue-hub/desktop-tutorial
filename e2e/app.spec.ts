@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 
 test.describe("App (demo mode)", () => {
   test("dashboard greets the user and shows the daily verse", async ({ page }) => {
