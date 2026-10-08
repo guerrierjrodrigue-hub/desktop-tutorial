@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 
 test.describe("Coach picker", () => {
   test("lists every persona and links into their chat", async ({ page }) => {

@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 
 test.describe("Auth (demo mode)", () => {
   test("signup screen offers OAuth and email", async ({ page }) => {
