@@ -60,3 +60,18 @@ export function levelFromXp(totalXp: number): {
   );
   return { level, currentLevelXp, nextLevelXp, progress };
 }
+
+/**
+ * Only allow same-origin, relative redirect targets. Rejects absolute URLs,
+ * protocol-relative paths (`//evil.com`, `/\\evil.com`) and anything not starting
+ * with "/" (e.g. `@evil.com`) to prevent open-redirect abuse.
+ */
+export function safeRedirectPath(
+  raw: string | null | undefined,
+  fallback = "/dashboard",
+): string {
+  if (!raw || !raw.startsWith("/") || raw.startsWith("//") || raw.startsWith("/\\")) {
+    return fallback;
+  }
+  return raw;
+}
