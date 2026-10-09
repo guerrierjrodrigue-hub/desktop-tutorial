@@ -7,10 +7,9 @@ import { getSpiritualNavItem } from "@/lib/personalization";
 import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 
-export function MobileNav({ identities, dict }: { identities: string[]; dict: Dictionary }) {
+export function MobileNav({ dict }: { dict: Dictionary }) {
   const pathname = usePathname();
   // Purpose slot always links to Spiritual (which contains the Bible).
-  void identities;
   const items = getMobileNavItems(getSpiritualNavItem());
 
   return (
