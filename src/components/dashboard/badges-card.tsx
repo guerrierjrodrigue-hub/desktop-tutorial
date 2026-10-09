@@ -14,7 +14,9 @@ export async function BadgesCard() {
       <CardHeader>
         <CardTitle>{dict["dashboard.achievements"]}</CardTitle>
         <span className="text-xs text-muted">
-          {badges.filter((b) => b.earned).length}/{badges.length} earned
+          {dict["badges.earnedCount"]
+            .replace("{n}", String(badges.filter((b) => b.earned).length))
+            .replace("{total}", String(badges.length))}
         </span>
       </CardHeader>
       <div className="grid grid-cols-3 gap-3">

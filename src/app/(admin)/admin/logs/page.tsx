@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 import { AdminHeader } from "@/components/admin/admin-header";
 import { Card } from "@/components/ui/card";
 import { getAdminLogs } from "@/lib/queries/admin-stats";
 import { cn } from "@/lib/utils";
 
-export const metadata: Metadata = { title: "Admin · Logs" };
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary(await getLocale());
+  return {
+    title: dict["meta.adminLogs"],
+  };
+}
 
 const levelStyle: Record<string, string> = {
   info: "bg-green/15 text-green-bright",

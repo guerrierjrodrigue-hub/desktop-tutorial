@@ -4,10 +4,13 @@ import { getCurrentUser } from "@/lib/queries/profile";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
-export const metadata: Metadata = {
-  title: "Welcome",
-  description: "Tell us your goal and who you want to become.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary(await getLocale());
+  return {
+    title: dict["meta.welcome"],
+    description: "Tell us your goal and who you want to become.",
+  };
+}
 
 export default async function OnboardingPage({
   searchParams,

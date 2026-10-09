@@ -9,10 +9,13 @@ import { getDictionary } from "@/i18n/get-dictionary";
 import type { ProgramCategory } from "@/types";
 import type { DictionaryKey } from "@/i18n/dictionaries/en";
 
-export const metadata: Metadata = {
-  title: "Fitness",
-  description: "Guided Christian fitness programs — strength, HIIT, running, mobility, and bodyweight.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary(await getLocale());
+  return {
+    title: dict["meta.fitness"],
+    description: "Guided Christian fitness programs — strength, HIIT, running, mobility, and bodyweight.",
+  };
+}
 
 const categories: { key: ProgramCategory | "all"; labelKey: DictionaryKey }[] = [
   { key: "all", labelKey: "fitness.categoryAll" },

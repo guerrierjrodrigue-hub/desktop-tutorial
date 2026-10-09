@@ -7,10 +7,13 @@ import { getCommunityPosts, getGroups } from "@/lib/queries/community";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
-export const metadata: Metadata = {
-  title: "Community",
-  description: "Groups, testimonies, progress shares, and prayer requests. Iron sharpens iron.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary(await getLocale());
+  return {
+    title: dict["meta.community"],
+    description: "Groups, testimonies, progress shares, and prayer requests. Iron sharpens iron.",
+  };
+}
 
 export default async function CommunityPage() {
   const locale = await getLocale();

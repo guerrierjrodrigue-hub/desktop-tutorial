@@ -4,9 +4,12 @@ import { FocusTimer } from "@/components/mind/focus-timer";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
-export const metadata: Metadata = {
-  title: "Focus",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary(await getLocale());
+  return {
+    title: dict["meta.focus"],
+  };
+}
 
 export default async function FocusPage() {
   const dict = await getDictionary(await getLocale());

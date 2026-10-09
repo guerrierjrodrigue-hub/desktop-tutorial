@@ -18,9 +18,12 @@ import { getUserPreferences } from "@/lib/queries/preferences";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
-export const metadata: Metadata = {
-  title: "Dashboard",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary(await getLocale());
+  return {
+    title: dict["meta.dashboard"],
+  };
+}
 
 export default async function DashboardPage() {
   const [{ dashboardLayout }, dict] = await Promise.all([

@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 import { Search } from "lucide-react";
 import { AdminHeader } from "@/components/admin/admin-header";
 import { DataTable } from "@/components/admin/data-table";
@@ -7,7 +9,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getRecentUsers } from "@/lib/queries/admin-stats";
 
-export const metadata: Metadata = { title: "Admin · Users" };
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary(await getLocale());
+  return {
+    title: dict["meta.adminUsers"],
+  };
+}
 
 export default async function AdminUsersPage() {
   const users = await getRecentUsers(50);

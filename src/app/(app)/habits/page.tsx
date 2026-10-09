@@ -5,9 +5,12 @@ import { getHabits } from "@/lib/queries/habits";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
-export const metadata: Metadata = {
-  title: "Habits",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary(await getLocale());
+  return {
+    title: dict["meta.habits"],
+  };
+}
 
 export default async function HabitsPage() {
   const locale = await getLocale();

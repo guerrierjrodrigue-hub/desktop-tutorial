@@ -23,9 +23,12 @@ import {
   hasPushSubscription,
 } from "@/lib/queries/notification-preferences";
 
-export const metadata: Metadata = {
-  title: "Profile",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary(await getLocale());
+  return {
+    title: dict["meta.profile"],
+  };
+}
 
 export default async function ProfilePage() {
   const locale = await getLocale();

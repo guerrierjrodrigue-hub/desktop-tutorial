@@ -5,9 +5,12 @@ import { getJournalEntries } from "@/lib/queries/journal";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
-export const metadata: Metadata = {
-  title: "Journal",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary(await getLocale());
+  return {
+    title: dict["meta.journal"],
+  };
+}
 
 export default async function JournalPage() {
   const locale = await getLocale();

@@ -18,24 +18,27 @@ import {
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
-export const metadata: Metadata = {
-  title: "Spiritual",
-  description: "Bible reading plans, devotionals, prayer journal, and verse memorization.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary(await getLocale());
+  return {
+    title: dict["meta.spiritual"],
+    description: "Bible reading plans, devotionals, prayer journal, and verse memorization.",
+  };
+}
 
 export default async function SpiritualPage() {
   const locale = await getLocale();
   const [prayers, dict, plans, verses] = await Promise.all([
     getPrayerRequests(),
     getDictionary(locale),
-    getReadingPlans(),
+    getReadingPlans(locale),
     getMemoryVerses(locale),
   ]);
   const { verse, reflection, prayer } = getDailyDevotional(locale);
 
   return (
     <>
-      <Topbar title="Spiritual" />
+      <Topbar title={dict["spiritual.title"]} />
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6">
         <PageHeader
           title={dict["spiritual.title"]}

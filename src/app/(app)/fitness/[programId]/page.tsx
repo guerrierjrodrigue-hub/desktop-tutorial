@@ -141,7 +141,8 @@ export default async function ProgramDetailPage({
                 <div className="mb-3 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
                     <span className="grid size-9 place-items-center rounded-lg bg-green/20 text-sm font-semibold text-green-bright">
-                      D{i + 1}
+                      {dict["fitness.dayShort"]}
+                      {i + 1}
                     </span>
                     <div>
                       <h3 className="font-serif text-lg font-semibold leading-tight">

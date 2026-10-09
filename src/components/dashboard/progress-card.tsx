@@ -35,10 +35,9 @@ export async function ProgressCard() {
       <div className="mt-5">
         <Progress value={progress} />
         <p className="mt-2 text-xs text-muted">
-          <span className="font-semibold text-gold-bright">
-            {toNext.toLocaleString()} XP
-          </span>{" "}
-          to level {level + 1}
+          {dict["progress.xpToLevel"]
+            .replace("{xp}", toNext.toLocaleString())
+            .replace("{level}", String(level + 1))}
         </p>
       </div>
     </Card>

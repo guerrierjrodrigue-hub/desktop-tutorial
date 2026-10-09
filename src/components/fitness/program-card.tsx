@@ -43,7 +43,8 @@ export function ProgramCard({
         <div className="mt-3 flex items-center gap-4 text-xs text-faint">
           <span className="flex items-center gap-1.5">
             <CalendarDays className="size-3.5" />
-            {program.weeks} wks · {program.daysPerWeek}×/wk
+            {program.weeks} {dict["fitness.weeksShort"]} · {program.daysPerWeek}×
+            {dict["fitness.perWeekShort"]}
           </span>
           <span className="flex items-center gap-1.5">
             <Clock className="size-3.5" />

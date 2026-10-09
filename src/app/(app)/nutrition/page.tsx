@@ -15,10 +15,13 @@ import { computeNutritionTargets } from "@/lib/nutrition-targets";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
-export const metadata: Metadata = {
-  title: "Nutrition",
-  description: "Track calories, macros, and hydration. Fuel your body to honor God.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary(await getLocale());
+  return {
+    title: dict["meta.nutrition"],
+    description: "Track calories, macros, and hydration. Fuel your body to honor God.",
+  };
+}
 
 export default async function NutritionPage() {
   const locale = await getLocale();
@@ -43,24 +46,24 @@ export default async function NutritionPage() {
   );
 
   const macros = [
-    { label: "Protein", icon: Beef, value: consumed.proteinG, goal: targets.proteinG, color: "text-green-bright" },
-    { label: "Carbs", icon: Wheat, value: 0, goal: targets.carbsG, color: "text-gold" },
-    { label: "Fat", icon: Droplet, value: 0, goal: targets.fatG, color: "text-bronze" },
+    { key: "protein", label: dict["nutrition.protein"], icon: Beef, value: consumed.proteinG, goal: targets.proteinG, color: "text-green-bright" },
+    { key: "carbs", label: dict["nutrition.carbs"], icon: Wheat, value: 0, goal: targets.carbsG, color: "text-gold" },
+    { key: "fat", label: dict["nutrition.fat"], icon: Droplet, value: 0, goal: targets.fatG, color: "text-bronze" },
   ];
 
   return (
     <>
-      <Topbar title="Nutrition" />
+      <Topbar title={dict["nutrition.title"]} />
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6">
         <PageHeader
-          title="Nutrition"
-          subtitle="Fuel with intention — track calories, macros, and hydration."
+          title={dict["nutrition.title"]}
+          subtitle={dict["nutrition.subtitle"]}
         />
 
         <div className="grid gap-5 lg:grid-cols-3">
           {/* Calories ring */}
           <Card className="flex flex-col items-center justify-center">
-            <CardTitle className="self-start">Calories</CardTitle>
+            <CardTitle className="self-start">{dict["nutrition.calories"]}</CardTitle>
             <Ring
               value={consumed.calories / targets.calories}
               size={168}
@@ -89,7 +92,7 @@ export default async function NutritionPage() {
           {/* Macros */}
           <Card className="lg:col-span-2">
             <CardHeader>
-              <CardTitle>Macros</CardTitle>
+              <CardTitle>{dict["nutrition.macros"]}</CardTitle>
               <Flame className="size-4 text-gold/70" />
             </CardHeader>
             <div className="space-y-5">
@@ -107,9 +110,9 @@ export default async function NutritionPage() {
                   <Progress
                     value={m.value / m.goal}
                     barClassName={
-                      m.label === "Protein"
+                      m.key === "protein"
                         ? "from-green to-green-bright"
-                        : m.label === "Fat"
+                        : m.key === "fat"
                           ? "from-bronze to-gold-deep"
                           : "from-gold to-gold-bright"
                     }

@@ -11,6 +11,7 @@ import {
   type ReadingPlanRow,
   type ReadingProgressRow,
 } from "@/lib/spiritual-progress";
+import { localizeReadingPlan } from "@/lib/content-i18n";
 import type { MemoryVerse, PrayerRequest, ReadingPlan } from "@/types";
 import type { PrayerRequestRow } from "@/types/database";
 import type { LocaleCode } from "@/i18n/locales";
@@ -44,9 +45,10 @@ export async function getPrayerRequests(): Promise<PrayerRequest[]> {
  * Demo data (with its illustrative progress) is used only when Supabase isn't
  * configured.
  */
-export async function getReadingPlans(): Promise<ReadingPlan[]> {
+export async function getReadingPlans(locale: LocaleCode = "en"): Promise<ReadingPlan[]> {
+  const loc = (p: ReadingPlan) => localizeReadingPlan(p, locale);
   const ctx = await getAuthedContext();
-  if (!ctx) return mockReadingPlans;
+  if (!ctx) return mockReadingPlans.map(loc);
 
   const [plansRes, progressRes] = await Promise.all([
     ctx.supabase
@@ -60,8 +62,8 @@ export async function getReadingPlans(): Promise<ReadingPlan[]> {
   ]);
 
   const plans = (plansRes.data ?? []) as ReadingPlanRow[];
-  if (plans.length === 0) return mockReadingPlans;
-  return mergeReadingProgress(plans, (progressRes.data ?? []) as ReadingProgressRow[]);
+  if (plans.length === 0) return mockReadingPlans.map(loc);
+  return mergeReadingProgress(plans, (progressRes.data ?? []) as ReadingProgressRow[]).map(loc);
 }
 
 /**

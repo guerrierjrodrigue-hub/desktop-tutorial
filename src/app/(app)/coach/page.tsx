@@ -8,10 +8,13 @@ import { localizeCoach } from "@/lib/coaches";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
-export const metadata: Metadata = {
-  title: "Coach",
-  description: "Choose your AI coach — each with a distinct voice and focus.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary(await getLocale());
+  return {
+    title: dict["meta.coach"],
+    description: "Choose your AI coach — each with a distinct voice and focus.",
+  };
+}
 
 export default async function CoachPickerPage() {
   const locale = await getLocale();

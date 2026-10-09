@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 import { Plus } from "lucide-react";
 import { AdminHeader } from "@/components/admin/admin-header";
 import { DataTable } from "@/components/admin/data-table";
@@ -7,7 +9,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { adminContent } from "@/data/admin";
 
-export const metadata: Metadata = { title: "Admin · Content" };
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary(await getLocale());
+  return {
+    title: dict["meta.adminContent"],
+  };
+}
 
 export default function AdminContentPage() {
   return (

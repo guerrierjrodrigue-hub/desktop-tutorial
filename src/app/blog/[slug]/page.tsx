@@ -20,9 +20,10 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
+  const locale = await getLocale();
   const raw = getBlogPost(slug);
-  if (!raw) return { title: "Blog" };
-  const post = localizeBlogPost(raw, await getLocale());
+  if (!raw) return { title: (await getDictionary(locale))["mkt.blog.metaTitle"] };
+  const post = localizeBlogPost(raw, locale);
   return { title: post.title, description: post.excerpt };
 }
 
