@@ -60,6 +60,7 @@ const en = {
   "spiritual.planDone": "Done",
   "spiritual.daysUnit": "days",
   "spiritual.logToday": "Log today",
+  "spiritual.readToday": "Read today",
   "spiritual.prayerJournalTitle": "Prayer journal",
   "spiritual.prayerTitlePlaceholder": "What are you praying for?",
   "spiritual.prayerNotePlaceholder": "Add a note (optional)",
@@ -365,6 +366,14 @@ const en = {
   "bible.error": "The Bible couldn't be loaded right now — check your connection and try again.",
   "bible.previous": "Previous",
   "bible.next": "Next",
+  "bible.searchPlaceholder": "Search this chapter",
+  "bible.searchResults": "matches",
+  "bible.bookmark": "Bookmark",
+  "bible.highlight": "Highlight",
+  "bible.memorize": "Memorize this verse",
+  "bible.share": "Share",
+  "bible.markRead": "Mark as read",
+  "bible.markedRead": "Marked as read",
 
   // Nutrition page — recipe categories
   "nutrition.kcalLeft": "kcal left",

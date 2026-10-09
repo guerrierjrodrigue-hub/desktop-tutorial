@@ -1,51 +1,42 @@
-"use client";
-
-import { useState, useTransition } from "react";
+import Link from "next/link";
 import { CheckCircle2, BookOpen } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { advanceReadingPlan } from "@/app/(app)/spiritual/actions";
+import { passageForDay } from "@/lib/reading-plan-passages";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { ReadingPlan } from "@/types";
 
+/** Deep-link into the Bible reader at a plan's next unread day, carrying the
+ * plan + day so the reader can offer "mark as read". */
+function readHref(plan: ReadingPlan, day: number): string | null {
+  const passage = passageForDay(plan.titleEn ?? plan.title, day);
+  if (!passage) return null;
+  const q = new URLSearchParams({
+    b: passage.book,
+    c: String(passage.chapter),
+    plan: plan.id,
+    day: String(day),
+  });
+  return `/spiritual/bible?${q.toString()}`;
+}
+
 export function ReadingPlans({ initial, dict }: { initial: ReadingPlan[]; dict: Dictionary }) {
-  const [plans, setPlans] = useState(initial);
-  const [, startTransition] = useTransition();
-
-  function advance(id: string) {
-    let target = 0;
-    setPlans((prev) =>
-      prev.map((p) => {
-        if (p.id !== id) return p;
-        target = Math.min(p.completedDays + 1, p.totalDays);
-        return { ...p, completedDays: target };
-      }),
-    );
-    startTransition(async () => {
-      await advanceReadingPlan(id, target);
-    });
-  }
-
   return (
     <Card>
       <CardHeader>
         <CardTitle>{dict["spiritual.readingPlansTitle"]}</CardTitle>
       </CardHeader>
       <div className="space-y-3">
-        {plans.map((plan) => {
+        {initial.map((plan) => {
           const done = plan.completedDays >= plan.totalDays;
+          const nextDay = Math.min(plan.completedDays + 1, plan.totalDays);
+          const href = done ? null : readHref(plan, nextDay);
           return (
-            <div
-              key={plan.id}
-              className="rounded-xl border border-border bg-surface-2 p-4"
-            >
+            <div key={plan.id} className="rounded-xl border border-border bg-surface-2 p-4">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h3 className="font-serif font-semibold leading-tight">
-                    {plan.title}
-                  </h3>
+                  <h3 className="font-serif font-semibold leading-tight">{plan.title}</h3>
                   <p className="mt-0.5 text-sm text-muted">{plan.description}</p>
                 </div>
                 {done && (
@@ -60,15 +51,13 @@ export function ReadingPlans({ initial, dict }: { initial: ReadingPlan[]; dict: 
                   <p className="text-xs text-muted">
                     {plan.completedDays}/{plan.totalDays} {dict["spiritual.daysUnit"]}
                   </p>
-                  {!done && (
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => advance(plan.id)}
-                      className="h-7 px-3 text-xs"
+                  {href && (
+                    <Link
+                      href={href}
+                      className="inline-flex h-7 items-center gap-1.5 rounded-full px-3 text-xs font-semibold text-gold-bright hover:bg-surface-3"
                     >
-                      <BookOpen className="size-3.5" /> {dict["spiritual.logToday"]}
-                    </Button>
+                      <BookOpen className="size-3.5" /> {dict["spiritual.readToday"]}
+                    </Link>
                   )}
                 </div>
               </div>

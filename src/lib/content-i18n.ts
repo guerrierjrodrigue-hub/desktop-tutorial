@@ -456,12 +456,13 @@ export const READING_PLAN_FR: Record<string, { title: string; description: strin
   },
 };
 
-/** Localize a reading plan's title + description by its English title. */
+/** Localize a reading plan's title + description, keeping the English title in `titleEn`. */
 export function localizeReadingPlan<T extends { title: string; description: string }>(
   plan: T,
   locale: LocaleCode,
-): T {
-  if (locale !== "fr") return plan;
-  const fr = READING_PLAN_FR[plan.title];
-  return fr ? { ...plan, title: fr.title, description: fr.description } : plan;
+): T & { titleEn: string } {
+  const titleEn = plan.title;
+  if (locale !== "fr") return { ...plan, titleEn };
+  const fr = READING_PLAN_FR[titleEn];
+  return fr ? { ...plan, titleEn, title: fr.title, description: fr.description } : { ...plan, titleEn };
 }
