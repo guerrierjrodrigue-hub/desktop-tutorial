@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   daysBetween,
+  pickDashboardChallenge,
   daysLeftFor,
   workoutProgress,
   WORKOUT_CHALLENGE_TARGET,
@@ -49,5 +50,27 @@ describe("workoutProgress", () => {
   it("honors a custom target and guards against zero", () => {
     expect(workoutProgress(5, 10)).toBe(0.5);
     expect(workoutProgress(5, 0)).toBe(0);
+  });
+});
+
+describe("pickDashboardChallenge", () => {
+  it("prefers a joined challenge over an unjoined one", () => {
+    const picked = pickDashboardChallenge([
+      { id: "a", joined: false },
+      { id: "b", joined: true },
+    ]);
+    expect(picked?.id).toBe("b");
+  });
+
+  it("falls back to the first challenge when none are joined", () => {
+    const picked = pickDashboardChallenge([
+      { id: "a", joined: false },
+      { id: "b", joined: false },
+    ]);
+    expect(picked?.id).toBe("a");
+  });
+
+  it("returns undefined when there are no challenges", () => {
+    expect(pickDashboardChallenge([])).toBeUndefined();
   });
 });

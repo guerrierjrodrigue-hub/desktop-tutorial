@@ -1,6 +1,26 @@
 import { describe, it, expect } from "vitest";
-import { getQuoteOfDay } from "./quote-of-day";
+import { getQuoteOfDay, splitQuote } from "./quote-of-day";
 import { getInspirationalQuotes } from "@/data/devotional";
+
+describe("splitQuote", () => {
+  it("returns just the text when there is no attribution", () => {
+    const q = splitQuote("Progress, not perfection.");
+    expect(q.text).toBe("Progress, not perfection.");
+    expect(q.reference).toBeUndefined();
+  });
+
+  it("separates the reference after an em dash", () => {
+    const q = splitQuote("Run in such a way as to get the prize. — 1 Cor. 9:24");
+    expect(q.text).toBe("Run in such a way as to get the prize.");
+    expect(q.reference).toBe("1 Cor. 9:24");
+  });
+
+  it("splits on the LAST em dash only", () => {
+    const q = splitQuote("Fall down — get up — Proverbs 24:16");
+    expect(q.text).toBe("Fall down — get up");
+    expect(q.reference).toBe("Proverbs 24:16");
+  });
+});
 
 const enQuotes = getInspirationalQuotes("en");
 
