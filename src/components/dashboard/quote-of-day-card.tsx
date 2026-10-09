@@ -1,13 +1,13 @@
 import { Quote } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { getQuoteOfDay } from "@/lib/quote-of-day";
+import { getQuoteOfDayParts } from "@/lib/quote-of-day";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
 export async function QuoteOfDayCard() {
   const locale = await getLocale();
   const dict = await getDictionary(locale);
-  const quote = getQuoteOfDay(locale);
+  const { text, reference } = getQuoteOfDayParts(locale);
 
   return (
     <Card className="relative overflow-hidden bg-gradient-to-br from-gold/10 to-surface">
@@ -18,8 +18,12 @@ export async function QuoteOfDayCard() {
         </span>
       </div>
       <blockquote className="mt-3 font-serif text-lg italic leading-snug">
-        “{quote}”
+        {/* Quotation marks wrap only the quote text. */}
+        “{text}”
       </blockquote>
+      {reference && (
+        <p className="mt-2 text-sm not-italic text-muted">— {reference}</p>
+      )}
     </Card>
   );
 }

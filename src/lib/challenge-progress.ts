@@ -32,3 +32,14 @@ export function workoutProgress(
   if (target <= 0) return 0;
   return Math.min(1, Math.max(0, count) / target);
 }
+
+/**
+ * Pick which challenge the dashboard card features: the user's joined challenge
+ * (shown as "in progress" with real progress) if any, otherwise the first
+ * challenge as a recommendation (shown with its duration + a Join button).
+ */
+export function pickDashboardChallenge<T extends { joined: boolean }>(
+  challenges: T[],
+): T | undefined {
+  return challenges.find((c) => c.joined) ?? challenges[0];
+}
