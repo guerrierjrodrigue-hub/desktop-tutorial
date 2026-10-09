@@ -5,6 +5,7 @@ import {
   clamp,
   xpForLevel,
   levelFromXp,
+  safeRedirectPath,
 } from "./utils";
 
 describe("cn", () => {
@@ -65,5 +66,27 @@ describe("xp progression", () => {
     const threshold = xpForLevel(3);
     expect(levelFromXp(threshold).level).toBe(3);
     expect(levelFromXp(threshold - 1).level).toBe(2);
+  });
+});
+
+describe("safeRedirectPath", () => {
+  it("keeps same-origin relative paths", () => {
+    expect(safeRedirectPath("/dashboard")).toBe("/dashboard");
+    expect(safeRedirectPath("/reset-password")).toBe("/reset-password");
+  });
+
+  it("rejects absolute, protocol-relative and malformed targets", () => {
+    expect(safeRedirectPath("https://evil.com")).toBe("/dashboard");
+    expect(safeRedirectPath("//evil.com")).toBe("/dashboard");
+    expect(safeRedirectPath("/\\evil.com")).toBe("/dashboard");
+    expect(safeRedirectPath("@evil.com")).toBe("/dashboard");
+    expect(safeRedirectPath("relative-no-slash")).toBe("/dashboard");
+  });
+
+  it("falls back on empty input", () => {
+    expect(safeRedirectPath(null)).toBe("/dashboard");
+    expect(safeRedirectPath(undefined)).toBe("/dashboard");
+    expect(safeRedirectPath("")).toBe("/dashboard");
+    expect(safeRedirectPath(null, "/login")).toBe("/login");
   });
 });
