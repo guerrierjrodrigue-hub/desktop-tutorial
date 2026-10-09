@@ -40,11 +40,11 @@ export const dashboardNavItem: NavItem = {
 };
 
 /**
- * Navigation grouped into the app's 5 Life Pillars. The Purpose pillar's item
- * adapts to the signed-in user's identities — see `getPurposeNavItem` in
- * `@/lib/personalization`.
+ * Navigation grouped into the app's 5 Life Pillars. The Purpose pillar's items
+ * adapt to the signed-in user's identities — see `getPurposeNavItems` in
+ * `@/lib/personalization` — but always include Spiritual + Bible.
  */
-export function getNavGroups(purposeItem: NavItem): NavGroup[] {
+export function getNavGroups(purposeItems: NavItem[]): NavGroup[] {
   return [
     {
       id: "body",
@@ -78,7 +78,7 @@ export function getNavGroups(purposeItem: NavItem): NavGroup[] {
       label: "Purpose",
       labelKey: "nav.purpose",
       icon: Compass,
-      items: [purposeItem],
+      items: purposeItems,
     },
     {
       id: "community",
@@ -99,7 +99,11 @@ export const standaloneNavItems: NavItem[] = [
   { href: "/profile", label: "Profile", labelKey: "nav.profile", icon: User },
 ];
 
-/** Curated 5-item bottom bar for mobile — one shortcut per pillar. */
+/**
+ * Curated 5-item bottom bar for mobile — one shortcut per pillar. The Purpose
+ * slot always points at Spiritual (which contains the Bible), so every user can
+ * reach it from the bottom bar.
+ */
 export function getMobileNavItems(purposeItem: NavItem): NavItem[] {
   return [
     dashboardNavItem,

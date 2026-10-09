@@ -9,7 +9,7 @@ import {
   standaloneNavItems,
   type NavItem,
 } from "@/lib/nav";
-import { getPurposeNavItem } from "@/lib/personalization";
+import { getPurposeNavItems } from "@/lib/personalization";
 import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 import { Sparkles, ShieldCheck } from "lucide-react";
@@ -56,7 +56,7 @@ export function Sidebar({
   const pathname = usePathname();
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + "/");
-  const groups = getNavGroups(getPurposeNavItem(identities));
+  const groups = getNavGroups(getPurposeNavItems(identities));
 
   return (
     <aside className="sticky top-0 hidden h-svh w-64 shrink-0 flex-col overflow-y-auto border-r border-border bg-surface/40 px-4 py-6 lg:flex">

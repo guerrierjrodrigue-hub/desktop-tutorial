@@ -14,6 +14,7 @@ const en = {
   "nav.habits": "Habits",
   "nav.purpose": "Purpose",
   "nav.spiritual": "Spiritual",
+  "nav.bible": "Bible",
   "nav.purposeJournal": "Purpose Journal",
   "nav.community": "Community",
   "nav.challenges": "Challenges",
