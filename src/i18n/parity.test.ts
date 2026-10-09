@@ -18,6 +18,7 @@ const IDENTICAL_ALLOWED = new Set<string>([
   "spiritual.bible",
   "bible.metaTitle",
   "bible.title",
+  "nav.bible",
   "coach.metaFallback",
   "notifications.title",
   "identity.parent",

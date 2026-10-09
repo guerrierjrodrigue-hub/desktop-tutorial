@@ -40,12 +40,20 @@ export async function DevotionalCard() {
 
         <p className="mt-4 text-sm italic text-muted">“{quote}”</p>
 
-        <Link
-          href="/spiritual"
-          className="mt-4 inline-flex text-sm font-semibold text-gold-bright hover:underline"
-        >
-          {dict["spiritual.openDevotional"]} →
-        </Link>
+        <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
+          <Link
+            href="/spiritual"
+            className="inline-flex text-sm font-semibold text-gold-bright hover:underline"
+          >
+            {dict["spiritual.openDevotional"]} →
+          </Link>
+          <Link
+            href="/spiritual/bible"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-gold-bright hover:underline"
+          >
+            <BookOpen className="size-4" /> {dict["nav.bible"]} →
+          </Link>
+        </div>
       </div>
     </Card>
   );

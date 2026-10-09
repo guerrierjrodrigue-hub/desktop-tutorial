@@ -11,6 +11,7 @@ const fr: Dictionary = {
   "nav.habits": "Habitudes",
   "nav.purpose": "Vocation",
   "nav.spiritual": "Spirituel",
+  "nav.bible": "Bible",
   "nav.purposeJournal": "Journal de vocation",
   "nav.community": "Communauté",
   "nav.challenges": "Défis",

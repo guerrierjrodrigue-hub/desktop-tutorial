@@ -53,15 +53,45 @@ export const PRIMARY_GOAL_OPTIONS: { id: GoalId; labelKey: DictionaryKey }[] = [
   { id: "increase-productivity", labelKey: "goal.increaseProductivity" },
 ];
 
+/** Spiritual hub (devotionals / reading plans / prayer) — Bible lives under it. */
+const SPIRITUAL_NAV_ITEM: NavItem = {
+  href: "/spiritual",
+  label: "Spiritual",
+  labelKey: "nav.spiritual",
+  icon: BookOpen,
+};
+
+/** Dedicated Bible reader entry, shown under Spiritual for everyone. */
+const BIBLE_NAV_ITEM: NavItem = {
+  href: "/spiritual/bible",
+  label: "Bible",
+  labelKey: "nav.bible",
+  icon: BookOpen,
+};
+
+/** Generic Purpose Journal (kept for users without the "christian" identity). */
+const PURPOSE_JOURNAL_NAV_ITEM: NavItem = {
+  href: "/journal",
+  label: "Purpose Journal",
+  labelKey: "nav.purposeJournal",
+  icon: Compass,
+};
+
 /**
- * The Purpose pillar's single nav item adapts to the user's identities:
- * Christian users get the existing Spiritual (Bible/prayer/devotionals) hub;
- * everyone else gets the generic Purpose Journal.
+ * The Purpose pillar's items. This is a faith app, so the Spiritual hub (which
+ * contains the Bible) and the dedicated Bible entry are ALWAYS shown — no user
+ * loses access. Users without the "christian" identity also keep the generic
+ * Purpose Journal as a second entry.
  */
-export function getPurposeNavItem(identities: string[]): NavItem {
-  return identities.includes("christian")
-    ? { href: "/spiritual", label: "Spiritual", labelKey: "nav.spiritual", icon: BookOpen }
-    : { href: "/journal", label: "Purpose Journal", labelKey: "nav.purposeJournal", icon: Compass };
+export function getPurposeNavItems(identities: string[]): NavItem[] {
+  const items: NavItem[] = [SPIRITUAL_NAV_ITEM, BIBLE_NAV_ITEM];
+  if (!identities.includes("christian")) items.push(PURPOSE_JOURNAL_NAV_ITEM);
+  return items;
+}
+
+/** The pillar's primary destination (Spiritual) — used for the mobile bottom bar. */
+export function getSpiritualNavItem(): NavItem {
+  return SPIRITUAL_NAV_ITEM;
 }
 
 /** Suggests which coach persona best fits a user's selected identities. */

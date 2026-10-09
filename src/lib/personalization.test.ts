@@ -1,14 +1,29 @@
 import { describe, it, expect } from "vitest";
-import { getPurposeNavItem, suggestedCoachId } from "./personalization";
+import { getPurposeNavItems, getSpiritualNavItem, suggestedCoachId } from "./personalization";
 
-describe("getPurposeNavItem", () => {
-  it("points Christian users to Spiritual", () => {
-    expect(getPurposeNavItem(["christian"]).href).toBe("/spiritual");
+describe("getPurposeNavItems", () => {
+  it("always shows Spiritual and the Bible — for Christian users", () => {
+    const hrefs = getPurposeNavItems(["christian"]).map((i) => i.href);
+    expect(hrefs).toContain("/spiritual");
+    expect(hrefs).toContain("/spiritual/bible");
   });
 
-  it("points everyone else to the generic Purpose Journal", () => {
-    expect(getPurposeNavItem(["athlete"]).href).toBe("/journal");
-    expect(getPurposeNavItem([]).href).toBe("/journal");
+  it("always shows Spiritual and the Bible — even without the Christian identity", () => {
+    for (const identities of [["athlete"], [] as string[]]) {
+      const hrefs = getPurposeNavItems(identities).map((i) => i.href);
+      expect(hrefs).toContain("/spiritual");
+      expect(hrefs).toContain("/spiritual/bible");
+    }
+  });
+
+  it("keeps the Purpose Journal for non-Christian users, and drops it for Christians", () => {
+    expect(getPurposeNavItems([]).map((i) => i.href)).toContain("/journal");
+    expect(getPurposeNavItems(["athlete"]).map((i) => i.href)).toContain("/journal");
+    expect(getPurposeNavItems(["christian"]).map((i) => i.href)).not.toContain("/journal");
+  });
+
+  it("exposes Spiritual as the mobile bottom-bar purpose shortcut", () => {
+    expect(getSpiritualNavItem().href).toBe("/spiritual");
   });
 });
 
