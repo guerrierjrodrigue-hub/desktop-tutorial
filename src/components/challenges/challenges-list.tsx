@@ -1,14 +1,16 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Users, Church, UserRound, Flame, Plus } from "lucide-react";
+import { Users, Church, UserRound, Flame, Plus, Share2, Check, CalendarClock } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { createChallenge, joinChallenge } from "@/app/(app)/challenges/actions";
+import { cohortStartWeekday } from "@/lib/cohort";
 import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/i18n/dictionaries/en";
+import type { LocaleCode } from "@/i18n/locales";
 import type { Challenge } from "@/types";
 
 const typeMeta: Record<Challenge["type"], { icon: typeof Users; labelKey: keyof Dictionary }> = {
@@ -22,9 +24,13 @@ const DURATION_OPTIONS = [7, 14, 21, 30, 40];
 export function ChallengesList({
   initial,
   dict,
+  locale,
+  currentUserId,
 }: {
   initial: Challenge[];
   dict: Dictionary;
+  locale: LocaleCode;
+  currentUserId?: string;
 }) {
   const [challenges, setChallenges] = useState(initial);
   const [composing, setComposing] = useState(false);
@@ -32,7 +38,29 @@ export function ChallengesList({
   const [description, setDescription] = useState("");
   const [type, setType] = useState<Challenge["type"]>("personal");
   const [days, setDays] = useState(14);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+
+  async function invite(c: Challenge) {
+    if (!c.inviteCode) return;
+    const ref = currentUserId ? `?ref=${currentUserId}` : "";
+    const link = `${window.location.origin}/join/${c.inviteCode}${ref}`;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: c.title, url: link });
+        return;
+      }
+    } catch {
+      // fall through to clipboard
+    }
+    try {
+      await navigator.clipboard.writeText(link);
+      setCopiedId(c.id);
+      setTimeout(() => setCopiedId(null), 2000);
+    } catch {
+      window.prompt(link, link);
+    }
+  }
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -95,6 +123,15 @@ export function ChallengesList({
                   <Badge variant="neutral">{dict[meta.labelKey]}</Badge>
                 </div>
                 <p className="mt-1 text-sm text-muted">{c.description}</p>
+                {c.startDate && (
+                  <p className="mt-1.5 inline-flex items-center gap-1.5 text-xs font-medium text-gold-bright">
+                    <CalendarClock className="size-3.5" />
+                    {dict["join.cohortSummary"]
+                      .replace("{n}", String(c.durationDays))
+                      .replace("{day}", cohortStartWeekday(c.startDate, locale))
+                      .replace("{count}", String(c.participants))}
+                  </p>
+                )}
               </div>
               {!c.joined && (
                 <Button size="sm" onClick={() => join(c.id)} disabled={pending}>
@@ -102,6 +139,24 @@ export function ChallengesList({
                 </Button>
               )}
             </div>
+
+            {c.inviteCode && (
+              <button
+                type="button"
+                onClick={() => invite(c)}
+                className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs font-medium text-muted transition hover:border-gold/30 hover:text-foreground"
+              >
+                {copiedId === c.id ? (
+                  <>
+                    <Check className="size-3.5 text-green-bright" /> {dict["challenges.inviteCopied"]}
+                  </>
+                ) : (
+                  <>
+                    <Share2 className="size-3.5" /> {dict["challenges.invite"]}
+                  </>
+                )}
+              </button>
+            )}
 
             <div className="mt-4">
               {c.joined && <Progress value={c.progress} />}

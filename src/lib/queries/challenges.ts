@@ -1,4 +1,6 @@
 import { getAuthedContext } from "@/lib/supabase/auth";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { getUserToday } from "@/lib/date";
 import { getUserTimezone } from "@/lib/timezone";
 import { daysLeftFor, workoutProgress } from "@/lib/challenge-progress";
@@ -26,7 +28,7 @@ export async function getChallenges(locale: LocaleCode = "en"): Promise<Challeng
   const [challengeRes, participantRes] = await Promise.all([
     ctx.supabase
       .from("challenges")
-      .select("id, title, title_fr, description, description_fr, type, duration_days, metric")
+      .select("id, title, title_fr, description, description_fr, type, duration_days, metric, start_date, invite_code")
       .order("created_at", { ascending: true }),
     ctx.supabase
       .from("challenge_participants")
@@ -75,9 +77,74 @@ export async function getChallenges(locale: LocaleCode = "en"): Promise<Challeng
         joined,
         progress,
         type: row.type,
+        startDate: row.start_date,
+        inviteCode: row.invite_code,
       };
     }),
   );
+}
+
+export interface CohortInvite {
+  id: string;
+  title: string;
+  description: string;
+  durationDays: number;
+  participants: number;
+  startDate: string | null;
+}
+
+/**
+ * A cohort resolved by its invite code, readable by anyone (public SELECT RLS)
+ * so even logged-out invitees see the /join/<code> landing. Null in demo mode
+ * (no backend) or when the code doesn't exist.
+ */
+export async function getChallengeByInviteCode(
+  code: string,
+  locale: LocaleCode = "en",
+): Promise<CohortInvite | null> {
+  if (!isSupabaseConfigured()) return null;
+  const supabase = await createSupabaseServerClient();
+
+  const { data } = await supabase
+    .from("challenges")
+    .select("id, title, title_fr, description, description_fr, duration_days, start_date")
+    .eq("invite_code", code)
+    .maybeSingle();
+  const row = data as {
+    id: string;
+    title: string;
+    title_fr: string | null;
+    description: string;
+    description_fr: string | null;
+    duration_days: number;
+    start_date: string | null;
+  } | null;
+  if (!row) return null;
+
+  const { count } = await supabase
+    .from("challenge_participants")
+    .select("*", { count: "exact", head: true })
+    .eq("challenge_id", row.id);
+
+  return {
+    id: row.id,
+    title: pick(locale, row.title, row.title_fr),
+    description: pick(locale, row.description, row.description_fr),
+    durationDays: row.duration_days ?? 21,
+    participants: count ?? 0,
+    startDate: row.start_date,
+  };
+}
+
+/** How many people the signed-in user has referred into challenges. */
+export async function getReferralCount(): Promise<number> {
+  const ctx = await getAuthedContext();
+  if (!ctx) return 0;
+  const { count } = await ctx.supabase
+    .from("challenge_participants")
+    .select("*", { count: "exact", head: true })
+    .eq("referred_by", ctx.userId);
+  return count ?? 0;
 }
 
 export interface LeaderboardEntry {

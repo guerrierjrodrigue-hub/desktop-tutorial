@@ -56,6 +56,19 @@ export const challenges: Challenge[] = [
     progress: 0.75,
     type: "friends",
   },
+  {
+    id: "c4",
+    title: "21-Day Discipline Cohort",
+    description: "Start together and build one daily habit for 21 days.",
+    participants: 12,
+    durationDays: 21,
+    daysLeft: 21,
+    joined: false,
+    progress: 0,
+    type: "friends",
+    startDate: "2026-10-12",
+    inviteCode: "cohort21",
+  },
 ];
 
 export const todayStats: DailyStats = {

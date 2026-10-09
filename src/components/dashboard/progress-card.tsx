@@ -1,6 +1,7 @@
 import { Flame, Zap } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { ShareStreakButton } from "./share-streak-button";
 import { getCurrentUser } from "@/lib/queries/profile";
 import { levelFromXp } from "@/lib/utils";
 import { getLocale } from "@/lib/locale";
@@ -39,6 +40,15 @@ export async function ProgressCard() {
             .replace("{xp}", toNext.toLocaleString())
             .replace("{level}", String(level + 1))}
         </p>
+        {currentUser.streak > 0 && (
+          <div className="mt-3">
+            <ShareStreakButton
+              streak={currentUser.streak}
+              label={dict["share.streak"]}
+              caption={`${currentUser.streak} ${dict["dashboard.dayStreak"]}`}
+            />
+          </div>
+        )}
       </div>
     </Card>
   );

@@ -48,6 +48,10 @@ export const CHALLENGE_FR: Record<string, { title: string; description: string }
     title: "Défi du repos du sabbat",
     description: "Protège une journée complète de repos chaque semaine pendant un mois.",
   },
+  "21-Day Discipline Cohort": {
+    title: "Cohorte de 21 jours",
+    description: "Commence ensemble et bâtis une habitude quotidienne pendant 21 jours.",
+  },
 };
 
 /**

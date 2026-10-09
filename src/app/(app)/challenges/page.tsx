@@ -4,7 +4,8 @@ import { Topbar } from "@/components/layout/topbar";
 import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChallengesList } from "@/components/challenges/challenges-list";
-import { getChallenges, getChallengeLeaderboard } from "@/lib/queries/challenges";
+import { getChallenges, getChallengeLeaderboard, getReferralCount } from "@/lib/queries/challenges";
+import { getCurrentUser } from "@/lib/queries/profile";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
@@ -18,21 +19,34 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ChallengesPage() {
   const locale = await getLocale();
-  const [challenges, leaderboard, dict] = await Promise.all([
+  const [challenges, leaderboard, user, referrals, dict] = await Promise.all([
     getChallenges(locale),
     getChallengeLeaderboard(),
+    getCurrentUser(),
+    getReferralCount(),
     getDictionary(locale),
   ]);
 
   return (
     <>
-      <Topbar title="Challenges" />
+      <Topbar title={dict["challenges.title"]} />
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6">
         <PageHeader title={dict["challenges.title"]} subtitle={dict["challenges.subtitle"]} />
 
+        {referrals > 0 && (
+          <p className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-gold/10 px-3 py-1 text-xs font-semibold text-gold-bright">
+            {dict["challenges.referrals"].replace("{n}", String(referrals))}
+          </p>
+        )}
+
         <div className="grid gap-5 lg:grid-cols-3">
           <div className="space-y-4 lg:col-span-2">
-            <ChallengesList initial={challenges} dict={dict} />
+            <ChallengesList
+              initial={challenges}
+              dict={dict}
+              locale={locale}
+              currentUserId={user.id}
+            />
           </div>
 
           {/* Leaderboard */}

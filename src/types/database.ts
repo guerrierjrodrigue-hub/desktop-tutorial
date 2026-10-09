@@ -242,6 +242,8 @@ export interface ChallengeRow {
   created_by: string | null;
   duration_days: number;
   metric: string;
+  start_date: DateStr | null;
+  invite_code: string | null;
 }
 
 export interface ChallengeParticipantRow {
