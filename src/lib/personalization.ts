@@ -1,4 +1,4 @@
-import { BookOpen, Compass } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import type { NavItem } from "@/lib/nav";
 import type { DictionaryKey } from "@/i18n/dictionaries/en";
 import type { CoachId, IdentityId } from "@/types";
@@ -69,24 +69,15 @@ const BIBLE_NAV_ITEM: NavItem = {
   icon: BookOpen,
 };
 
-/** Generic Purpose Journal (kept for users without the "christian" identity). */
-const PURPOSE_JOURNAL_NAV_ITEM: NavItem = {
-  href: "/journal",
-  label: "Purpose Journal",
-  labelKey: "nav.purposeJournal",
-  icon: Compass,
-};
-
 /**
  * The Purpose pillar's items. This is a faith app, so the Spiritual hub (which
- * contains the Bible) and the dedicated Bible entry are ALWAYS shown — no user
- * loses access. Users without the "christian" identity also keep the generic
- * Purpose Journal as a second entry.
+ * contains the Bible) and the dedicated Bible entry are ALWAYS shown to every
+ * user, regardless of identity. (The old "Purpose Journal" entry was dropped:
+ * it pointed at /journal, the exact same page as the Mind pillar's "Journal",
+ * so it was a duplicate.)
  */
-export function getPurposeNavItems(identities: string[]): NavItem[] {
-  const items: NavItem[] = [SPIRITUAL_NAV_ITEM, BIBLE_NAV_ITEM];
-  if (!identities.includes("christian")) items.push(PURPOSE_JOURNAL_NAV_ITEM);
-  return items;
+export function getPurposeNavItems(): NavItem[] {
+  return [SPIRITUAL_NAV_ITEM, BIBLE_NAV_ITEM];
 }
 
 /** The pillar's primary destination (Spiritual) — used for the mobile bottom bar. */

@@ -51,7 +51,7 @@ export async function DevotionalCard() {
             href="/spiritual/bible"
             className="inline-flex items-center gap-1.5 text-sm font-semibold text-gold-bright hover:underline"
           >
-            <BookOpen className="size-4" /> {dict["nav.bible"]} →
+            <BookOpen className="size-4" /> {dict["spiritual.readBible"]} →
           </Link>
         </div>
       </div>

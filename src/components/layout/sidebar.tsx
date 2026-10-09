@@ -45,18 +45,16 @@ function NavLink({ item, active, dict }: { item: NavItem; active: boolean; dict:
 }
 
 export function Sidebar({
-  identities,
   dict,
   freeMode = false,
 }: {
-  identities: string[];
   dict: Dictionary;
   freeMode?: boolean;
 }) {
   const pathname = usePathname();
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + "/");
-  const groups = getNavGroups(getPurposeNavItems(identities));
+  const groups = getNavGroups(getPurposeNavItems());
 
   return (
     <aside className="sticky top-0 hidden h-svh w-64 shrink-0 flex-col overflow-y-auto border-r border-border bg-surface/40 px-4 py-6 lg:flex">

@@ -2,24 +2,14 @@ import { describe, it, expect } from "vitest";
 import { getPurposeNavItems, getSpiritualNavItem, suggestedCoachId } from "./personalization";
 
 describe("getPurposeNavItems", () => {
-  it("always shows Spiritual and the Bible — for Christian users", () => {
-    const hrefs = getPurposeNavItems(["christian"]).map((i) => i.href);
+  it("always shows Spiritual and the Bible — for every user", () => {
+    const hrefs = getPurposeNavItems().map((i) => i.href);
     expect(hrefs).toContain("/spiritual");
     expect(hrefs).toContain("/spiritual/bible");
   });
 
-  it("always shows Spiritual and the Bible — even without the Christian identity", () => {
-    for (const identities of [["athlete"], [] as string[]]) {
-      const hrefs = getPurposeNavItems(identities).map((i) => i.href);
-      expect(hrefs).toContain("/spiritual");
-      expect(hrefs).toContain("/spiritual/bible");
-    }
-  });
-
-  it("keeps the Purpose Journal for non-Christian users, and drops it for Christians", () => {
-    expect(getPurposeNavItems([]).map((i) => i.href)).toContain("/journal");
-    expect(getPurposeNavItems(["athlete"]).map((i) => i.href)).toContain("/journal");
-    expect(getPurposeNavItems(["christian"]).map((i) => i.href)).not.toContain("/journal");
+  it("does not duplicate /journal (that lives in the Mind pillar)", () => {
+    expect(getPurposeNavItems().map((i) => i.href)).not.toContain("/journal");
   });
 
   it("exposes Spiritual as the mobile bottom-bar purpose shortcut", () => {
