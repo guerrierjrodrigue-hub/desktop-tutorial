@@ -33,6 +33,8 @@ export function RecipesSection({ recipes, dict }: { recipes: Recipe[]; dict: Dic
         </div>
       </div>
 
+      <p className="mb-4 text-xs text-faint">{dict["nutrition.recipesEstimateNote"]}</p>
+
       <div className="mb-4 flex flex-wrap gap-2">
         {CATEGORIES.map((c) => (
           <Badge
