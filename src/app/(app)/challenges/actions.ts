@@ -54,16 +54,23 @@ export async function createChallenge(input: CreateChallengeInput): Promise<Acti
  * `joined_at`), so "days left" is computed from this moment onward.
  * Idempotent — re-joining is a no-op.
  */
-export async function joinChallenge(challengeId: string): Promise<ActionResult> {
+export async function joinChallenge(
+  challengeId: string,
+  referredBy?: string | null,
+): Promise<ActionResult> {
   if (!challengeId) return { ok: false, error: "A challenge is required." };
 
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
 
+  // Credit the referrer only when it's a valid, different user.
+  const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  const referrer = referredBy && UUID.test(referredBy) && referredBy !== ctx.userId ? referredBy : null;
+
   const { error } = await ctx.supabase
     .from("challenge_participants")
     .upsert(
-      { challenge_id: challengeId, user_id: ctx.userId, progress: 0, points: 0 },
+      { challenge_id: challengeId, user_id: ctx.userId, progress: 0, points: 0, referred_by: referrer },
       { onConflict: "challenge_id,user_id", ignoreDuplicates: true },
     );
   if (error) return { ok: false, error: error.message };

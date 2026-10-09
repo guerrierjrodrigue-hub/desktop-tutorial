@@ -130,6 +130,10 @@ export interface Challenge {
   joined: boolean;
   progress: number; // 0..1
   type: "personal" | "friends" | "church";
+  /** Cohort start date (YYYY-MM-DD) when this is a group cohort. */
+  startDate?: string | null;
+  /** Invite code for the shareable /join/<code> link (cohorts). */
+  inviteCode?: string | null;
 }
 
 export interface DailyStats {
