@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Users } from "lucide-react";
+import { Users, AlertTriangle } from "lucide-react";
 import { MarketingNav } from "@/components/marketing/marketing-nav";
 import { MarketingFooter } from "@/components/marketing/marketing-footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getAuthedContext } from "@/lib/supabase/auth";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { getChallengeByInviteCode } from "@/lib/queries/challenges";
-import { joinChallenge } from "@/app/(app)/challenges/actions";
 import { cohortStartWeekday } from "@/lib/cohort";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
@@ -17,21 +17,24 @@ export default async function JoinPage({
   searchParams,
 }: {
   params: Promise<{ code: string }>;
-  searchParams: Promise<{ ref?: string }>;
+  searchParams: Promise<{ ref?: string; error?: string }>;
 }) {
   const { code } = await params;
-  const { ref } = await searchParams;
+  const { ref, error } = await searchParams;
   const locale = await getLocale();
   const dict = await getDictionary(locale);
-  const cohort = await getChallengeByInviteCode(code, locale);
 
-  // Signed in: join immediately (crediting the referrer) and go to challenges.
   const ctx = await getAuthedContext();
-  if (ctx && cohort) {
-    await joinChallenge(cohort.id, ref);
-    redirect("/challenges");
+  const demo = !isSupabaseConfigured();
+  const goHref = `/join/${code}/go${ref ? `?ref=${encodeURIComponent(ref)}` : ""}`;
+
+  // Signed-in (or demo) and nothing went wrong yet: hand off to the route
+  // handler, which does the join + redirect. We do NOT join during render.
+  if ((ctx || demo) && !error) {
+    redirect(goHref);
   }
 
+  const cohort = await getChallengeByInviteCode(code, locale);
   const summary = cohort
     ? dict["join.cohortSummary"]
         .replace("{n}", String(cohort.durationDays))
@@ -56,6 +59,13 @@ export default async function JoinPage({
             {dict["join.title"]}
           </h1>
 
+          {error && (
+            <p className="mt-4 inline-flex items-center gap-2 rounded-lg border border-red/30 bg-red/10 px-3 py-2 text-sm text-red-300">
+              <AlertTriangle className="size-4 shrink-0" />
+              {error === "notfound" ? dict["join.notFound"] : dict["join.error"]}
+            </p>
+          )}
+
           {cohort ? (
             <>
               <Card className="mt-8 w-full text-left">
@@ -65,20 +75,31 @@ export default async function JoinPage({
               </Card>
               <p className="mt-6 text-muted">{dict["join.subtitle"]}</p>
               <div className="mt-6 flex w-full flex-col gap-3 sm:flex-row sm:justify-center">
-                <Link href={signupHref}>
-                  <Button size="lg" className="w-full sm:w-auto">
-                    {dict["join.cta"]}
-                  </Button>
-                </Link>
-                <Link href={loginHref}>
-                  <Button size="lg" variant="secondary" className="w-full sm:w-auto">
-                    {dict["join.signInCta"]}
-                  </Button>
-                </Link>
+                {ctx ? (
+                  // Signed in but a previous attempt errored: let them retry.
+                  <Link href={goHref}>
+                    <Button size="lg" className="w-full sm:w-auto">
+                      {dict["join.retry"]}
+                    </Button>
+                  </Link>
+                ) : (
+                  <>
+                    <Link href={signupHref}>
+                      <Button size="lg" className="w-full sm:w-auto">
+                        {dict["join.cta"]}
+                      </Button>
+                    </Link>
+                    <Link href={loginHref}>
+                      <Button size="lg" variant="secondary" className="w-full sm:w-auto">
+                        {dict["join.signInCta"]}
+                      </Button>
+                    </Link>
+                  </>
+                )}
               </div>
             </>
           ) : (
-            <p className="mt-6 text-muted">{dict["join.notFound"]}</p>
+            !error && <p className="mt-6 text-muted">{dict["join.notFound"]}</p>
           )}
         </section>
       </main>

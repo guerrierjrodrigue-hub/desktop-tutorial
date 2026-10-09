@@ -434,6 +434,8 @@ const en = {
   "join.cta": "Join the cohort",
   "join.signInCta": "I already have an account",
   "join.notFound": "This invite link is invalid or has expired.",
+  "join.error": "We couldn't add you to the cohort. Please try again.",
+  "join.retry": "Try again",
   "share.streak": "Share my streak",
   "challenges.startOwn": "Start your own challenge",
   "challenges.startOwnSubtitle": "Rally your friends or your whole church.",
