@@ -48,6 +48,10 @@ const cspDirectives: Record<string, string> = {
   "frame-src": `'self' ${STRIPE_FRAME}`,
   "worker-src": "'self' blob:",
   "manifest-src": "'self'",
+  // Violation reporting: `report-to` (modern) + `report-uri` (legacy fallback),
+  // both pointing at the same-origin /api/csp-report route.
+  "report-to": "csp-endpoint",
+  "report-uri": "/api/csp-report",
   "upgrade-insecure-requests": "",
 };
 
@@ -66,6 +70,8 @@ const enforceCsp = process.env.CSP_ENFORCE === "1";
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  // Names the reporting group used by the CSP `report-to` directive above.
+  { key: "Reporting-Endpoints", value: 'csp-endpoint="/api/csp-report"' },
   { key: "X-Frame-Options", value: "DENY" },
   {
     key: "Permissions-Policy",
