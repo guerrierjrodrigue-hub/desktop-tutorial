@@ -171,6 +171,18 @@ export interface MemoryVerseRow {
   created_at: Timestamptz;
 }
 
+export interface BibleMarkRow {
+  id: string;
+  user_id: string;
+  translation: string;
+  book: string;
+  chapter: number;
+  verse: number;
+  kind: "bookmark" | "highlight";
+  color: string | null;
+  created_at: Timestamptz;
+}
+
 export interface CommunityPostRow {
   id: string;
   user_id: string;
@@ -312,6 +324,7 @@ export interface Database {
       recipes: T<RecipeRow>;
       prayer_requests: T<PrayerRequestRow>;
       memory_verses: T<MemoryVerseRow>;
+      bible_marks: T<BibleMarkRow>;
       community_posts: T<CommunityPostRow>;
       post_likes: T<PostLikeRow>;
       habits: T<HabitRow>;

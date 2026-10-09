@@ -169,6 +169,8 @@ export interface ReadingPlan {
   description: string;
   totalDays: number;
   completedDays: number;
+  /** The canonical English title, used to look up the day-by-day passage schedule. */
+  titleEn?: string;
 }
 
 export interface MemoryVerse {

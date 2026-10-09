@@ -91,3 +91,30 @@ export async function getMemoryVerses(locale: LocaleCode): Promise<MemoryVerse[]
     locale,
   );
 }
+
+export interface ChapterMarks {
+  bookmarks: number[];
+  highlights: number[];
+}
+
+/** The signed-in user's bookmarks + highlights for one chapter (empty in demo). */
+export async function getBibleMarks(
+  translation: string,
+  book: string,
+  chapter: number,
+): Promise<ChapterMarks> {
+  const ctx = await getAuthedContext();
+  if (!ctx) return { bookmarks: [], highlights: [] };
+
+  const { data } = await ctx.supabase
+    .from("bible_marks")
+    .select("verse, kind")
+    .match({ user_id: ctx.userId, translation, book, chapter });
+
+  const marks: ChapterMarks = { bookmarks: [], highlights: [] };
+  for (const row of data ?? []) {
+    if (row.kind === "bookmark") marks.bookmarks.push(row.verse);
+    else if (row.kind === "highlight") marks.highlights.push(row.verse);
+  }
+  return marks;
+}

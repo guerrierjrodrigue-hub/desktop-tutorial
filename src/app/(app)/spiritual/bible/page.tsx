@@ -5,6 +5,7 @@ import { Topbar } from "@/components/layout/topbar";
 import { PageHeader } from "@/components/layout/page-header";
 import { Card } from "@/components/ui/card";
 import { BibleControls } from "@/components/spiritual/bible-controls";
+import { BibleReader } from "@/components/spiritual/bible-reader";
 import {
   BIBLE_TRANSLATIONS,
   getBibleBooks,
@@ -12,6 +13,7 @@ import {
   isBibleTranslationId,
   type BibleTranslationId,
 } from "@/lib/bible";
+import { getBibleMarks } from "@/lib/queries/spiritual";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
@@ -30,7 +32,7 @@ function hrefFor(t: BibleTranslationId, b: string, c: number) {
 export default async function BiblePage({
   searchParams,
 }: {
-  searchParams: Promise<{ t?: string; b?: string; c?: string }>;
+  searchParams: Promise<{ t?: string; b?: string; c?: string; plan?: string; day?: string }>;
 }) {
   const params = await searchParams;
   const dict = await getDictionary(await getLocale());
@@ -48,6 +50,13 @@ export default async function BiblePage({
   const chapter = books.length
     ? await getBibleChapter(translationId, bookId, chapterNumber, numberOfChapters)
     : null;
+
+  const marks = chapter
+    ? await getBibleMarks(translationId, bookId, chapterNumber)
+    : { bookmarks: [], highlights: [] };
+
+  const planContext =
+    params.plan && params.day ? { planId: params.plan, day: Number(params.day) || 1 } : null;
 
   const bookIndex = books.findIndex((b) => b.id === bookId);
   const prev =
@@ -91,26 +100,17 @@ export default async function BiblePage({
             </div>
           ) : (
             <>
-              <h2 className="font-serif text-2xl font-semibold">
-                {chapter.bookName} {chapter.chapterNumber}
-              </h2>
-              <div className="mt-5 space-y-3 leading-relaxed">
-                {chapter.content.map((block, i) =>
-                  block.type === "heading" ? (
-                    <h3
-                      key={i}
-                      className="!mt-6 font-serif text-lg font-semibold text-gold-bright first:!mt-0"
-                    >
-                      {block.text}
-                    </h3>
-                  ) : (
-                    <p key={i}>
-                      <sup className="mr-1 text-xs font-semibold text-faint">{block.number}</sup>
-                      {block.text}
-                    </p>
-                  ),
-                )}
-              </div>
+              <BibleReader
+                translation={translationId}
+                book={bookId}
+                chapter={chapter.chapterNumber}
+                bookName={chapter.bookName}
+                content={chapter.content}
+                initialBookmarks={marks.bookmarks}
+                initialHighlights={marks.highlights}
+                plan={planContext}
+                dict={dict}
+              />
 
               <div className="mt-8 flex items-center justify-between border-t border-border pt-4">
                 {prev ? (
