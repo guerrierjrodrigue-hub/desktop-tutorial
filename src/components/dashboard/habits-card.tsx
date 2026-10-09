@@ -24,5 +24,11 @@ export async function HabitsCard() {
     );
   }
 
-  return <HabitsCardClient initial={habits} title={dict["dashboard.todaysHabits"]} />;
+  return (
+    <HabitsCardClient
+      initial={habits}
+      title={dict["dashboard.todaysHabits"]}
+      restLabel={dict["dashboard.restDay"]}
+    />
+  );
 }

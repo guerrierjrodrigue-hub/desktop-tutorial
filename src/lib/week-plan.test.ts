@@ -1,6 +1,33 @@
 import { describe, it, expect } from "vitest";
-import { buildWeekPlan, spreadTrainingDays } from "./week-plan";
+import {
+  buildWeekPlan,
+  spreadTrainingDays,
+  mondayIndexFromDateStr,
+  isRestWeekday,
+} from "./week-plan";
 import type { Program } from "@/types";
+
+describe("mondayIndexFromDateStr", () => {
+  it("maps calendar dates to a Monday-based weekday index", () => {
+    // 2026-10-05 is a Monday, 2026-10-11 a Sunday.
+    expect(mondayIndexFromDateStr("2026-10-05")).toBe(0); // Mon
+    expect(mondayIndexFromDateStr("2026-10-08")).toBe(3); // Thu
+    expect(mondayIndexFromDateStr("2026-10-11")).toBe(6); // Sun
+  });
+
+  it("is timezone-independent (pure calendar date)", () => {
+    expect(mondayIndexFromDateStr("2026-01-01")).toBe(mondayIndexFromDateStr("2026-01-01"));
+  });
+});
+
+describe("isRestWeekday", () => {
+  it("reads the rest/train pattern by weekday index", () => {
+    const days = spreadTrainingDays(3); // Mon/Wed/Fri train
+    expect(isRestWeekday(days, 0)).toBe(false); // Mon trains
+    expect(isRestWeekday(days, 1)).toBe(true); // Tue rests
+    expect(isRestWeekday(days, 3)).toBe(true); // Thu rests
+  });
+});
 
 type P = Omit<Program, "schedule">;
 const mk = (id: string, category: P["category"], level: P["level"]): P => ({

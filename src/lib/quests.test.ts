@@ -27,6 +27,34 @@ describe("getDailyQuests", () => {
     expect(habitsQuest.done).toBe(false);
   });
 
+  it("uses the workout quest on a training day", () => {
+    const quests = getDailyQuests(habits, true, false, { isRestDay: false });
+    const training = quests[1];
+    expect(training.id).toBe("workout");
+    expect(training.done).toBe(true);
+  });
+
+  it("swaps in a recovery quest on a rest day", () => {
+    const quests = getDailyQuests(habits, false, false, {
+      isRestDay: true,
+      recoveryDoneToday: false,
+    });
+    const training = quests[1];
+    expect(training.id).toBe("recovery");
+    expect(training.done).toBe(false);
+    // no "workout" quest on a rest day
+    expect(quests.some((q) => q.id === "workout")).toBe(false);
+  });
+
+  it("marks the recovery quest done when recovery happened", () => {
+    const quests = getDailyQuests(habits, false, false, {
+      isRestDay: true,
+      recoveryDoneToday: true,
+    });
+    expect(quests[1].id).toBe("recovery");
+    expect(quests[1].done).toBe(true);
+  });
+
   it("marks the workout and devotional quests from the flags passed in", () => {
     const quests = getDailyQuests(habits, true, false);
     expect(quests.find((q) => q.id === "workout")!.done).toBe(true);

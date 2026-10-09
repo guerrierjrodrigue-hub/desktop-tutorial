@@ -2,27 +2,17 @@ import { getAuthedContext } from "@/lib/supabase/auth";
 import { getUserToday, addDaysToDateStr } from "@/lib/date";
 import { getUserTimezone } from "@/lib/timezone";
 import { localizeHabitLabel } from "@/lib/content-i18n";
+import { getCurrentUser } from "@/lib/queries/profile";
+import { spreadTrainingDays, mondayIndexFromDateStr } from "@/lib/week-plan";
+import { computeStreak } from "@/lib/habit-streak";
 import { habits as mockHabits } from "@/data/dashboard";
 import type { LocaleCode } from "@/i18n/locales";
 import type { Habit } from "@/types";
 
-/**
- * Consecutive done-days ending on `todayStr` (or ending yesterday if today
- * isn't done yet). Works on YYYY-MM-DD strings so it's timezone-correct.
- */
-export function computeStreak(doneDates: Set<string>, todayStr: string): number {
-  let cursor = todayStr;
-  if (!doneDates.has(cursor)) {
-    cursor = addDaysToDateStr(cursor, -1);
-    if (!doneDates.has(cursor)) return 0;
-  }
-  let streak = 0;
-  while (doneDates.has(cursor)) {
-    streak++;
-    cursor = addDaysToDateStr(cursor, -1);
-  }
-  return streak;
-}
+export { computeStreak };
+
+/** The lucide icon that identifies the "complete workout" habit. */
+const WORKOUT_HABIT_ICON = "Dumbbell";
 
 /**
  * The signed-in user's habits with today's completion + running streak, with
@@ -57,14 +47,28 @@ export async function getHabits(locale: LocaleCode = "en"): Promise<Habit[]> {
     logsByHabit.get(log.habit_id)!.add(log.log_date);
   }
 
+  // Rest-day pattern from the user's weekly cadence (Mon→Sun). A planned rest
+  // day neither breaks the workout habit's streak nor counts against the user.
+  const user = await getCurrentUser();
+  const weekPattern = spreadTrainingDays(user.trainingDays ?? 3);
+  const isWorkoutRestDay = (dateStr: string) =>
+    weekPattern[mondayIndexFromDateStr(dateStr)] === "rest";
+  const todayIsRest = isWorkoutRestDay(todayStr);
+
   return habitRows.map((row) => {
     const doneDates = logsByHabit.get(row.id) ?? new Set<string>();
+    const isWorkoutHabit = row.icon === WORKOUT_HABIT_ICON;
     return {
       id: row.id,
       label: localizeHabitLabel(row.label, locale),
       icon: row.icon,
       done: doneDates.has(todayStr),
-      streak: computeStreak(doneDates, todayStr),
+      streak: computeStreak(
+        doneDates,
+        todayStr,
+        isWorkoutHabit ? isWorkoutRestDay : undefined,
+      ),
+      ...(isWorkoutHabit && todayIsRest ? { restExempt: true } : {}),
     };
   });
 }
