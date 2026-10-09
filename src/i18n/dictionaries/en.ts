@@ -383,6 +383,7 @@ const en = {
   "nutrition.defaultTargets": "Default targets — add your details in your profile to personalize them.",
   "nutrition.recipesTitle": "Recipes",
   "nutrition.recipesSubtitle": "High-protein, whole-food meals to fuel your training.",
+  "nutrition.recipesEstimateNote": "Nutrition values are rounded estimates, not medical advice.",
   "nutrition.noRecipesInCategory": "No recipes in this category yet.",
   "nutrition.categoryAll": "All",
   "nutrition.categoryWeightLoss": "Weight loss",

@@ -367,6 +367,7 @@ const fr: Dictionary = {
   "nutrition.defaultTargets": "Cibles par défaut — ajoute tes infos dans ton profil pour les personnaliser.",
   "nutrition.recipesTitle": "Recettes",
   "nutrition.recipesSubtitle": "Des repas riches en protéines et en aliments complets pour nourrir ton entraînement.",
+  "nutrition.recipesEstimateNote": "Les valeurs nutritionnelles sont des estimations arrondies, pas un avis médical.",
   "nutrition.noRecipesInCategory": "Aucune recette dans cette catégorie pour l'instant.",
   "nutrition.categoryAll": "Tous",
   "nutrition.categoryWeightLoss": "Perte de poids",

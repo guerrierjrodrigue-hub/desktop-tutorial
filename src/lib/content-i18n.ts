@@ -285,6 +285,10 @@ export function localizeExerciseName(name: string, locale: LocaleCode): string {
 
 /** Recipe tag, keyed by English tag. */
 export const TAG_FR: Record<string, string> = {
+  Estimated: "Estimation",
+  Caribbean: "Caraïbes",
+  "Québécois": "Québécois",
+  Vegetables: "Légumes",
   Breakfast: "Petit-déjeuner",
   Bulk: "Prise de masse",
   Comfort: "Réconfort",
@@ -319,6 +323,24 @@ export function localizeTags(tags: string[], locale: LocaleCode): string[] {
 
 /** Recipe name, keyed by English name. "Daniel Fast" → "jeûne de Daniel". */
 export const RECIPE_NAME_FR: Record<string, string> = {
+  "Haitian Rice & Beans (Diri ak Pwa)": "Riz et pois haïtiens",
+  "Grilled Snapper with Pikliz": "Vivaneau grillé et pikliz",
+  "Haitian Legim with Lean Beef": "Légume haïtien au bœuf maigre",
+  "Poulet Créole with Brown Rice": "Poulet créole et riz brun",
+  "Pikliz (Spicy Slaw)": "Pikliz (salade piquante)",
+  "Haitian Pumpkin Soup (Soup Joumou)": "Soupe joumou",
+  "Black Bean & Plantain Power Bowl": "Bol haricots noirs et banane plantain",
+  "Jerk Chicken & Mango Quinoa": "Poulet jerk et quinoa à la mangue",
+  "Coconut Fish Stew": "Poisson en sauce coco",
+  "Griot-Style Lean Pork with Cabbage": "Griot de porc maigre et chou",
+  "Haitian Cornmeal (Mayi Moulen) with Beans": "Mayi moulen aux haricots",
+  "Caribbean Green Smoothie (Lime & Mango)": "Smoothie vert caraïbe",
+  "Québécois Turkey Pâté Chinois": "Pâté chinois à la dinde",
+  "Maple-Dijon Salmon with Roasted Veg": "Saumon érable-dijon et légumes rôtis",
+  "Lighter Québec Baked Beans": "Fèves au lard allégées",
+  "Tourtière-Spiced Lean Bowl": "Bol épicé façon tourtière",
+  "Oatmeal with Québec Maple & Walnuts": "Gruau à l'érable et aux noix",
+  "Lentil Cretons-Style Spread on Rye": "Tartinade de lentilles façon cretons",
   "5-Minute Tuna Salad": "Salade de thon en 5 minutes",
   "Almond Butter Toast with Banana": "Toast au beurre d'amande et banane",
   "Almond-Crusted Baked Chicken Tenders": "Aiguillettes de poulet panées aux amandes",
