@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { getAuthedContext } from "@/lib/supabase/auth";
 import { getUserToday, addDaysToDateStr } from "@/lib/date";
 import { getUserTimezone } from "@/lib/timezone";
+import { resolveReferrer } from "@/lib/referral";
 import { type ActionResult, demoOk } from "@/lib/actions/result";
 
 export interface CreateChallengeInput {
@@ -64,8 +65,7 @@ export async function joinChallenge(
   if (!ctx) return demoOk;
 
   // Credit the referrer only when it's a valid, different user.
-  const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-  const referrer = referredBy && UUID.test(referredBy) && referredBy !== ctx.userId ? referredBy : null;
+  const referrer = resolveReferrer(referredBy, ctx.userId);
 
   const { error } = await ctx.supabase
     .from("challenge_participants")

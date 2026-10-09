@@ -415,6 +415,8 @@ const fr: Dictionary = {
   "join.cta": "Rejoindre la cohorte",
   "join.signInCta": "J'ai déjà un compte",
   "join.notFound": "Ce lien d'invitation est invalide ou expiré.",
+  "join.error": "Impossible de t'ajouter à la cohorte. Réessaie.",
+  "join.retry": "Réessayer",
   "share.streak": "Partager ma série",
   "challenges.startOwn": "Lance ton propre défi",
   "challenges.startOwnSubtitle": "Rallie tes amis ou toute ton église.",
