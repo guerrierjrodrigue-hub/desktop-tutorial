@@ -19,7 +19,7 @@ const fr: Dictionary = {
   "nav.profile": "Profil",
   "nav.admin": "Admin",
   "nav.goPremium": "Passer Premium",
-  "nav.goPremiumBlurb": "Débloquez tous les programmes, le coaching de Barnabas et des analyses avancées.",
+  "nav.goPremiumBlurb": "Débloque tous les programmes, le coaching de Barnabas et des analyses avancées.",
   "nav.startFreeTrial": "Démarrer l'essai gratuit",
 
   "common.save": "Enregistrer",
@@ -232,7 +232,7 @@ const fr: Dictionary = {
   "dashboard.startWorkout": "Commencer l'entraînement",
 
   "settings.languageTitle": "Langue",
-  "settings.languageSubtitle": "Choisissez la langue d'affichage de Kingdom Athlete.",
+  "settings.languageSubtitle": "Choisis la langue d'affichage de Kingdom Athlete.",
 
   "reminders.title": "Rappels",
   "reminders.subtitle": "Reçois un rappel quotidien — un verset ou une citation, et un rappel pour ton entraînement.",
@@ -243,7 +243,7 @@ const fr: Dictionary = {
   "reminders.workoutReminder": "Rappel d'entraînement",
 
   "spiritual.title": "Spirituel",
-  "spiritual.subtitle": "Entraînez l'âme avec la même discipline que le corps.",
+  "spiritual.subtitle": "Entraîne l'âme avec la même discipline que le corps.",
   "spiritual.verseOfDay": "Verset du jour",
   "spiritual.prayerOfDay": "Prière du jour",
   "spiritual.openDevotional": "Ouvrir la méditation du jour",
@@ -253,18 +253,18 @@ const fr: Dictionary = {
   "spiritual.verseMemorization": "Mémorisation de versets",
   "spiritual.mastered": "maîtrisé",
   "spiritual.bible": "Bible",
-  "spiritual.bibleSubtitle": "Lisez la Bible complète en français ou en anglais.",
+  "spiritual.bibleSubtitle": "Lis la Bible complète en français ou en anglais.",
   "spiritual.readBible": "Lire la Bible",
   "spiritual.selectBook": "Livre",
   "spiritual.selectChapter": "Chapitre",
   "spiritual.selectTranslation": "Traduction",
 
   "empty.noHabitsYet": "Aucune habitude pour l'instant.",
-  "empty.addFirstHabit": "Ajoutez la première",
+  "empty.addFirstHabit": "Ajoute la première",
   "empty.noChallengesYet": "Aucun défi pour l'instant.",
   "empty.browseChallenges": "Parcourir les défis",
-  "empty.noOneOnLeaderboard": "Personne n'a encore rejoint de défi — soyez le premier.",
-  "empty.noChallengesAvailable": "Aucun défi n'est disponible pour le moment — revenez bientôt.",
+  "empty.noOneOnLeaderboard": "Personne n'a encore rejoint de défi — sois le premier.",
+  "empty.noChallengesAvailable": "Aucun défi n'est disponible pour le moment — reviens bientôt.",
 
   "onboarding.step": "Étape",
   "onboarding.of": "sur",
@@ -321,7 +321,7 @@ const fr: Dictionary = {
   "recommendations.takeFocusSession": "Faire une session Focus",
   "recommendations.focusDescription": "Une pause calme de 15 minutes peut relancer ton élan.",
   "recommendations.joinChallenge": "Rejoindre un défi",
-  "recommendations.communityDescription": "Le fer aiguise le fer — trouvez du soutien dans la Communauté.",
+  "recommendations.communityDescription": "Le fer aiguise le fer — trouve du soutien dans la Communauté.",
 
   "fitness.title": "Programmes",
   "fitness.subtitle": "Entraîne-toi avec intention. Chaque programme est conçu autour de la progression, de la forme et du repos.",
@@ -339,14 +339,14 @@ const fr: Dictionary = {
   "fitness.perSession": "/ séance",
   "fitness.startWeek": "Commencer la semaine {week}",
   "fitness.week": "Semaine {week}",
-  "fitness.progressiveOverload": "{weeks} semaines de surcharge progressive — augmentez la charge ou les répétitions chaque semaine à mesure que cela devient plus facile.",
+  "fitness.progressiveOverload": "{weeks} semaines de surcharge progressive — augmente la charge ou les répétitions chaque semaine à mesure que cela devient plus facile.",
   "fitness.start": "Commencer",
   "fitness.restSeconds": "{seconds}s de repos",
   "fitness.workoutFallback": "Séance",
 
   // Page Bible (la traduction du texte est gérée séparément par BIBLE_TRANSLATIONS)
   "bible.metaTitle": "Bible",
-  "bible.metaDescription": "Lisez la Bible complète en français (Louis Segond 1910) ou en anglais (World English Bible).",
+  "bible.metaDescription": "Lis la Bible complète en français (Louis Segond 1910) ou en anglais (World English Bible).",
   "bible.title": "Bible",
   "bible.subtitle": "La Bible complète, en lecture libre — Louis Segond 1910 (français) et la World English Bible.",
   "bible.error": "La Bible n'a pas pu être chargée pour le moment — vérifie ta connexion et réessaie.",
@@ -454,7 +454,7 @@ const fr: Dictionary = {
 
   // Page Contact
   "mkt.contact.metaTitle": "Contact",
-  "mkt.contact.metaDescription": "Contactez l'équipe Kingdom Athlete.",
+  "mkt.contact.metaDescription": "Contacte l'équipe Kingdom Athlete.",
   "mkt.contact.badge": "Contact",
   "mkt.contact.title": "Nous aimerions avoir de tes nouvelles",
   "mkt.contact.subtitle":
@@ -577,9 +577,9 @@ const fr: Dictionary = {
   "mkt.careers.metaTitle": "Carrières",
   "mkt.careers.metaDescription": "Kingdom Athlete est une petite équipe indépendante — voici comment nous joindre.",
   "mkt.careers.title": "Nous ne recrutons pas pour le moment",
-  "mkt.careers.subtitle": "Kingdom Athlete est bâti par une petite équipe indépendante. Nous n'avons pas de postes ouverts aujourd'hui, mais nous sommes toujours ravis d'échanger avec des personnes qui tiennent à la fois au travail bien fait et à la vocation — gardez-nous en tête quand cela changera.",
+  "mkt.careers.subtitle": "Kingdom Athlete est bâti par une petite équipe indépendante. Nous n'avons pas de postes ouverts aujourd'hui, mais nous sommes toujours ravis d'échanger avec des personnes qui tiennent à la fois au travail bien fait et à la vocation — garde-nous en tête quand cela changera.",
   "mkt.careers.helloPre": "Envie de dire bonjour quand même ? ",
-  "mkt.careers.helloLink": "Écrivez-nous",
+  "mkt.careers.helloLink": "Écris-nous",
   "mkt.careers.helloPost": " — nous lisons tout, même si nous ne pouvons pas toujours répondre rapidement.",
   "mkt.careers.mailSubject": "Bonjour d'un futur coéquipier",
   "mkt.careers.ctaTitle": "Curieux de ce que nous construisons ?",
