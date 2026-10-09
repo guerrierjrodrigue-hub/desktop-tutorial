@@ -9,7 +9,7 @@ export async function StatsCard() {
   const [s, dict] = await Promise.all([getTodayStats(), getDictionary(await getLocale())]);
   const rings = [
     {
-      label: "Calories",
+      label: dict["stats.calories"],
       icon: Flame,
       value: s.caloriesBurned,
       goal: s.caloriesGoal,
@@ -17,7 +17,7 @@ export async function StatsCard() {
       color: "text-gold",
     },
     {
-      label: "Active",
+      label: dict["stats.active"],
       icon: Timer,
       value: s.activeMinutes,
       goal: s.activeMinutesGoal,
@@ -25,7 +25,7 @@ export async function StatsCard() {
       color: "text-green-bright",
     },
     {
-      label: "Water",
+      label: dict["stats.water"],
       icon: Droplets,
       value: s.waterMl / 1000,
       goal: s.waterGoalMl / 1000,

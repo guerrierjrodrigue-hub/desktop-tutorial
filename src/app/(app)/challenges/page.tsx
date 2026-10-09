@@ -8,10 +8,13 @@ import { getChallenges, getChallengeLeaderboard } from "@/lib/queries/challenges
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
-export const metadata: Metadata = {
-  title: "Challenges",
-  description: "Personal, friend, and church challenges. Compete, encourage, and grow together.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary(await getLocale());
+  return {
+    title: dict["meta.challenges"],
+    description: "Personal, friend, and church challenges. Compete, encourage, and grow together.",
+  };
+}
 
 export default async function ChallengesPage() {
   const locale = await getLocale();

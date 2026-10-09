@@ -431,3 +431,37 @@ export const RECIPE_NAME_FR: Record<string, string> = {
 export function localizeRecipeName(name: string, locale: LocaleCode): string {
   return locale === "fr" ? RECIPE_NAME_FR[name] ?? name : name;
 }
+
+// ---------------------------------------------------------------------------
+// Reading plans (Q3). Keyed by English title; demo + DB rows localize here.
+// ---------------------------------------------------------------------------
+
+/** Reading plan title + description, keyed by English title. */
+export const READING_PLAN_FR: Record<string, { title: string; description: string }> = {
+  "The Gospels in 30 Days": {
+    title: "Les Évangiles en 30 jours",
+    description: "Parcours la vie de Jésus, un chapitre à la fois.",
+  },
+  "Psalms of Strength": {
+    title: "Psaumes de force",
+    description: "31 jours de courage, de refuge et de louange.",
+  },
+  "Proverbs for Discipline": {
+    title: "Proverbes pour la discipline",
+    description: "Sagesse quotidienne pour une vie disciplinée.",
+  },
+  "Fitness & Faith": {
+    title: "Forme et foi",
+    description: "Lectures choisies sur la gérance du corps.",
+  },
+};
+
+/** Localize a reading plan's title + description by its English title. */
+export function localizeReadingPlan<T extends { title: string; description: string }>(
+  plan: T,
+  locale: LocaleCode,
+): T {
+  if (locale !== "fr") return plan;
+  const fr = READING_PLAN_FR[plan.title];
+  return fr ? { ...plan, title: fr.title, description: fr.description } : plan;
+}

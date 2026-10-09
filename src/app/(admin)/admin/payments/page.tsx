@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 import { AdminHeader } from "@/components/admin/admin-header";
 import { DataTable } from "@/components/admin/data-table";
 import { StatusPill } from "@/components/admin/status-pill";
 import { Card } from "@/components/ui/card";
 import { getRecentPayments } from "@/lib/queries/admin-stats";
 
-export const metadata: Metadata = { title: "Admin · Payments" };
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary(await getLocale());
+  return {
+    title: dict["meta.adminPayments"],
+  };
+}
 
 export default async function AdminPaymentsPage() {
   const payments = await getRecentPayments(20);

@@ -4,15 +4,17 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { getCurrentUser } from "@/lib/queries/profile";
 import { getHabits } from "@/lib/queries/habits";
 import { getRecommendations } from "@/lib/recommendations";
-import { programs } from "@/data/programs";
+import { getPrograms } from "@/lib/queries/programs";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
 export async function RecommendationsCard() {
-  const [user, habits, dict] = await Promise.all([
+  const locale = await getLocale();
+  const [user, habits, programs, dict] = await Promise.all([
     getCurrentUser(),
-    getHabits(),
-    getDictionary(await getLocale()),
+    getHabits(locale),
+    getPrograms(locale),
+    getDictionary(locale),
   ]);
   const recs = getRecommendations(user, programs, habits, dict);
   if (!recs.length) return null;

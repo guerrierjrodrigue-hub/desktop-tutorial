@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
 import Link from "next/link";
 import { TrendingUp, TrendingDown, ArrowRight } from "lucide-react";
 import { AdminHeader } from "@/components/admin/admin-header";
@@ -7,7 +9,12 @@ import { DataTable } from "@/components/admin/data-table";
 import { StatusPill } from "@/components/admin/status-pill";
 import { getAdminStats, getRecentUsers, getAdminLogs } from "@/lib/queries/admin-stats";
 
-export const metadata: Metadata = { title: "Admin · Overview" };
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary(await getLocale());
+  return {
+    title: dict["meta.adminOverview"],
+  };
+}
 
 const logColor: Record<string, string> = {
   info: "text-green-bright",
