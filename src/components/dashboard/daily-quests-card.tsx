@@ -3,6 +3,7 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { getDailyQuests, type Quest } from "@/lib/quests";
 import { getHabits } from "@/lib/queries/habits";
 import { getWorkoutDoneToday } from "@/lib/queries/stats";
+import { getTodayPlan } from "@/lib/queries/today-plan";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 import type { Dictionary } from "@/i18n/dictionaries/en";
@@ -16,19 +17,27 @@ function questLabel(quest: Quest, dict: Dictionary): string {
     return template.replace("{n}", String(n));
   }
   if (quest.id === "workout") return dict["quests.workout"];
+  if (quest.id === "recovery") return dict["quests.recovery"];
   if (quest.id === "devotional") return dict["quests.devotional"];
   return quest.label;
 }
 
 export async function DailyQuestsCard() {
   const locale = await getLocale();
-  const [habits, workoutDone, dict] = await Promise.all([
+  const [habits, workoutDone, today, dict] = await Promise.all([
     getHabits(locale),
     getWorkoutDoneToday(),
+    getTodayPlan(locale),
     getDictionary(locale),
   ]);
   const devotionalDone = false; // no per-day devotional-completion tracking yet
-  const quests = getDailyQuests(habits, workoutDone, devotionalDone);
+  // Recovery counts as done if they did any non-workout habit (prayer, water,
+  // journal…) or trained anyway.
+  const recoveryDoneToday = workoutDone || habits.some((h) => h.done && h.icon !== "Dumbbell");
+  const quests = getDailyQuests(habits, workoutDone, devotionalDone, {
+    isRestDay: today.isRestDay,
+    recoveryDoneToday,
+  });
   const earnedXp = quests.reduce((sum, q) => sum + (q.done ? q.xp : 0), 0);
 
   return (

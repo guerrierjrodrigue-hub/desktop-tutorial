@@ -8,10 +8,21 @@ import { toggleHabit } from "@/app/(app)/dashboard/actions";
 import { cn } from "@/lib/utils";
 import type { Habit } from "@/types";
 
-export function HabitsCardClient({ initial, title }: { initial: Habit[]; title: string }) {
+export function HabitsCardClient({
+  initial,
+  title,
+  restLabel,
+}: {
+  initial: Habit[];
+  title: string;
+  restLabel: string;
+}) {
   const [habits, setHabits] = useState(initial);
   const [, startTransition] = useTransition();
-  const done = habits.filter((h) => h.done).length;
+  // Rest-exempt (planned rest-day) habits are optional today, so they don't
+  // count toward the "X of Y done" tally — resting carries no penalty.
+  const counted = habits.filter((h) => !h.restExempt);
+  const done = counted.filter((h) => h.done).length;
 
   function toggle(id: string) {
     let nextDone = false;
@@ -36,7 +47,7 @@ export function HabitsCardClient({ initial, title }: { initial: Habit[]; title: 
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <span className="text-xs font-semibold text-gold-bright">
-          {done}/{habits.length}
+          {done}/{counted.length}
         </span>
       </CardHeader>
       <ul className="space-y-2">
@@ -73,6 +84,11 @@ export function HabitsCardClient({ initial, title }: { initial: Habit[]; title: 
                 )}
               >
                 {habit.label}
+                {habit.restExempt && (
+                  <span className="ml-2 rounded-full bg-green/15 px-2 py-0.5 text-[10px] font-semibold uppercase text-green-bright">
+                    {restLabel}
+                  </span>
+                )}
               </span>
               <span className="flex items-center gap-1 text-xs text-faint">
                 <Flame className="size-3.5 text-gold/70" />

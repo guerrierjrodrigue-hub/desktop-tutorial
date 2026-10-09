@@ -36,6 +36,22 @@ export function spreadTrainingDays(n: number): ("train" | "rest")[] {
 }
 
 /**
+ * Monday-based weekday index (Mon=0 … Sun=6) for a `YYYY-MM-DD` calendar date.
+ * Timezone-independent: it reads the calendar date the user is already on, so
+ * callers pass `getUserToday(tz)` rather than a raw Date.
+ */
+export function mondayIndexFromDateStr(dateStr: string): number {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const dow = new Date(Date.UTC(y, (m ?? 1) - 1, d ?? 1)).getUTCDay(); // 0 = Sunday
+  return (dow + 6) % 7;
+}
+
+/** Whether `weekday` (Monday-based index) is a rest day in this week pattern. */
+export function isRestWeekday(days: ("train" | "rest")[], weekday: number): boolean {
+  return days[weekday] === "rest";
+}
+
+/**
  * Choose a program and a weekly cadence from the user's level, equipment, and
  * goals — a small, explainable rule, not an ML planner.
  */

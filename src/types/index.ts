@@ -103,6 +103,9 @@ export interface Habit {
   icon: string; // lucide icon name
   done: boolean;
   streak: number;
+  /** Today is a planned rest day for this habit (workout habit only): it's
+   * optional and not counted against the user, and rest days don't break its streak. */
+  restExempt?: boolean;
 }
 
 export interface Badge {
