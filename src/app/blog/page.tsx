@@ -37,7 +37,7 @@ export default async function BlogIndexPage() {
       <main className="flex-1">
         <section className="mx-auto max-w-3xl px-6 pb-8 pt-20 text-center">
           <Reveal>
-            <Badge variant="gold">{dict["mkt.blog.badge"]}</Badge>
+            <Badge variant="accent">{dict["mkt.blog.badge"]}</Badge>
             <h1 className="mt-4 font-serif text-4xl font-semibold tracking-tight sm:text-5xl">
               {dict["mkt.blog.title"]}
             </h1>
@@ -52,15 +52,15 @@ export default async function BlogIndexPage() {
             {posts.map((post, i) => (
               <Reveal key={post.slug} delay={i * 0.05}>
                 <Link href={`/blog/${post.slug}`} className="group block">
-                  <article className="glass rounded-2xl border border-border p-6 transition hover:border-gold/30 sm:p-8">
+                  <article className="glass rounded-2xl border border-border p-6 transition hover:border-accent/30 sm:p-8">
                     <p className="text-xs text-faint">
                       {formatDate(post.date, locale)} · {post.readMinutes} {dict["mkt.blog.minRead"]} · {post.author}
                     </p>
-                    <h2 className="mt-2 font-serif text-2xl font-semibold transition group-hover:text-gold-bright">
+                    <h2 className="mt-2 font-serif text-2xl font-semibold transition group-hover:text-accent-bright">
                       {post.title}
                     </h2>
                     <p className="mt-2 text-sm leading-relaxed text-muted">{post.excerpt}</p>
-                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-gold-bright">
+                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-accent-bright">
                       {dict["mkt.blog.readMore"]}
                       <ArrowRight className="size-4 transition group-hover:translate-x-0.5" />
                     </span>

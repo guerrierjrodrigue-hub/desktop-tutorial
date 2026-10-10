@@ -7,11 +7,11 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        gold: "bg-gold/12 text-gold-bright border border-gold/25",
+        accent: "bg-accent/12 text-accent-bright border border-accent/25",
         green: "bg-green/25 text-green-bright border border-green-bright/25",
         neutral: "bg-surface-2 text-muted border border-border",
         premium:
-          "bg-gradient-to-r from-gold/20 to-bronze/20 text-gold-bright border border-gold/30",
+          "bg-gradient-to-r from-accent/20 to-ember/20 text-accent-bright border border-accent/30",
       },
     },
     defaultVariants: { variant: "neutral" },

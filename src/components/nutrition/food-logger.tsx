@@ -61,7 +61,7 @@ export function FoodLogger({ initial, dict }: { initial: FoodLogEntry[]; dict: D
             placeholder={dict["nutrition.foodNamePlaceholder"]}
             aria-label={dict["nutrition.foodNameAria"]}
             autoFocus
-            className="h-10 w-full rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-gold/40 focus:ring-2 focus:ring-gold/20"
+            className="h-10 w-full rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/20"
           />
           <div className="flex gap-2">
             <input
@@ -71,7 +71,7 @@ export function FoodLogger({ initial, dict }: { initial: FoodLogEntry[]; dict: D
               type="number"
               min={0}
               aria-label={dict["nutrition.caloriesAria"]}
-              className="h-10 w-full rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-gold/40 focus:ring-2 focus:ring-gold/20"
+              className="h-10 w-full rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/20"
             />
             <input
               value={protein}
@@ -80,7 +80,7 @@ export function FoodLogger({ initial, dict }: { initial: FoodLogEntry[]; dict: D
               type="number"
               min={0}
               aria-label={dict["nutrition.proteinAria"]}
-              className="h-10 w-full rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-gold/40 focus:ring-2 focus:ring-gold/20"
+              className="h-10 w-full rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/20"
             />
           </div>
           <Button type="submit" size="sm" className="w-full" disabled={!name.trim()}>
@@ -105,7 +105,7 @@ export function FoodLogger({ initial, dict }: { initial: FoodLogEntry[]; dict: D
                 <span className="font-medium">{e.name}</span>
                 <span className="flex items-center gap-3 text-muted">
                   <span className="flex items-center gap-1">
-                    <Flame className="size-3.5 text-gold/70" />
+                    <Flame className="size-3.5 text-ember/70" />
                     {e.calories}
                   </span>
                   <span>P {e.proteinG}g</span>

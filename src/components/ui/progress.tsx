@@ -18,7 +18,7 @@ export function Progress({ value, className, barClassName }: ProgressProps) {
     >
       <div
         className={cn(
-          "h-full rounded-full bg-gradient-to-r from-gold to-gold-bright transition-[width] duration-700 ease-out",
+          "h-full rounded-full bg-gradient-to-r from-ember-deep to-ember transition-[width] duration-700 ease-out",
           barClassName,
         )}
         style={{ width: `${pct}%` }}

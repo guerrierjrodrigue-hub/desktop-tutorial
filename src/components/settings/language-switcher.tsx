@@ -47,8 +47,8 @@ export function LanguageSwitcher({
             className={cn(
               "rounded-xl border px-3 py-2.5 text-sm font-medium transition disabled:opacity-60",
               currentLocale === locale.code
-                ? "border-gold/50 bg-gold/15 text-gold-bright"
-                : "border-border bg-surface-2 hover:border-gold/30",
+                ? "border-accent/50 bg-accent/15 text-accent-bright"
+                : "border-border bg-surface-2 hover:border-accent/30",
             )}
           >
             {locale.nativeLabel}

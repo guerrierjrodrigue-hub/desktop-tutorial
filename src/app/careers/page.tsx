@@ -26,7 +26,7 @@ export default async function CareersPage() {
       <main className="flex-1">
         <section className="mx-auto max-w-3xl px-6 pb-8 pt-20 text-center">
           <Reveal>
-            <Badge variant="gold">{dict["mkt.footer.careers"]}</Badge>
+            <Badge variant="accent">{dict["mkt.footer.careers"]}</Badge>
             <h1 className="mt-4 font-serif text-4xl font-semibold tracking-tight sm:text-5xl">
               {dict["mkt.careers.title"]}
             </h1>
@@ -42,7 +42,7 @@ export default async function CareersPage() {
               {dict["mkt.careers.helloPre"]}
               <a
                 href={`mailto:${APP_SUPPORT_EMAIL}?subject=${encodeURIComponent(dict["mkt.careers.mailSubject"])}`}
-                className="font-medium text-gold-bright hover:underline"
+                className="font-medium text-accent-bright hover:underline"
               >
                 {dict["mkt.careers.helloLink"]}
               </a>
@@ -52,7 +52,7 @@ export default async function CareersPage() {
         </section>
 
         <section className="mx-auto max-w-5xl px-6 pb-20">
-          <Reveal className="glass ring-gold relative overflow-hidden rounded-3xl border border-gold/20 px-8 py-12 text-center sm:px-12">
+          <Reveal className="glass ring-accent relative overflow-hidden rounded-3xl border border-accent/20 px-8 py-12 text-center sm:px-12">
             <h2 className="font-serif text-2xl font-semibold tracking-tight sm:text-3xl">
               {dict["mkt.careers.ctaTitle"]}
             </h2>

@@ -7,7 +7,7 @@ const styles: Record<string, string> = {
   past_due: "bg-warning/15 text-warning",
   failed: "bg-danger/15 text-danger",
   Draft: "bg-surface-2 text-muted",
-  Scheduled: "bg-gold/12 text-gold-bright",
+  Scheduled: "bg-accent/12 text-accent-bright",
 };
 
 export function StatusPill({ status }: { status: string }) {

@@ -14,7 +14,7 @@ export async function StatsCard() {
       value: s.caloriesBurned,
       goal: s.caloriesGoal,
       unit: "kcal",
-      color: "text-gold",
+      color: "text-accent",
     },
     {
       label: dict["stats.active"],
@@ -30,7 +30,7 @@ export async function StatsCard() {
       value: s.waterMl / 1000,
       goal: s.waterGoalMl / 1000,
       unit: "L",
-      color: "text-bronze",
+      color: "text-ember",
     },
   ];
 

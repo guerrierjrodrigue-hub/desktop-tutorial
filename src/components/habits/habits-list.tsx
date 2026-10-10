@@ -68,7 +68,7 @@ export function HabitsList({
     <Card>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
-        <span className="text-xs font-semibold text-gold-bright">
+        <span className="text-xs font-semibold text-accent-bright">
           {done}/{habits.length}
         </span>
       </CardHeader>
@@ -83,7 +83,7 @@ export function HabitsList({
                 "flex w-full items-center gap-3 rounded-xl border p-3 text-left transition",
                 habit.done
                   ? "border-green-bright/30 bg-green/15"
-                  : "border-border bg-surface-2 hover:border-gold/30",
+                  : "border-border bg-surface-2 hover:border-accent/30",
               )}
             >
               <span
@@ -98,7 +98,7 @@ export function HabitsList({
                 {habit.label}
               </span>
               <span className="flex items-center gap-1 text-xs text-faint">
-                <Flame className="size-3.5 text-gold/70" />
+                <Flame className="size-3.5 text-ember/70" />
                 {habit.streak}
               </span>
             </button>
@@ -113,7 +113,7 @@ export function HabitsList({
             value={label}
             onChange={(e) => setLabel(e.target.value)}
             placeholder={dict["habits.namePlaceholder"]}
-            className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-gold/40"
+            className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-accent/40"
           />
           <div className="flex flex-wrap gap-2">
             {ICON_CHOICES.map((choice) => (
@@ -125,8 +125,8 @@ export function HabitsList({
                 className={cn(
                   "grid size-9 place-items-center rounded-lg border transition",
                   icon === choice
-                    ? "border-gold/50 bg-gold/15 text-gold-bright"
-                    : "border-border bg-surface text-muted hover:border-gold/30",
+                    ? "border-accent/50 bg-accent/15 text-accent-bright"
+                    : "border-border bg-surface text-muted hover:border-accent/30",
                 )}
               >
                 <Icon name={choice} className="size-4" />

@@ -24,7 +24,7 @@ export function MobileNav({ dict }: { dict: Dictionary }) {
             aria-current={active ? "page" : undefined}
             className={cn(
               "flex flex-1 flex-col items-center gap-1 py-2.5 text-xs font-medium transition-colors",
-              active ? "text-gold-bright" : "text-faint",
+              active ? "text-accent-bright" : "text-faint",
             )}
           >
             <item.icon className="size-5" />

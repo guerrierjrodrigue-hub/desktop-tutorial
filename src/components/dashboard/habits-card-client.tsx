@@ -46,7 +46,7 @@ export function HabitsCardClient({
     <Card>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
-        <span className="text-xs font-semibold text-gold-bright">
+        <span className="text-xs font-semibold text-accent-bright">
           {done}/{counted.length}
         </span>
       </CardHeader>
@@ -60,7 +60,7 @@ export function HabitsCardClient({
                 "flex w-full items-center gap-3 rounded-xl border p-3 text-left transition",
                 habit.done
                   ? "border-green-bright/30 bg-green/15"
-                  : "border-border bg-surface-2 hover:border-gold/30",
+                  : "border-border bg-surface-2 hover:border-accent/30",
               )}
             >
               <span
@@ -91,7 +91,7 @@ export function HabitsCardClient({
                 )}
               </span>
               <span className="flex items-center gap-1 text-xs text-faint">
-                <Flame className="size-3.5 text-gold/70" />
+                <Flame className="size-3.5 text-ember/70" />
                 {habit.streak}
               </span>
             </button>

@@ -80,7 +80,7 @@ export async function WorkoutCard() {
               className="flex items-center justify-between rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm"
             >
               <span className="flex items-center gap-2.5">
-                <Dumbbell className="size-4 text-gold/70" />
+                <Dumbbell className="size-4 text-accent/70" />
                 {ex.name}
               </span>
               <span className="text-muted">

@@ -120,7 +120,7 @@ export function BibleReader({
           if (block.type === "heading") {
             if (q) return null; // hide section headings while searching
             return (
-              <h3 key={i} className="!mt-6 font-serif text-lg font-semibold text-gold-bright first:!mt-0">
+              <h3 key={i} className="!mt-6 font-serif text-lg font-semibold text-accent-bright first:!mt-0">
                 {block.text}
               </h3>
             );
@@ -134,7 +134,7 @@ export function BibleReader({
               key={i}
               className={cn(
                 "group rounded-lg px-2 py-1 transition",
-                isHl ? "bg-gold/15" : "hover:bg-surface-2",
+                isHl ? "bg-accent/15" : "hover:bg-surface-2",
               )}
             >
               <p>
@@ -147,14 +147,14 @@ export function BibleReader({
                   active={isBm}
                   onClick={() => onToggle(block.number, "bookmark")}
                 >
-                  <Bookmark className={cn("size-3.5", isBm && "fill-gold-bright text-gold-bright")} />
+                  <Bookmark className={cn("size-3.5", isBm && "fill-accent-bright text-accent-bright")} />
                 </VerseAction>
                 <VerseAction
                   label={dict["bible.highlight"]}
                   active={isHl}
                   onClick={() => onToggle(block.number, "highlight")}
                 >
-                  <Highlighter className={cn("size-3.5", isHl && "text-gold-bright")} />
+                  <Highlighter className={cn("size-3.5", isHl && "text-accent-bright")} />
                 </VerseAction>
                 <VerseAction
                   label={dict["bible.memorize"]}
@@ -232,7 +232,7 @@ function highlightMatch(text: string, q: string) {
     }
     if (found > i) parts.push(text.slice(i, found));
     parts.push(
-      <mark key={key++} className="rounded bg-gold/30 text-foreground">
+      <mark key={key++} className="rounded bg-accent/30 text-foreground">
         {text.slice(found, found + q.length)}
       </mark>,
     );

@@ -27,7 +27,7 @@ export async function BadgesCard() {
             className={cn(
               "flex flex-col items-center gap-1.5 rounded-xl border p-3 text-center transition",
               badge.earned
-                ? "border-gold/25 bg-gold/8"
+                ? "border-accent/25 bg-accent/8"
                 : "border-border bg-surface-2 opacity-50",
             )}
           >
@@ -35,7 +35,7 @@ export async function BadgesCard() {
               className={cn(
                 "grid size-10 place-items-center rounded-full",
                 badge.earned
-                  ? "bg-gradient-to-br from-gold-bright to-gold-deep text-background"
+                  ? "bg-gradient-to-br from-accent-bright to-accent-deep text-accent-fg"
                   : "bg-elevated text-faint",
               )}
             >

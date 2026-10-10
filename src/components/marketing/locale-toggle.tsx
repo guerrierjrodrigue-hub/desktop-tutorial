@@ -38,7 +38,7 @@ export function LocaleToggle({ current, label }: { current: LocaleCode; label: s
           className={cn(
             "rounded-full px-2.5 py-1 uppercase transition disabled:opacity-60",
             current === locale.code
-              ? "bg-gold/15 text-gold-bright"
+              ? "bg-accent/15 text-accent-bright"
               : "text-muted hover:text-foreground",
           )}
         >

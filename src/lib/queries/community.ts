@@ -42,7 +42,7 @@ export async function getGroups(): Promise<CommunityGroup[]> {
   }));
 }
 
-const AVATAR_COLORS = ["#1e7a1b", "#c60d40", "#00838d", "#b8860b", "#5b3fa0", "#2f6f6e"];
+const AVATAR_COLORS = ["#2e7d3a", "#c9811f", "#00838d", "#b8860b", "#5b3fa0", "#2f6f6e"];
 
 /** Deterministic color per author so the same person always gets the same avatar color. */
 function colorFor(id: string): string {

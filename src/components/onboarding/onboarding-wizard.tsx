@@ -127,12 +127,12 @@ export function OnboardingWizard({
                   className={cn(
                     "flex items-center justify-between rounded-xl border px-4 py-3 text-left text-sm font-medium transition",
                     language === l.code
-                      ? "border-gold/50 bg-gold/10 text-foreground"
-                      : "border-border bg-surface-2 text-muted hover:border-gold/30",
+                      ? "border-accent/50 bg-accent/10 text-foreground"
+                      : "border-border bg-surface-2 text-muted hover:border-accent/30",
                   )}
                 >
                   {l.nativeLabel}
-                  {language === l.code && <Check className="size-4 shrink-0 text-gold-bright" />}
+                  {language === l.code && <Check className="size-4 shrink-0 text-accent-bright" />}
                 </button>
               ))}
             </div>
@@ -159,12 +159,12 @@ export function OnboardingWizard({
                     className={cn(
                       "flex items-center justify-between rounded-xl border px-4 py-3 text-left text-sm font-medium transition",
                       selected
-                        ? "border-gold/50 bg-gold/10 text-foreground"
-                        : "border-border bg-surface-2 text-muted hover:border-gold/30",
+                        ? "border-accent/50 bg-accent/10 text-foreground"
+                        : "border-border bg-surface-2 text-muted hover:border-accent/30",
                     )}
                   >
                     {dict[option.labelKey]}
-                    {selected && <Check className="size-4 shrink-0 text-gold-bright" />}
+                    {selected && <Check className="size-4 shrink-0 text-accent-bright" />}
                   </button>
                 );
               })}
@@ -226,8 +226,8 @@ export function OnboardingWizard({
                       className={cn(
                         "rounded-full border px-3 py-1.5 text-sm transition",
                         level === o.id
-                          ? "border-gold/50 bg-gold/10 text-foreground"
-                          : "border-border bg-surface-2 text-muted hover:border-gold/30",
+                          ? "border-accent/50 bg-accent/10 text-foreground"
+                          : "border-border bg-surface-2 text-muted hover:border-accent/30",
                       )}
                     >
                       {dict[o.labelKey]}
@@ -247,8 +247,8 @@ export function OnboardingWizard({
                       className={cn(
                         "rounded-full border px-3 py-1.5 text-sm transition",
                         equipment === o.id
-                          ? "border-gold/50 bg-gold/10 text-foreground"
-                          : "border-border bg-surface-2 text-muted hover:border-gold/30",
+                          ? "border-accent/50 bg-accent/10 text-foreground"
+                          : "border-border bg-surface-2 text-muted hover:border-accent/30",
                       )}
                     >
                       {dict[o.labelKey]}
@@ -264,7 +264,7 @@ export function OnboardingWizard({
                   id="ob-days"
                   value={trainingDays}
                   onChange={(e) => setTrainingDays(Number(e.target.value))}
-                  className="h-10 rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-gold/40"
+                  className="h-10 rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-accent/40"
                 >
                   {DAY_OPTIONS.map((d) => (
                     <option key={d} value={d}>{d}</option>
@@ -280,7 +280,7 @@ export function OnboardingWizard({
                   type="time"
                   value={reminderTime}
                   onChange={(e) => setReminderTime(e.target.value)}
-                  className="h-10 rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-gold/40"
+                  className="h-10 rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-accent/40"
                 />
               </div>
 
@@ -297,7 +297,7 @@ export function OnboardingWizard({
                     onChange={(e) => setHeightCm(e.target.value)}
                     placeholder={dict["onboarding.heightCm"]}
                     aria-label={dict["onboarding.heightCm"]}
-                    className="h-10 rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-gold/40"
+                    className="h-10 rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-accent/40"
                   />
                   <input
                     type="number"
@@ -306,7 +306,7 @@ export function OnboardingWizard({
                     onChange={(e) => setWeightKg(e.target.value)}
                     placeholder={dict["onboarding.weightKg"]}
                     aria-label={dict["onboarding.weightKg"]}
-                    className="h-10 rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-gold/40"
+                    className="h-10 rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-accent/40"
                   />
                   <label className="col-span-2 flex items-center justify-between gap-2 text-xs text-muted">
                     {dict["onboarding.birthDate"]}
@@ -315,7 +315,7 @@ export function OnboardingWizard({
                       value={birthDate}
                       onChange={(e) => setBirthDate(e.target.value)}
                       aria-label={dict["onboarding.birthDate"]}
-                      className="h-10 rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-gold/40"
+                      className="h-10 rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-accent/40"
                     />
                   </label>
                 </div>

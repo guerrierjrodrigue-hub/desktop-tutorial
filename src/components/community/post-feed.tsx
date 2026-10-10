@@ -11,8 +11,8 @@ import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { CommunityPost } from "@/types";
 
-const kindMeta: Record<CommunityPost["kind"], { label: string; variant: "gold" | "green" | "premium" }> = {
-  testimony: { label: "Testimony", variant: "gold" },
+const kindMeta: Record<CommunityPost["kind"], { label: string; variant: "accent" | "green" | "premium" }> = {
+  testimony: { label: "Testimony", variant: "accent" },
   progress: { label: "Progress", variant: "green" },
   prayer: { label: "Prayer request", variant: "premium" },
 };

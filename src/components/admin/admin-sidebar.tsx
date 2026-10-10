@@ -13,7 +13,7 @@ export function AdminSidebar() {
   return (
     <aside className="sticky top-0 hidden h-svh w-60 shrink-0 flex-col border-r border-border bg-surface/40 px-4 py-6 lg:flex">
       <Logo />
-      <div className="mt-6 flex items-center gap-2 rounded-lg border border-gold/20 bg-gold/8 px-3 py-2 text-xs font-semibold text-gold-bright">
+      <div className="mt-6 flex items-center gap-2 rounded-lg border border-accent/20 bg-accent/8 px-3 py-2 text-xs font-semibold text-accent-bright">
         <ShieldCheck className="size-4" /> Admin console
       </div>
 
@@ -33,7 +33,7 @@ export function AdminSidebar() {
               )}
             >
               <item.icon
-                className={cn("size-5", active ? "text-gold-bright" : "text-faint")}
+                className={cn("size-5", active ? "text-accent-bright" : "text-faint")}
               />
               {item.label}
             </Link>

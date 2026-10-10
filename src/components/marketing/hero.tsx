@@ -38,9 +38,9 @@ function HeroContent({ dict, freeMode }: { dict: Dictionary; freeMode: boolean }
           variants={fadeUp}
           initial="hidden"
           animate="show"
-          className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-gold/25 bg-gold/8 px-4 py-1.5 text-sm text-gold-bright"
+          className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-accent/25 bg-accent/8 px-4 py-1.5 text-sm text-accent-bright"
         >
-          <Star className="size-3.5 fill-gold-bright" />
+          <Star className="size-3.5 fill-accent-bright" />
           {dict["mkt.hero.badge"]}
         </motion.div>
 
@@ -53,7 +53,7 @@ function HeroContent({ dict, freeMode }: { dict: Dictionary; freeMode: boolean }
         >
           {dict["mkt.hero.title1"]}
           <br />
-          <span className="text-gradient-gold">{dict["mkt.hero.title2"]}</span>
+          <span className="text-gradient-accent">{dict["mkt.hero.title2"]}</span>
         </motion.h1>
 
         <motion.p
@@ -110,8 +110,8 @@ function HeroPreview({ dict }: { dict: Dictionary }) {
       transition={{ delay: 0.5, duration: 0.9, ease: [0.21, 0.47, 0.32, 0.98] }}
       className="relative mx-auto mt-16 max-w-4xl"
     >
-      <div className="absolute -inset-x-10 -top-10 -z-10 h-40 rounded-full bg-gold/10 blur-3xl" />
-      <div className="glass ring-gold overflow-hidden rounded-3xl border border-border p-2">
+      <div className="absolute -inset-x-10 -top-10 -z-10 h-40 rounded-full bg-accent/10 blur-3xl" />
+      <div className="glass ring-accent overflow-hidden rounded-3xl border border-border p-2">
         <div className="rounded-2xl bg-surface p-6 sm:p-8">
           <div className="grid gap-4 sm:grid-cols-3">
             <PreviewStat label={dict["mkt.preview.streak"]} value="26" accent />
@@ -126,7 +126,7 @@ function HeroPreview({ dict }: { dict: Dictionary }) {
               <p className="mt-2 font-serif text-lg leading-snug">
                 {dict["mkt.verse.short"]}
               </p>
-              <p className="mt-2 text-sm text-gold-bright">{dict["mkt.verse.shortRef"]}</p>
+              <p className="mt-2 text-sm text-accent-bright">{dict["mkt.verse.shortRef"]}</p>
             </div>
             <div className="rounded-xl border border-border bg-gradient-to-br from-green-deep to-surface-2 p-5 text-left">
               <p className="text-xs font-semibold uppercase tracking-wide text-muted">
@@ -135,7 +135,7 @@ function HeroPreview({ dict }: { dict: Dictionary }) {
               <p className="mt-2 font-serif text-lg">{dict["mkt.workout.name"]}</p>
               <p className="mt-1 text-sm text-muted">{dict["mkt.workout.meta"]}</p>
               <div className="mt-4 h-2 overflow-hidden rounded-full bg-black/30">
-                <div className="h-full w-2/3 rounded-full bg-gradient-to-r from-gold to-gold-bright" />
+                <div className="h-full w-2/3 rounded-full bg-gradient-to-r from-ember-deep to-ember" />
               </div>
             </div>
           </div>
@@ -157,7 +157,7 @@ function PreviewStat({
   return (
     <div className="rounded-xl border border-border bg-surface-2 p-5 text-left">
       <p
-        className={`font-serif text-3xl font-semibold ${accent ? "text-gold-bright" : "text-foreground"}`}
+        className={`font-serif text-3xl font-semibold ${accent ? "text-ember" : "text-foreground"}`}
       >
         {value}
       </p>

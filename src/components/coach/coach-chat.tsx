@@ -176,7 +176,7 @@ export function CoachChat({
             <button
               key={p}
               onClick={() => send(p)}
-              className="rounded-full border border-border bg-surface-2 px-3 py-1.5 text-xs text-muted transition hover:border-gold/30 hover:text-foreground"
+              className="rounded-full border border-border bg-surface-2 px-3 py-1.5 text-xs text-muted transition hover:border-accent/30 hover:text-foreground"
             >
               {p}
             </button>
@@ -197,7 +197,7 @@ export function CoachChat({
           onChange={(e) => setInput(e.target.value)}
           placeholder={dict["coach.messagePlaceholder"].replace("{name}", coach.name)}
           aria-label={dict["coach.messagePlaceholder"].replace("{name}", coach.name)}
-          className="h-11 flex-1 rounded-full border border-border bg-surface-2 px-4 text-sm outline-none transition focus:border-gold/40 focus:ring-2 focus:ring-gold/20"
+          className="h-11 flex-1 rounded-full border border-border bg-surface-2 px-4 text-sm outline-none transition focus:border-accent/40 focus:ring-2 focus:ring-accent/20"
         />
         <Button type="submit" size="icon" disabled={!input.trim() || loading} aria-label={dict["coach.sendAria"]}>
           <Send className="size-4" />

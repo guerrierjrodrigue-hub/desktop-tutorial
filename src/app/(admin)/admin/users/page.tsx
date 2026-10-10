@@ -32,7 +32,7 @@ export default async function AdminUsersPage() {
           <input
             placeholder="Search by name or email…"
             aria-label="Search users"
-            className="h-10 w-full rounded-xl border border-border bg-surface-2 pl-10 pr-4 text-sm outline-none focus:border-gold/40 focus:ring-2 focus:ring-gold/20"
+            className="h-10 w-full rounded-xl border border-border bg-surface-2 pl-10 pr-4 text-sm outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/20"
           />
         </div>
         <Button variant="secondary" size="sm">
@@ -57,7 +57,7 @@ export default async function AdminUsersPage() {
             key: "plan",
             header: "Plan",
             render: (r) => (
-              <Badge variant={r.plan === "Seeker" ? "neutral" : "gold"}>
+              <Badge variant={r.plan === "Seeker" ? "neutral" : "accent"}>
                 {r.plan}
               </Badge>
             ),
@@ -72,7 +72,7 @@ export default async function AdminUsersPage() {
             key: "actions",
             header: "",
             render: () => (
-              <button className="text-sm text-gold-bright hover:underline">
+              <button className="text-sm text-accent-bright hover:underline">
                 Manage
               </button>
             ),

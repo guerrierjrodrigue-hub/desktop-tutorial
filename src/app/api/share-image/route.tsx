@@ -31,12 +31,12 @@ export function GET(req: Request) {
           alignItems: "center",
           textAlign: "center",
           padding: "120px 96px",
-          background: "linear-gradient(160deg, #0b0b0f 0%, #17110c 55%, #241405 100%)",
-          color: "#f5f0e6",
+          background: "linear-gradient(160deg, #0d0b0a 0%, #171412 55%, #211d1a 100%)",
+          color: "#f7f2ea",
           fontFamily: "Georgia, serif",
         }}
       >
-        <div style={{ display: "flex", fontSize: 40, color: "#f0a13f", letterSpacing: 4 }}>
+        <div style={{ display: "flex", fontSize: 40, color: "#f2a93b", letterSpacing: 4 }}>
           KINGDOM ATHLETE
         </div>
 
@@ -51,7 +51,7 @@ export function GET(req: Request) {
               marginTop: 48,
               fontSize: headlineSize,
               fontWeight: 700,
-              color: "#f0a13f",
+              color: "#ff5a36",
               lineHeight: 1,
             }}
           >
@@ -61,7 +61,7 @@ export function GET(req: Request) {
 
         <div style={{ display: "flex", marginTop: 40, fontSize: 48 }}>{type === "verse" ? value : label}</div>
 
-        <div style={{ display: "flex", marginTop: 80, fontSize: 30, color: "#9b948a" }}>
+        <div style={{ display: "flex", marginTop: 80, fontSize: 30, color: "#a59d93" }}>
           Strengthen your body. Grow your faith.
         </div>
       </div>

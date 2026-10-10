@@ -3,16 +3,16 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         primary:
-          "bg-gradient-to-b from-gold-bright to-gold text-background font-semibold shadow-[0_8px_30px_-8px_rgba(250,17,79,0.5)] hover:brightness-105",
+          "bg-gradient-to-b from-accent-bright to-accent text-accent-fg font-semibold shadow-[0_8px_24px_-10px_rgba(0,0,0,0.55)] hover:brightness-105",
         secondary:
           "bg-surface-2 text-foreground border border-border hover:bg-elevated",
         outline:
-          "border border-gold/40 text-gold hover:bg-gold/10 hover:border-gold/60",
+          "border border-accent/40 text-accent hover:bg-accent/10 hover:border-accent/60",
         ghost: "text-muted hover:text-foreground hover:bg-surface-2",
         green:
           "bg-green text-foreground hover:bg-green-bright hover:text-background font-semibold",

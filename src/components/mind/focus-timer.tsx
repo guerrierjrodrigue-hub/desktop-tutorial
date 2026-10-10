@@ -62,7 +62,7 @@ export function FocusTimer({ dict }: { dict: Dictionary }) {
 
         <div className="mt-6 h-1.5 w-48 overflow-hidden rounded-full bg-surface-2">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-gold to-gold-bright transition-[width] duration-1000 ease-linear"
+            className="h-full rounded-full bg-gradient-to-r from-accent to-accent-bright transition-[width] duration-1000 ease-linear"
             style={{ width: `${Math.round(progress * 100)}%` }}
           />
         </div>
@@ -87,8 +87,8 @@ export function FocusTimer({ dict }: { dict: Dictionary }) {
               className={cn(
                 "rounded-full border px-4 py-1.5 text-sm font-medium transition",
                 durationMin === min
-                  ? "border-gold/50 bg-gold/15 text-gold-bright"
-                  : "border-border bg-surface-2 text-muted hover:border-gold/30",
+                  ? "border-accent/50 bg-accent/15 text-accent-bright"
+                  : "border-border bg-surface-2 text-muted hover:border-accent/30",
               )}
             >
               {min} {dict["focus.minUnit"]}
@@ -102,7 +102,7 @@ export function FocusTimer({ dict }: { dict: Dictionary }) {
           <p className="text-sm font-semibold">{dict["focus.sessionsToday"]}</p>
           <p className="text-xs text-muted">{dict["focus.sessionsSubtitle"]}</p>
         </div>
-        <p className="font-serif text-3xl font-semibold text-gold-bright">{sessionsToday}</p>
+        <p className="font-serif text-3xl font-semibold text-accent-bright">{sessionsToday}</p>
       </Card>
     </div>
   );

@@ -30,7 +30,7 @@ export function BibleControls({
         name="t"
         defaultValue={translationId}
         onChange={autoSubmit}
-        className="h-10 rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-gold/40"
+        className="h-10 rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-accent/40"
       >
         {BIBLE_TRANSLATIONS.map((t) => (
           <option key={t.id} value={t.id}>
@@ -43,7 +43,7 @@ export function BibleControls({
         name="b"
         defaultValue={bookId}
         onChange={autoSubmit}
-        className="h-10 min-w-0 flex-1 rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-gold/40 sm:flex-none"
+        className="h-10 min-w-0 flex-1 rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-accent/40 sm:flex-none"
       >
         {books.map((b) => (
           <option key={b.id} value={b.id}>
@@ -56,7 +56,7 @@ export function BibleControls({
         name="c"
         defaultValue={chapterNumber}
         onChange={autoSubmit}
-        className="h-10 rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-gold/40"
+        className="h-10 rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-accent/40"
       >
         {chapters.map((c) => (
           <option key={c} value={c}>
@@ -68,7 +68,7 @@ export function BibleControls({
       <noscript>
         <button
           type="submit"
-          className="h-10 rounded-lg border border-gold/40 bg-gold/10 px-4 text-sm font-semibold text-gold-bright"
+          className="h-10 rounded-lg border border-accent/40 bg-accent/10 px-4 text-sm font-semibold text-accent-bright"
         >
           {dict["bible.go"]}
         </button>

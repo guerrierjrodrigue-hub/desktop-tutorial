@@ -29,9 +29,9 @@ export default async function CoachPickerPage() {
         <div className="grid gap-4 sm:grid-cols-2">
           {coaches.map((coach) => (
             <Link key={coach.id} href={`/coach/${coach.id}`}>
-              <Card className="h-full transition hover:border-gold/30">
+              <Card className="h-full transition hover:border-accent/30">
                 <span
-                  className={`grid size-12 place-items-center rounded-2xl bg-gradient-to-br ${coach.avatarGradient} text-background shadow-[0_6px_20px_-6px_rgba(250,17,79,0.6)]`}
+                  className={`grid size-12 place-items-center rounded-2xl bg-gradient-to-br ${coach.avatarGradient} text-background shadow-[0_6px_20px_-6px_rgba(0,0,0,0.5)]`}
                 >
                   <Sparkles className="size-5" />
                 </span>

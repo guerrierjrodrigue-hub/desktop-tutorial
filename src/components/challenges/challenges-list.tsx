@@ -153,7 +153,7 @@ export function ChallengesList({
                 </div>
                 <p className="mt-1 text-sm text-muted">{c.description}</p>
                 {isCohort && !started && c.startDate && (
-                  <p className="mt-1.5 inline-flex items-center gap-1.5 text-xs font-medium text-gold-bright">
+                  <p className="mt-1.5 inline-flex items-center gap-1.5 text-xs font-medium text-accent-bright">
                     <CalendarClock className="size-3.5" />
                     {dict["challenges.startsOn"].replace(
                       "{date}",
@@ -203,7 +203,7 @@ export function ChallengesList({
               <button
                 type="button"
                 onClick={() => invite(c)}
-                className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs font-medium text-muted transition hover:border-gold/30 hover:text-foreground"
+                className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs font-medium text-muted transition hover:border-accent/30 hover:text-foreground"
               >
                 {copiedId === c.id ? (
                   <>
@@ -234,7 +234,7 @@ export function ChallengesList({
                   )}
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Flame className="size-3.5 text-gold/70" />
+                  <Flame className="size-3.5 text-ember/70" />
                   {started && (c.joined || isCohort)
                     ? plural(
                         c.daysLeft,
@@ -257,14 +257,14 @@ export function ChallengesList({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder={dict["challenges.titlePlaceholder"]}
-              className="w-full rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm outline-none focus:border-gold/40 focus:ring-2 focus:ring-gold/20"
+              className="w-full rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/20"
             />
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder={dict["challenges.descriptionPlaceholder"]}
               rows={2}
-              className="w-full resize-none rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm outline-none focus:border-gold/40 focus:ring-2 focus:ring-gold/20"
+              className="w-full resize-none rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/20"
             />
             <div className="flex flex-wrap items-center gap-2">
               {(Object.keys(typeMeta) as Challenge["type"][]).map((value) => (
@@ -274,7 +274,7 @@ export function ChallengesList({
                   onClick={() => setType(value)}
                   aria-pressed={type === value}
                 >
-                  <Badge variant={type === value ? "gold" : "neutral"} className="cursor-pointer px-3 py-1.5">
+                  <Badge variant={type === value ? "accent" : "neutral"} className="cursor-pointer px-3 py-1.5">
                     {dict[typeMeta[value].labelKey]}
                   </Badge>
                 </button>
@@ -282,7 +282,7 @@ export function ChallengesList({
               <select
                 value={days}
                 onChange={(e) => setDays(Number(e.target.value))}
-                className="h-8 rounded-lg border border-border bg-surface-2 px-2 text-xs outline-none focus:border-gold/40"
+                className="h-8 rounded-lg border border-border bg-surface-2 px-2 text-xs outline-none focus:border-accent/40"
               >
                 {DURATION_OPTIONS.map((d) => (
                   <option key={d} value={d}>
@@ -304,7 +304,7 @@ export function ChallengesList({
       ) : (
         <Card
           className={cn(
-            "flex items-center justify-between bg-gradient-to-br from-gold/10 to-surface",
+            "flex items-center justify-between bg-gradient-to-br from-accent/10 to-surface",
           )}
         >
           <div>

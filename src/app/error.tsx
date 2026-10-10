@@ -48,7 +48,7 @@ export default function Error({
         <div className="mb-8 flex justify-center">
           <Logo />
         </div>
-        <p className="font-serif text-6xl font-semibold text-gradient-gold">
+        <p className="font-serif text-6xl font-semibold text-gradient-accent">
           {t.eyebrow}
         </p>
         <h1 className="mt-4 font-serif text-2xl font-semibold">{t.heading}</h1>

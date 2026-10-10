@@ -29,10 +29,10 @@ export async function RecommendationsCard() {
           <Link
             key={rec.id}
             href={rec.href}
-            className="group flex items-center justify-between gap-3 rounded-xl border border-border bg-surface-2 p-3 transition hover:border-gold/30"
+            className="group flex items-center justify-between gap-3 rounded-xl border border-border bg-surface-2 p-3 transition hover:border-accent/30"
           >
             <div className="flex items-center gap-3">
-              <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-gold/12 text-gold-bright">
+              <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-accent/12 text-accent-bright">
                 <Sparkles className="size-4" />
               </span>
               <div>
@@ -40,7 +40,7 @@ export async function RecommendationsCard() {
                 <p className="text-xs text-muted">{rec.description}</p>
               </div>
             </div>
-            <ArrowRight className="size-4 shrink-0 text-faint transition group-hover:translate-x-0.5 group-hover:text-gold-bright" />
+            <ArrowRight className="size-4 shrink-0 text-faint transition group-hover:translate-x-0.5 group-hover:text-accent-bright" />
           </Link>
         ))}
       </div>

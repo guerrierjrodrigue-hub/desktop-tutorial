@@ -54,7 +54,7 @@ export default async function AboutPage() {
       <main className="flex-1">
         <section className="mx-auto max-w-3xl px-6 pb-8 pt-20 text-center">
           <Reveal>
-            <Badge variant="gold">{dict["mkt.about.badge"]}</Badge>
+            <Badge variant="accent">{dict["mkt.about.badge"]}</Badge>
             <h1 className="mt-4 font-serif text-4xl font-semibold tracking-tight sm:text-5xl">
               {dict["mkt.about.title"]}
             </h1>
@@ -85,7 +85,7 @@ export default async function AboutPage() {
             {pillars.map((p, i) => (
               <Reveal key={p.titleKey} delay={i * 0.05}>
                 <div className="glass h-full rounded-2xl border border-border p-6">
-                  <div className="grid size-11 place-items-center rounded-xl bg-gradient-to-br from-gold/15 to-transparent text-gold-bright ring-1 ring-gold/20">
+                  <div className="grid size-11 place-items-center rounded-xl bg-gradient-to-br from-accent/15 to-transparent text-accent-bright ring-1 ring-accent/20">
                     <p.icon className="size-5" />
                   </div>
                   <h3 className="mt-4 font-serif text-lg font-semibold">{dict[p.titleKey]}</h3>
@@ -98,7 +98,7 @@ export default async function AboutPage() {
 
         {/* CTA */}
         <section className="mx-auto max-w-5xl px-6 py-20">
-          <Reveal className="glass ring-gold relative overflow-hidden rounded-3xl border border-gold/20 px-8 py-14 text-center sm:px-12">
+          <Reveal className="glass ring-accent relative overflow-hidden rounded-3xl border border-accent/20 px-8 py-14 text-center sm:px-12">
             <h2 className="font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
               {dict["mkt.about.ctaTitle"]}
             </h2>

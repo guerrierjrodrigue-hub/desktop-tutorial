@@ -195,7 +195,7 @@ function ReminderRow({
         <span
           className={cn(
             "grid size-8 shrink-0 place-items-center rounded-full transition",
-            enabled ? "bg-gold/15 text-gold-bright" : "bg-elevated text-faint",
+            enabled ? "bg-accent/15 text-accent-bright" : "bg-elevated text-faint",
           )}
         >
           <Icon className="size-4" />

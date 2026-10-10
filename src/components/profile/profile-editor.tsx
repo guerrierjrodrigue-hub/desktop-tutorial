@@ -114,7 +114,7 @@ export function ProfileEditor({
                   value={draft.name}
                   onChange={(e) => setDraft((d) => ({ ...d, name: e.target.value }))}
                   aria-label={dict["profile.nameAria"]}
-                  className="w-full max-w-xs rounded-lg border border-border bg-surface-2 px-3 py-1.5 font-serif text-lg font-semibold outline-none focus:border-gold/40"
+                  className="w-full max-w-xs rounded-lg border border-border bg-surface-2 px-3 py-1.5 font-serif text-lg font-semibold outline-none focus:border-accent/40"
                 />
               ) : (
                 <h2 className="font-serif text-2xl font-semibold">{user.name}</h2>
@@ -137,7 +137,7 @@ export function ProfileEditor({
                 rows={2}
                 placeholder={dict["profile.bioPlaceholder"]}
                 aria-label={dict["profile.bioAria"]}
-                className="mt-2 w-full rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm outline-none focus:border-gold/40"
+                className="mt-2 w-full rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm outline-none focus:border-accent/40"
               />
             ) : (
               user.bio && <p className="mt-1 text-sm text-muted">{user.bio}</p>
@@ -195,7 +195,7 @@ export function ProfileEditor({
 
         <div className="relative mt-6">
           <div className="mb-1.5 flex items-center justify-between text-sm">
-            <span className="font-semibold text-gold-bright">
+            <span className="font-semibold text-accent-bright">
               {dict["profile.levelPrefix"]} {level}
             </span>
             <span className="text-muted">
@@ -247,7 +247,7 @@ export function ProfileEditor({
                   onChange={(e) =>
                     setDraft((d) => ({ ...d, level: e.target.value as typeof d.level }))
                   }
-                  className="mt-1 h-10 w-full rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-gold/40"
+                  className="mt-1 h-10 w-full rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-accent/40"
                 >
                   <option value="beginner">{dict["level.beginner"]}</option>
                   <option value="intermediate">{dict["level.intermediate"]}</option>
@@ -259,7 +259,7 @@ export function ProfileEditor({
                 <select
                   value={draft.equipment ?? "home"}
                   onChange={(e) => setDraft((d) => ({ ...d, equipment: e.target.value }))}
-                  className="mt-1 h-10 w-full rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-gold/40"
+                  className="mt-1 h-10 w-full rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-accent/40"
                 >
                   <option value="none">{dict["equipment.none"]}</option>
                   <option value="home">{dict["equipment.home"]}</option>
@@ -284,7 +284,7 @@ export function ProfileEditor({
             <dl className="space-y-3">
               {details.map((d) => (
                 <div key={d.label} className="flex items-center gap-3">
-                  <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-surface-2 text-gold/70">
+                  <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-surface-2 text-accent/70">
                     <d.icon className="size-4" />
                   </span>
                   <div className="min-w-0">
@@ -314,7 +314,7 @@ function Stat({
 }) {
   return (
     <div className="rounded-xl border border-border bg-surface-2 px-4 py-2 text-center">
-      <IconEl className="mx-auto size-4 text-gold/70" />
+      <IconEl className="mx-auto size-4 text-accent/70" />
       <p className="mt-1 text-sm font-semibold">{value}</p>
       <p className="text-xs uppercase tracking-wide text-faint">{label}</p>
     </div>
@@ -339,7 +339,7 @@ function EditField({
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-1 w-full rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm outline-none focus:border-gold/40"
+        className="mt-1 w-full rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm outline-none focus:border-accent/40"
       />
     </label>
   );

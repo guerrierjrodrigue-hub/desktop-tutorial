@@ -22,21 +22,21 @@ export function GET(req: Request) {
           flexDirection: "column",
           justifyContent: "center",
           padding: "120px 96px",
-          background: "linear-gradient(160deg, #0b0b0f 0%, #17110c 55%, #241405 100%)",
-          color: "#f5f0e6",
+          background: "linear-gradient(160deg, #0d0b0a 0%, #171412 55%, #211d1a 100%)",
+          color: "#f7f2ea",
           fontFamily: "Georgia, serif",
         }}
       >
-        <div style={{ display: "flex", fontSize: 40, color: "#f0a13f", letterSpacing: 4 }}>
+        <div style={{ display: "flex", fontSize: 40, color: "#f2a93b", letterSpacing: 4 }}>
           KINGDOM ATHLETE
         </div>
         <div style={{ display: "flex", marginTop: 48, fontSize: 64, lineHeight: 1.3 }}>
           “{text}”
         </div>
-        <div style={{ display: "flex", marginTop: 56, fontSize: 44, color: "#f0a13f", fontWeight: 700 }}>
+        <div style={{ display: "flex", marginTop: 56, fontSize: 44, color: "#f2a93b", fontWeight: 700 }}>
           {reference}
         </div>
-        <div style={{ display: "flex", marginTop: 24, fontSize: 30, color: "#9b948a" }}>
+        <div style={{ display: "flex", marginTop: 24, fontSize: 30, color: "#a59d93" }}>
           Strengthen your body. Grow your faith.
         </div>
       </div>

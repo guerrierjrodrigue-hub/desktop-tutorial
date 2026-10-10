@@ -118,7 +118,7 @@ export default async function ProgramDetailPage({
               {program.schedule.map((w) => (
                 <Link key={w.week} href={`/fitness/${program.id}?week=${w.week}`} scroll={false}>
                   <Badge
-                    variant={w.week === activeWeek?.week ? "gold" : "neutral"}
+                    variant={w.week === activeWeek?.week ? "accent" : "neutral"}
                     className="cursor-pointer px-3 py-1.5"
                   >
                     {dict["fitness.week"].replace("{week}", String(w.week))}
@@ -181,7 +181,7 @@ export default async function ProgramDetailPage({
                             unoptimized
                           />
                         ) : (
-                          <Dumbbell className="size-4 shrink-0 text-gold/70" />
+                          <Dumbbell className="size-4 shrink-0 text-accent/70" />
                         )}
                         <div>
                           <p className="text-sm font-medium">{ex.name}</p>

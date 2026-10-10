@@ -30,7 +30,7 @@ export async function Topbar({ title }: { title?: string }) {
 
       <div className="flex items-center gap-2 sm:gap-3">
         <span
-          className="inline-flex items-center gap-1.5 rounded-full border border-gold/25 bg-gold/10 px-3 py-1.5 text-sm font-semibold text-gold-bright"
+          className="inline-flex items-center gap-1.5 rounded-full border border-ember/25 bg-ember/10 px-3 py-1.5 text-sm font-semibold text-ember"
           aria-label={dict["topbar.streakAria"]}
         >
           <Flame className="size-4" />

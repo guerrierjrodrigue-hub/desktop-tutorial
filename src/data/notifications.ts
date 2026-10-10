@@ -5,7 +5,7 @@ export interface AppNotification {
   body: string;
   time: string;
   read: boolean;
-  accent: "gold" | "green" | "bronze";
+  accent: "accent" | "green" | "ember";
 }
 
 export const notifications: AppNotification[] = [
@@ -16,7 +16,7 @@ export const notifications: AppNotification[] = [
     body: "You're on fire. Keep the discipline going today.",
     time: "just now",
     read: false,
-    accent: "gold",
+    accent: "accent",
   },
   {
     id: "n2",
@@ -34,7 +34,7 @@ export const notifications: AppNotification[] = [
     body: "You climbed to #3 in “40 Days of Discipline”.",
     time: "3h ago",
     read: false,
-    accent: "bronze",
+    accent: "ember",
   },
   {
     id: "n4",
@@ -43,7 +43,7 @@ export const notifications: AppNotification[] = [
     body: "“How did today's workout feel? I'm here when you're ready.”",
     time: "yesterday",
     read: true,
-    accent: "gold",
+    accent: "accent",
   },
   {
     id: "n5",

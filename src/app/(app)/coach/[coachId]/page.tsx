@@ -52,7 +52,7 @@ export default async function CoachChatPage({
         </Link>
         <div className="mb-4 flex items-center gap-3">
           <span
-            className={`grid size-11 place-items-center rounded-2xl bg-gradient-to-br ${coach.avatarGradient} text-background shadow-[0_6px_20px_-6px_rgba(250,17,79,0.6)]`}
+            className={`grid size-11 place-items-center rounded-2xl bg-gradient-to-br ${coach.avatarGradient} text-background shadow-[0_6px_20px_-6px_rgba(0,0,0,0.5)]`}
           >
             <Sparkles className="size-5" />
           </span>

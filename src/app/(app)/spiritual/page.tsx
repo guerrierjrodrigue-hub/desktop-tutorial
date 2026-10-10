@@ -50,9 +50,9 @@ export default async function SpiritualPage() {
 
         {/* Read the full Bible */}
         <Link href="/spiritual/bible" className="block">
-          <Card className="mb-5 flex items-center justify-between gap-4 bg-gradient-to-br from-gold/10 to-surface transition hover:border-gold/30">
+          <Card className="mb-5 flex items-center justify-between gap-4 bg-gradient-to-br from-accent/10 to-surface transition hover:border-accent/30">
             <div className="flex items-center gap-3">
-              <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-gold/15 text-gold-bright">
+              <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-accent/15 text-accent-bright">
                 <BookOpen className="size-5" />
               </span>
               <div>
@@ -68,15 +68,15 @@ export default async function SpiritualPage() {
 
         {/* Today's devotional */}
         <Card className="relative overflow-hidden bg-gradient-to-br from-green-deep/50 to-surface">
-          <div className="pointer-events-none absolute -right-10 -top-10 size-48 rounded-full bg-gold/10 blur-3xl" />
+          <div className="pointer-events-none absolute -right-10 -top-10 size-48 rounded-full bg-accent/10 blur-3xl" />
           <div className="relative">
-            <Badge variant="gold">
+            <Badge variant="accent">
               <BookOpen className="size-3" /> {dict["spiritual.todaysDevotional"]}
             </Badge>
             <blockquote className="mt-4 max-w-3xl font-serif text-2xl leading-snug">
               “{verse.text}”
             </blockquote>
-            <p className="mt-3 text-sm font-semibold text-gold-bright">
+            <p className="mt-3 text-sm font-semibold text-accent-bright">
               {verse.reference} · {verse.translation}
             </p>
             <p className="mt-4 max-w-2xl text-muted">{reflection}</p>
@@ -111,7 +111,7 @@ export default async function SpiritualPage() {
                     className="rounded-xl border border-border bg-surface-2 p-4"
                   >
                     <div className="flex items-center justify-between">
-                      <p className="text-sm font-semibold text-gold-bright">
+                      <p className="text-sm font-semibold text-accent-bright">
                         {v.reference}
                       </p>
                       <span className="text-xs text-muted">

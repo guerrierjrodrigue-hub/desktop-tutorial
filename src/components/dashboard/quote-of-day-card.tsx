@@ -10,8 +10,8 @@ export async function QuoteOfDayCard() {
   const { text, reference } = getQuoteOfDayParts(locale);
 
   return (
-    <Card className="relative overflow-hidden bg-gradient-to-br from-gold/10 to-surface">
-      <div className="flex items-center gap-2 text-gold-bright">
+    <Card className="relative overflow-hidden bg-gradient-to-br from-accent/10 to-surface">
+      <div className="flex items-center gap-2 text-accent-bright">
         <Quote className="size-4" />
         <span className="text-xs font-semibold uppercase tracking-wide">
           {dict["dashboard.quoteOfDay"]}

@@ -31,12 +31,12 @@ function NavLink({ item, active, dict }: { item: NavItem; active: boolean; dict:
       )}
     >
       {active && (
-        <span className="absolute left-0 top-1/2 h-5 -translate-y-1/2 rounded-r-full border-l-2 border-gold" />
+        <span className="absolute left-0 top-1/2 h-5 -translate-y-1/2 rounded-r-full border-l-2 border-accent" />
       )}
       <item.icon
         className={cn(
           "size-5",
-          active ? "text-gold-bright" : "text-faint group-hover:text-foreground",
+          active ? "text-accent-bright" : "text-faint group-hover:text-foreground",
         )}
       />
       {navLabel(item, dict)}
@@ -86,15 +86,15 @@ export function Sidebar({
       </nav>
 
       {!freeMode && (
-        <div className="mt-4 rounded-2xl border border-gold/20 bg-gradient-to-b from-gold/10 to-transparent p-4">
-          <div className="mb-1 flex items-center gap-2 text-gold-bright">
+        <div className="mt-4 rounded-2xl border border-accent/20 bg-gradient-to-b from-accent/10 to-transparent p-4">
+          <div className="mb-1 flex items-center gap-2 text-accent-bright">
             <Sparkles className="size-4" />
             <span className="text-sm font-semibold">{dict["nav.goPremium"]}</span>
           </div>
           <p className="text-xs text-muted">{dict["nav.goPremiumBlurb"]}</p>
           <Link
             href="/pricing"
-            className="mt-3 inline-flex h-9 w-full items-center justify-center rounded-full bg-gradient-to-b from-gold-bright to-gold text-sm font-semibold text-background transition hover:brightness-105"
+            className="mt-3 inline-flex h-9 w-full items-center justify-center rounded-full bg-gradient-to-b from-accent-bright to-accent text-sm font-semibold text-accent-fg transition hover:brightness-105"
           >
             {dict["nav.startFreeTrial"]}
           </Link>

@@ -78,7 +78,7 @@ export const programs: Program[] = [
     weeks: 6,
     daysPerWeek: 4,
     durationMinutes: 35,
-    coverColor: "from-gold-deep to-bronze",
+    coverColor: "from-accent-deep to-ember",
     premium: true,
     schedule: buildSchedule(6, [
       {
@@ -237,7 +237,7 @@ export const programs: Program[] = [
     weeks: 6,
     daysPerWeek: 4,
     durationMinutes: 25,
-    coverColor: "from-gold to-gold-deep",
+    coverColor: "from-accent to-accent-deep",
     premium: true,
     schedule: buildSchedule(6, [
       {

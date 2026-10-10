@@ -55,7 +55,7 @@ function buildScenes(dict: Dictionary): Scene[] {
           <p className="mt-2 font-serif text-2xl">{dict["mkt.workout.name"]}</p>
           <p className="mt-1 text-sm text-muted">{dict["mkt.workout.meta"]}</p>
           <div className="mt-4 h-2 overflow-hidden rounded-full bg-black/30">
-            <div className="h-full w-2/3 rounded-full bg-gradient-to-r from-gold to-gold-bright" />
+            <div className="h-full w-2/3 rounded-full bg-gradient-to-r from-accent to-accent-bright" />
           </div>
         </div>
       ),
@@ -89,7 +89,7 @@ function buildScenes(dict: Dictionary): Scene[] {
             {dict["mkt.verseOfDay"]}
           </p>
           <p className="mt-2 font-serif text-lg leading-snug">{dict["mkt.verse.short"]}</p>
-          <p className="mt-2 text-sm text-gold-bright">{dict["mkt.verse.shortRef"]}</p>
+          <p className="mt-2 text-sm text-accent-bright">{dict["mkt.verse.shortRef"]}</p>
         </div>
       ),
     },
@@ -102,13 +102,13 @@ function buildScenes(dict: Dictionary): Scene[] {
       render: () => (
         <div className="rounded-2xl border border-border bg-surface-2 p-6 text-left">
           <div className="flex items-center justify-between text-sm">
-            <span className="flex items-center gap-1.5 font-semibold text-gold-bright">
+            <span className="flex items-center gap-1.5 font-semibold text-accent-bright">
               <Flame className="size-4" /> {dict["mkt.film.habits.streak"]}
             </span>
             <span className="text-muted">{dict["mkt.film.habits.level"]}</span>
           </div>
           <div className="mt-3 h-2 overflow-hidden rounded-full bg-black/30">
-            <div className="h-full w-3/4 rounded-full bg-gradient-to-r from-gold to-gold-bright" />
+            <div className="h-full w-3/4 rounded-full bg-gradient-to-r from-accent to-accent-bright" />
           </div>
         </div>
       ),
@@ -218,7 +218,7 @@ export function FilmModal({
               className="h-1 flex-1 overflow-hidden rounded-full bg-white/15"
             >
               <motion.span
-                className="block h-full rounded-full bg-gold-bright"
+                className="block h-full rounded-full bg-accent-bright"
                 initial={{ width: "0%" }}
                 animate={{ width: i < index ? "100%" : i > index ? "0%" : "100%" }}
                 transition={
@@ -253,7 +253,7 @@ export function FilmModal({
               {scene.kind === "statement" && (
                 <>
                   {scene.eyebrow && (
-                    <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-gold-bright/80">
+                    <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-accent-bright/80">
                       {scene.eyebrow}
                     </p>
                   )}
@@ -268,14 +268,14 @@ export function FilmModal({
 
               {scene.kind === "feature" && (
                 <>
-                  <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-gold-bright/80">
+                  <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-accent-bright/80">
                     {scene.eyebrow}
                   </p>
                   <h2 className="font-serif text-2xl font-semibold text-white sm:text-3xl">
                     {scene.title}
                   </h2>
                   <p className="mt-2 text-sm text-white/60">{scene.caption}</p>
-                  <div className="glass ring-gold mt-6 overflow-hidden rounded-3xl border border-white/10 p-2">
+                  <div className="glass ring-accent mt-6 overflow-hidden rounded-3xl border border-white/10 p-2">
                     {scene.render()}
                   </div>
                 </>
@@ -324,14 +324,15 @@ function LogoScene({
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
-        className="grid size-16 place-items-center rounded-2xl bg-gradient-to-br from-gold-bright to-gold-deep text-background shadow-[0_10px_40px_-8px_rgba(250,17,79,0.6)]"
+        className="grid size-16 place-items-center rounded-2xl bg-gradient-to-br from-accent-bright to-accent-deep text-accent-fg shadow-[0_10px_40px_-8px_rgba(0,0,0,0.5)]"
       >
-        <svg viewBox="0 0 24 24" className="size-8" fill="none" aria-hidden="true">
-          <path d="M3 18h18l-1.4-8.2-3.7 3.1L12 6l-3.9 6.9-3.7-3.1L3 18Z" fill="currentColor" />
+        <svg viewBox="0 0 24 24" className="size-8" fill="currentColor" aria-hidden="true">
+          <path d="M3 8l3.8 2.8L12 5l5.2 5.8L21 8l-1.4 7.5H4.4L3 8Z" />
+          <rect x="4.2" y="16.4" width="15.6" height="2.4" rx="0.7" />
         </svg>
       </motion.span>
       <h2 className="mt-6 font-serif text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-        Kingdom<span className="text-gold-bright"> Athlete</span>
+        Kingdom<span className="text-accent-bright"> Athlete</span>
       </h2>
       <p className="mt-3 text-base text-white/60">{dict["mkt.tagline"]}</p>
 
@@ -339,7 +340,7 @@ function LogoScene({
         <Link
           href="/signup"
           onClick={onClose}
-          className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-gold-bright to-gold-deep px-6 py-2.5 text-sm font-semibold text-background transition hover:opacity-90"
+          className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-accent-bright to-accent-deep px-6 py-2.5 text-sm font-semibold text-accent-fg transition hover:opacity-90"
         >
           {dict["mkt.hero.cta"]}
         </Link>

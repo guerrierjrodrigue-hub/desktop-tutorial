@@ -73,7 +73,7 @@ export function Journal({
             placeholder={dict["journal.titlePlaceholder"]}
             aria-label={dict["journal.titleAria"]}
             autoFocus
-            className="h-10 w-full rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-gold/40 focus:ring-2 focus:ring-gold/20"
+            className="h-10 w-full rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/20"
           />
           <textarea
             value={body}
@@ -81,7 +81,7 @@ export function Journal({
             placeholder={dict["journal.bodyPlaceholder"]}
             aria-label={dict["journal.bodyAria"]}
             rows={3}
-            className="w-full resize-none rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm outline-none focus:border-gold/40 focus:ring-2 focus:ring-gold/20"
+            className="w-full resize-none rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/20"
           />
           <Button type="submit" size="sm" className="w-full" disabled={!title.trim()}>
             {dict["journal.add"]}

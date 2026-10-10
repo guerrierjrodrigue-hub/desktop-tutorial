@@ -101,7 +101,7 @@ export default async function LandingPage({
           <div className="mx-auto mt-6 grid max-w-5xl grid-cols-2 gap-6 px-6 sm:grid-cols-4">
             {pillars.map((p) => (
               <div key={p.label} className="text-center">
-                <p className="font-serif text-3xl font-semibold text-gradient-gold">
+                <p className="font-serif text-3xl font-semibold text-gradient-accent">
                   {p.value.toLocaleString(locale)}
                 </p>
                 <p className="mt-1 text-sm text-muted">{dict[p.label]}</p>
@@ -113,7 +113,7 @@ export default async function LandingPage({
         {/* Features */}
         <section id="features" className="mx-auto max-w-6xl px-6 py-24">
           <Reveal className="mx-auto max-w-2xl text-center">
-            <Badge variant="gold">{dict["mkt.features.badge"]}</Badge>
+            <Badge variant="accent">{dict["mkt.features.badge"]}</Badge>
             <h2 className="mt-4 font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
               {dict["mkt.features.title"]}
             </h2>
@@ -123,8 +123,8 @@ export default async function LandingPage({
           <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((f, i) => (
               <Reveal key={f.title} delay={i * 0.05}>
-                <div className="glass group h-full rounded-2xl border border-border p-6 transition hover:border-gold/30">
-                  <div className="grid size-11 place-items-center rounded-xl bg-gradient-to-br from-gold/15 to-transparent text-gold-bright ring-1 ring-gold/20">
+                <div className="glass group h-full rounded-2xl border border-border p-6 transition hover:border-accent/30">
+                  <div className="grid size-11 place-items-center rounded-xl bg-gradient-to-br from-accent/15 to-transparent text-accent-bright ring-1 ring-accent/20">
                     <f.icon className="size-5" />
                   </div>
                   <h3 className="mt-4 font-serif text-xl font-semibold">
@@ -173,7 +173,7 @@ export default async function LandingPage({
         {/* Conviction */}
         <section className="mx-auto max-w-4xl px-6 py-20 text-center">
           <Reveal>
-            <Quote className="mx-auto size-8 text-gold/50" />
+            <Quote className="mx-auto size-8 text-accent/50" />
             <p className="mt-6 font-serif text-2xl font-medium leading-snug sm:text-3xl">
               {dict["mkt.verse.full"]}
             </p>
@@ -187,10 +187,10 @@ export default async function LandingPage({
 
         {/* Final CTA */}
         <section className="mx-auto max-w-5xl px-6 py-20">
-          <Reveal className="glass ring-gold relative overflow-hidden rounded-3xl border border-gold/20 px-8 py-14 text-center sm:px-12">
+          <Reveal className="glass ring-accent relative overflow-hidden rounded-3xl border border-accent/20 px-8 py-14 text-center sm:px-12">
             <h2 className="font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
               {dict["mkt.cta.title1"]}{" "}
-              <span className="text-gradient-gold">{dict["mkt.cta.title2"]}</span>
+              <span className="text-gradient-accent">{dict["mkt.cta.title2"]}</span>
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-muted">
               {dict[freeMode ? "mkt.cta.bodyFree" : "mkt.cta.body"]}
@@ -237,7 +237,7 @@ function Testimonials({ dict }: { dict: Dictionary }) {
   return (
     <section id="testimonials" className="mx-auto max-w-6xl px-6 py-16">
       <Reveal className="mx-auto max-w-2xl text-center">
-        <Badge variant="gold">{dict["mkt.testimonials.badge"]}</Badge>
+        <Badge variant="accent">{dict["mkt.testimonials.badge"]}</Badge>
         <h2 className="mt-4 font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
           {dict["mkt.testimonials.title"]}
         </h2>
@@ -246,7 +246,7 @@ function Testimonials({ dict }: { dict: Dictionary }) {
         {testimonials.map((t, i) => (
           <Reveal key={t.name} delay={i * 0.05}>
             <figure className="glass flex h-full flex-col rounded-2xl border border-border p-6">
-              <Quote className="size-5 text-gold/50" />
+              <Quote className="size-5 text-accent/50" />
               <blockquote className="mt-3 flex-1 text-sm leading-relaxed text-foreground">
                 “{t.quote}”
               </blockquote>
@@ -266,7 +266,7 @@ function Pricing({ dict, locale }: { dict: Dictionary; locale: LocaleCode }) {
   return (
     <section id="pricing" className="mx-auto max-w-6xl px-6 py-24">
       <Reveal className="mx-auto max-w-2xl text-center">
-        <Badge variant="gold">{dict["mkt.pricing.badge"]}</Badge>
+        <Badge variant="accent">{dict["mkt.pricing.badge"]}</Badge>
         <h2 className="mt-4 font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
           {dict["mkt.pricing.title"]}
         </h2>
