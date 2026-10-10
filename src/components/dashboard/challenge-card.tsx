@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { JoinChallengeButton } from "./join-challenge-button";
 import { getChallenges } from "@/lib/queries/challenges";
 import { pickDashboardChallenge } from "@/lib/challenge-progress";
+import { cohortStartLabel } from "@/lib/cohort";
+import { plural } from "@/lib/i18n-plural";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
@@ -73,7 +75,16 @@ export async function ChallengeCard() {
               {Math.round(featured.progress * 100)}% {dict["challenges.percentComplete"]}
             </span>
             <span>
-              {featured.daysLeft} {dict["challenges.daysLeft"]}
+              {featured.startDate && !featured.started
+                ? dict["challenges.startsOn"].replace(
+                    "{date}",
+                    cohortStartLabel(featured.startDate, locale),
+                  )
+                : plural(
+                    featured.daysLeft,
+                    { one: dict["plural.daysLeft.one"], other: dict["plural.daysLeft.other"] },
+                    locale,
+                  )}
             </span>
           </div>
         </div>
@@ -85,7 +96,11 @@ export async function ChallengeCard() {
               {dict["challenges.lastsDays"].replace("{n}", String(featured.durationDays))}
             </Badge>
             <span>
-              {featured.participants} {dict["challenges.joined"]}
+              {plural(
+                featured.participants,
+                { one: dict["plural.participants.one"], other: dict["plural.participants.other"] },
+                locale,
+              )}
             </span>
           </div>
           <JoinChallengeButton challengeId={featured.id} label={dict["challenges.join"]} />

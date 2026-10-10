@@ -52,6 +52,9 @@ const IDENTICAL_ALLOWED = new Set<string>([
   "meta.nutrition",
   "meta.coach",
   "meta.journal",
+  // R5 plural labels — "participant/participants" is the same word in FR & EN.
+  "plural.participants.one",
+  "plural.participants.other",
 ]);
 
 describe("i18n en/fr parity", () => {

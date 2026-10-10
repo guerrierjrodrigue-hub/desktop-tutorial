@@ -4,17 +4,21 @@ import { useState, useTransition } from "react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { joinGroup } from "@/app/(app)/community/actions";
+import { plural } from "@/lib/i18n-plural";
 import type { Dictionary } from "@/i18n/dictionaries/en";
+import type { LocaleCode } from "@/i18n/locales";
 import type { CommunityGroup } from "@/lib/queries/community";
 
 function GroupRow({
   group,
   dict,
+  locale,
   onJoin,
   joining,
 }: {
   group: CommunityGroup;
   dict: Dictionary;
+  locale: LocaleCode;
   onJoin?: (id: string) => void;
   joining?: boolean;
 }) {
@@ -26,7 +30,11 @@ function GroupRow({
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-semibold">{group.name}</p>
         <p className="text-xs text-faint">
-          {group.members.toLocaleString()} {dict["community.members"]}
+          {plural(
+            group.members,
+            { one: dict["plural.members.one"], other: dict["plural.members.other"] },
+            locale,
+          )}
         </p>
       </div>
       {onJoin && (
@@ -41,9 +49,11 @@ function GroupRow({
 export function GroupsPanel({
   initial,
   dict,
+  locale,
 }: {
   initial: CommunityGroup[];
   dict: Dictionary;
+  locale: LocaleCode;
 }) {
   const [groups, setGroups] = useState(initial);
   const [pending, startTransition] = useTransition();
@@ -69,7 +79,7 @@ export function GroupsPanel({
         {joined.length === 0 ? (
           <p className="text-sm text-muted">{dict["community.noGroupsYet"]}</p>
         ) : (
-          joined.map((g) => <GroupRow key={g.id} group={g} dict={dict} />)
+          joined.map((g) => <GroupRow key={g.id} group={g} dict={dict} locale={locale} />)
         )}
       </div>
 
@@ -80,7 +90,7 @@ export function GroupsPanel({
           </h3>
           <div className="mt-2 space-y-2">
             {discover.map((g) => (
-              <GroupRow key={g.id} group={g} dict={dict} onJoin={join} joining={pending} />
+              <GroupRow key={g.id} group={g} dict={dict} locale={locale} onJoin={join} joining={pending} />
             ))}
           </div>
         </>

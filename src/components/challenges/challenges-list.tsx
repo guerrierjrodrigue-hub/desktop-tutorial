@@ -7,7 +7,8 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { createChallenge, joinChallenge } from "@/app/(app)/challenges/actions";
-import { cohortStartWeekday } from "@/lib/cohort";
+import { cohortStartLabel } from "@/lib/cohort";
+import { plural } from "@/lib/i18n-plural";
 import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { LocaleCode } from "@/i18n/locales";
@@ -75,6 +76,7 @@ export function ChallengesList({
       participants: 1,
       durationDays: days,
       daysLeft: days,
+      started: true,
       joined: true,
       progress: 0,
     };
@@ -92,7 +94,13 @@ export function ChallengesList({
     setChallenges((prev) =>
       prev.map((c) =>
         c.id === id
-          ? { ...c, joined: true, participants: c.participants + 1, daysLeft: c.durationDays }
+          ? {
+              ...c,
+              joined: true,
+              participants: c.participants + 1,
+              // A cohort keeps its shared countdown; a personal window starts now.
+              daysLeft: c.startDate ? c.daysLeft : c.durationDays,
+            }
           : c,
       ),
     );
@@ -111,6 +119,10 @@ export function ChallengesList({
 
       {challenges.map((c) => {
         const meta = typeMeta[c.type];
+        // Cohorts carry a real `started` flag; anything else (personal, demo,
+        // optimistic) is always "started".
+        const isCohort = Boolean(c.startDate);
+        const started = isCohort ? Boolean(c.started) : true;
         return (
           <Card key={c.id}>
             <div className="flex items-start gap-3">
@@ -123,13 +135,13 @@ export function ChallengesList({
                   <Badge variant="neutral">{dict[meta.labelKey]}</Badge>
                 </div>
                 <p className="mt-1 text-sm text-muted">{c.description}</p>
-                {c.startDate && (
+                {isCohort && !started && c.startDate && (
                   <p className="mt-1.5 inline-flex items-center gap-1.5 text-xs font-medium text-gold-bright">
                     <CalendarClock className="size-3.5" />
-                    {dict["join.cohortSummary"]
-                      .replace("{n}", String(c.durationDays))
-                      .replace("{day}", cohortStartWeekday(c.startDate, locale))
-                      .replace("{count}", String(c.participants))}
+                    {dict["challenges.startsOn"].replace(
+                      "{date}",
+                      cohortStartLabel(c.startDate, locale),
+                    )}
                   </p>
                 )}
               </div>
@@ -168,12 +180,20 @@ export function ChallengesList({
               >
                 <span className="flex items-center gap-1.5">
                   <Users className="size-3.5" />
-                  {c.participants.toLocaleString()} {dict["challenges.joined"]}
+                  {plural(
+                    c.participants,
+                    { one: dict["plural.participants.one"], other: dict["plural.participants.other"] },
+                    locale,
+                  )}
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Flame className="size-3.5 text-gold/70" />
-                  {c.joined
-                    ? `${c.daysLeft} ${dict["challenges.daysLeft"]}`
+                  {started && (c.joined || isCohort)
+                    ? plural(
+                        c.daysLeft,
+                        { one: dict["plural.daysLeft.one"], other: dict["plural.daysLeft.other"] },
+                        locale,
+                      )
                     : `${dict["challenges.lasts"]} ${c.durationDays} ${dict["challenges.daysUnit"]}`}
                 </span>
               </div>
