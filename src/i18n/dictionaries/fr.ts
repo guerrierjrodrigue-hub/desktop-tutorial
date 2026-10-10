@@ -122,6 +122,8 @@ const fr: Dictionary = {
   "auth.consentRequired": "Tu dois accepter pour créer un compte.",
   "privacy.title": "Confidentialité",
   "privacy.subtitle": "Tes données t'appartiennent.",
+  "privacy.leaderboardVisibility": "Apparaître dans les classements et groupes",
+  "privacy.leaderboardVisibilityHint": "Désactivé, tu apparais comme membre anonyme et ton nom est caché des autres membres.",
   "privacy.export": "Exporter mes données",
   "privacy.exportHint": "Télécharge tout ce que nous stockons sur toi dans un fichier JSON.",
   "privacy.delete": "Supprimer mon compte",
@@ -437,6 +439,7 @@ const fr: Dictionary = {
   "challenges.create": "Créer",
   "challenges.leaderboard": "Classement",
   "challenges.you": "toi",
+  "leaderboard.anonymous": "Membre anonyme",
   "challenges.personal": "Personnel",
   "challenges.friends": "Amis",
   "challenges.church": "Église",
@@ -544,7 +547,9 @@ const fr: Dictionary = {
   "mkt.privacy.s7.b": "Nous pouvons mettre à jour cette politique de temps à autre. Nous actualiserons la date de « Dernière mise à jour » ci-dessus lorsque ce sera le cas et, pour les changements importants, nous ferons un effort raisonnable pour vous en informer.",
   "mkt.privacy.s9.h": "8. Tes droits (accès, portabilité, suppression)",
   "mkt.privacy.s9.b": "En vertu de la Loi 25 du Québec et de lois équivalentes, tu peux consulter et exporter toutes tes données à tout moment : va dans Profil → Confidentialité → « Exporter mes données » pour télécharger au format JSON tout ce que nous détenons à ton sujet. Tu peux aussi supprimer définitivement ton compte et toutes les données associées depuis Profil → Confidentialité → « Supprimer mon compte ». Cela efface ton profil, tes habitudes, ton journal, tes prières, tes séances, tes repas, ton hydratation et tes messages du coach, annule toute facturation, te déconnecte, et est irréversible.",
-  "mkt.privacy.s8.h": "9. Nous contacter",
+  "mkt.privacy.s10.h": "9. Visibilité auprès des autres membres",
+  "mkt.privacy.s10.b": "Pour aider les membres à s'encourager, les classements et les fonctions de groupe affichent un nom raccourci — ton prénom et l'initiale de ton nom de famille seulement (par exemple « Jean G. »). Nous ne montrons jamais ton nom de famille complet ni ton adresse courriel aux autres membres. Tu peux masquer entièrement ton nom des classements et des groupes depuis Profil → Confidentialité → « Apparaître dans les classements et groupes » ; une fois désactivé, tu apparais uniquement comme « Membre anonyme ».",
+  "mkt.privacy.s8.h": "10. Nous contacter",
   "mkt.privacy.s8.b": "Des questions sur cette politique ? Écrivez-nous à {email}.",
 
   // Conditions d'utilisation

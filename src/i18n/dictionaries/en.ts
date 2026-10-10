@@ -127,6 +127,8 @@ const en = {
   "auth.consentRequired": "You must accept to create an account.",
   "privacy.title": "Privacy",
   "privacy.subtitle": "Your data belongs to you.",
+  "privacy.leaderboardVisibility": "Appear on leaderboards and in groups",
+  "privacy.leaderboardVisibilityHint": "When off, you show up as an anonymous member and your name is hidden from other members.",
   "privacy.export": "Export my data",
   "privacy.exportHint": "Download everything we store about you as a JSON file.",
   "privacy.delete": "Delete my account",
@@ -456,6 +458,7 @@ const en = {
   "challenges.create": "Create",
   "challenges.leaderboard": "Leaderboard",
   "challenges.you": "you",
+  "leaderboard.anonymous": "Anonymous member",
   "challenges.personal": "Personal",
   "challenges.friends": "Friends",
   "challenges.church": "Church",
@@ -565,7 +568,9 @@ const en = {
   "mkt.privacy.s7.b": "We may update this policy from time to time. We'll update the \"Last updated\" date above when we do, and, for material changes, we'll make a reasonable effort to notify you.",
   "mkt.privacy.s9.h": "8. Your rights (access, portability, deletion)",
   "mkt.privacy.s9.b": "Under Québec's Law 25 and comparable laws, you can access and export all of your data at any time: go to Profile → Privacy → \"Export my data\" to download everything we hold about you as a JSON file. You can also permanently delete your account and all associated data from Profile → Privacy → \"Delete my account\". This erases your profile, habits, journal, prayers, workouts, meals, hydration and coach messages, cancels any billing, signs you out, and cannot be undone.",
-  "mkt.privacy.s8.h": "9. Contact us",
+  "mkt.privacy.s10.h": "9. Visibility to other members",
+  "mkt.privacy.s10.b": "To help members encourage one another, leaderboards and group features show a shortened name — your first name and last initial only (for example \"Jean G.\"). We never show your full surname or your email address to other members. You can hide your name entirely from leaderboards and groups at Profile → Privacy → \"Appear on leaderboards and in groups\"; when it's off, you appear only as an \"Anonymous member\".",
+  "mkt.privacy.s8.h": "10. Contact us",
   "mkt.privacy.s8.b": "Questions about this policy? Email us at {email}.",
 
   // Terms of Service
