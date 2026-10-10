@@ -85,7 +85,7 @@ export default async function NutritionPage() {
               <span>{consumed.calories} {dict["nutrition.eaten"]}</span>
               <span>{targets.calories} {dict["nutrition.goal"]}</span>
             </div>
-            <p className="mt-3 text-center text-[11px] text-faint">
+            <p className="mt-3 text-center text-xs text-faint">
               {targets.isDefault
                 ? dict["nutrition.defaultTargets"]
                 : dict["nutrition.estimateDisclaimer"]}

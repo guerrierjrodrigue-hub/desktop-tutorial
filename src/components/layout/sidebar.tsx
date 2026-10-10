@@ -67,7 +67,7 @@ export function Sidebar({
 
         {groups.map((group) => (
           <div key={group.id} className="mt-4 first:mt-0">
-            <p className="px-3 text-[11px] font-semibold uppercase tracking-wide text-faint">
+            <p className="px-3 text-xs font-semibold uppercase tracking-wide text-faint">
               {group.labelKey ? dict[group.labelKey] : group.label}
             </p>
             <div className="mt-1 flex flex-col gap-1">

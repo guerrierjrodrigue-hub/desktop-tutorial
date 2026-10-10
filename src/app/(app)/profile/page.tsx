@@ -84,7 +84,7 @@ export default async function ProfilePage() {
                   >
                     <Icon name={badge.icon} className="size-5" />
                   </span>
-                  <span className="text-[11px] font-medium leading-tight">
+                  <span className="text-xs font-medium leading-tight">
                     {badge.name}
                   </span>
                 </div>

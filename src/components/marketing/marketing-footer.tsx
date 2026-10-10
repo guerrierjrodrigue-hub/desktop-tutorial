@@ -81,7 +81,7 @@ export async function MarketingFooter() {
           {/* Visible only in APP_FREE_MODE — a reminder to disable it before the
               real paid launch. */}
           {isFreeMode() && (
-            <span className="rounded-full border border-gold/30 bg-gold/10 px-2.5 py-0.5 text-[11px] font-medium text-gold-bright">
+            <span className="rounded-full border border-gold/30 bg-gold/10 px-2.5 py-0.5 text-xs font-medium text-gold-bright">
               {dict["mkt.freeMode.footerBadge"]}
             </span>
           )}

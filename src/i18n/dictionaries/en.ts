@@ -752,7 +752,7 @@ const en = {
   "mkt.features.title": "One daily rhythm for body and soul",
   "mkt.features.intro": "Most apps train the body. Kingdom Athlete disciples the whole person — strength, nutrition, and spirit — in a single, beautiful flow.",
   "mkt.features.programs.title": "Guided Programs",
-  "mkt.features.programs.body": "Strength, HIIT, running, mobility & bodyweight plans for every level — with video, sets, reps, and rest built in.",
+  "mkt.features.programs.body": "Strength, HIIT, running, mobility & bodyweight plans for every level — with photos, cues, sets, reps, and rest built in.",
   "mkt.features.nutrition.title": "Smart Nutrition",
   "mkt.features.nutrition.body": "Calorie & macro tracking, hydration, curated Christian-friendly recipes, and an effortless food journal.",
   "mkt.features.scripture.title": "Scripture & Prayer",

@@ -316,7 +316,7 @@ function Stat({
     <div className="rounded-xl border border-border bg-surface-2 px-4 py-2 text-center">
       <IconEl className="mx-auto size-4 text-gold/70" />
       <p className="mt-1 text-sm font-semibold">{value}</p>
-      <p className="text-[10px] uppercase tracking-wide text-faint">{label}</p>
+      <p className="text-xs uppercase tracking-wide text-faint">{label}</p>
     </div>
   );
 }

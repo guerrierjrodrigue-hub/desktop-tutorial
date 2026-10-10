@@ -102,7 +102,7 @@ export function Journal({
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-2">
                     <h3 className="text-sm font-semibold leading-tight">{entry.title}</h3>
-                    <span className="shrink-0 text-[11px] text-faint">
+                    <span className="shrink-0 text-xs text-faint">
                       {formatDate(entry.createdAt, locale)}
                     </span>
                   </div>
