@@ -17,12 +17,15 @@ export async function getGroups(): Promise<CommunityGroup[]> {
   const ctx = await getAuthedContext();
   if (!ctx) return mockGroups;
 
-  const { data: groupRows } = await ctx.supabase.from("groups").select("*");
+  // Independent reads — run them together instead of back-to-back.
+  const [groupQuery, memberQuery] = await Promise.all([
+    ctx.supabase.from("groups").select("*"),
+    ctx.supabase.from("group_members").select("group_id, user_id"),
+  ]);
+  const groupRows = groupQuery.data;
   if (!groupRows?.length) return [];
 
-  const { data: memberRows } = await ctx.supabase
-    .from("group_members")
-    .select("group_id, user_id");
+  const memberRows = memberQuery.data;
   const countByGroup = new Map<string, number>();
   const mine = new Set<string>();
   for (const row of (memberRows ?? []) as { group_id: string; user_id: string }[]) {

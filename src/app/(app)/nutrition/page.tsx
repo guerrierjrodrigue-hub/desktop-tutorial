@@ -14,6 +14,7 @@ import { getCurrentUser } from "@/lib/queries/profile";
 import { computeNutritionTargets } from "@/lib/nutrition-targets";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { timed } from "@/lib/perf";
 
 export async function generateMetadata(): Promise<Metadata> {
   const dict = await getDictionary(await getLocale());
@@ -25,13 +26,15 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function NutritionPage() {
   const locale = await getLocale();
-  const [todayStats, foodLogs, recipes, user, dict] = await Promise.all([
-    getTodayStats(),
-    getFoodLogsToday(),
-    getRecipes(locale),
-    getCurrentUser(),
-    getDictionary(locale),
-  ]);
+  const [todayStats, foodLogs, recipes, user, dict] = await timed("nutrition", () =>
+    Promise.all([
+      getTodayStats(),
+      getFoodLogsToday(),
+      getRecipes(locale),
+      getCurrentUser(),
+      getDictionary(locale),
+    ]),
+  );
   const targets = computeNutritionTargets({
     weightKg: user.weightKg,
     heightCm: user.heightCm,

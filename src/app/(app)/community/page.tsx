@@ -6,6 +6,7 @@ import { GroupsPanel } from "@/components/community/groups-panel";
 import { getCommunityPosts, getGroups } from "@/lib/queries/community";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { timed } from "@/lib/perf";
 
 export async function generateMetadata(): Promise<Metadata> {
   const dict = await getDictionary(await getLocale());
@@ -17,11 +18,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function CommunityPage() {
   const locale = await getLocale();
-  const [posts, groups, dict] = await Promise.all([
-    getCommunityPosts(),
-    getGroups(),
-    getDictionary(locale),
-  ]);
+  const [posts, groups, dict] = await timed("community", () =>
+    Promise.all([getCommunityPosts(), getGroups(), getDictionary(locale)]),
+  );
 
   return (
     <>

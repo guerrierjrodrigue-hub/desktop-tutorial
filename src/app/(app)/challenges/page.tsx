@@ -8,6 +8,7 @@ import { getChallenges, getChallengeLeaderboard, getReferralCount } from "@/lib/
 import { getCurrentUser } from "@/lib/queries/profile";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { timed } from "@/lib/perf";
 
 export async function generateMetadata(): Promise<Metadata> {
   const dict = await getDictionary(await getLocale());
@@ -19,13 +20,15 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ChallengesPage() {
   const locale = await getLocale();
-  const [challenges, leaderboard, user, referrals, dict] = await Promise.all([
-    getChallenges(locale),
-    getChallengeLeaderboard(),
-    getCurrentUser(),
-    getReferralCount(),
-    getDictionary(locale),
-  ]);
+  const [challenges, leaderboard, user, referrals, dict] = await timed("challenges", () =>
+    Promise.all([
+      getChallenges(locale),
+      getChallengeLeaderboard(),
+      getCurrentUser(),
+      getReferralCount(),
+      getDictionary(locale),
+    ]),
+  );
 
   return (
     <>
