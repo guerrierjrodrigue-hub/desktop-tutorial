@@ -8,7 +8,8 @@ import { Card } from "@/components/ui/card";
 import { getAuthedContext } from "@/lib/supabase/auth";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { getChallengeByInviteCode } from "@/lib/queries/challenges";
-import { cohortStartWeekday } from "@/lib/cohort";
+import { cohortStartLabel } from "@/lib/cohort";
+import { plural } from "@/lib/i18n-plural";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
@@ -38,8 +39,14 @@ export default async function JoinPage({
   const summary = cohort
     ? dict["join.cohortSummary"]
         .replace("{n}", String(cohort.durationDays))
-        .replace("{day}", cohort.startDate ? cohortStartWeekday(cohort.startDate, locale) : "—")
-        .replace("{count}", String(cohort.participants))
+        .replace("{day}", cohort.startDate ? cohortStartLabel(cohort.startDate, locale) : "—")
+    : null;
+  const enrolledLabel = cohort
+    ? plural(
+        cohort.participants,
+        { one: dict["plural.enrolled.one"], other: dict["plural.enrolled.other"] },
+        locale,
+      )
     : null;
 
   // Preserve the invite (and referrer) through sign-up / sign-in.
@@ -72,6 +79,7 @@ export default async function JoinPage({
                 <h2 className="font-serif text-xl font-semibold">{cohort.title}</h2>
                 <p className="mt-1 text-sm text-muted">{cohort.description}</p>
                 <p className="mt-4 text-sm font-medium text-gold-bright">{summary}</p>
+                <p className="mt-1 text-sm text-muted">{enrolledLabel}</p>
               </Card>
               <p className="mt-6 text-muted">{dict["join.subtitle"]}</p>
               <div className="mt-6 flex w-full flex-col gap-3 sm:flex-row sm:justify-center">

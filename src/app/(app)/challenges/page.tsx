@@ -8,6 +8,7 @@ import { getChallenges, getChallengeLeaderboard, getReferralCount } from "@/lib/
 import { getCurrentUser } from "@/lib/queries/profile";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { plural } from "@/lib/i18n-plural";
 import { timed } from "@/lib/perf";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -38,7 +39,11 @@ export default async function ChallengesPage() {
 
         {referrals > 0 && (
           <p className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-gold/10 px-3 py-1 text-xs font-semibold text-gold-bright">
-            {dict["challenges.referrals"].replace("{n}", String(referrals))}
+            {plural(
+              referrals,
+              { one: dict["plural.referrals.one"], other: dict["plural.referrals.other"] },
+              locale,
+            )}
           </p>
         )}
 

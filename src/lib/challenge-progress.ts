@@ -21,6 +21,26 @@ export function daysLeftFor(
   return Math.max(0, durationDays - elapsed);
 }
 
+/**
+ * Shared window for a group cohort: everyone runs from the cohort's fixed
+ * `startDate` for `durationDays`, so the end is common and a late joiner does
+ * NOT get a fresh countdown.
+ *
+ * - Before the start date: `started=false` and no countdown is shown (the UI
+ *   shows "Starts <date>" instead); `daysLeft` is the full duration.
+ * - On/after the start date: `started=true` and `daysLeft` counts down to the
+ *   shared end (never negative).
+ */
+export function cohortStatus(
+  startDate: string,
+  durationDays: number,
+  todayStr: string,
+): { started: boolean; daysLeft: number } {
+  const elapsed = daysBetween(startDate, todayStr); // today - start
+  if (elapsed < 0) return { started: false, daysLeft: durationDays };
+  return { started: true, daysLeft: Math.max(0, durationDays - elapsed) };
+}
+
 /** Target for the workout-count challenge ("30 workouts"). */
 export const WORKOUT_CHALLENGE_TARGET = 30;
 

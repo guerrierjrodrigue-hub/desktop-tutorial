@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { cohortStartWeekday } from "./cohort";
+import { cohortStartWeekday, cohortStartLabel } from "./cohort";
 
 describe("cohortStartWeekday", () => {
   it("names the weekday in English", () => {
@@ -13,5 +13,15 @@ describe("cohortStartWeekday", () => {
 
   it("is timezone-independent (plain calendar date)", () => {
     expect(cohortStartWeekday("2026-10-11", "en")).toBe("Sunday");
+  });
+});
+
+describe("cohortStartLabel", () => {
+  it("gives weekday + day + month (French)", () => {
+    expect(cohortStartLabel("2026-10-12", "fr")).toBe("lundi 12 octobre");
+  });
+
+  it("gives weekday + day + month (English)", () => {
+    expect(cohortStartLabel("2026-10-12", "en")).toBe("Monday, October 12");
   });
 });

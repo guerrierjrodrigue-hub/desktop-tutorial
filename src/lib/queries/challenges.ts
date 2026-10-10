@@ -3,7 +3,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { getUserToday } from "@/lib/date";
 import { getUserTimezone } from "@/lib/timezone";
-import { daysLeftFor, workoutProgress } from "@/lib/challenge-progress";
+import { daysLeftFor, cohortStatus, workoutProgress } from "@/lib/challenge-progress";
 import { pick, CHALLENGE_FR } from "@/lib/content-i18n";
 import { challenges as mockChallenges } from "@/data/dashboard";
 import type { LocaleCode } from "@/i18n/locales";
@@ -65,15 +65,26 @@ export async function getChallenges(locale: LocaleCode = "en"): Promise<Challeng
         progress = workoutProgress(count ?? 0);
       }
 
+      // A dated cohort shares one window from its start_date (late joiners keep
+      // the common end); everything else runs from the user's own join date.
+      let started = true;
+      let daysLeft = durationDays;
+      if (row.start_date) {
+        const status = cohortStatus(row.start_date, durationDays, todayStr);
+        started = status.started;
+        daysLeft = status.daysLeft;
+      } else if (joined && mine) {
+        daysLeft = daysLeftFor(getUserToday(tz, new Date(mine.joined_at)), durationDays, todayStr);
+      }
+
       return {
         id: row.id,
         title: pick(locale, row.title, row.title_fr),
         description: pick(locale, row.description, row.description_fr),
         participants: counts.get(row.id) ?? 0,
         durationDays,
-        daysLeft: joined && mine
-          ? daysLeftFor(getUserToday(tz, new Date(mine.joined_at)), durationDays, todayStr)
-          : durationDays,
+        daysLeft,
+        started,
         joined,
         progress,
         type: row.type,

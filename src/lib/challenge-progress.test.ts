@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   daysBetween,
   pickDashboardChallenge,
+  cohortStatus,
   daysLeftFor,
   workoutProgress,
   WORKOUT_CHALLENGE_TARGET,
@@ -72,5 +73,36 @@ describe("pickDashboardChallenge", () => {
 
   it("returns undefined when there are no challenges", () => {
     expect(pickDashboardChallenge([])).toBeUndefined();
+  });
+});
+
+describe("cohortStatus", () => {
+  it("before the start date: not started, no countdown, full duration", () => {
+    expect(cohortStatus("2026-10-12", 21, "2026-10-09")).toEqual({
+      started: false,
+      daysLeft: 21,
+    });
+  });
+
+  it("on the start date: started, full duration left", () => {
+    expect(cohortStatus("2026-10-12", 21, "2026-10-12")).toEqual({
+      started: true,
+      daysLeft: 21,
+    });
+  });
+
+  it("mid-cohort: shared countdown from the start date", () => {
+    // 5 days elapsed since start -> 16 of 21 left, regardless of join date.
+    expect(cohortStatus("2026-10-12", 21, "2026-10-17")).toEqual({
+      started: true,
+      daysLeft: 16,
+    });
+  });
+
+  it("past the end: clamps at zero, never negative", () => {
+    expect(cohortStatus("2026-10-12", 21, "2026-12-01")).toEqual({
+      started: true,
+      daysLeft: 0,
+    });
   });
 });

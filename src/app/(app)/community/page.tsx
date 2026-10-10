@@ -34,7 +34,7 @@ export default async function CommunityPage() {
           </div>
 
           <div className="space-y-5">
-            <GroupsPanel initial={groups} dict={dict} />
+            <GroupsPanel initial={groups} dict={dict} locale={locale} />
           </div>
         </div>
       </main>

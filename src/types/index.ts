@@ -132,6 +132,13 @@ export interface Challenge {
   type: "personal" | "friends" | "church";
   /** Cohort start date (YYYY-MM-DD) when this is a group cohort. */
   startDate?: string | null;
+  /**
+   * Whether the challenge window has begun. Always true for personal/ad-hoc
+   * challenges; for a dated cohort it's false until its `startDate`, which is
+   * when the "N days left" countdown begins (before then the UI shows the
+   * start date instead).
+   */
+  started?: boolean;
   /** Invite code for the shareable /join/<code> link (cohorts). */
   inviteCode?: string | null;
 }
