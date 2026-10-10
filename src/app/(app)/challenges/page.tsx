@@ -94,7 +94,11 @@ export default async function ChallengesPage() {
                         )}
                       </span>
                       <span className="flex-1 text-sm font-medium">
-                        {row.name}
+                        {row.anonymous ? (
+                          <span className="text-muted">{dict["leaderboard.anonymous"]}</span>
+                        ) : (
+                          row.name
+                        )}
                         {row.you && (
                           <span className="ml-1.5 text-xs text-gold-bright">
                             ({dict["challenges.you"]})

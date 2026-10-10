@@ -42,6 +42,7 @@ function mapProfile(row: ProfileRow): UserProfile {
     identities: row.identities,
     primaryGoals: row.primary_goals,
     onboardedAt: row.onboarded_at ?? undefined,
+    showOnLeaderboard: row.show_on_leaderboard,
   };
 }
 
@@ -78,6 +79,7 @@ export const getCurrentUser = cache(async function getCurrentUser(): Promise<Use
     joinedAt: user.created_at,
     identities: [],
     primaryGoals: [],
+    showOnLeaderboard: true,
   });
 });
 

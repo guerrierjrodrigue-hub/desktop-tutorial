@@ -4,6 +4,7 @@ import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { getUserToday } from "@/lib/date";
 import { getUserTimezone } from "@/lib/timezone";
 import { daysLeftFor, cohortStatus, workoutProgress } from "@/lib/challenge-progress";
+import { publicDisplayName } from "@/lib/public-name";
 import { pick, CHALLENGE_FR } from "@/lib/content-i18n";
 import { challenges as mockChallenges } from "@/data/dashboard";
 import type { LocaleCode } from "@/i18n/locales";
@@ -160,20 +161,30 @@ export async function getReferralCount(): Promise<number> {
 
 export interface LeaderboardEntry {
   rank: number;
+  /** Privacy-safe name ("Jean G."); empty when `anonymous` — the UI shows a label. */
   name: string;
   points: number;
   you: boolean;
+  /** The member opted out of leaderboard visibility — show "Anonymous member". */
+  anonymous: boolean;
 }
 
 const MOCK_LEADERBOARD: LeaderboardEntry[] = [
-  { rank: 1, name: "Marcus T.", points: 2840, you: false },
-  { rank: 2, name: "Sarah M.", points: 2610, you: false },
-  { rank: 3, name: "David Bennett", points: 2480, you: true },
-  { rank: 4, name: "Elena R.", points: 2210, you: false },
-  { rank: 5, name: "James P.", points: 1990, you: false },
+  { rank: 1, name: "Marcus T.", points: 2840, you: false, anonymous: false },
+  { rank: 2, name: "Sarah M.", points: 2610, you: false, anonymous: false },
+  { rank: 3, name: "David B.", points: 2480, you: true, anonymous: false },
+  { rank: 4, name: "Elena R.", points: 2210, you: false, anonymous: false },
+  { rank: 5, name: "James P.", points: 1990, you: false, anonymous: false },
 ];
 
-/** Top challenge participants by total points across all challenges (demo data when unconfigured). */
+/**
+ * Top challenge participants by total points (demo data when unconfigured).
+ *
+ * Privacy (R7): names are shortened to first name + last initial ("Jean G."),
+ * never the full surname and never the email. A member who turned off
+ * "show_on_leaderboard" is returned as `anonymous` (the UI renders "Anonymous
+ * member") — except on their own row, where they still see their own name.
+ */
 export async function getChallengeLeaderboard(limit = 5): Promise<LeaderboardEntry[]> {
   const ctx = await getAuthedContext();
   if (!ctx) return MOCK_LEADERBOARD;
@@ -190,17 +201,29 @@ export async function getChallengeLeaderboard(limit = 5): Promise<LeaderboardEnt
 
   const { data: profiles } = await ctx.supabase
     .from("profile_public")
-    .select("id, name")
+    .select("id, name, show_on_leaderboard")
     .in("id", [...totals.keys()]);
-  const nameById = new Map((profiles ?? []).map((p) => [p.id, p.name]));
+  const profileById = new Map(
+    ((profiles ?? []) as { id: string; name: string; show_on_leaderboard: boolean }[]).map((p) => [
+      p.id,
+      p,
+    ]),
+  );
 
   return [...totals.entries()]
     .sort((a, b) => b[1] - a[1])
     .slice(0, limit)
-    .map(([userId, points], i) => ({
-      rank: i + 1,
-      name: nameById.get(userId) ?? "Athlete",
-      points,
-      you: userId === ctx.userId,
-    }));
+    .map(([userId, points], i) => {
+      const you = userId === ctx.userId;
+      const profile = profileById.get(userId);
+      // Opted out and not your own row -> anonymize. You always see yourself.
+      const anonymous = !you && profile?.show_on_leaderboard === false;
+      return {
+        rank: i + 1,
+        name: anonymous ? "" : publicDisplayName(profile?.name ?? "Athlete"),
+        points,
+        you,
+        anonymous,
+      };
+    });
 }

@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { getAuthedContext } from "@/lib/supabase/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
@@ -12,6 +13,28 @@ import { DELETE_CONFIRMATION } from "@/lib/privacy";
 export interface DeleteAccountResult {
   ok: boolean;
   error?: string;
+}
+
+/**
+ * Toggle whether the signed-in user appears (by name) in leaderboards and
+ * groups. Owner-only RLS (auth.uid() = id) restricts the update to their own
+ * row. No-op in demo mode.
+ */
+export async function setLeaderboardVisibility(
+  show: boolean,
+): Promise<{ ok: boolean; error?: string }> {
+  const ctx = await getAuthedContext();
+  if (!ctx) return { ok: true };
+
+  const { error } = await ctx.supabase
+    .from("profiles")
+    .update({ show_on_leaderboard: show })
+    .eq("id", ctx.userId);
+  if (error) return { ok: false, error: error.message };
+
+  revalidatePath("/challenges");
+  revalidatePath("/profile");
+  return { ok: true };
 }
 
 /**

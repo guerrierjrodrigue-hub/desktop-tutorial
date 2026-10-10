@@ -35,6 +35,7 @@ export interface ProfileRow {
   reminder_time: string | null;
   is_premium: boolean;
   is_admin: boolean;
+  show_on_leaderboard: boolean;
   xp: number;
   streak: number;
   primary_goal: string | null;

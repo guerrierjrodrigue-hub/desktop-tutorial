@@ -144,7 +144,7 @@ export default async function ProfilePage() {
           </Card>
         )}
 
-        <PrivacySection dict={dict} />
+        <PrivacySection dict={dict} showOnLeaderboard={currentUser.showOnLeaderboard} />
       </main>
     </>
   );

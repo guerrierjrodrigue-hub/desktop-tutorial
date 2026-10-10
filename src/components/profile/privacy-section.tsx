@@ -1,20 +1,37 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Download, ShieldAlert, Trash2 } from "lucide-react";
+import { Download, ShieldAlert, Trash2, Eye } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { deleteAccount } from "@/app/(app)/profile/privacy-actions";
+import { deleteAccount, setLeaderboardVisibility } from "@/app/(app)/profile/privacy-actions";
 import { DELETE_CONFIRMATION } from "@/lib/privacy";
+import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 
-export function PrivacySection({ dict }: { dict: Dictionary }) {
+export function PrivacySection({
+  dict,
+  showOnLeaderboard,
+}: {
+  dict: Dictionary;
+  showOnLeaderboard: boolean;
+}) {
   const [confirming, setConfirming] = useState(false);
   const [typed, setTyped] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [visible, setVisible] = useState(showOnLeaderboard);
   const [pending, startTransition] = useTransition();
 
   const canDelete = typed.trim() === DELETE_CONFIRMATION;
+
+  function toggleVisibility() {
+    const next = !visible;
+    setVisible(next); // optimistic
+    startTransition(async () => {
+      const result = await setLeaderboardVisibility(next);
+      if (result && !result.ok) setVisible(!next); // revert on failure
+    });
+  }
 
   function runDelete() {
     setError(null);
@@ -39,6 +56,35 @@ export function PrivacySection({ dict }: { dict: Dictionary }) {
       </CardHeader>
 
       <div className="space-y-4">
+        {/* Leaderboard & groups visibility */}
+        <div className="flex flex-col gap-2 rounded-xl border border-border bg-surface-2 p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0">
+            <p className="flex items-center gap-1.5 text-sm font-semibold">
+              <Eye className="size-4" /> {dict["privacy.leaderboardVisibility"]}
+            </p>
+            <p className="text-xs text-muted">{dict["privacy.leaderboardVisibilityHint"]}</p>
+          </div>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={visible}
+            aria-label={dict["privacy.leaderboardVisibility"]}
+            onClick={toggleVisibility}
+            disabled={pending}
+            className={cn(
+              "relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors disabled:opacity-60",
+              visible ? "bg-gold" : "bg-surface",
+            )}
+          >
+            <span
+              className={cn(
+                "inline-block size-5 transform rounded-full bg-white transition-transform",
+                visible ? "translate-x-5" : "translate-x-0.5",
+              )}
+            />
+          </button>
+        </div>
+
         {/* Export */}
         <div className="flex flex-col gap-2 rounded-xl border border-border bg-surface-2 p-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">

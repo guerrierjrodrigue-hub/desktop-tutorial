@@ -18,4 +18,5 @@ export const currentUser: UserProfile = {
   identities: ["christian"],
   primaryGoals: ["become-disciplined", "grow-spiritually"],
   onboardedAt: "2025-11-02",
+  showOnLeaderboard: true,
 };

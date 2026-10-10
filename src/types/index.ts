@@ -42,6 +42,8 @@ export interface UserProfile {
   identities: string[];
   primaryGoals: string[];
   onboardedAt?: string;
+  /** Whether the member appears (by name) in leaderboards and groups. */
+  showOnLeaderboard: boolean;
 }
 
 export interface Exercise {
