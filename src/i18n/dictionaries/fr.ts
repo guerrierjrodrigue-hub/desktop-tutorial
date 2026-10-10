@@ -405,6 +405,8 @@ const fr: Dictionary = {
   "challenges.lasts": "Dure",
   "challenges.lastsDays": "Dure {n} jours",
   "challenges.join": "Rejoindre",
+  "challenges.leave": "Quitter ce défi",
+  "challenges.leaveConfirm": "Oui, quitter",
   "challenges.cohort": "Cohorte",
   "challenges.invite": "Inviter",
   "challenges.inviteCopied": "Lien copié !",

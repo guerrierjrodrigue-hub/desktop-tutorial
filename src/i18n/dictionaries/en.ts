@@ -424,6 +424,8 @@ const en = {
   "challenges.lasts": "Lasts",
   "challenges.lastsDays": "Lasts {n} days",
   "challenges.join": "Join",
+  "challenges.leave": "Leave this challenge",
+  "challenges.leaveConfirm": "Yes, leave",
   "challenges.cohort": "Cohort",
   "challenges.invite": "Invite",
   "challenges.inviteCopied": "Link copied!",
