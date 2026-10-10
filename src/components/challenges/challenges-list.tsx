@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { createChallenge, joinChallenge } from "@/app/(app)/challenges/actions";
+import { createChallenge, joinChallenge, leaveChallenge } from "@/app/(app)/challenges/actions";
 import { cohortStartLabel } from "@/lib/cohort";
 import { plural } from "@/lib/i18n-plural";
 import { cn } from "@/lib/utils";
@@ -40,6 +40,7 @@ export function ChallengesList({
   const [type, setType] = useState<Challenge["type"]>("personal");
   const [days, setDays] = useState(14);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [confirmingLeaveId, setConfirmingLeaveId] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
   async function invite(c: Challenge) {
@@ -109,6 +110,22 @@ export function ChallengesList({
     });
   }
 
+  function leave(id: string) {
+    // Drop the user from the challenge and its participant count; the server
+    // removes the row (and the leaderboard entry) on the next load.
+    setChallenges((prev) =>
+      prev.map((c) =>
+        c.id === id
+          ? { ...c, joined: false, progress: 0, participants: Math.max(0, c.participants - 1) }
+          : c,
+      ),
+    );
+    setConfirmingLeaveId(null);
+    startTransition(async () => {
+      await leaveChallenge(id);
+    });
+  }
+
   return (
     <div className="space-y-4">
       {challenges.length === 0 && (
@@ -124,7 +141,7 @@ export function ChallengesList({
         const isCohort = Boolean(c.startDate);
         const started = isCohort ? Boolean(c.started) : true;
         return (
-          <Card key={c.id}>
+          <Card key={c.id} data-testid={`challenge-${c.id}`}>
             <div className="flex items-start gap-3">
               <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-green/20 text-green-bright">
                 <meta.icon className="size-5" />
@@ -145,7 +162,37 @@ export function ChallengesList({
                   </p>
                 )}
               </div>
-              {!c.joined && (
+              {c.joined ? (
+                confirmingLeaveId === c.id ? (
+                  <div className="flex shrink-0 items-center gap-1.5">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => setConfirmingLeaveId(null)}
+                      disabled={pending}
+                    >
+                      {dict["common.cancel"]}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="danger"
+                      onClick={() => leave(c.id)}
+                      disabled={pending}
+                    >
+                      {dict["challenges.leaveConfirm"]}
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    onClick={() => setConfirmingLeaveId(c.id)}
+                    disabled={pending}
+                  >
+                    {dict["challenges.leave"]}
+                  </Button>
+                )
+              ) : (
                 <Button size="sm" onClick={() => join(c.id)} disabled={pending}>
                   {dict["challenges.join"]}
                 </Button>

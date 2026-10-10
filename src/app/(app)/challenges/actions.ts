@@ -51,6 +51,31 @@ export async function createChallenge(input: CreateChallengeInput): Promise<Acti
 }
 
 /**
+ * Leave a challenge the user has joined: remove their own participant row.
+ * Owner-only RLS (auth.uid() = user_id) already restricts the delete to the
+ * caller's row; the explicit user_id filter is belt-and-suspenders. Participant
+ * counts and the leaderboard are derived from this table, so they update on the
+ * revalidated pages. Idempotent — leaving when not joined is a no-op.
+ */
+export async function leaveChallenge(challengeId: string): Promise<ActionResult> {
+  if (!challengeId) return { ok: false, error: "A challenge is required." };
+
+  const ctx = await getAuthedContext();
+  if (!ctx) return demoOk;
+
+  const { error } = await ctx.supabase
+    .from("challenge_participants")
+    .delete()
+    .eq("challenge_id", challengeId)
+    .eq("user_id", ctx.userId);
+  if (error) return { ok: false, error: error.message };
+
+  revalidatePath("/challenges");
+  revalidatePath("/dashboard");
+  return { ok: true };
+}
+
+/**
  * Join an existing challenge. The user's own window starts now (their
  * `joined_at`), so "days left" is computed from this moment onward.
  * Idempotent — re-joining is a no-op.
