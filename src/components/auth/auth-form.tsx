@@ -46,15 +46,15 @@ export function AuthForm({ mode, dict }: { mode: "login" | "signup"; dict: Dicti
                 type="checkbox"
                 checked={consented}
                 onChange={(e) => setConsented(e.target.checked)}
-                className="mt-0.5 size-4 shrink-0 rounded border-border accent-gold-bright"
+                className="mt-0.5 size-4 shrink-0 rounded border-border accent-accent-bright"
               />
               <span>
                 {dict["auth.consentPre"]}{" "}
-                <Link href="/terms" className="text-gold-bright hover:underline" target="_blank">
+                <Link href="/terms" className="text-accent-bright hover:underline" target="_blank">
                   {dict["auth.consentTerms"]}
                 </Link>{" "}
                 {dict["auth.consentAnd"]}{" "}
-                <Link href="/privacy" className="text-gold-bright hover:underline" target="_blank">
+                <Link href="/privacy" className="text-accent-bright hover:underline" target="_blank">
                   {dict["auth.consentPrivacy"]}
                 </Link>
                 .
@@ -105,7 +105,7 @@ export function AuthForm({ mode, dict }: { mode: "login" | "signup"; dict: Dicti
 
             {!isSignup && (
               <div className="text-right">
-                <Link href="/forgot-password" className="text-xs text-gold-bright hover:underline">
+                <Link href="/forgot-password" className="text-xs text-accent-bright hover:underline">
                   {dict["auth.forgotPassword"]}
                 </Link>
               </div>
@@ -127,7 +127,7 @@ export function AuthForm({ mode, dict }: { mode: "login" | "signup"; dict: Dicti
         {isSignup ? dict["auth.alreadyHaveAccount"] : dict["auth.newHere"]}{" "}
         <Link
           href={isSignup ? "/login" : "/signup"}
-          className="font-semibold text-gold-bright hover:underline"
+          className="font-semibold text-accent-bright hover:underline"
         >
           {isSignup ? dict["auth.signIn"] : dict["auth.createOne"]}
         </Link>
@@ -165,7 +165,7 @@ function Field({
       <Icon className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-faint" />
       <input
         {...props}
-        className="h-12 w-full rounded-xl border border-border bg-surface-2 pl-11 pr-4 text-sm outline-none transition focus:border-gold/40 focus:ring-2 focus:ring-gold/20"
+        className="h-12 w-full rounded-xl border border-border bg-surface-2 pl-11 pr-4 text-sm outline-none transition focus:border-accent/40 focus:ring-2 focus:ring-accent/20"
       />
     </div>
   );

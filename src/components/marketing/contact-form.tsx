@@ -29,7 +29,7 @@ export function ContactForm({ dict }: { dict: Dictionary }) {
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-border bg-surface-2 px-3 py-2.5 text-sm outline-none focus:border-gold/40"
+            className="mt-1 w-full rounded-lg border border-border bg-surface-2 px-3 py-2.5 text-sm outline-none focus:border-accent/40"
           />
         </label>
         <label className="block">
@@ -39,7 +39,7 @@ export function ContactForm({ dict }: { dict: Dictionary }) {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-border bg-surface-2 px-3 py-2.5 text-sm outline-none focus:border-gold/40"
+            className="mt-1 w-full rounded-lg border border-border bg-surface-2 px-3 py-2.5 text-sm outline-none focus:border-accent/40"
           />
         </label>
       </div>
@@ -50,7 +50,7 @@ export function ContactForm({ dict }: { dict: Dictionary }) {
           rows={5}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="mt-1 w-full rounded-lg border border-border bg-surface-2 px-3 py-2.5 text-sm outline-none focus:border-gold/40"
+          className="mt-1 w-full rounded-lg border border-border bg-surface-2 px-3 py-2.5 text-sm outline-none focus:border-accent/40"
         />
       </label>
       <p className="text-xs text-faint">

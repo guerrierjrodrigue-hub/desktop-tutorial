@@ -17,7 +17,7 @@ export function ProgramCard({
   return (
     <Link
       href={`/fitness/${program.id}`}
-      className="group block overflow-hidden rounded-2xl border border-border bg-surface transition hover:border-gold/30"
+      className="group block overflow-hidden rounded-2xl border border-border bg-surface transition hover:border-accent/30"
     >
       <div
         className={`relative h-32 bg-gradient-to-br ${program.coverColor} p-4`}
@@ -34,7 +34,7 @@ export function ProgramCard({
         </div>
       </div>
       <div className="p-4">
-        <h3 className="font-serif text-lg font-semibold leading-tight group-hover:text-gold-bright">
+        <h3 className="font-serif text-lg font-semibold leading-tight group-hover:text-accent-bright">
           {program.title}
         </h3>
         <p className="mt-1.5 line-clamp-2 text-sm text-muted">

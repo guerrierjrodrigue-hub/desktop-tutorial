@@ -30,7 +30,7 @@ export function ResetPasswordForm({ dict }: { dict: Dictionary }) {
             autoComplete="new-password"
             minLength={6}
             required
-            className="h-12 w-full rounded-xl border border-border bg-surface-2 pl-11 pr-4 text-sm outline-none transition focus:border-gold/40 focus:ring-2 focus:ring-gold/20"
+            className="h-12 w-full rounded-xl border border-border bg-surface-2 pl-11 pr-4 text-sm outline-none transition focus:border-accent/40 focus:ring-2 focus:ring-accent/20"
           />
         </div>
         <div className="relative">
@@ -42,7 +42,7 @@ export function ResetPasswordForm({ dict }: { dict: Dictionary }) {
             autoComplete="new-password"
             minLength={6}
             required
-            className="h-12 w-full rounded-xl border border-border bg-surface-2 pl-11 pr-4 text-sm outline-none transition focus:border-gold/40 focus:ring-2 focus:ring-gold/20"
+            className="h-12 w-full rounded-xl border border-border bg-surface-2 pl-11 pr-4 text-sm outline-none transition focus:border-accent/40 focus:ring-2 focus:ring-accent/20"
           />
         </div>
 

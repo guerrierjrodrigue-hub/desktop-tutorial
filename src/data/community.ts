@@ -4,7 +4,7 @@ export const communityPosts: CommunityPost[] = [
   {
     id: "p1",
     author: "Sarah M.",
-    avatarColor: "#1e7a1b",
+    avatarColor: "#2e7d3a",
     timeAgo: "2h ago",
     kind: "testimony",
     content:
@@ -16,7 +16,7 @@ export const communityPosts: CommunityPost[] = [
   {
     id: "p2",
     author: "Marcus T.",
-    avatarColor: "#c60d40",
+    avatarColor: "#c9811f",
     timeAgo: "5h ago",
     kind: "progress",
     content:

@@ -40,7 +40,7 @@ export default async function FitnessPage() {
           {categories.map((c, i) => (
             <Badge
               key={c.key}
-              variant={i === 0 ? "gold" : "neutral"}
+              variant={i === 0 ? "accent" : "neutral"}
               className="cursor-pointer px-3 py-1.5"
             >
               {dict[c.labelKey]}

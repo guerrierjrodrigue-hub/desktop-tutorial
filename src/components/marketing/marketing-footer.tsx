@@ -64,7 +64,7 @@ export async function MarketingFooter() {
             <ul className="mt-4 space-y-2.5 text-sm text-muted">
               {col.links.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="transition hover:text-gold-bright">
+                  <Link href={link.href} className="transition hover:text-accent-bright">
                     {dict[link.labelKey]}
                   </Link>
                 </li>
@@ -81,7 +81,7 @@ export async function MarketingFooter() {
           {/* Visible only in APP_FREE_MODE — a reminder to disable it before the
               real paid launch. */}
           {isFreeMode() && (
-            <span className="rounded-full border border-gold/30 bg-gold/10 px-2.5 py-0.5 text-xs font-medium text-gold-bright">
+            <span className="rounded-full border border-accent/30 bg-accent/10 px-2.5 py-0.5 text-xs font-medium text-accent-bright">
               {dict["mkt.freeMode.footerBadge"]}
             </span>
           )}

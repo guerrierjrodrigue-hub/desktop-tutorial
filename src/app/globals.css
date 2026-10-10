@@ -2,36 +2,40 @@
 
 /* ------------------------------------------------------------------ *
  * Kingdom Athlete — design tokens
- * Apple Fitness-inspired identity: true-black surfaces, iOS system
- * grays, and the three activity-ring accents (Move red, Exercise
- * green, Stand cyan). Elegant serif display + clean sans body.
+ * Warm, earthy identity: near-black ember-brown surfaces, warm neutral
+ * text, an amber accent (buttons, titles, links), an ember red reserved
+ * for flames / streaks / progression, and a green for successes.
+ * Elegant serif display + clean sans body.
  * ------------------------------------------------------------------ */
 
 @theme {
-  --color-background: #000000;
-  --color-surface: #1c1c1e;
-  --color-surface-2: #2c2c2e;
-  --color-elevated: #3a3a3c;
-  --color-foreground: #ffffff;
-  --color-muted: #98989f;
-  --color-faint: #8e8e93;
-  --color-border: #313134;
+  --color-background: #0d0b0a;
+  --color-surface: #171412;
+  --color-surface-2: #211d1a;
+  --color-elevated: #2b2521;
+  --color-foreground: #f7f2ea;
+  --color-muted: #a59d93;
+  --color-faint: #928a80;
+  --color-border: #2f2924;
 
-  /* "Move" ring — red/pink */
-  --color-gold: #fa114f;
-  --color-gold-bright: #ff375f;
-  --color-gold-deep: #c60d40;
+  /* Primary accent — amber (buttons, titles, links) */
+  --color-accent: #f2a93b;
+  --color-accent-bright: #f8c268;
+  --color-accent-deep: #c9811f;
+  /* Dark text that sits on top of a filled amber accent. */
+  --color-accent-fg: #1a1208;
 
-  /* "Exercise" ring — green */
-  --color-green: #63d131;
-  --color-green-deep: #1e7a1b;
-  --color-green-bright: #a6e22e;
+  /* Ember — reserved for flames, streaks, and progression */
+  --color-ember: #ff5a36;
+  --color-ember-deep: #d9421f;
 
-  /* "Stand" ring — cyan */
-  --color-bronze: #00d4e0;
+  /* Green — successes / completed */
+  --color-green: #6fcf5a;
+  --color-green-bright: #8fe07a;
+  --color-green-deep: #2e7d3a;
 
-  --color-success: #34d399;
-  --color-warning: #fbbf24;
+  --color-success: #6fcf5a;
+  --color-warning: #f2a93b;
   --color-danger: #f87171;
 
   --font-sans:
@@ -40,8 +44,8 @@
 
   --radius: 1rem;
 
-  --shadow-glow: 0 0 0 1px rgba(250, 17, 79, 0.18),
-    0 8px 40px -8px rgba(250, 17, 79, 0.3);
+  /* Quiet amber emphasis ring — no luminous/pink glow. */
+  --shadow-glow: 0 0 0 1px color-mix(in srgb, var(--color-accent) 30%, transparent);
 }
 
 :root {
@@ -64,17 +68,17 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Ambient background: subtle radial red/green ring glow on true black. */
+/* Ambient background: subtle warm amber/ember radial glow on near-black. */
 .bg-ambient {
   background:
     radial-gradient(
       60rem 60rem at 85% -10%,
-      color-mix(in srgb, var(--color-gold) 10%, transparent),
+      color-mix(in srgb, var(--color-accent) 10%, transparent),
       transparent 60%
     ),
     radial-gradient(
       50rem 50rem at -10% 20%,
-      color-mix(in srgb, var(--color-green) 16%, transparent),
+      color-mix(in srgb, var(--color-ember) 8%, transparent),
       transparent 55%
     ),
     var(--color-background);
@@ -87,19 +91,19 @@ body {
   border: 1px solid var(--color-border);
 }
 
-.text-gradient-gold {
+.text-gradient-accent {
   background: linear-gradient(
     100deg,
-    var(--color-gold-bright),
-    var(--color-gold) 55%,
-    var(--color-gold-deep)
+    var(--color-accent-bright),
+    var(--color-accent) 55%,
+    var(--color-accent-deep)
   );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-.ring-gold {
+.ring-accent {
   box-shadow: var(--shadow-glow);
 }
 

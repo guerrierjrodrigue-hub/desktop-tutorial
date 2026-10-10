@@ -54,7 +54,7 @@ export function ReadingPlans({ initial, dict }: { initial: ReadingPlan[]; dict: 
                   {href && (
                     <Link
                       href={href}
-                      className="inline-flex h-7 items-center gap-1.5 rounded-full px-3 text-xs font-semibold text-gold-bright hover:bg-surface-3"
+                      className="inline-flex h-7 items-center gap-1.5 rounded-full px-3 text-xs font-semibold text-accent-bright hover:bg-surface-3"
                     >
                       <BookOpen className="size-3.5" /> {dict["spiritual.readToday"]}
                     </Link>

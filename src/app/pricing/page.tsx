@@ -36,7 +36,7 @@ export default async function PricingPage() {
       <main className="flex-1">
         <section className="mx-auto max-w-6xl px-6 pb-8 pt-20 text-center">
           <Reveal>
-            <Badge variant="gold">{dict["mkt.nav.pricing"]}</Badge>
+            <Badge variant="accent">{dict["mkt.nav.pricing"]}</Badge>
             <h1 className="mt-4 font-serif text-4xl font-semibold tracking-tight sm:text-5xl">
               {dict["mkt.pricing.title"]}
             </h1>
@@ -51,7 +51,7 @@ export default async function PricingPage() {
             // FREE-BETA MODE: paid plans are replaced by a single free banner.
             // Flip APP_FREE_MODE off to restore the real plans in the else branch.
             <Reveal className="mx-auto max-w-2xl">
-              <div className="glass ring-gold rounded-3xl border border-gold/30 bg-gradient-to-b from-gold/8 to-transparent px-8 py-12 text-center sm:px-12">
+              <div className="glass ring-accent rounded-3xl border border-accent/30 bg-gradient-to-b from-accent/8 to-transparent px-8 py-12 text-center sm:px-12">
                 <Badge variant="premium">{dict["mkt.freeMode.footerBadge"]}</Badge>
                 <h2 className="mt-5 font-serif text-2xl font-semibold leading-snug sm:text-3xl">
                   {dict["mkt.freeMode.title"]}

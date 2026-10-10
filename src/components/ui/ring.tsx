@@ -17,7 +17,7 @@ export function Ring({
   stroke = 10,
   className,
   trackClassName = "text-surface-2",
-  progressClassName = "text-gold",
+  progressClassName = "text-ember",
   children,
 }: RingProps) {
   const clamped = Math.min(Math.max(value, 0), 1);

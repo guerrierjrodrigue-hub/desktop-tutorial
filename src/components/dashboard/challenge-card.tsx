@@ -30,7 +30,7 @@ export async function ChallengeCard() {
         </CardHeader>
         <p className="text-sm text-muted">
           {dict["empty.noChallengesYet"]}{" "}
-          <Link href="/challenges" className="font-semibold text-gold-bright hover:underline">
+          <Link href="/challenges" className="font-semibold text-accent-bright hover:underline">
             {dict["empty.browseChallenges"]} →
           </Link>
         </p>
@@ -50,7 +50,7 @@ export async function ChallengeCard() {
         <CardTitle>{title}</CardTitle>
         <Link
           href="/challenges"
-          className="inline-flex items-center gap-1 text-xs font-semibold text-gold-bright hover:underline"
+          className="inline-flex items-center gap-1 text-xs font-semibold text-accent-bright hover:underline"
         >
           {dict["common.seeAll"]} <ArrowRight className="size-3" />
         </Link>
@@ -92,7 +92,7 @@ export async function ChallengeCard() {
         // RECOMMENDED: show duration + a Join button (no fake progress bar).
         <div className="mt-4 space-y-3">
           <div className="flex items-center justify-between text-xs text-muted">
-            <Badge variant="gold">
+            <Badge variant="accent">
               {dict["challenges.lastsDays"].replace("{n}", String(featured.durationDays))}
             </Badge>
             <span>

@@ -14,13 +14,13 @@ export default async function AuthLayout({
     <div className="grid min-h-svh lg:grid-cols-2">
       {/* Brand panel */}
       <div className="relative hidden overflow-hidden border-r border-border bg-gradient-to-br from-green-deep via-background to-background p-12 lg:flex lg:flex-col lg:justify-between">
-        <div className="pointer-events-none absolute -right-20 top-10 size-80 rounded-full bg-gold/10 blur-3xl" />
+        <div className="pointer-events-none absolute -right-20 top-10 size-80 rounded-full bg-accent/10 blur-3xl" />
         <Logo />
         <div className="relative">
           <blockquote className="max-w-md font-serif text-3xl font-medium leading-snug">
             {dict["mkt.verse.full"]}
           </blockquote>
-          <p className="mt-4 text-sm text-gold-bright">{dict["mkt.verse.fullRef"]}</p>
+          <p className="mt-4 text-sm text-accent-bright">{dict["mkt.verse.fullRef"]}</p>
         </div>
         <p className="relative text-sm text-muted">{dict["mkt.tagline"]}</p>
       </div>

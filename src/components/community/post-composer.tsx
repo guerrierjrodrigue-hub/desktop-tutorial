@@ -68,7 +68,7 @@ export function PostComposer({
           aria-label={dict["community.postAria"]}
           rows={3}
           autoFocus
-          className="w-full resize-none rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm outline-none focus:border-gold/40 focus:ring-2 focus:ring-gold/20"
+          className="w-full resize-none rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/20"
         />
         <div className="flex flex-wrap items-center gap-2">
           {kinds.map((k) => (
@@ -78,7 +78,7 @@ export function PostComposer({
               onClick={() => setKind(k.value)}
               aria-pressed={kind === k.value}
             >
-              <Badge variant={kind === k.value ? "gold" : "neutral"} className="cursor-pointer px-3 py-1.5">
+              <Badge variant={kind === k.value ? "accent" : "neutral"} className="cursor-pointer px-3 py-1.5">
                 {dict[k.labelKey]}
               </Badge>
             </button>

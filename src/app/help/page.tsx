@@ -60,13 +60,13 @@ export default async function HelpPage() {
       <main className="flex-1">
         <section className="mx-auto max-w-3xl px-6 pb-8 pt-20 text-center">
           <Reveal>
-            <Badge variant="gold">{dict["mkt.footer.help"]}</Badge>
+            <Badge variant="accent">{dict["mkt.footer.help"]}</Badge>
             <h1 className="mt-4 font-serif text-4xl font-semibold tracking-tight sm:text-5xl">
               {dict["mkt.help.title"]}
             </h1>
             <p className="mx-auto mt-5 max-w-xl text-muted">
               {dict["mkt.help.subtitlePre"]}
-              <Link href="/contact" className="text-gold-bright hover:underline">
+              <Link href="/contact" className="text-accent-bright hover:underline">
                 {dict["mkt.help.subtitleLink"]}
               </Link>
               .
@@ -92,7 +92,7 @@ export default async function HelpPage() {
           <Reveal className="glass rounded-2xl border border-border p-6 text-center">
             <p className="text-sm text-muted">
               {dict["mkt.help.stuckPre"]}
-              <a href={`mailto:${APP_SUPPORT_EMAIL}`} className="text-gold-bright hover:underline">
+              <a href={`mailto:${APP_SUPPORT_EMAIL}`} className="text-accent-bright hover:underline">
                 {APP_SUPPORT_EMAIL}
               </a>
               {dict["mkt.help.stuckPost"]}

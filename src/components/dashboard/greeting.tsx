@@ -33,7 +33,7 @@ export async function Greeting() {
 
   return (
     <div>
-      <p className="text-sm font-medium text-gold-bright">{dateLabel}</p>
+      <p className="text-sm font-medium text-accent-bright">{dateLabel}</p>
       <h1 className="mt-1 font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
         {greeting}, {firstName}.
       </h1>

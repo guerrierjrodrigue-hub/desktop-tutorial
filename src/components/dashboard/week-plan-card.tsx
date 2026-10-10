@@ -35,17 +35,17 @@ export async function WeekPlanCard() {
       <CardHeader>
         <CardTitle>
           <span className="inline-flex items-center gap-2">
-            <CalendarRange className="size-4 text-gold-bright" /> {dict["dashboard.weekPlan"]}
+            <CalendarRange className="size-4 text-accent-bright" /> {dict["dashboard.weekPlan"]}
           </span>
         </CardTitle>
       </CardHeader>
 
       <Link
         href={`/fitness/${plan.program.id}`}
-        className="group flex items-center justify-between gap-3 rounded-xl border border-border bg-surface-2 p-3 transition hover:border-gold/30"
+        className="group flex items-center justify-between gap-3 rounded-xl border border-border bg-surface-2 p-3 transition hover:border-accent/30"
       >
         <div className="min-w-0">
-          <p className="truncate text-sm font-semibold group-hover:text-gold-bright">
+          <p className="truncate text-sm font-semibold group-hover:text-accent-bright">
             {plan.program.title}
           </p>
           <p className="text-xs text-muted">
@@ -63,7 +63,7 @@ export async function WeekPlanCard() {
               className={cn(
                 "grid h-8 w-full place-items-center rounded-lg text-xs font-semibold",
                 d === "train"
-                  ? "bg-gradient-to-br from-gold-bright to-gold-deep text-background"
+                  ? "bg-gradient-to-br from-accent-bright to-accent-deep text-accent-fg"
                   : "bg-surface-2 text-faint",
               )}
             >

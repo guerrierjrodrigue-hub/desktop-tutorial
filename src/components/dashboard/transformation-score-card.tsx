@@ -17,14 +17,14 @@ export async function TransformationScoreCard() {
 
   return (
     <Card className="flex items-center gap-5">
-      <Ring value={score / 100} size={88} stroke={8} progressClassName="text-gold">
+      <Ring value={score / 100} size={88} stroke={8} progressClassName="text-ember">
         <span className="font-serif text-xl font-semibold">{score}</span>
       </Ring>
       <div>
         <p className="text-xs font-semibold uppercase tracking-wide text-muted">
           {dict["dashboard.transformationScore"]}
         </p>
-        <p className="mt-1 font-serif text-xl font-semibold text-gold-bright">{tier}</p>
+        <p className="mt-1 font-serif text-xl font-semibold text-accent-bright">{tier}</p>
         <p className="mt-1 text-xs text-faint">{dict["score.blurb"]}</p>
       </div>
     </Card>

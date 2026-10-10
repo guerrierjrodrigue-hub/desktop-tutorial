@@ -71,14 +71,14 @@ export default async function ProfilePage() {
                   title={badge.description}
                   className={`flex flex-col items-center gap-1.5 rounded-xl border p-3 text-center ${
                     badge.earned
-                      ? "border-gold/25 bg-gold/8"
+                      ? "border-accent/25 bg-accent/8"
                       : "border-border bg-surface-2 opacity-50"
                   }`}
                 >
                   <span
                     className={`grid size-10 place-items-center rounded-full ${
                       badge.earned
-                        ? "bg-gradient-to-br from-gold-bright to-gold-deep text-background"
+                        ? "bg-gradient-to-br from-accent-bright to-accent-deep text-accent-fg"
                         : "bg-elevated text-faint"
                     }`}
                   >
@@ -104,7 +104,7 @@ export default async function ProfilePage() {
         </div>
 
         {profilePlanCard(isFreeMode(), currentUser.isPremium) === "free-beta" ? (
-          <Card className="mt-5 flex flex-col items-center justify-between gap-4 bg-gradient-to-br from-gold/12 to-surface sm:flex-row">
+          <Card className="mt-5 flex flex-col items-center justify-between gap-4 bg-gradient-to-br from-accent/12 to-surface sm:flex-row">
             <div className="text-center sm:text-left">
               <h3 className="font-serif text-lg font-semibold">
                 {dict["profile.freeBeta.title"]}
@@ -113,7 +113,7 @@ export default async function ProfilePage() {
             </div>
           </Card>
         ) : profilePlanCard(isFreeMode(), currentUser.isPremium) === "premium-member" ? (
-          <Card className="mt-5 flex flex-col items-center justify-between gap-4 bg-gradient-to-br from-gold/12 to-surface sm:flex-row">
+          <Card className="mt-5 flex flex-col items-center justify-between gap-4 bg-gradient-to-br from-accent/12 to-surface sm:flex-row">
             <div className="text-center sm:text-left">
               <h3 className="font-serif text-lg font-semibold">
                 You&apos;re a Premium member
@@ -126,7 +126,7 @@ export default async function ProfilePage() {
             <ManageBillingButton />
           </Card>
         ) : (
-          <Card className="mt-5 flex flex-col items-center justify-between gap-4 bg-gradient-to-br from-gold/12 to-surface sm:flex-row">
+          <Card className="mt-5 flex flex-col items-center justify-between gap-4 bg-gradient-to-br from-accent/12 to-surface sm:flex-row">
             <div className="text-center sm:text-left">
               <h3 className="font-serif text-lg font-semibold">
                 Unlock your full potential

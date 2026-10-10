@@ -13,13 +13,13 @@ export async function ProgressCard() {
   const toNext = nextLevelXp - currentUser.xp;
 
   return (
-    <Card className="bg-gradient-to-br from-gold/10 to-surface">
+    <Card className="bg-gradient-to-br from-accent/10 to-surface">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-muted">
             {dict["dashboard.level"]}
           </p>
-          <p className="font-serif text-4xl font-semibold text-gradient-gold">
+          <p className="font-serif text-4xl font-semibold text-gradient-accent">
             {level}
           </p>
         </div>
@@ -65,7 +65,7 @@ function Stat({
 }) {
   return (
     <div className="rounded-xl border border-border bg-black/20 px-3 py-2 text-center">
-      <Icon className="mx-auto size-4 text-gold/70" />
+      <Icon className="mx-auto size-4 text-accent/70" />
       <p className="mt-1 text-sm font-semibold">{value}</p>
       <p className="text-xs uppercase tracking-wide text-faint">{label}</p>
     </div>

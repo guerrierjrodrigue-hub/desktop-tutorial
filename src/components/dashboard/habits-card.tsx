@@ -16,7 +16,7 @@ export async function HabitsCard() {
         </CardHeader>
         <p className="text-sm text-muted">
           {dict["empty.noHabitsYet"]}{" "}
-          <a href="/habits" className="font-semibold text-gold-bright hover:underline">
+          <a href="/habits" className="font-semibold text-accent-bright hover:underline">
             {dict["empty.addFirstHabit"]} →
           </a>
         </p>

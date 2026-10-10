@@ -73,7 +73,7 @@ export function PrivacySection({
             disabled={pending}
             className={cn(
               "relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors disabled:opacity-60",
-              visible ? "bg-gold" : "bg-surface",
+              visible ? "bg-accent" : "bg-surface",
             )}
           >
             <span

@@ -59,7 +59,7 @@ export default async function JoinPage({
       <MarketingNav />
       <main className="flex-1">
         <section className="mx-auto flex max-w-xl flex-col items-center px-6 pb-24 pt-20 text-center">
-          <span className="grid size-14 place-items-center rounded-2xl bg-gold/15 text-gold-bright">
+          <span className="grid size-14 place-items-center rounded-2xl bg-accent/15 text-accent-bright">
             <Users className="size-7" />
           </span>
           <h1 className="mt-6 font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
@@ -78,7 +78,7 @@ export default async function JoinPage({
               <Card className="mt-8 w-full text-left">
                 <h2 className="font-serif text-xl font-semibold">{cohort.title}</h2>
                 <p className="mt-1 text-sm text-muted">{cohort.description}</p>
-                <p className="mt-4 text-sm font-medium text-gold-bright">{summary}</p>
+                <p className="mt-4 text-sm font-medium text-accent-bright">{summary}</p>
                 <p className="mt-1 text-sm text-muted">{enrolledLabel}</p>
               </Card>
               <p className="mt-6 text-muted">{dict["join.subtitle"]}</p>

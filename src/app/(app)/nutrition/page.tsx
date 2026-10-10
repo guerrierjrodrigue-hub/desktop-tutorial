@@ -50,8 +50,8 @@ export default async function NutritionPage() {
 
   const macros = [
     { key: "protein", label: dict["nutrition.protein"], icon: Beef, value: consumed.proteinG, goal: targets.proteinG, color: "text-green-bright" },
-    { key: "carbs", label: dict["nutrition.carbs"], icon: Wheat, value: 0, goal: targets.carbsG, color: "text-gold" },
-    { key: "fat", label: dict["nutrition.fat"], icon: Droplet, value: 0, goal: targets.fatG, color: "text-bronze" },
+    { key: "carbs", label: dict["nutrition.carbs"], icon: Wheat, value: 0, goal: targets.carbsG, color: "text-accent" },
+    { key: "fat", label: dict["nutrition.fat"], icon: Droplet, value: 0, goal: targets.fatG, color: "text-ember" },
   ];
 
   return (
@@ -72,7 +72,7 @@ export default async function NutritionPage() {
               size={168}
               stroke={14}
               className="my-2"
-              progressClassName="text-gold"
+              progressClassName="text-ember"
             >
               <div className="text-center">
                 <p className="font-serif text-3xl font-semibold">
@@ -96,7 +96,7 @@ export default async function NutritionPage() {
           <Card className="lg:col-span-2">
             <CardHeader>
               <CardTitle>{dict["nutrition.macros"]}</CardTitle>
-              <Flame className="size-4 text-gold/70" />
+              <Flame className="size-4 text-ember/70" />
             </CardHeader>
             <div className="space-y-5">
               {macros.map((m) => (
@@ -116,8 +116,8 @@ export default async function NutritionPage() {
                       m.key === "protein"
                         ? "from-green to-green-bright"
                         : m.key === "fat"
-                          ? "from-bronze to-gold-deep"
-                          : "from-gold to-gold-bright"
+                          ? "from-ember to-accent-deep"
+                          : "from-accent to-accent-bright"
                     }
                   />
                 </div>

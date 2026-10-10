@@ -12,7 +12,7 @@ export default async function NotFound() {
         <div className="mb-8 flex justify-center">
           <Logo />
         </div>
-        <p className="font-serif text-7xl font-semibold text-gradient-gold">404</p>
+        <p className="font-serif text-7xl font-semibold text-gradient-accent">404</p>
         <h1 className="mt-4 font-serif text-2xl font-semibold">{dict["notFound.heading"]}</h1>
         <p className="mx-auto mt-2 max-w-sm text-muted">{dict["notFound.body"]}</p>
         <div className="mt-8 flex justify-center gap-3">

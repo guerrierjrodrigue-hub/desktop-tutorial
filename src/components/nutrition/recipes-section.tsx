@@ -39,7 +39,7 @@ export function RecipesSection({ recipes, dict }: { recipes: Recipe[]; dict: Dic
         {CATEGORIES.map((c) => (
           <Badge
             key={c.key}
-            variant={category === c.key ? "gold" : "neutral"}
+            variant={category === c.key ? "accent" : "neutral"}
             className="cursor-pointer px-3 py-1.5"
             onClick={() => setCategory(c.key)}
           >
@@ -63,7 +63,7 @@ export function RecipesSection({ recipes, dict }: { recipes: Recipe[]; dict: Dic
               </div>
               <div className="mt-3 flex items-center justify-between text-xs text-muted">
                 <span className="flex items-center gap-1">
-                  <Flame className="size-3.5 text-gold/70" />
+                  <Flame className="size-3.5 text-ember/70" />
                   {r.calories} kcal
                 </span>
                 <span>P {r.proteinG}g</span>

@@ -4,7 +4,7 @@ export interface Coach {
   id: CoachId;
   name: string;
   tagline: string;
-  /** Complete Tailwind gradient stop classes, e.g. "from-gold-bright to-gold-deep". */
+  /** Complete Tailwind gradient stop classes, e.g. "from-accent-bright to-accent-deep". */
   avatarGradient: string;
   greeting: string;
   suggestedPrompts: string[];
@@ -23,7 +23,7 @@ export const COACHES: Coach[] = [
     id: "barnabas",
     name: "Barnabas",
     tagline: "Faith & fitness coach · son of encouragement",
-    avatarGradient: "from-gold-bright to-gold-deep",
+    avatarGradient: "from-accent-bright to-accent-deep",
     greeting:
       "Hi, I'm Barnabas — your faith & fitness coach. 🙌 I'm here to encourage you, plan your training, talk nutrition, or simply pray with you. How can I help today?",
     suggestedPrompts: [
@@ -92,7 +92,7 @@ Voice & values:
     id: "forge",
     name: "Coach Forge",
     tagline: "Discipline & habits coach",
-    avatarGradient: "from-gold to-bronze",
+    avatarGradient: "from-accent to-ember",
     greeting:
       "Coach Forge here. Discipline isn't a feeling, it's a system. What are we building or fixing today?",
     suggestedPrompts: [
@@ -125,7 +125,7 @@ Voice & values:
     id: "haven",
     name: "Coach Haven",
     tagline: "Mindset & wellness coach",
-    avatarGradient: "from-bronze to-green-deep",
+    avatarGradient: "from-ember to-green-deep",
     greeting:
       "Hi, I'm Coach Haven. Let's slow down for a moment — how are you actually doing today?",
     suggestedPrompts: [

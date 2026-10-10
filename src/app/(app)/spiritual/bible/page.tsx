@@ -116,7 +116,7 @@ export default async function BiblePage({
                 {prev ? (
                   <Link
                     href={prev}
-                    className="inline-flex items-center gap-1 text-sm font-semibold text-gold-bright hover:underline"
+                    className="inline-flex items-center gap-1 text-sm font-semibold text-accent-bright hover:underline"
                   >
                     <ChevronLeft className="size-4" /> {dict["bible.previous"]}
                   </Link>
@@ -126,7 +126,7 @@ export default async function BiblePage({
                 {next ? (
                   <Link
                     href={next}
-                    className="inline-flex items-center gap-1 text-sm font-semibold text-gold-bright hover:underline"
+                    className="inline-flex items-center gap-1 text-sm font-semibold text-accent-bright hover:underline"
                   >
                     {dict["bible.next"]} <ChevronRight className="size-4" />
                   </Link>

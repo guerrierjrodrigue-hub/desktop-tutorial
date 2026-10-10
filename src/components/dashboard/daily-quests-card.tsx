@@ -44,7 +44,7 @@ export async function DailyQuestsCard() {
     <Card>
       <CardHeader>
         <CardTitle>{dict["dashboard.dailyQuests"]}</CardTitle>
-        <span className="text-xs font-semibold text-gold-bright">
+        <span className="text-xs font-semibold text-accent-bright">
           +{earnedXp} {dict["quests.xpToday"]}
         </span>
       </CardHeader>

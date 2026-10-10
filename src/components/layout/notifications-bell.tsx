@@ -8,9 +8,9 @@ import type { Dictionary } from "@/i18n/dictionaries/en";
 import { cn } from "@/lib/utils";
 
 const accentClass: Record<string, string> = {
-  gold: "bg-gold/15 text-gold-bright",
+  accent: "bg-accent/15 text-accent-bright",
   green: "bg-green/25 text-green-bright",
-  bronze: "bg-bronze/20 text-bronze",
+  ember: "bg-ember/20 text-ember",
 };
 
 export function NotificationsBell({
@@ -56,7 +56,7 @@ export function NotificationsBell({
       >
         <Bell className="size-5" />
         {unread > 0 && (
-          <span className="absolute right-1.5 top-1.5 grid min-w-4 place-items-center rounded-full bg-gold px-1 text-xs font-bold text-background">
+          <span className="absolute right-1.5 top-1.5 grid min-w-4 place-items-center rounded-full bg-accent px-1 text-xs font-bold text-accent-fg">
             {unread}
           </span>
         )}
@@ -72,7 +72,7 @@ export function NotificationsBell({
             {unread > 0 && (
               <button
                 onClick={markAllRead}
-                className="flex items-center gap-1 text-xs font-medium text-gold-bright hover:underline"
+                className="flex items-center gap-1 text-xs font-medium text-accent-bright hover:underline"
               >
                 <Check className="size-3.5" /> {dict["notifications.markAllRead"]}
               </button>
@@ -90,7 +90,7 @@ export function NotificationsBell({
                 key={n.id}
                 className={cn(
                   "flex gap-3 border-b border-border/60 px-4 py-3 transition last:border-0",
-                  !n.read && "bg-gold/5",
+                  !n.read && "bg-accent/5",
                 )}
               >
                 <span
@@ -107,7 +107,7 @@ export function NotificationsBell({
                   <p className="mt-1 text-xs text-faint">{n.time}</p>
                 </div>
                 {!n.read && (
-                  <span className="mt-1.5 size-2 shrink-0 rounded-full bg-gold" />
+                  <span className="mt-1.5 size-2 shrink-0 rounded-full bg-accent" />
                 )}
               </li>
             ))}

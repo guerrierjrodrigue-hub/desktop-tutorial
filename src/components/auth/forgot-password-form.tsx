@@ -36,7 +36,7 @@ export function ForgotPasswordForm({ dict }: { dict: Dictionary }) {
               placeholder={dict["auth.emailAddress"]}
               autoComplete="email"
               required
-              className="h-12 w-full rounded-xl border border-border bg-surface-2 pl-11 pr-4 text-sm outline-none transition focus:border-gold/40 focus:ring-2 focus:ring-gold/20"
+              className="h-12 w-full rounded-xl border border-border bg-surface-2 pl-11 pr-4 text-sm outline-none transition focus:border-accent/40 focus:ring-2 focus:ring-accent/20"
             />
           </div>
 
@@ -54,7 +54,7 @@ export function ForgotPasswordForm({ dict }: { dict: Dictionary }) {
       <p className="mt-6 text-center text-sm text-muted">
         <Link
           href="/login"
-          className="inline-flex items-center gap-1 font-semibold text-gold-bright hover:underline"
+          className="inline-flex items-center gap-1 font-semibold text-accent-bright hover:underline"
         >
           <ArrowLeft className="size-3.5" /> {dict["auth.backToLogin"]}
         </Link>

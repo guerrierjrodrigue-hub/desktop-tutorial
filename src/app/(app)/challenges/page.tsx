@@ -38,7 +38,7 @@ export default async function ChallengesPage() {
         <PageHeader title={dict["challenges.title"]} subtitle={dict["challenges.subtitle"]} />
 
         {referrals > 0 && (
-          <p className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-gold/10 px-3 py-1 text-xs font-semibold text-gold-bright">
+          <p className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-accent-bright">
             {plural(
               referrals,
               { one: dict["plural.referrals.one"], other: dict["plural.referrals.other"] },
@@ -63,7 +63,7 @@ export default async function ChallengesPage() {
               <CardHeader>
                 <CardTitle>
                   <span className="inline-flex items-center gap-2">
-                    <Trophy className="size-4 text-gold-bright" /> {dict["challenges.leaderboard"]}
+                    <Trophy className="size-4 text-accent-bright" /> {dict["challenges.leaderboard"]}
                   </span>
                 </CardTitle>
               </CardHeader>
@@ -75,7 +75,7 @@ export default async function ChallengesPage() {
                     <li
                       key={row.rank}
                       className={`flex items-center gap-3 rounded-xl px-3 py-2.5 ${
-                        row.you ? "bg-gold/10 ring-1 ring-gold/25" : ""
+                        row.you ? "bg-accent/10 ring-1 ring-accent/25" : ""
                       }`}
                     >
                       <span className="w-5 text-center text-sm font-semibold text-muted">
@@ -83,10 +83,10 @@ export default async function ChallengesPage() {
                           <Medal
                             className={`mx-auto size-4 ${
                               row.rank === 1
-                                ? "text-gold-bright"
+                                ? "text-accent-bright"
                                 : row.rank === 2
                                   ? "text-muted"
-                                  : "text-bronze"
+                                  : "text-ember"
                             }`}
                           />
                         ) : (
@@ -100,12 +100,12 @@ export default async function ChallengesPage() {
                           row.name
                         )}
                         {row.you && (
-                          <span className="ml-1.5 text-xs text-gold-bright">
+                          <span className="ml-1.5 text-xs text-accent-bright">
                             ({dict["challenges.you"]})
                           </span>
                         )}
                       </span>
-                      <span className="text-sm font-semibold text-gold-bright">
+                      <span className="text-sm font-semibold text-accent-bright">
                         {row.points.toLocaleString()}
                       </span>
                     </li>

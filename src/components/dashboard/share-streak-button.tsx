@@ -31,7 +31,7 @@ export function ShareStreakButton({
     <button
       type="button"
       onClick={share}
-      className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs font-medium text-muted transition hover:border-gold/30 hover:text-foreground"
+      className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs font-medium text-muted transition hover:border-accent/30 hover:text-foreground"
     >
       <Share2 className="size-3.5" /> {label}
     </button>

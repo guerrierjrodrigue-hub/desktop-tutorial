@@ -28,7 +28,7 @@ export default async function ContactPage() {
       <main className="flex-1">
         <section className="mx-auto max-w-3xl px-6 pb-8 pt-20 text-center">
           <Reveal>
-            <Badge variant="gold">{dict["mkt.contact.badge"]}</Badge>
+            <Badge variant="accent">{dict["mkt.contact.badge"]}</Badge>
             <h1 className="mt-4 font-serif text-4xl font-semibold tracking-tight sm:text-5xl">
               {dict["mkt.contact.title"]}
             </h1>
@@ -47,14 +47,14 @@ export default async function ContactPage() {
 
           <Reveal delay={0.05} className="space-y-4">
             <Card className="flex items-start gap-3">
-              <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-gold/12 text-gold-bright">
+              <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-accent/12 text-accent-bright">
                 <Mail className="size-4" />
               </span>
               <div>
                 <h3 className="font-semibold">{dict["mkt.contact.emailTitle"]}</h3>
                 <a
                   href={`mailto:${APP_SUPPORT_EMAIL}`}
-                  className="text-sm text-gold-bright hover:underline"
+                  className="text-sm text-accent-bright hover:underline"
                 >
                   {APP_SUPPORT_EMAIL}
                 </a>
@@ -71,14 +71,14 @@ export default async function ContactPage() {
               </div>
             </Card>
             <Card className="flex items-start gap-3">
-              <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-bronze/20 text-bronze">
+              <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-ember/20 text-ember">
                 <HelpCircle className="size-4" />
               </span>
               <div>
                 <h3 className="font-semibold">{dict["mkt.contact.faqTitle"]}</h3>
                 <p className="text-sm text-muted">
                   {dict["mkt.contact.faqBody"]}
-                  <Link href="/help" className="text-gold-bright hover:underline">
+                  <Link href="/help" className="text-accent-bright hover:underline">
                     {dict["mkt.footer.help"]}
                   </Link>
                   .

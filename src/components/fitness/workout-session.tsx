@@ -79,7 +79,7 @@ export function WorkoutSession({
         animate={{ opacity: 1, y: 0 }}
         className="flex flex-col items-center gap-4 py-16 text-center"
       >
-        <span className="grid size-16 place-items-center rounded-full bg-gradient-to-br from-gold-bright to-gold-deep text-background">
+        <span className="grid size-16 place-items-center rounded-full bg-gradient-to-br from-accent-bright to-accent-deep text-accent-fg">
           <PartyPopper className="size-8" />
         </span>
         <h1 className="font-serif text-2xl font-semibold">{dict["session.complete"]}</h1>
@@ -154,7 +154,7 @@ export function WorkoutSession({
                         "grid size-10 place-items-center rounded-xl border text-sm font-semibold transition",
                         setComplete
                           ? "border-green-bright/40 bg-green-bright text-background"
-                          : "border-border bg-surface-2 text-muted hover:border-gold/40",
+                          : "border-border bg-surface-2 text-muted hover:border-accent/40",
                       )}
                     >
                       {i + 1}
@@ -164,7 +164,7 @@ export function WorkoutSession({
               </div>
 
               {resting?.exerciseId === ex.id && (
-                <p className="mt-2 text-xs font-medium text-gold-bright">
+                <p className="mt-2 text-xs font-medium text-accent-bright">
                   {dict["session.resting"]} {resting.secondsLeft}s
                 </p>
               )}

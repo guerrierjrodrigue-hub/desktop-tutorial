@@ -64,7 +64,7 @@ export default async function AdminOverviewPage() {
             <h2 className="font-serif text-lg font-semibold">Recent users</h2>
             <Link
               href="/admin/users"
-              className="inline-flex items-center gap-1 text-sm text-gold-bright hover:underline"
+              className="inline-flex items-center gap-1 text-sm text-accent-bright hover:underline"
             >
               View all <ArrowRight className="size-3.5" />
             </Link>

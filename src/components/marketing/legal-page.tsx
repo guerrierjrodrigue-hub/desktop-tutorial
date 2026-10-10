@@ -40,7 +40,7 @@ export async function LegalPage({
         </section>
 
         <section className="mx-auto max-w-3xl px-6 pb-24">
-          <Reveal className="glass rounded-2xl border border-gold/20 bg-gold/5 p-5 text-sm text-muted">
+          <Reveal className="glass rounded-2xl border border-accent/20 bg-accent/5 p-5 text-sm text-muted">
             {dict["mkt.legal.provisional"]}
           </Reveal>
 

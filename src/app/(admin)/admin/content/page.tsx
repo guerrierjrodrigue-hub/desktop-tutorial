@@ -52,7 +52,7 @@ export default function AdminContentPage() {
             key: "actions",
             header: "",
             render: () => (
-              <button className="text-sm text-gold-bright hover:underline">
+              <button className="text-sm text-accent-bright hover:underline">
                 Edit
               </button>
             ),

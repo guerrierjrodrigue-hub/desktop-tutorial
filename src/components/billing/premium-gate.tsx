@@ -15,8 +15,8 @@ export function PremiumGate({
   perks?: string[];
 }) {
   return (
-    <div className="glass ring-gold mt-8 overflow-hidden rounded-3xl border border-gold/25 p-8 text-center">
-      <span className="mx-auto grid size-14 place-items-center rounded-2xl bg-gradient-to-br from-gold-bright to-gold-deep text-background">
+    <div className="glass ring-accent mt-8 overflow-hidden rounded-3xl border border-accent/25 p-8 text-center">
+      <span className="mx-auto grid size-14 place-items-center rounded-2xl bg-gradient-to-br from-accent-bright to-accent-deep text-accent-fg">
         <Crown className="size-7" />
       </span>
       <h2 className="mt-4 font-serif text-2xl font-semibold">{title}</h2>
@@ -27,7 +27,7 @@ export function PremiumGate({
       <ul className="mx-auto mt-6 flex max-w-xs flex-col gap-2 text-left text-sm">
         {perks.map((p) => (
           <li key={p} className="flex items-center gap-2.5">
-            <Check className="size-4 shrink-0 text-gold-bright" />
+            <Check className="size-4 shrink-0 text-accent-bright" />
             <span className="text-muted">{p}</span>
           </li>
         ))}

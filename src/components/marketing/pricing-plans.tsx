@@ -23,7 +23,7 @@ export function PricingPlans({ dict, locale }: { dict: Dictionary; locale: Local
           <div
             className={`relative flex h-full flex-col rounded-2xl border p-7 ${
               plan.highlighted
-                ? "border-gold/40 bg-gradient-to-b from-gold/8 to-transparent ring-gold"
+                ? "border-accent/40 bg-gradient-to-b from-accent/8 to-transparent ring-accent"
                 : "glass border-border"
             }`}
           >
@@ -48,7 +48,7 @@ export function PricingPlans({ dict, locale }: { dict: Dictionary; locale: Local
             <ul className="mt-6 flex-1 space-y-3 text-sm">
               {plan.featureKeys.map((key) => (
                 <li key={key} className="flex items-start gap-2.5">
-                  <Check className="mt-0.5 size-4 shrink-0 text-gold-bright" />
+                  <Check className="mt-0.5 size-4 shrink-0 text-accent-bright" />
                   <span className="text-muted">{dict[key]}</span>
                 </li>
               ))}
