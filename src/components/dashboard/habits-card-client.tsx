@@ -85,7 +85,7 @@ export function HabitsCardClient({
               >
                 {habit.label}
                 {habit.restExempt && (
-                  <span className="ml-2 rounded-full bg-green/15 px-2 py-0.5 text-[10px] font-semibold uppercase text-green-bright">
+                  <span className="ml-2 rounded-full bg-green/15 px-2 py-0.5 text-xs font-semibold uppercase text-green-bright">
                     {restLabel}
                   </span>
                 )}

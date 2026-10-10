@@ -56,7 +56,7 @@ export function NotificationsBell({
       >
         <Bell className="size-5" />
         {unread > 0 && (
-          <span className="absolute right-1.5 top-1.5 grid min-w-4 place-items-center rounded-full bg-gold px-1 text-[10px] font-bold text-background">
+          <span className="absolute right-1.5 top-1.5 grid min-w-4 place-items-center rounded-full bg-gold px-1 text-xs font-bold text-background">
             {unread}
           </span>
         )}
@@ -104,7 +104,7 @@ export function NotificationsBell({
                 <div className="min-w-0">
                   <p className="text-sm font-medium leading-tight">{n.title}</p>
                   <p className="mt-0.5 text-xs text-muted">{n.body}</p>
-                  <p className="mt-1 text-[11px] text-faint">{n.time}</p>
+                  <p className="mt-1 text-xs text-faint">{n.time}</p>
                 </div>
                 {!n.read && (
                   <span className="mt-1.5 size-2 shrink-0 rounded-full bg-gold" />

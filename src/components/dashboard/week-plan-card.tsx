@@ -58,10 +58,10 @@ export async function WeekPlanCard() {
       <div className="mt-4 flex justify-between gap-1.5">
         {plan.days.map((d, i) => (
           <div key={i} className="flex flex-1 flex-col items-center gap-1">
-            <span className="text-[10px] text-faint">{dayLabels[i]}</span>
+            <span className="text-xs text-faint">{dayLabels[i]}</span>
             <span
               className={cn(
-                "grid h-8 w-full place-items-center rounded-lg text-[10px] font-semibold",
+                "grid h-8 w-full place-items-center rounded-lg text-xs font-semibold",
                 d === "train"
                   ? "bg-gradient-to-br from-gold-bright to-gold-deep text-background"
                   : "bg-surface-2 text-faint",

@@ -56,7 +56,7 @@ export function RecipesSection({ recipes, dict }: { recipes: Recipe[]; dict: Dic
               <h3 className="font-serif font-semibold leading-tight">{r.name}</h3>
               <div className="mt-2 flex flex-wrap gap-1.5">
                 {r.tags.map((t) => (
-                  <Badge key={t} variant="neutral" className="text-[10px]">
+                  <Badge key={t} variant="neutral" className="text-xs">
                     {t}
                   </Badge>
                 ))}
