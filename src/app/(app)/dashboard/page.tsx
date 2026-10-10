@@ -17,6 +17,7 @@ import { DashboardGrid } from "@/components/dashboard/dashboard-grid";
 import { getUserPreferences } from "@/lib/queries/preferences";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { timed } from "@/lib/perf";
 
 export async function generateMetadata(): Promise<Metadata> {
   const dict = await getDictionary(await getLocale());
@@ -26,10 +27,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function DashboardPage() {
-  const [{ dashboardLayout }, dict] = await Promise.all([
-    getUserPreferences(),
-    getDictionary(await getLocale()),
-  ]);
+  const locale = await getLocale();
+  const [{ dashboardLayout }, dict] = await timed("dashboard", () =>
+    Promise.all([getUserPreferences(), getDictionary(locale)]),
+  );
 
   const widgets = [
     { id: "progress", label: dict["dashboard.progress"], node: <ProgressCard /> },

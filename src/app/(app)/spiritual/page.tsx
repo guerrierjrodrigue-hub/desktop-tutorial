@@ -17,6 +17,7 @@ import {
 } from "@/lib/queries/spiritual";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { timed } from "@/lib/perf";
 
 export async function generateMetadata(): Promise<Metadata> {
   const dict = await getDictionary(await getLocale());
@@ -28,12 +29,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function SpiritualPage() {
   const locale = await getLocale();
-  const [prayers, dict, plans, verses] = await Promise.all([
-    getPrayerRequests(),
-    getDictionary(locale),
-    getReadingPlans(locale),
-    getMemoryVerses(locale),
-  ]);
+  const [prayers, dict, plans, verses] = await timed("spiritual", () =>
+    Promise.all([
+      getPrayerRequests(),
+      getDictionary(locale),
+      getReadingPlans(locale),
+      getMemoryVerses(locale),
+    ]),
+  );
   const { verse, reflection, prayer } = getDailyDevotional(locale);
 
   return (
