@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAuthedContext } from "@/lib/supabase/auth";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 
 /**
  * Loi 25 / data-portability export. Streams every row the signed-in user owns
@@ -38,6 +39,11 @@ export async function GET() {
   const stamp = new Date().toISOString().slice(0, 10);
 
   if (!ctx) {
+    // With a real backend, an unauthenticated request must be rejected — never
+    // hand back a file. The placeholder is only for demo mode (no backend).
+    if (isSupabaseConfigured()) {
+      return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+    }
     const body = JSON.stringify(
       { demo: true, note: "Data export is available on a real account." },
       null,
