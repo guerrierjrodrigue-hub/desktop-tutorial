@@ -200,11 +200,37 @@ export interface CommunityPostRow {
   content: string;
   kind: "testimony" | "progress" | "prayer";
   created_at: Timestamptz;
+  hidden: boolean;
 }
 
 export interface PostLikeRow {
   post_id: string;
   user_id: string;
+}
+
+export interface PostCommentRow {
+  id: string;
+  post_id: string;
+  user_id: string;
+  body: string;
+  created_at: Timestamptz;
+  hidden: boolean;
+}
+
+export interface ContentReportRow {
+  id: string;
+  reporter_id: string;
+  post_id: string | null;
+  comment_id: string | null;
+  reason: string;
+  status: "open" | "resolved";
+  created_at: Timestamptz;
+}
+
+export interface UserBlockRow {
+  blocker_id: string;
+  blocked_id: string;
+  created_at: Timestamptz;
 }
 
 export interface HabitRow {
@@ -342,6 +368,9 @@ export interface Database {
       bible_marks: T<BibleMarkRow>;
       community_posts: T<CommunityPostRow>;
       post_likes: T<PostLikeRow>;
+      post_comments: T<PostCommentRow>;
+      content_reports: T<ContentReportRow>;
+      user_blocks: T<UserBlockRow>;
       habits: T<HabitRow>;
       habit_logs: T<HabitLogRow>;
       daily_stats: T<DailyStatRow>;

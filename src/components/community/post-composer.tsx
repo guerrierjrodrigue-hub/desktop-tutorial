@@ -6,6 +6,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { createPost } from "@/app/(app)/community/actions";
+import { POST_MAX_LENGTH } from "@/lib/community";
+import { cn } from "@/lib/utils";
 import type { Dictionary, DictionaryKey } from "@/i18n/dictionaries/en";
 import type { CommunityPost } from "@/types";
 
@@ -25,28 +27,39 @@ export function PostComposer({
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState("");
   const [kind, setKind] = useState<CommunityPost["kind"]>("progress");
+  const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+
+  const overLimit = content.length > POST_MAX_LENGTH;
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
     const text = content.trim();
-    if (!text) return;
+    if (!text || overLimit) return;
 
-    onPost({
-      id: crypto.randomUUID(),
-      author: dict["community.you"],
-      avatarColor: "var(--color-green)",
-      timeAgo: dict["community.justNow"],
-      content: text,
-      kind,
-      likes: 0,
-      comments: 0,
-      liked: false,
-    });
-    setContent("");
-    setOpen(false);
+    setError(null);
     startTransition(async () => {
-      await createPost({ content: text, kind });
+      const result = await createPost({ content: text, kind });
+      if (result.ok) {
+        // Only surface the post once the server accepted it (so a rate-limited
+        // or rejected post never appears in the feed).
+        onPost({
+          id: crypto.randomUUID(),
+          author: dict["community.you"],
+          avatarColor: "var(--color-green)",
+          timeAgo: dict["community.justNow"],
+          content: text,
+          kind,
+          likes: 0,
+          comments: 0,
+          liked: false,
+          isOwn: true,
+        });
+        setContent("");
+        setOpen(false);
+      } else {
+        setError(result.error ? dict[result.error as DictionaryKey] ?? null : null);
+      }
     });
   }
 
@@ -70,6 +83,16 @@ export function PostComposer({
           autoFocus
           className="w-full resize-none rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/20"
         />
+        <div className="flex items-center justify-between text-xs">
+          {error ? (
+            <span role="alert" className="text-danger">{error}</span>
+          ) : (
+            <span />
+          )}
+          <span className={cn("tabular-nums text-faint", overLimit && "font-semibold text-danger")}>
+            {content.length}/{POST_MAX_LENGTH}
+          </span>
+        </div>
         <div className="flex flex-wrap items-center gap-2">
           {kinds.map((k) => (
             <button
@@ -87,7 +110,7 @@ export function PostComposer({
             <Button type="button" size="sm" variant="ghost" onClick={() => setOpen(false)}>
               {dict["common.cancel"]}
             </Button>
-            <Button type="submit" size="sm" disabled={!content.trim() || pending}>
+            <Button type="submit" size="sm" disabled={!content.trim() || overLimit || pending}>
               {dict["community.post"]}
             </Button>
           </div>

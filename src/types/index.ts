@@ -218,6 +218,10 @@ export interface CommunityPost {
   likes: number;
   comments: number;
   liked: boolean;
+  /** The author's user id — drives "report"/"block" and own-post deletion. */
+  authorId?: string;
+  /** Whether the signed-in user is the author (shows the delete action). */
+  isOwn?: boolean;
 }
 
 export interface ChatMessage {
