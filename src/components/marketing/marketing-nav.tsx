@@ -12,7 +12,10 @@ export async function MarketingNav() {
   return (
     <header className="sticky top-0 z-40">
       <div className="glass mx-auto mt-4 flex h-14 max-w-6xl items-center justify-between rounded-full border border-border px-4 sm:px-6">
-        <Logo />
+        <Link href="/" aria-label="Kingdom Athlete" className="inline-flex items-center gap-2.5">
+          <Logo variant="mark" height={34} />
+          <Logo variant="inline" height={22} className="hidden text-foreground sm:block" />
+        </Link>
         <nav className="hidden items-center gap-8 text-sm text-muted md:flex">
           <Link href="/#features" className="transition hover:text-foreground">
             {dict["mkt.nav.features"]}

@@ -126,6 +126,29 @@ body {
     transform: translateX(100%);
   }
 }
+
+/* Gentle "breathing" pulse for the brand loader. Disabled under reduced motion
+ * (also covered by the global reduced-motion reset below). */
+@keyframes logo-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.97);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.logo-breathe {
+  animation: logo-breathe 1.8s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .logo-breathe {
+    animation: none;
+    opacity: 1;
+  }
+}
 .skeleton {
   position: relative;
   overflow: hidden;

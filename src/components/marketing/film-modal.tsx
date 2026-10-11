@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Flame, RotateCcw, X } from "lucide-react";
+import { Logo } from "@/components/brand/logo";
 import { APP_NAME } from "@/lib/constants";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 
@@ -320,21 +321,16 @@ function LogoScene({
 }) {
   return (
     <div className="flex flex-col items-center">
-      <motion.span
+      <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
-        className="grid size-16 place-items-center rounded-2xl bg-gradient-to-br from-accent-bright to-accent-deep text-accent-fg shadow-[0_10px_40px_-8px_rgba(0,0,0,0.5)]"
+        className="flex flex-col items-center gap-5"
       >
-        <svg viewBox="0 0 24 24" className="size-8" fill="currentColor" aria-hidden="true">
-          <path d="M3 8l3.8 2.8L12 5l5.2 5.8L21 8l-1.4 7.5H4.4L3 8Z" />
-          <rect x="4.2" y="16.4" width="15.6" height="2.4" rx="0.7" />
-        </svg>
-      </motion.span>
-      <h2 className="mt-6 font-serif text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-        Kingdom<span className="text-accent-bright"> Athlete</span>
-      </h2>
-      <p className="mt-3 text-base text-white/60">{dict["mkt.tagline"]}</p>
+        <Logo variant="mark" height={96} />
+        <Logo variant="inline" height={40} className="text-white" />
+      </motion.div>
+      <p className="mt-4 text-base text-white/60">{dict["mkt.tagline"]}</p>
 
       <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row">
         <Link

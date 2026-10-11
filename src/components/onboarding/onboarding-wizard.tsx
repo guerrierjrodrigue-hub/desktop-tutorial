@@ -97,8 +97,9 @@ export function OnboardingWizard({
 
   return (
     <div className="w-full max-w-lg">
-      <div className="mb-8 flex justify-center">
-        <Logo />
+      <div className="mb-8 flex items-center justify-center gap-2.5">
+        <Logo variant="mark" height={30} />
+        <Logo variant="inline" height={20} className="text-foreground" />
       </div>
 
       <div className="mb-6">

@@ -12,7 +12,10 @@ export function AdminSidebar() {
 
   return (
     <aside className="sticky top-0 hidden h-svh w-60 shrink-0 flex-col border-r border-border bg-surface/40 px-4 py-6 lg:flex">
-      <Logo />
+      <Link href="/dashboard" aria-label="Kingdom Athlete" className="inline-flex items-center gap-2.5">
+        <Logo variant="mark" height={24} />
+        <Logo variant="inline" height={18} className="text-foreground" />
+      </Link>
       <div className="mt-6 flex items-center gap-2 rounded-lg border border-accent/20 bg-accent/8 px-3 py-2 text-xs font-semibold text-accent-bright">
         <ShieldCheck className="size-4" /> Admin console
       </div>

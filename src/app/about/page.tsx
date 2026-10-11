@@ -9,6 +9,7 @@ import { MarketingFooter } from "@/components/marketing/marketing-footer";
 import { Reveal } from "@/components/ui/reveal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/brand/logo";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 import type { DictionaryKey } from "@/i18n/dictionaries/en";
@@ -93,6 +94,7 @@ export default async function AboutPage() {
             <p className="pt-2 font-serif text-base font-semibold text-foreground">
               {dict["mkt.about.signature"]}
             </p>
+            <Logo variant="stacked" height={40} className="text-foreground" />
           </Reveal>
         </section>
 

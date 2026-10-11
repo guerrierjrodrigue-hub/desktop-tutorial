@@ -29,7 +29,10 @@ export async function sendWelcomeEmail(to: string, name: string): Promise<void> 
       subject: `Welcome to ${APP_NAME} 🙏💪`,
       html: `
         <div style="font-family: Georgia, serif; max-width: 480px; margin: 0 auto; color: #1a1a1a;">
-          <h1 style="font-size: 22px;">Welcome, ${escapeHtml(name)}.</h1>
+          <div style="background: #0d0b0a; padding: 28px 24px; text-align: center; border-radius: 12px;">
+            <img src="${APP_URL}/images/kingdom-athlete-nom-ligne.png" alt="${APP_NAME}" width="260" style="display: inline-block; height: auto; max-width: 100%;" />
+          </div>
+          <h1 style="font-size: 22px; margin-top: 28px;">Welcome, ${escapeHtml(name)}.</h1>
           <p style="font-size: 15px; line-height: 1.6;">
             "Do you not know that your bodies are temples of the Holy Spirit?
             Therefore honor God with your bodies." — 1 Corinthians 6:19-20
@@ -40,7 +43,7 @@ export async function sendWelcomeEmail(to: string, name: string): Promise<void> 
             training program waiting for day one.
           </p>
           <p style="margin-top: 24px;">
-            <a href="${APP_URL}/dashboard" style="background: #d4a017; color: #000; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+            <a href="${APP_URL}/dashboard" style="background: #f2a93b; color: #1a1208; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-weight: 600;">
               Go to your dashboard
             </a>
           </p>

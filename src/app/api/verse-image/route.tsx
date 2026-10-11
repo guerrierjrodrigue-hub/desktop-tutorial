@@ -1,6 +1,18 @@
 import { ImageResponse } from "next/og";
+import { LOGO_PATHS } from "@/components/brand/logo";
 
 export const dynamic = "force-dynamic";
+
+// Stacked wordmark signature with explicit colors (next/og ignores currentColor).
+const S = LOGO_PATHS.stacked;
+const SIGNATURE =
+  "data:image/svg+xml;utf8," +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${S.vb}">` +
+      `<path d="${S.king}" fill="#F7F2EA"/>` +
+      `<path d="${S.ath}" fill="#F7F2EA"/>` +
+      `<path d="${S.cross}" fill="#F2A93B"/></svg>`,
+  );
 
 /**
  * Shareable verse image (Instagram-story portrait, 1080×1920). Rendered from
@@ -16,6 +28,7 @@ export function GET(req: Request) {
     (
       <div
         style={{
+          position: "relative",
           width: "100%",
           height: "100%",
           display: "flex",
@@ -27,17 +40,22 @@ export function GET(req: Request) {
           fontFamily: "Georgia, serif",
         }}
       >
-        <div style={{ display: "flex", fontSize: 40, color: "#f2a93b", letterSpacing: 4 }}>
-          KINGDOM ATHLETE
-        </div>
-        <div style={{ display: "flex", marginTop: 48, fontSize: 64, lineHeight: 1.3 }}>
-          “{text}”
-        </div>
+        <div style={{ display: "flex", fontSize: 64, lineHeight: 1.3 }}>“{text}”</div>
         <div style={{ display: "flex", marginTop: 56, fontSize: 44, color: "#f2a93b", fontWeight: 700 }}>
           {reference}
         </div>
-        <div style={{ display: "flex", marginTop: 24, fontSize: 30, color: "#a59d93" }}>
-          Strengthen your body. Grow your faith.
+
+        {/* Brand signature, pinned to the bottom. */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 110,
+            left: 96,
+            display: "flex",
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={SIGNATURE} width={340} height={(340 * 168) / 709} alt="Kingdom Athlete" />
         </div>
       </div>
     ),

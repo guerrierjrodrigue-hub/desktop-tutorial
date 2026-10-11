@@ -1,6 +1,19 @@
 import { ImageResponse } from "next/og";
+import { LOGO_PATHS } from "@/components/brand/logo";
 
 export const dynamic = "force-dynamic";
+
+// Stacked wordmark signature. next/og (satori) does not resolve currentColor, so
+// the paths get explicit colors: cream text + gold cross.
+const S = LOGO_PATHS.stacked;
+const SIGNATURE =
+  "data:image/svg+xml;utf8," +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${S.vb}">` +
+      `<path d="${S.king}" fill="#F7F2EA"/>` +
+      `<path d="${S.ath}" fill="#F7F2EA"/>` +
+      `<path d="${S.cross}" fill="#F2A93B"/></svg>`,
+  );
 
 /**
  * Shareable achievement image (Instagram-story portrait, 1080×1920) rendered
@@ -23,6 +36,7 @@ export function GET(req: Request) {
     (
       <div
         style={{
+          position: "relative",
           width: "100%",
           height: "100%",
           display: "flex",
@@ -36,19 +50,14 @@ export function GET(req: Request) {
           fontFamily: "Georgia, serif",
         }}
       >
-        <div style={{ display: "flex", fontSize: 40, color: "#f2a93b", letterSpacing: 4 }}>
-          KINGDOM ATHLETE
-        </div>
-
         {type === "verse" ? (
-          <div style={{ display: "flex", marginTop: 72, fontSize: headlineSize, lineHeight: 1.3 }}>
+          <div style={{ display: "flex", fontSize: headlineSize, lineHeight: 1.3 }}>
             “{text}”
           </div>
         ) : (
           <div
             style={{
               display: "flex",
-              marginTop: 48,
               fontSize: headlineSize,
               fontWeight: 700,
               color: "#ff5a36",
@@ -59,10 +68,23 @@ export function GET(req: Request) {
           </div>
         )}
 
-        <div style={{ display: "flex", marginTop: 40, fontSize: 48 }}>{type === "verse" ? value : label}</div>
+        <div style={{ display: "flex", marginTop: 40, fontSize: 48 }}>
+          {type === "verse" ? value : label}
+        </div>
 
-        <div style={{ display: "flex", marginTop: 80, fontSize: 30, color: "#a59d93" }}>
-          Strengthen your body. Grow your faith.
+        {/* Brand signature, pinned to the bottom. */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 110,
+            left: 0,
+            right: 0,
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={SIGNATURE} width={380} height={(380 * 168) / 709} alt="Kingdom Athlete" />
         </div>
       </div>
     ),

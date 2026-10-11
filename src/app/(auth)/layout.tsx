@@ -15,7 +15,9 @@ export default async function AuthLayout({
       {/* Brand panel */}
       <div className="relative hidden overflow-hidden border-r border-border bg-gradient-to-br from-green-deep via-background to-background p-12 lg:flex lg:flex-col lg:justify-between">
         <div className="pointer-events-none absolute -right-20 top-10 size-80 rounded-full bg-accent/10 blur-3xl" />
-        <Logo />
+        <Link href="/" aria-label="Kingdom Athlete" className="relative inline-flex">
+          <Logo variant="stacked" height={52} className="text-foreground" />
+        </Link>
         <div className="relative">
           <blockquote className="max-w-md font-serif text-3xl font-medium leading-snug">
             {dict["mkt.verse.full"]}
@@ -28,7 +30,10 @@ export default async function AuthLayout({
       {/* Form panel */}
       <div className="relative flex flex-col items-center justify-center px-6 py-12">
         <div className="absolute left-6 top-6 lg:hidden">
-          <Logo />
+          <Link href="/" aria-label="Kingdom Athlete" className="inline-flex items-center gap-2.5">
+            <Logo variant="mark" height={28} />
+            <Logo variant="inline" height={18} className="text-foreground" />
+          </Link>
         </div>
         {children}
         <p className="mt-10 text-center text-xs text-faint">

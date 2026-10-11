@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import * as Sentry from "@sentry/nextjs";
 import { readClientLocale } from "@/i18n/client-locale";
+import { Logo } from "@/components/brand/logo";
 import "./globals.css";
 
 const COPY = {
@@ -53,6 +54,18 @@ export default function GlobalError({
           }}
         >
           <div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "0.6rem",
+                marginBottom: "2rem",
+              }}
+            >
+              <Logo variant="mark" height={34} />
+              <Logo variant="inline" height={22} />
+            </div>
             <h1 style={{ fontSize: "1.75rem", fontWeight: 600 }}>{t.heading}</h1>
             <p style={{ marginTop: "0.5rem", opacity: 0.7, maxWidth: "24rem" }}>{t.body}</p>
             <button

@@ -9,8 +9,9 @@ export default async function NotFound() {
   return (
     <div className="grid min-h-svh place-items-center px-6 text-center">
       <div>
-        <div className="mb-8 flex justify-center">
-          <Logo />
+        <div className="mb-8 flex items-center justify-center gap-2.5">
+          <Logo variant="mark" height={34} />
+          <Logo variant="inline" height={22} className="text-foreground" />
         </div>
         <p className="font-serif text-7xl font-semibold text-gradient-accent">404</p>
         <h1 className="mt-4 font-serif text-2xl font-semibold">{dict["notFound.heading"]}</h1>
