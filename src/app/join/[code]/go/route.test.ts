@@ -3,11 +3,13 @@ import { NextRequest } from "next/server";
 
 // Mock the server-only deps so importing the route is safe in node and so we
 // can assert the mutation (joinChallenge) is never triggered by a GET.
-const joinChallenge = vi.fn(async () => ({ ok: true }));
+const joinChallenge = vi.fn(async (..._args: unknown[]) => ({ ok: true }));
 const getAuthedContext = vi.fn(async () => ({ userId: "u1", supabase: {} }));
 const getChallengeByInviteCode = vi.fn(async () => ({ id: "c1" }));
 
-vi.mock("@/app/(app)/challenges/actions", () => ({ joinChallenge: (...a: unknown[]) => joinChallenge(...a) }));
+vi.mock("@/app/(app)/challenges/actions", () => ({
+  joinChallenge: (...a: unknown[]) => joinChallenge(...a),
+}));
 vi.mock("@/lib/supabase/auth", () => ({ getAuthedContext: () => getAuthedContext() }));
 vi.mock("@/lib/supabase/config", () => ({ isSupabaseConfigured: () => true }));
 vi.mock("@/lib/queries/challenges", () => ({
