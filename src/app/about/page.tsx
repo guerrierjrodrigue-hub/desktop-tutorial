@@ -72,15 +72,14 @@ export default async function AboutPage() {
         {hasFounderPhoto && (
           <section className="mx-auto max-w-3xl px-6">
             <Reveal>
-              <div className="relative mx-auto aspect-[4/5] w-full max-w-xs overflow-hidden rounded-3xl border border-border">
-                <Image
-                  src="/images/rodrigue.jpg"
-                  alt={dict["mkt.about.photoAlt"]}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 640px) 100vw, 320px"
-                />
-              </div>
+              <Image
+                src="/images/rodrigue.jpg"
+                alt={dict["mkt.about.photoAlt"]}
+                width={800}
+                height={1000}
+                sizes="(max-width: 400px) 100vw, 400px"
+                className="mx-auto h-auto w-full max-w-[400px] rounded-3xl border border-border"
+              />
             </Reveal>
           </section>
         )}
