@@ -3,6 +3,7 @@ import {
   LayoutDashboard,
   Users,
   FileText,
+  Flag,
   CreditCard,
   ScrollText,
 } from "lucide-react";
@@ -17,6 +18,7 @@ export const adminNavItems: AdminNavItem[] = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard },
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/content", label: "Content", icon: FileText },
+  { href: "/admin/reports", label: "Reports", icon: Flag },
   { href: "/admin/payments", label: "Payments", icon: CreditCard },
   { href: "/admin/logs", label: "Logs", icon: ScrollText },
 ];

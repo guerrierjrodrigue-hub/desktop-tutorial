@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { Shield } from "lucide-react";
 import { Topbar } from "@/components/layout/topbar";
 import { PageHeader } from "@/components/layout/page-header";
 import { PostFeed } from "@/components/community/post-feed";
@@ -26,7 +28,15 @@ export default async function CommunityPage() {
     <>
       <Topbar title="Community" />
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6">
-        <PageHeader title={dict["community.title"]} subtitle={dict["community.subtitle"]} />
+        <div className="flex items-start justify-between gap-3">
+          <PageHeader title={dict["community.title"]} subtitle={dict["community.subtitle"]} />
+          <Link
+            href="/community/rules"
+            className="mt-1 inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs font-medium text-muted transition hover:border-accent/30 hover:text-foreground"
+          >
+            <Shield className="size-3.5" /> {dict["community.rulesLink"]}
+          </Link>
+        </div>
 
         <div className="grid gap-5 lg:grid-cols-3">
           <div className="lg:col-span-2">

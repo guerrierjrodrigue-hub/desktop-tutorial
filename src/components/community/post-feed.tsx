@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { Heart, MessageCircle, Share2 } from "lucide-react";
+import { useState, useRef, useEffect, useTransition } from "react";
+import { Heart, MessageCircle, Share2, MoreHorizontal, Trash2, Flag, Ban } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
 import { PostComposer } from "@/components/community/post-composer";
-import { toggleLike } from "@/app/(app)/community/actions";
+import { toggleLike, deletePost, reportContent, blockUser } from "@/app/(app)/community/actions";
 import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { CommunityPost } from "@/types";
@@ -19,7 +19,24 @@ const kindMeta: Record<CommunityPost["kind"], { label: string; variant: "accent"
 
 export function PostFeed({ initial, dict }: { initial: CommunityPost[]; dict: Dictionary }) {
   const [posts, setPosts] = useState(initial);
+  const [menuId, setMenuId] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
   const [, startTransition] = useTransition();
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!menuId) return;
+    function onDown(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setMenuId(null);
+    }
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [menuId]);
+
+  function flash(message: string) {
+    setNotice(message);
+    setTimeout(() => setNotice(null), 2600);
+  }
 
   function prependPost(post: CommunityPost) {
     setPosts((prev) => [post, ...prev]);
@@ -39,9 +56,42 @@ export function PostFeed({ initial, dict }: { initial: CommunityPost[]; dict: Di
     });
   }
 
+  function remove(id: string) {
+    setMenuId(null);
+    setPosts((prev) => prev.filter((p) => p.id !== id));
+    startTransition(async () => {
+      await deletePost(id);
+    });
+  }
+
+  function report(id: string) {
+    setMenuId(null);
+    flash(dict["community.reported"]);
+    startTransition(async () => {
+      await reportContent({ postId: id });
+    });
+  }
+
+  function block(post: CommunityPost) {
+    setMenuId(null);
+    if (!post.authorId) return;
+    flash(dict["community.blocked"]);
+    // Drop every post by this author from the viewer's feed immediately.
+    setPosts((prev) => prev.filter((p) => p.authorId !== post.authorId));
+    startTransition(async () => {
+      await blockUser(post.authorId!);
+    });
+  }
+
   return (
     <div className="space-y-4">
       <PostComposer onPost={prependPost} dict={dict} />
+
+      {notice && (
+        <p role="status" className="rounded-xl border border-border bg-surface-2 px-4 py-2 text-center text-sm text-muted">
+          {notice}
+        </p>
+      )}
 
       {posts.length === 0 && (
         <p className="rounded-xl border border-dashed border-border bg-surface-2 p-6 text-center text-sm text-muted">
@@ -60,6 +110,50 @@ export function PostFeed({ initial, dict }: { initial: CommunityPost[]; dict: Di
                 <p className="text-xs text-faint">{post.timeAgo}</p>
               </div>
               <Badge variant={meta.variant}>{meta.label}</Badge>
+              <div className="relative" ref={menuId === post.id ? menuRef : undefined}>
+                <button
+                  onClick={() => setMenuId((cur) => (cur === post.id ? null : post.id))}
+                  aria-haspopup="menu"
+                  aria-expanded={menuId === post.id}
+                  aria-label={dict["community.postMenu"]}
+                  className="grid size-8 place-items-center rounded-full text-muted transition hover:bg-surface-2 hover:text-foreground"
+                >
+                  <MoreHorizontal className="size-4" />
+                </button>
+                {menuId === post.id && (
+                  <div
+                    role="menu"
+                    className="absolute right-0 top-9 z-10 w-44 overflow-hidden rounded-xl border border-border bg-surface shadow-lg"
+                  >
+                    {post.isOwn ? (
+                      <button
+                        role="menuitem"
+                        onClick={() => remove(post.id)}
+                        className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm text-danger transition hover:bg-surface-2"
+                      >
+                        <Trash2 className="size-4" /> {dict["community.delete"]}
+                      </button>
+                    ) : (
+                      <>
+                        <button
+                          role="menuitem"
+                          onClick={() => report(post.id)}
+                          className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm transition hover:bg-surface-2"
+                        >
+                          <Flag className="size-4" /> {dict["community.report"]}
+                        </button>
+                        <button
+                          role="menuitem"
+                          onClick={() => block(post)}
+                          className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm text-danger transition hover:bg-surface-2"
+                        >
+                          <Ban className="size-4" /> {dict["community.block"]}
+                        </button>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
 
             <p className="mt-3 text-sm leading-relaxed text-foreground/90">

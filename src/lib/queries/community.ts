@@ -57,6 +57,7 @@ interface PostRow {
   content: string;
   kind: CommunityPost["kind"];
   created_at: string;
+  hidden?: boolean;
 }
 
 /** The community feed — real posts across all users (demo data when unconfigured). */
@@ -64,13 +65,24 @@ export async function getCommunityPosts(): Promise<CommunityPost[]> {
   const ctx = await getAuthedContext();
   if (!ctx) return mockPosts;
 
+  // Members the viewer has blocked — their posts are dropped from the feed.
+  const { data: blockRows } = await ctx.supabase
+    .from("user_blocks")
+    .select("blocked_id")
+    .eq("blocker_id", ctx.userId);
+  const blocked = new Set(
+    ((blockRows ?? []) as { blocked_id: string }[]).map((b) => b.blocked_id),
+  );
+
   const postQuery = await ctx.supabase
     .from("community_posts")
     .select("*")
+    .eq("hidden", false)
     .order("created_at", { ascending: false })
     .limit(50);
-  const postRows = postQuery.data as PostRow[] | null;
-  if (!postRows?.length) return [];
+  const allRows = (postQuery.data as PostRow[] | null) ?? [];
+  const postRows = allRows.filter((p) => !blocked.has(p.user_id));
+  if (!postRows.length) return [];
 
   // Author names come from the safe public view — PostgREST can't embed a view
   // across a foreign key, so resolve them with a separate keyed lookup.
@@ -112,5 +124,7 @@ export async function getCommunityPosts(): Promise<CommunityPost[]> {
     likes: likesByPost.get(row.id) ?? 0,
     comments: commentsByPost.get(row.id) ?? 0,
     liked: likedByMe.has(row.id),
+    authorId: row.user_id,
+    isOwn: row.user_id === ctx.userId,
   }));
 }
