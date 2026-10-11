@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { createChallenge, joinChallenge, leaveChallenge } from "@/app/(app)/challenges/actions";
 import { cohortStartLabel } from "@/lib/cohort";
 import { plural } from "@/lib/i18n-plural";
+import { showXp } from "@/components/gamification/xp-toast";
 import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { LocaleCode } from "@/i18n/locales";
@@ -106,7 +107,8 @@ export function ChallengesList({
       ),
     );
     startTransition(async () => {
-      await joinChallenge(id);
+      const result = await joinChallenge(id);
+      if (result.ok) showXp(result.xp);
     });
   }
 

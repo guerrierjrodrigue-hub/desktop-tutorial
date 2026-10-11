@@ -10,6 +10,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { logWorkoutCompletion } from "@/app/(app)/fitness/actions";
+import { showXp } from "@/components/gamification/xp-toast";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/i18n/dictionaries/en";
@@ -67,7 +68,8 @@ export function WorkoutSession({
   async function finish() {
     setSaving(true);
     track("workout_completed");
-    await logWorkoutCompletion(day.durationMinutes);
+    const result = await logWorkoutCompletion(day.durationMinutes);
+    if (result.ok) showXp(result.xp);
     setSaving(false);
     setFinished(true);
   }

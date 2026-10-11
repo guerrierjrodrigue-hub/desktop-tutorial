@@ -16,6 +16,16 @@ interface T<Row> {
   Relationships: [];
 }
 
+export interface XpEventRow {
+  id: string;
+  user_id: string;
+  type: string;
+  ref_id: string;
+  day: DateStr;
+  xp: number;
+  created_at: Timestamptz;
+}
+
 export interface ProfileRow {
   id: string;
   name: string;
@@ -342,6 +352,7 @@ export interface Database {
       journal_entries: T<JournalEntryRow>;
       push_subscriptions: T<PushSubscriptionRow>;
       notification_preferences: T<NotificationPreferencesRow>;
+      xp_events: T<XpEventRow>;
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

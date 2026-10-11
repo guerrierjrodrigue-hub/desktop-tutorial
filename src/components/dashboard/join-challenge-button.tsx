@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { Loader2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { joinChallenge } from "@/app/(app)/challenges/actions";
+import { showXp } from "@/components/gamification/xp-toast";
 
 /** Joins a recommended challenge from the dashboard card. */
 export function JoinChallengeButton({ challengeId, label }: { challengeId: string; label: string }) {
@@ -12,7 +13,8 @@ export function JoinChallengeButton({ challengeId, label }: { challengeId: strin
 
   function join() {
     startTransition(async () => {
-      await joinChallenge(challengeId);
+      const result = await joinChallenge(challengeId);
+      if (result.ok) showXp(result.xp);
       setJoined(true);
     });
   }

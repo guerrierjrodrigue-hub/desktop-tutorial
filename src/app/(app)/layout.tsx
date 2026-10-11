@@ -1,5 +1,6 @@
 import { Sidebar } from "@/components/layout/sidebar";
 import { MobileNav } from "@/components/layout/mobile-nav";
+import { XpToaster } from "@/components/gamification/xp-toast";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { isFreeMode } from "@/lib/flags";
@@ -20,6 +21,7 @@ export default async function AppLayout({
         {children}
       </div>
       <MobileNav dict={dict} />
+      <XpToaster />
     </div>
   );
 }

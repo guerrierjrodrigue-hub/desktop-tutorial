@@ -5,6 +5,7 @@ import { CheckCircle2, Circle, Plus, X } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { createPrayerRequest, setPrayerAnswered } from "@/app/(app)/spiritual/actions";
+import { showXp } from "@/components/gamification/xp-toast";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { PrayerRequest } from "@/types";
 
@@ -34,7 +35,8 @@ export function PrayerJournal({ initial, dict }: { initial: PrayerRequest[]; dic
     setComposing(false);
 
     startTransition(async () => {
-      await createPrayerRequest({ title: optimistic.title, body: optimistic.body });
+      const result = await createPrayerRequest({ title: optimistic.title, body: optimistic.body });
+      if (result.ok) showXp(result.xp);
     });
   }
 

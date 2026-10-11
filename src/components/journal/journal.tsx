@@ -5,6 +5,7 @@ import { NotebookPen, Plus, X } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { createJournalEntry } from "@/app/(app)/journal/actions";
+import { showXp } from "@/components/gamification/xp-toast";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { LocaleCode } from "@/i18n/locales";
 import type { JournalEntry } from "@/types";
@@ -46,7 +47,8 @@ export function Journal({
     setComposing(false);
 
     startTransition(async () => {
-      await createJournalEntry({ title: optimistic.title, body: optimistic.body });
+      const result = await createJournalEntry({ title: optimistic.title, body: optimistic.body });
+      if (result.ok) showXp(result.xp);
     });
   }
 

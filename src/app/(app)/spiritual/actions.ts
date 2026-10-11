@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { getAuthedContext } from "@/lib/supabase/auth";
+import { XP_REWARDS } from "@/lib/gamification";
 import { type ActionResult, demoOk } from "@/lib/actions/result";
 
 /** Create a prayer request for the signed-in user. */
@@ -23,7 +24,7 @@ export async function createPrayerRequest(input: {
   if (error) return { ok: false, error: error.message };
 
   revalidatePath("/spiritual");
-  return { ok: true };
+  return { ok: true, xp: XP_REWARDS.prayer };
 }
 
 /** Advance a reading plan by one day for the signed-in user (idempotent-ish). */
@@ -46,7 +47,7 @@ export async function advanceReadingPlan(
   if (error) return { ok: false, error: error.message };
 
   revalidatePath("/spiritual");
-  return { ok: true };
+  return { ok: true, xp: XP_REWARDS.reading_day };
 }
 
 /** Mark a prayer request answered / unanswered. */

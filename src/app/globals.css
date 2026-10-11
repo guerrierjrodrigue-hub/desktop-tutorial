@@ -143,6 +143,26 @@ body {
 .logo-breathe {
   animation: logo-breathe 1.8s ease-in-out infinite;
 }
+
+/* "+N XP" toast: rise + fade. Disabled under reduced motion by the reset below. */
+@keyframes xp-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+  }
+  15%,
+  70% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+}
+.xp-toast {
+  animation: xp-rise 2.2s ease-in-out forwards;
+}
 @media (prefers-reduced-motion: reduce) {
   .logo-breathe {
     animation: none;

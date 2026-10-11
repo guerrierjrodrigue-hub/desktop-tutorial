@@ -5,6 +5,7 @@ import { Check, Flame } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Icon } from "@/components/ui/icon";
 import { toggleHabit } from "@/app/(app)/dashboard/actions";
+import { showXp } from "@/components/gamification/xp-toast";
 import { cn } from "@/lib/utils";
 import type { Habit } from "@/types";
 
@@ -38,7 +39,8 @@ export function HabitsCardClient({
       }),
     );
     startTransition(async () => {
-      await toggleHabit(id, nextDone);
+      const result = await toggleHabit(id, nextDone);
+      if (result.ok) showXp(result.xp);
     });
   }
 
