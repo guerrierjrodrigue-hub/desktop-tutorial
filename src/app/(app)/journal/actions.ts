@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { getAuthedContext } from "@/lib/supabase/auth";
+import { XP_REWARDS } from "@/lib/gamification";
 import { type ActionResult, demoOk } from "@/lib/actions/result";
 
 /** Create a journal entry for the signed-in user. */
@@ -23,5 +24,5 @@ export async function createJournalEntry(input: {
   if (error) return { ok: false, error: error.message };
 
   revalidatePath("/journal");
-  return { ok: true };
+  return { ok: true, xp: XP_REWARDS.journal };
 }

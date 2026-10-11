@@ -3,6 +3,7 @@
 import { getAuthedContext } from "@/lib/supabase/auth";
 import { getUserToday } from "@/lib/date";
 import { getUserTimezone } from "@/lib/timezone";
+import { XP_REWARDS } from "@/lib/gamification";
 import { type ActionResult, demoOk } from "@/lib/actions/result";
 
 /**
@@ -25,7 +26,8 @@ export async function toggleHabit(
     );
 
   if (error) return { ok: false, error: error.message };
-  return { ok: true };
+  // XP is awarded server-side by a DB trigger only when marking a habit done.
+  return { ok: true, xp: done ? XP_REWARDS.habit : undefined };
 }
 
 /** Persist the signed-in user's dashboard widget order/visibility. */

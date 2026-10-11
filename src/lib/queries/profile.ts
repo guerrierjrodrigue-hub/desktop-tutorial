@@ -2,6 +2,8 @@ import { cache } from "react";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getSessionUser } from "@/lib/supabase/auth";
 import { isFreeMode } from "@/lib/flags";
+import { globalStreak } from "@/lib/gamification";
+import { getUserToday, addDaysToDateStr } from "@/lib/date";
 import { currentUser as mockUser } from "@/data/user";
 import type { UserProfile } from "@/types";
 import type { ProfileRow } from "@/types/database";
@@ -61,7 +63,23 @@ export const getCurrentUser = cache(async function getCurrentUser(): Promise<Use
     .eq("id", user.id)
     .single();
 
-  if (data) return applyFreeMode(mapProfile(data));
+  if (data) {
+    const row = data as ProfileRow;
+    const profile = applyFreeMode(mapProfile(row));
+    // Global streak derived from xp_events (planned rest days don't break it).
+    const todayStr = getUserToday(row.timezone ?? "UTC");
+    const { data: dayRows } = await supabase
+      .from("xp_events")
+      .select("day")
+      .eq("user_id", user.id)
+      .gte("day", addDaysToDateStr(todayStr, -200));
+    profile.streak = globalStreak(
+      ((dayRows ?? []) as { day: string }[]).map((r) => r.day),
+      row.training_days ?? 3,
+      todayStr,
+    );
+    return profile;
+  }
 
   // Authenticated but no profile row yet (e.g. the database migrations
   // haven't been applied, so the handle_new_user trigger never ran). Return

@@ -5,6 +5,7 @@ import { getAuthedContext } from "@/lib/supabase/auth";
 import { getUserToday, addDaysToDateStr } from "@/lib/date";
 import { getUserTimezone } from "@/lib/timezone";
 import { resolveReferrer } from "@/lib/referral";
+import { XP_REWARDS } from "@/lib/gamification";
 import { type ActionResult, demoOk } from "@/lib/actions/result";
 
 export interface CreateChallengeInput {
@@ -102,5 +103,5 @@ export async function joinChallenge(
 
   revalidatePath("/challenges");
   revalidatePath("/dashboard");
-  return { ok: true };
+  return { ok: true, xp: XP_REWARDS.challenge_join };
 }
