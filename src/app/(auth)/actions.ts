@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
+import * as Sentry from "@sentry/nextjs";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { sendWelcomeEmail } from "@/lib/email";
@@ -9,6 +10,27 @@ import { sendWelcomeEmail } from "@/lib/email";
 export interface AuthState {
   error?: string;
   confirmationSent?: boolean;
+}
+
+/**
+ * Map a Supabase auth error to a localized dictionary key, logging the raw
+ * provider detail to Sentry. The UI renders `dict[code]`, so the provider's
+ * raw message never reaches the user.
+ */
+function mapAuthError(error: { message?: string; code?: string; status?: number }): string {
+  Sentry.captureException(error);
+  const msg = (error.message ?? "").toLowerCase();
+  const code = error.code ?? "";
+  if (code === "user_already_exists" || msg.includes("already registered") || msg.includes("already been registered")) {
+    return "auth.error.emailInUse";
+  }
+  if (msg.includes("invalid login") || msg.includes("invalid credentials") || code === "invalid_credentials") {
+    return "auth.error.invalidCredentials";
+  }
+  if (msg.includes("password") && (msg.includes("length") || msg.includes("at least") || msg.includes("weak") || msg.includes("6 char"))) {
+    return "auth.error.weakPassword";
+  }
+  return "auth.error.generic";
 }
 
 async function siteOrigin(): Promise<string> {
@@ -38,7 +60,7 @@ export async function emailAuthAction(
   if (!isSupabaseConfigured()) redirect(mode === "signup" ? "/onboarding" : "/dashboard");
 
   if (!email || !password) {
-    return { error: "Email and password are required." };
+    return { error: "auth.error.missingFields" };
   }
 
   const supabase = await createSupabaseServerClient();
@@ -52,7 +74,7 @@ export async function emailAuthAction(
         emailRedirectTo: `${await siteOrigin()}/auth/callback?redirect=/onboarding`,
       },
     });
-    if (error) return { error: error.message };
+    if (error) return { error: mapAuthError(error) };
     void sendWelcomeEmail(email, name || email.split("@")[0]);
     // No session yet means Supabase requires email confirmation before sign-in.
     if (!data.session) return { confirmationSent: true };
@@ -61,7 +83,7 @@ export async function emailAuthAction(
       email,
       password,
     });
-    if (error) return { error: error.message };
+    if (error) return { error: mapAuthError(error) };
   }
 
   redirect(mode === "signup" ? "/onboarding" : "/dashboard");
@@ -78,7 +100,7 @@ export async function requestPasswordReset(
   formData: FormData,
 ): Promise<ForgotPasswordState> {
   const email = String(formData.get("email") ?? "").trim();
-  if (!email) return { error: "Email is required." };
+  if (!email) return { error: "auth.error.emailRequired" };
 
   if (!isSupabaseConfigured()) return { sent: true };
 
@@ -103,17 +125,17 @@ export async function resetPassword(
   const confirmPassword = String(formData.get("confirmPassword") ?? "");
 
   if (password.length < 6) {
-    return { error: "Password must be at least 6 characters." };
+    return { error: "auth.error.weakPassword" };
   }
   if (password !== confirmPassword) {
-    return { error: "Passwords do not match." };
+    return { error: "auth.error.passwordMismatch" };
   }
 
   if (!isSupabaseConfigured()) redirect("/dashboard");
 
   const supabase = await createSupabaseServerClient();
   const { error } = await supabase.auth.updateUser({ password });
-  if (error) return { error: error.message };
+  if (error) return { error: mapAuthError(error) };
 
   redirect("/dashboard");
 }

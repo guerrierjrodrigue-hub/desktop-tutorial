@@ -43,7 +43,7 @@ export function ForgotPasswordForm({ dict }: { dict: Dictionary }) {
           {state.error && (
             <p className="flex items-center gap-2 rounded-lg bg-danger/10 px-3 py-2 text-sm text-danger">
               <AlertCircle className="size-4 shrink-0" />
-              {state.error}
+              {dict[state.error as keyof typeof dict] ?? dict["errors.unexpected"]}
             </p>
           )}
 

@@ -1,11 +1,19 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 import { getAuthedContext } from "@/lib/supabase/auth";
 import { getUserToday } from "@/lib/date";
 import { getUserTimezone } from "@/lib/timezone";
 import { type ActionResult, demoOk } from "@/lib/actions/result";
+import { validate, logAndFail } from "@/lib/actions/errors";
 import { nextWaterMl, isValidWaterDelta } from "@/lib/hydration";
+
+const foodLogSchema = z.object({
+  name: z.string().trim().min(1, "errors.foodNameRequired").max(120, "errors.tooLong"),
+  calories: z.number().finite().min(0).max(100000),
+  proteinG: z.number().finite().min(0).max(100000),
+});
 
 /** Log a food entry for the signed-in user for today. */
 export async function createFoodLog(input: {
@@ -13,20 +21,20 @@ export async function createFoodLog(input: {
   calories: number;
   proteinG: number;
 }): Promise<ActionResult> {
-  const name = input.name.trim();
-  if (!name) return { ok: false, error: "Name is required." };
+  const check = validate(foodLogSchema, input);
+  if (!check.ok) return check.result;
 
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
 
   const { error } = await ctx.supabase.from("food_logs").insert({
     user_id: ctx.userId,
-    name,
-    calories: Math.max(0, Math.round(input.calories) || 0),
-    protein_g: Math.max(0, Math.round(input.proteinG) || 0),
+    name: check.data.name,
+    calories: Math.round(check.data.calories),
+    protein_g: Math.round(check.data.proteinG),
     log_date: getUserToday(await getUserTimezone()),
   });
-  if (error) return { ok: false, error: error.message };
+  if (error) return logAndFail(error);
 
   revalidatePath("/nutrition");
   return { ok: true };
@@ -39,7 +47,7 @@ export async function createFoodLog(input: {
  */
 export async function addWater(amountMl: number): Promise<ActionResult> {
   if (!isValidWaterDelta(amountMl)) {
-    return { ok: false, error: "Invalid amount." };
+    return { ok: false, error: "errors.amountInvalid" };
   }
   const amount = Math.round(amountMl);
 
@@ -64,7 +72,7 @@ export async function addWater(amountMl: number): Promise<ActionResult> {
       { user_id: ctx.userId, stat_date: today, water_ml: next },
       { onConflict: "user_id,stat_date" },
     );
-  if (error) return { ok: false, error: error.message };
+  if (error) return logAndFail(error);
 
   revalidatePath("/nutrition");
   revalidatePath("/dashboard");

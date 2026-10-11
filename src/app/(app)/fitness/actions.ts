@@ -1,10 +1,12 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 import { getAuthedContext } from "@/lib/supabase/auth";
 import { XP_REWARDS } from "@/lib/gamification";
-import { isValidWorkoutDuration } from "@/lib/workout";
+import { isValidWorkoutDuration, MIN_WORKOUT_MINUTES, MAX_WORKOUT_MINUTES } from "@/lib/workout";
 import { type ActionResult, demoOk } from "@/lib/actions/result";
+import { validate, logAndFail } from "@/lib/actions/errors";
 
 export interface LogWorkoutInput {
   /** Program slug (the public id used in URLs). */
@@ -13,6 +15,16 @@ export interface LogWorkoutInput {
   dayId: string;
   durationMinutes: number;
 }
+
+const logWorkoutSchema = z.object({
+  programId: z.string().trim().min(1).max(100),
+  dayId: z.string().uuid(),
+  durationMinutes: z
+    .number()
+    .int("fitness.error.invalidDuration")
+    .min(MIN_WORKOUT_MINUTES, "fitness.error.invalidDuration")
+    .max(MAX_WORKOUT_MINUTES, "fitness.error.invalidDuration"),
+});
 
 /**
  * Log a completed workout-day for the signed-in user.
@@ -24,8 +36,11 @@ export interface LogWorkoutInput {
  * migration 0025. XP itself is awarded server-side by the ka_xp_workout trigger.
  */
 export async function logWorkoutCompletion(input: LogWorkoutInput): Promise<ActionResult> {
-  const { programId, dayId, durationMinutes } = input;
+  const check = validate(logWorkoutSchema, input);
+  if (!check.ok) return check.result;
+  const { programId, dayId, durationMinutes } = check.data;
 
+  // Belt-and-suspenders with the shared pure guard (also used by the client).
   if (!isValidWorkoutDuration(durationMinutes)) {
     return { ok: false, error: "fitness.error.invalidDuration" };
   }
@@ -57,7 +72,7 @@ export async function logWorkoutCompletion(input: LogWorkoutInput): Promise<Acti
       revalidatePath(`/fitness/${programId}`);
       return { ok: true };
     }
-    return { ok: false, error: error.message };
+    return logAndFail(error);
   }
 
   revalidatePath("/dashboard");

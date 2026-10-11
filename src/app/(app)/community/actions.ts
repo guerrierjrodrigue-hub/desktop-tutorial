@@ -1,8 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 import { getAuthedContext } from "@/lib/supabase/auth";
 import { type ActionResult, demoOk } from "@/lib/actions/result";
+import { validate, logAndFail } from "@/lib/actions/errors";
 import {
   isValidPostContent,
   isValidReportReason,
@@ -13,14 +15,27 @@ import {
 } from "@/lib/community";
 import type { CommunityPost } from "@/types";
 
+const createPostSchema = z.object({
+  content: z.string().trim().min(1, "community.error.empty").max(POST_MAX_LENGTH, "community.error.postTooLong"),
+  kind: z.enum(["testimony", "progress", "prayer"]),
+});
+
+const reportSchema = z.object({
+  postId: z.string().uuid().optional(),
+  commentId: z.string().uuid().optional(),
+  reason: z.string().trim().max(REPORT_REASON_MAX_LENGTH, "community.error.reasonTooLong").optional(),
+});
+
+const targetIdSchema = z.string().uuid("community.error.missingTarget");
+
 /** Create a community post for the signed-in user. */
 export async function createPost(input: {
   content: string;
   kind: CommunityPost["kind"];
 }): Promise<ActionResult> {
-  const content = input.content.trim();
-  if (!content) return { ok: false, error: "community.error.empty" };
-  if (content.length > POST_MAX_LENGTH) return { ok: false, error: "community.error.postTooLong" };
+  const check = validate(createPostSchema, input);
+  if (!check.ok) return check.result;
+  const content = check.data.content;
   if (!isValidPostContent(content)) return { ok: false, error: "community.error.postTooLong" };
 
   const ctx = await getAuthedContext();
@@ -39,9 +54,9 @@ export async function createPost(input: {
   const { error } = await ctx.supabase.from("community_posts").insert({
     user_id: ctx.userId,
     content,
-    kind: input.kind,
+    kind: check.data.kind,
   });
-  if (error) return { ok: false, error: error.message };
+  if (error) return logAndFail(error);
 
   revalidatePath("/community");
   return { ok: true };
@@ -49,7 +64,8 @@ export async function createPost(input: {
 
 /** Delete a post the signed-in user owns. Comments and likes cascade in the DB. */
 export async function deletePost(postId: string): Promise<ActionResult> {
-  if (!postId) return { ok: false, error: "community.error.missingTarget" };
+  const check = validate(targetIdSchema, postId);
+  if (!check.ok) return check.result;
 
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
@@ -59,9 +75,9 @@ export async function deletePost(postId: string): Promise<ActionResult> {
   const { error } = await ctx.supabase
     .from("community_posts")
     .delete()
-    .eq("id", postId)
+    .eq("id", check.data)
     .eq("user_id", ctx.userId);
-  if (error) return { ok: false, error: error.message };
+  if (error) return logAndFail(error);
 
   revalidatePath("/community");
   return { ok: true };
@@ -69,7 +85,8 @@ export async function deletePost(postId: string): Promise<ActionResult> {
 
 /** Delete a comment the signed-in user owns. */
 export async function deleteComment(commentId: string): Promise<ActionResult> {
-  if (!commentId) return { ok: false, error: "community.error.missingTarget" };
+  const check = validate(targetIdSchema, commentId);
+  if (!check.ok) return check.result;
 
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
@@ -77,9 +94,9 @@ export async function deleteComment(commentId: string): Promise<ActionResult> {
   const { error } = await ctx.supabase
     .from("post_comments")
     .delete()
-    .eq("id", commentId)
+    .eq("id", check.data)
     .eq("user_id", ctx.userId);
-  if (error) return { ok: false, error: error.message };
+  if (error) return logAndFail(error);
 
   revalidatePath("/community");
   return { ok: true };
@@ -91,11 +108,14 @@ export async function reportContent(input: {
   commentId?: string;
   reason?: string;
 }): Promise<ActionResult> {
-  const reason = (input.reason ?? "").trim();
-  if (!input.postId && !input.commentId) {
+  const check = validate(reportSchema, input);
+  if (!check.ok) return check.result;
+  const { postId, commentId } = check.data;
+  const reason = (check.data.reason ?? "").trim();
+  if (!postId && !commentId) {
     return { ok: false, error: "community.error.missingTarget" };
   }
-  if (reason.length > REPORT_REASON_MAX_LENGTH || !isValidReportReason(reason)) {
+  if (!isValidReportReason(reason)) {
     return { ok: false, error: "community.error.reasonTooLong" };
   }
 
@@ -104,33 +124,34 @@ export async function reportContent(input: {
 
   const { error } = await ctx.supabase.from("content_reports").insert({
     reporter_id: ctx.userId,
-    post_id: input.postId ?? null,
-    comment_id: input.commentId ?? null,
+    post_id: postId ?? null,
+    comment_id: commentId ?? null,
     reason,
   });
   if (error) {
     // 23505 = already reported by this user → treat as a successful no-op.
     if (error.code === "23505") return { ok: true };
-    return { ok: false, error: error.message };
+    return logAndFail(error);
   }
   return { ok: true };
 }
 
 /** Block another member so their content drops out of the viewer's feed. */
 export async function blockUser(userId: string): Promise<ActionResult> {
-  if (!userId) return { ok: false, error: "community.error.missingTarget" };
+  const check = validate(targetIdSchema, userId);
+  if (!check.ok) return check.result;
 
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
-  if (userId === ctx.userId) return { ok: false, error: "community.error.cannotBlockSelf" };
+  if (check.data === ctx.userId) return { ok: false, error: "community.error.cannotBlockSelf" };
 
   const { error } = await ctx.supabase
     .from("user_blocks")
     .upsert(
-      { blocker_id: ctx.userId, blocked_id: userId },
+      { blocker_id: ctx.userId, blocked_id: check.data },
       { onConflict: "blocker_id,blocked_id", ignoreDuplicates: true },
     );
-  if (error) return { ok: false, error: error.message };
+  if (error) return logAndFail(error);
 
   revalidatePath("/community");
   return { ok: true };
@@ -138,7 +159,8 @@ export async function blockUser(userId: string): Promise<ActionResult> {
 
 /** Unblock a previously blocked member. */
 export async function unblockUser(userId: string): Promise<ActionResult> {
-  if (!userId) return { ok: false, error: "community.error.missingTarget" };
+  const check = validate(targetIdSchema, userId);
+  if (!check.ok) return check.result;
 
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
@@ -147,8 +169,8 @@ export async function unblockUser(userId: string): Promise<ActionResult> {
     .from("user_blocks")
     .delete()
     .eq("blocker_id", ctx.userId)
-    .eq("blocked_id", userId);
-  if (error) return { ok: false, error: error.message };
+    .eq("blocked_id", check.data);
+  if (error) return logAndFail(error);
 
   revalidatePath("/community");
   return { ok: true };
@@ -159,26 +181,33 @@ export async function toggleLike(
   postId: string,
   liked: boolean,
 ): Promise<ActionResult> {
+  const check = validate(z.object({ postId: z.string().uuid(), liked: z.boolean() }), {
+    postId,
+    liked,
+  });
+  if (!check.ok) return check.result;
+
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
 
-  const { error } = liked
+  const { error } = check.data.liked
     ? await ctx.supabase
         .from("post_likes")
-        .insert({ post_id: postId, user_id: ctx.userId })
+        .insert({ post_id: check.data.postId, user_id: ctx.userId })
     : await ctx.supabase
         .from("post_likes")
         .delete()
-        .eq("post_id", postId)
+        .eq("post_id", check.data.postId)
         .eq("user_id", ctx.userId);
 
-  if (error) return { ok: false, error: error.message };
+  if (error) return logAndFail(error);
   return { ok: true };
 }
 
 /** Join a community group. Idempotent — re-joining is a no-op. */
 export async function joinGroup(groupId: string): Promise<ActionResult> {
-  if (!groupId) return { ok: false, error: "A group is required." };
+  const check = validate(z.string().uuid(), groupId);
+  if (!check.ok) return check.result;
 
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
@@ -186,10 +215,10 @@ export async function joinGroup(groupId: string): Promise<ActionResult> {
   const { error } = await ctx.supabase
     .from("group_members")
     .upsert(
-      { group_id: groupId, user_id: ctx.userId },
+      { group_id: check.data, user_id: ctx.userId },
       { onConflict: "group_id,user_id", ignoreDuplicates: true },
     );
-  if (error) return { ok: false, error: error.message };
+  if (error) return logAndFail(error);
 
   revalidatePath("/community");
   return { ok: true };

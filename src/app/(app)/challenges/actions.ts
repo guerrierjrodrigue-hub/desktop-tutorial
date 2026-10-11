@@ -1,12 +1,14 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 import { getAuthedContext } from "@/lib/supabase/auth";
 import { getUserToday, addDaysToDateStr } from "@/lib/date";
 import { getUserTimezone } from "@/lib/timezone";
 import { resolveReferrer } from "@/lib/referral";
 import { XP_REWARDS } from "@/lib/gamification";
 import { type ActionResult, demoOk } from "@/lib/actions/result";
+import { validate, logAndFail } from "@/lib/actions/errors";
 
 export interface CreateChallengeInput {
   title: string;
@@ -15,29 +17,37 @@ export interface CreateChallengeInput {
   endsInDays: number;
 }
 
+const createChallengeSchema = z.object({
+  title: z.string().trim().min(1, "errors.challengeTitleRequired").max(120, "errors.tooLong"),
+  description: z.string().trim().max(500, "errors.tooLong"),
+  type: z.enum(["personal", "friends", "church"]),
+  endsInDays: z.number().int().min(1).max(365),
+});
+
 /** Create a challenge and automatically join it as its first participant. */
 export async function createChallenge(input: CreateChallengeInput): Promise<ActionResult> {
-  const title = input.title.trim();
-  if (!title) return { ok: false, error: "A title is required." };
+  const check = validate(createChallengeSchema, input);
+  if (!check.ok) return check.result;
+  const data_in = check.data;
 
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
 
   const today = getUserToday(await getUserTimezone());
-  const endsAt = addDaysToDateStr(today, Math.max(1, input.endsInDays));
+  const endsAt = addDaysToDateStr(today, data_in.endsInDays);
 
   const { data, error } = await ctx.supabase
     .from("challenges")
     .insert({
-      title,
-      description: input.description.trim(),
-      type: input.type,
+      title: data_in.title,
+      description: data_in.description,
+      type: data_in.type,
       ends_at: endsAt,
       created_by: ctx.userId,
     })
     .select("id")
     .single();
-  if (error) return { ok: false, error: error.message };
+  if (error) return logAndFail(error);
 
   await ctx.supabase.from("challenge_participants").insert({
     challenge_id: data.id,
@@ -59,7 +69,8 @@ export async function createChallenge(input: CreateChallengeInput): Promise<Acti
  * revalidated pages. Idempotent — leaving when not joined is a no-op.
  */
 export async function leaveChallenge(challengeId: string): Promise<ActionResult> {
-  if (!challengeId) return { ok: false, error: "A challenge is required." };
+  const check = validate(z.string().uuid(), challengeId);
+  if (!check.ok) return check.result;
 
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
@@ -67,9 +78,9 @@ export async function leaveChallenge(challengeId: string): Promise<ActionResult>
   const { error } = await ctx.supabase
     .from("challenge_participants")
     .delete()
-    .eq("challenge_id", challengeId)
+    .eq("challenge_id", check.data)
     .eq("user_id", ctx.userId);
-  if (error) return { ok: false, error: error.message };
+  if (error) return logAndFail(error);
 
   revalidatePath("/challenges");
   revalidatePath("/dashboard");
@@ -85,7 +96,8 @@ export async function joinChallenge(
   challengeId: string,
   referredBy?: string | null,
 ): Promise<ActionResult> {
-  if (!challengeId) return { ok: false, error: "A challenge is required." };
+  const check = validate(z.string().uuid(), challengeId);
+  if (!check.ok) return check.result;
 
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
@@ -96,10 +108,10 @@ export async function joinChallenge(
   const { error } = await ctx.supabase
     .from("challenge_participants")
     .upsert(
-      { challenge_id: challengeId, user_id: ctx.userId, progress: 0, points: 0, referred_by: referrer },
+      { challenge_id: check.data, user_id: ctx.userId, progress: 0, points: 0, referred_by: referrer },
       { onConflict: "challenge_id,user_id", ignoreDuplicates: true },
     );
-  if (error) return { ok: false, error: error.message };
+  if (error) return logAndFail(error);
 
   revalidatePath("/challenges");
   revalidatePath("/dashboard");

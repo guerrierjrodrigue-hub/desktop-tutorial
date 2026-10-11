@@ -114,7 +114,9 @@ export function AuthForm({ mode, dict }: { mode: "login" | "signup"; dict: Dicti
             {state.error && (
               <p className="flex items-center gap-2 rounded-lg bg-danger/10 px-3 py-2 text-sm text-danger">
                 <AlertCircle className="size-4 shrink-0" />
-                {state.error === "consent" ? dict["auth.consentRequired"] : state.error}
+                {state.error === "consent"
+                  ? dict["auth.consentRequired"]
+                  : dict[state.error as keyof typeof dict] ?? dict["auth.error.generic"]}
               </p>
             )}
 

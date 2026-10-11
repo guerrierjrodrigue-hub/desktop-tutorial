@@ -1,7 +1,21 @@
 "use server";
 
+import { z } from "zod";
 import { getAuthedContext } from "@/lib/supabase/auth";
 import { type ActionResult, demoOk } from "@/lib/actions/result";
+import { validate, logAndFail } from "@/lib/actions/errors";
+
+const onboardingSchema = z.object({
+  goals: z.array(z.string().min(1)).min(1, "errors.goalRequired").max(20),
+  identities: z.array(z.string().min(1)).min(1, "errors.identityRequired").max(20),
+  level: z.enum(["beginner", "intermediate", "advanced"]).optional(),
+  equipment: z.enum(["none", "home", "gym"]).optional(),
+  trainingDays: z.number().int().min(1).max(7).optional(),
+  reminderTime: z.string().regex(/^\d{2}:\d{2}$/).optional(),
+  heightCm: z.number().finite().min(50).max(300).nullable().optional(),
+  weightKg: z.number().finite().min(20).max(500).nullable().optional(),
+  birthDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
+});
 
 export interface OnboardingInput {
   goals: string[];
@@ -30,14 +44,12 @@ function ageFrom(birthDate: string): number {
 
 /** Save goals, identities, and the training profile chosen during onboarding. */
 export async function saveOnboarding(input: OnboardingInput): Promise<ActionResult> {
-  if (!input.goals.length) {
-    return { ok: false, error: "Choose at least one goal." };
-  }
-  if (!input.identities.length) {
-    return { ok: false, error: "Choose at least one identity." };
-  }
+  const check = validate(onboardingSchema, input);
+  if (!check.ok) return check.result;
+
   if (input.birthDate) {
     const age = ageFrom(input.birthDate);
+    // "age" is a control sentinel the wizard handles with its own localized UI.
     if (Number.isNaN(age) || age < MIN_AGE) {
       return { ok: false, error: "age" };
     }
@@ -61,7 +73,7 @@ export async function saveOnboarding(input: OnboardingInput): Promise<ActionResu
   if (input.birthDate) update.birth_date = input.birthDate;
 
   const { error } = await ctx.supabase.from("profiles").update(update).eq("id", ctx.userId);
-  if (error) return { ok: false, error: error.message };
+  if (error) return logAndFail(error);
 
   return { ok: true };
 }

@@ -1,27 +1,44 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 import { getAuthedContext } from "@/lib/supabase/auth";
 import { XP_REWARDS } from "@/lib/gamification";
 import { type ActionResult, demoOk } from "@/lib/actions/result";
+import { validate, logAndFail } from "@/lib/actions/errors";
+
+const prayerSchema = z.object({
+  title: z.string().trim().min(1, "errors.titleRequired").max(200, "errors.tooLong"),
+  body: z.string().trim().max(2000, "errors.tooLong"),
+});
+
+const advancePlanSchema = z.object({
+  planId: z.string().uuid(),
+  completedDays: z.number().int().min(0).max(1000),
+});
+
+const setAnsweredSchema = z.object({
+  id: z.string().uuid(),
+  answered: z.boolean(),
+});
 
 /** Create a prayer request for the signed-in user. */
 export async function createPrayerRequest(input: {
   title: string;
   body: string;
 }): Promise<ActionResult> {
-  const title = input.title.trim();
-  if (!title) return { ok: false, error: "A title is required." };
+  const check = validate(prayerSchema, input);
+  if (!check.ok) return check.result;
 
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
 
   const { error } = await ctx.supabase.from("prayer_requests").insert({
     user_id: ctx.userId,
-    title,
-    body: input.body.trim(),
+    title: check.data.title,
+    body: check.data.body,
   });
-  if (error) return { ok: false, error: error.message };
+  if (error) return logAndFail(error);
 
   revalidatePath("/spiritual");
   return { ok: true, xp: XP_REWARDS.prayer };
@@ -32,19 +49,22 @@ export async function advanceReadingPlan(
   planId: string,
   completedDays: number,
 ): Promise<ActionResult> {
+  const check = validate(advancePlanSchema, { planId, completedDays });
+  if (!check.ok) return check.result;
+
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
 
   const { error } = await ctx.supabase.from("reading_progress").upsert(
     {
       user_id: ctx.userId,
-      reading_plan_id: planId,
-      completed_days: completedDays,
+      reading_plan_id: check.data.planId,
+      completed_days: check.data.completedDays,
       updated_at: new Date().toISOString(),
     },
     { onConflict: "user_id,reading_plan_id" },
   );
-  if (error) return { ok: false, error: error.message };
+  if (error) return logAndFail(error);
 
   revalidatePath("/spiritual");
   return { ok: true, xp: XP_REWARDS.reading_day };
@@ -55,15 +75,18 @@ export async function setPrayerAnswered(
   id: string,
   answered: boolean,
 ): Promise<ActionResult> {
+  const check = validate(setAnsweredSchema, { id, answered });
+  if (!check.ok) return check.result;
+
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
 
   const { error } = await ctx.supabase
     .from("prayer_requests")
-    .update({ answered })
-    .eq("id", id)
+    .update({ answered: check.data.answered })
+    .eq("id", check.data.id)
     .eq("user_id", ctx.userId);
-  if (error) return { ok: false, error: error.message };
+  if (error) return logAndFail(error);
 
   revalidatePath("/spiritual");
   return { ok: true };
