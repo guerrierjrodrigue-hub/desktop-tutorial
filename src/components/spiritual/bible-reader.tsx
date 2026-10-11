@@ -5,6 +5,7 @@ import { Bookmark, Highlighter, Brain, Share2, Check, Search } from "lucide-reac
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { toggleBibleMark, memorizeVerse, markReadingDay } from "@/app/(app)/spiritual/bible/actions";
+import { signedVerseImageUrl } from "@/lib/actions/share";
 import type { BibleContentBlock } from "@/lib/bible";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 
@@ -73,7 +74,8 @@ export function BibleReader({
 
   async function onShare(verse: number, text: string) {
     const reference = `${bookName} ${chapter}:${verse}`;
-    const url = `/api/verse-image?ref=${encodeURIComponent(reference)}&text=${encodeURIComponent(text)}`;
+    // The URL is signed on the server so the image route accepts it.
+    const url = await signedVerseImageUrl({ ref: reference, text });
     const absolute = typeof window !== "undefined" ? new URL(url, window.location.origin).toString() : url;
     try {
       if (typeof navigator !== "undefined" && navigator.share) {

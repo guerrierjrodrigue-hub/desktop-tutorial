@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { LOGO_PATHS } from "@/components/brand/logo";
+import { verifyShareParams } from "@/lib/share-signature";
 
 export const dynamic = "force-dynamic";
 
@@ -21,8 +22,14 @@ const SIGNATURE =
  */
 export function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const text = (searchParams.get("text") ?? "").slice(0, 500);
-  const reference = (searchParams.get("ref") ?? "").slice(0, 100);
+  const rawText = searchParams.get("text") ?? "";
+  const rawRef = searchParams.get("ref") ?? "";
+
+  const ok = verifyShareParams({ ref: rawRef, text: rawText }, searchParams.get("sig"));
+  if (!ok) return new Response("Invalid signature", { status: 403 });
+
+  const text = rawText.slice(0, 500);
+  const reference = rawRef.slice(0, 100);
 
   return new ImageResponse(
     (

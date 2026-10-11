@@ -1,6 +1,7 @@
 "use client";
 
 import { Share2 } from "lucide-react";
+import { signedShareImageUrl } from "@/lib/actions/share";
 
 /** Shares an Instagram-story image of the user's current streak (Web Share API,
  * with a new-tab fallback where sharing isn't available). */
@@ -14,7 +15,8 @@ export function ShareStreakButton({
   caption: string;
 }) {
   async function share() {
-    const url = `/api/share-image?type=streak&value=${streak}&label=${encodeURIComponent(caption)}`;
+    // The URL is signed on the server so the image route accepts it.
+    const url = await signedShareImageUrl({ type: "streak", value: String(streak), label: caption });
     const absolute = typeof window !== "undefined" ? new URL(url, window.location.origin).toString() : url;
     try {
       if (typeof navigator !== "undefined" && navigator.share) {

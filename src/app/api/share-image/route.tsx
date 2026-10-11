@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { LOGO_PATHS } from "@/components/brand/logo";
+import { verifyShareParams } from "@/lib/share-signature";
 
 export const dynamic = "force-dynamic";
 
@@ -26,9 +27,21 @@ const SIGNATURE =
 export function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const type = searchParams.get("type") ?? "streak";
-  const value = (searchParams.get("value") ?? "").slice(0, 120);
-  const label = (searchParams.get("label") ?? "").slice(0, 160);
-  const text = (searchParams.get("text") ?? "").slice(0, 400);
+  const rawValue = searchParams.get("value") ?? "";
+  const rawLabel = searchParams.get("label") ?? "";
+  const rawText = searchParams.get("text") ?? "";
+
+  // Reject forged URLs: the params must carry a valid app-issued signature
+  // (skipped only when no signing secret is configured, e.g. local/demo).
+  const ok = verifyShareParams(
+    { type, value: rawValue, label: rawLabel, text: rawText },
+    searchParams.get("sig"),
+  );
+  if (!ok) return new Response("Invalid signature", { status: 403 });
+
+  const value = rawValue.slice(0, 120);
+  const label = rawLabel.slice(0, 160);
+  const text = rawText.slice(0, 400);
 
   const headlineSize = type === "verse" ? 56 : 240;
 
