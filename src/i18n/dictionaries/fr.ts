@@ -473,17 +473,17 @@ const fr: Dictionary = {
   "mkt.contact.metaTitle": "Contact",
   "mkt.contact.metaDescription": "Contacte l'équipe Kingdom Athlete.",
   "mkt.contact.badge": "Contact",
-  "mkt.contact.title": "Nous aimerions avoir de tes nouvelles",
+  "mkt.contact.title": "J'aimerais avoir de tes nouvelles",
   "mkt.contact.subtitle":
-    "Questions, retours, idées de partenariat, ou simplement envie de dire bonjour ? Écris-nous et une vraie personne te répondra.",
-  "mkt.contact.emailTitle": "Écris-nous",
-  "mkt.contact.replyTime": "Nous répondons sous 1 à 2 jours ouvrés.",
+    "Questions, retours, idées de partenariat, ou simplement envie de dire bonjour ? Écris-moi et je te répondrai en personne.",
+  "mkt.contact.emailTitle": "Écris-moi",
+  "mkt.contact.replyTime": "Je réponds sous 1 à 2 jours ouvrés.",
   "mkt.contact.barnabasTitle": "Parle à Barnabas",
   "mkt.contact.barnabasBody":
-    "Des questions sur le produit dans l'application ? Ton coach IA répond souvent plus vite que nous.",
+    "Des questions sur le produit dans l'application ? Ton coach IA répond souvent plus vite que moi.",
   "mkt.contact.faqTitle": "Questions fréquentes",
   "mkt.contact.faqBody":
-    "Facturation, programmes, compte : la plupart des réponses se trouvent dans notre ",
+    "Facturation, programmes, compte : la plupart des réponses se trouvent dans mon ",
   "mkt.contact.form.name": "Ton nom",
   "mkt.contact.form.email": "E-mail",
   "mkt.contact.form.message": "Message",
@@ -494,17 +494,19 @@ const fr: Dictionary = {
 
   // Page À propos
   "mkt.about.metaTitle": "À propos",
-  "mkt.about.metaDescription": "L'histoire et la mission derrière Kingdom Athlete.",
-  "mkt.about.badge": "Notre histoire",
-  "mkt.about.title": "La foi et le fitness n'ont jamais été faits pour s'opposer",
+  "mkt.about.metaDescription": "L'histoire du fondateur derrière Kingdom Athlete.",
+  "mkt.about.badge": "Mon histoire",
+  "mkt.about.title": "Pourquoi j'ai créé Kingdom Athlete",
   "mkt.about.subtitle":
-    "Kingdom Athlete est né d'une frustration simple : chaque application nous forçait à choisir entre entraîner notre corps et nourrir notre âme. Nous avons bâti celle qui refuse de choisir.",
+    "Je m'appelle Rodrigue et je vis à Montréal. Je m'entraîne, et je partage mon parcours sur Instagram : le physique, le mental et la foi.",
   "mkt.about.story1":
-    "Tout a commencé par une frustration simple et familière : notre agenda avait un créneau pour la salle de sport et un pour les dévotions, et les deux ne se parlaient jamais. Les applis de fitness étaient laïques et transactionnelles. Les applis de dévotion ne touchaient jamais une barre de musculation.",
+    "Pendant longtemps, mon entraînement et ma vie avec Dieu ont vécu chacun de leur côté. Les applications de fitness ne parlaient pas de foi. Les applications bibliques ne parlaient pas du corps.",
   "mkt.about.story2":
-    "Nous avons donc imaginé une application différente : un seul rythme quotidien où un plan d'entraînement, un plan de lecture et un coach qui connaît vraiment ton nom (ou du moins ta série) vivent au même endroit.",
+    "Alors j'ai créé une seule app pour t'entraîner, bien manger et lire la Bible, avec Barnabas, un coach IA qui t'accompagne sans jamais te faire sentir coupable. Je l'ai construite en parallèle de mon travail.",
   "mkt.about.story3":
-    "Nous en sommes encore aux débuts : une petite équipe indépendante qui construit ceci pas à pas. Notre souhait : que tu t'entraînes avec discipline et te reposes avec grâce ici, sans culpabilité, sans gadgets, juste une fidélité constante du corps et de l'esprit.",
+    "Kingdom Athlete est encore jeune, et je la fais grandir avec ceux qui l'essaient. Si quelque chose ne marche pas, ou si tu as une idée, écris-moi. Je lis tout.",
+  "mkt.about.signature": "Rodrigue, Montréal",
+  "mkt.about.photoAlt": "Rodrigue, fondateur de Kingdom Athlete",
   "mkt.about.missionBadge": "Notre mission",
   "mkt.about.pillar.discipline.title": "Discipline",
   "mkt.about.pillar.discipline.body":
@@ -518,9 +520,9 @@ const fr: Dictionary = {
   "mkt.about.pillar.stewardship.title": "Intendance",
   "mkt.about.pillar.stewardship.body":
     "Ton corps est un temple, pas un projet. Nous t'aidons à en prendre soin comme un acte d'adoration, non par vanité.",
-  "mkt.about.ctaTitle": "Envie de construire ceci avec nous ?",
+  "mkt.about.ctaTitle": "Envie de construire ceci avec moi ?",
   "mkt.about.ctaBody":
-    "Nous sommes une petite équipe indépendante, mais toujours ravis d'échanger avec des personnes qui tiennent à la fois au travail bien fait et à la vocation.",
+    "Je fais grandir Kingdom Athlete en solo, et je suis toujours ravi d'échanger avec des personnes qui tiennent à la fois au travail bien fait et à la vocation.",
   "mkt.about.ctaContact": "Nous contacter",
 
   // Pages légales — commun
@@ -594,15 +596,15 @@ const fr: Dictionary = {
 
   // Page Carrières
   "mkt.careers.metaTitle": "Carrières",
-  "mkt.careers.metaDescription": "Kingdom Athlete est une petite équipe indépendante. Voici comment nous joindre.",
-  "mkt.careers.title": "Nous ne recrutons pas pour le moment",
-  "mkt.careers.subtitle": "Kingdom Athlete est bâti par une petite équipe indépendante. Nous n'avons pas de postes ouverts aujourd'hui, mais nous sommes toujours ravis d'échanger avec des personnes qui tiennent à la fois au travail bien fait et à la vocation. Garde-nous en tête quand cela changera.",
+  "mkt.careers.metaDescription": "Kingdom Athlete, c'est moi, Rodrigue. Voici comment me joindre.",
+  "mkt.careers.title": "Je ne recrute pas pour le moment",
+  "mkt.careers.subtitle": "Je construis Kingdom Athlete en solo. Je n'ai pas de postes ouverts aujourd'hui, mais je suis toujours ravi d'échanger avec des personnes qui tiennent à la fois au travail bien fait et à la vocation. Garde-moi en tête quand cela changera.",
   "mkt.careers.helloPre": "Envie de dire bonjour quand même ? ",
-  "mkt.careers.helloLink": "Écris-nous",
-  "mkt.careers.helloPost": " : nous lisons tout, même si nous ne pouvons pas toujours répondre rapidement.",
+  "mkt.careers.helloLink": "Écris-moi",
+  "mkt.careers.helloPost": " : je lis tout, même si je ne peux pas toujours répondre rapidement.",
   "mkt.careers.mailSubject": "Bonjour d'un futur coéquipier",
-  "mkt.careers.ctaTitle": "Curieux de ce que nous construisons ?",
-  "mkt.careers.ctaButton": "Lire notre histoire",
+  "mkt.careers.ctaTitle": "Curieux de ce que je construis ?",
+  "mkt.careers.ctaButton": "Lire mon histoire",
 
   // Page Centre d'aide
   "mkt.help.metaTitle": "Centre d'aide",
@@ -685,6 +687,7 @@ const fr: Dictionary = {
   "mkt.hero.title2": "Grandis dans la foi.",
   "mkt.hero.subtitle": "Kingdom Athlete réunit entraînement guidé, nutrition, Écritures et prière en un seul rythme quotidien, avec Barnabas, ton coach IA foi & fitness, à tes côtés.",
   "mkt.hero.cta": "Commence ton essai gratuit d'un mois",
+  "mkt.hero.madeIn": "Fait à Montréal, par Rodrigue.",
   "mkt.hero.watchFilm": "Voir le film",
   "mkt.hero.footnote": "Entraîne-toi avec un but · 1 mois offert · Sans carte bancaire",
   // Variantes bêta gratuite (affichées quand APP_FREE_MODE est actif) — pas d'essai limité dans le temps.

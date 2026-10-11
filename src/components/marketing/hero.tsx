@@ -90,7 +90,17 @@ function HeroContent({ dict, freeMode }: { dict: Dictionary; freeMode: boolean }
           variants={fadeUp}
           initial="hidden"
           animate="show"
-          className="mt-5 text-sm text-faint"
+          className="mt-4 text-sm font-medium text-accent-bright"
+        >
+          {dict["mkt.hero.madeIn"]}
+        </motion.p>
+
+        <motion.p
+          custom={5}
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
+          className="mt-3 text-sm text-faint"
         >
           {dict[freeMode ? "mkt.hero.footnoteFree" : "mkt.hero.footnote"]}
         </motion.p>
