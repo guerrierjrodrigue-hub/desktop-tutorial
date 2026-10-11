@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { Users, AlertTriangle } from "lucide-react";
 import { MarketingNav } from "@/components/marketing/marketing-nav";
 import { MarketingFooter } from "@/components/marketing/marketing-footer";
@@ -27,13 +26,10 @@ export default async function JoinPage({
 
   const ctx = await getAuthedContext();
   const demo = !isSupabaseConfigured();
+  // The join happens only when this form is POSTed (never on GET/render), so a
+  // link preview or prefetch can't enroll anyone.
   const goHref = `/join/${code}/go${ref ? `?ref=${encodeURIComponent(ref)}` : ""}`;
-
-  // Signed-in (or demo) and nothing went wrong yet: hand off to the route
-  // handler, which does the join + redirect. We do NOT join during render.
-  if ((ctx || demo) && !error) {
-    redirect(goHref);
-  }
+  const canJoin = Boolean(ctx) || demo;
 
   const cohort = await getChallengeByInviteCode(code, locale);
   const summary = cohort
@@ -63,7 +59,7 @@ export default async function JoinPage({
             <Users className="size-7" />
           </span>
           <h1 className="mt-6 font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
-            {dict["join.title"]}
+            {canJoin && cohort ? dict["join.confirmTitle"] : dict["join.title"]}
           </h1>
 
           {error && (
@@ -81,15 +77,18 @@ export default async function JoinPage({
                 <p className="mt-4 text-sm font-medium text-accent-bright">{summary}</p>
                 <p className="mt-1 text-sm text-muted">{enrolledLabel}</p>
               </Card>
-              <p className="mt-6 text-muted">{dict["join.subtitle"]}</p>
+              <p className="mt-6 text-muted">
+                {canJoin ? dict["join.confirmSubtitle"] : dict["join.subtitle"]}
+              </p>
               <div className="mt-6 flex w-full flex-col gap-3 sm:flex-row sm:justify-center">
-                {ctx ? (
-                  // Signed in but a previous attempt errored: let them retry.
-                  <Link href={goHref}>
-                    <Button size="lg" className="w-full sm:w-auto">
-                      {dict["join.retry"]}
+                {canJoin ? (
+                  // The actual join is a POST from this explicit confirmation —
+                  // never a GET — so rendering/previewing the page can't enroll.
+                  <form action={goHref} method="post" className="w-full sm:w-auto">
+                    <Button type="submit" size="lg" className="w-full sm:w-auto">
+                      {error ? dict["join.retry"] : dict["join.confirmCta"]}
                     </Button>
-                  </Link>
+                  </form>
                 ) : (
                   <>
                     <Link href={signupHref}>
