@@ -674,7 +674,7 @@ const en = {
   "mkt.todaysWorkout": "Today's workout",
   "mkt.workout.name": "Lower Body Power",
   "mkt.workout.meta": "4 exercises · 45 min",
-  "mkt.meta.homeDescription": "Kingdom Athlete is a premium Christian fitness app that unites training, nutrition, and faith. Follow guided programs, track habits, read Scripture, and grow with Barnabas — your AI faith & fitness coach.",
+  "mkt.meta.homeDescription": "Kingdom Athlete is a Christian fitness app that unites training, nutrition, and faith. Follow guided programs, track habits, read Scripture, and grow with Barnabas, your AI faith & fitness coach.",
 
   // Marketing — nav & footer
   "mkt.nav.features": "Features",
