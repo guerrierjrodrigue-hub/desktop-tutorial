@@ -107,14 +107,28 @@ export interface CohortInvite {
 
 /**
  * A cohort resolved by its invite code, readable by anyone (public SELECT RLS)
- * so even logged-out invitees see the /join/<code> landing. Null in demo mode
- * (no backend) or when the code doesn't exist.
+ * so even logged-out invitees see the /join/<code> landing. In demo mode (no
+ * backend) a placeholder cohort is returned so the invite flow stays
+ * explorable; null when the code doesn't exist.
  */
 export async function getChallengeByInviteCode(
   code: string,
   locale: LocaleCode = "en",
 ): Promise<CohortInvite | null> {
-  if (!isSupabaseConfigured()) return null;
+  if (!isSupabaseConfigured()) {
+    return {
+      // A syntactically valid UUID so the (no-op) demo join passes validation.
+      id: "00000000-0000-4000-8000-000000000000",
+      title: locale === "fr" ? "Cohorte de démonstration" : "Demo cohort",
+      description:
+        locale === "fr"
+          ? "Un aperçu du parcours de groupe de 21 jours."
+          : "A preview of the 21-day group journey.",
+      durationDays: 21,
+      participants: 12,
+      startDate: null,
+    };
+  }
   const supabase = await createSupabaseServerClient();
 
   const { data } = await supabase
