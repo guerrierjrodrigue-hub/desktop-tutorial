@@ -55,6 +55,8 @@ const IDENTICAL_ALLOWED = new Set<string>([
   // R5 plural labels — "participant/participants" is the same word in FR & EN.
   "plural.participants.one",
   "plural.participants.other",
+  // Founder signature — a name + city, identical in both languages.
+  "mkt.about.signature",
 ]);
 
 describe("i18n en/fr parity", () => {

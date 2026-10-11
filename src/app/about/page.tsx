@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { HeartHandshake, Dumbbell, BookOpen, Users } from "lucide-react";
 import { MarketingNav } from "@/components/marketing/marketing-nav";
 import { MarketingFooter } from "@/components/marketing/marketing-footer";
@@ -47,6 +50,8 @@ const pillars: {
 
 export default async function AboutPage() {
   const dict = await getDictionary(await getLocale());
+  // Founder photo is optional: only render the slot once the file is added.
+  const hasFounderPhoto = existsSync(join(process.cwd(), "public/images/rodrigue.jpg"));
 
   return (
     <div className="flex min-h-svh flex-col">
@@ -64,11 +69,30 @@ export default async function AboutPage() {
           </Reveal>
         </section>
 
+        {hasFounderPhoto && (
+          <section className="mx-auto max-w-3xl px-6">
+            <Reveal>
+              <div className="relative mx-auto aspect-[4/5] w-full max-w-xs overflow-hidden rounded-3xl border border-border">
+                <Image
+                  src="/images/rodrigue.jpg"
+                  alt={dict["mkt.about.photoAlt"]}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 640px) 100vw, 320px"
+                />
+              </div>
+            </Reveal>
+          </section>
+        )}
+
         <section className="mx-auto max-w-3xl px-6 py-10">
           <Reveal className="glass space-y-4 rounded-3xl border border-border p-8 text-sm leading-relaxed text-muted sm:p-10">
             <p>{dict["mkt.about.story1"]}</p>
             <p>{dict["mkt.about.story2"]}</p>
             <p>{dict["mkt.about.story3"]}</p>
+            <p className="pt-2 font-serif text-base font-semibold text-foreground">
+              {dict["mkt.about.signature"]}
+            </p>
           </Reveal>
         </section>
 
