@@ -653,7 +653,7 @@ const fr: Dictionary = {
   "mkt.todaysWorkout": "Séance du jour",
   "mkt.workout.name": "Puissance bas du corps",
   "mkt.workout.meta": "4 exercices · 45 min",
-  "mkt.meta.homeDescription": "Kingdom Athlete est une application de fitness chrétienne premium qui réunit entraînement, nutrition et foi. Suis des programmes guidés, tes habitudes, lis les Écritures et grandis avec Barnabas, ton coach IA foi & fitness.",
+  "mkt.meta.homeDescription": "Kingdom Athlete est une application de fitness chrétienne qui réunit entraînement, nutrition et foi. Suis des programmes guidés, tes habitudes, lis les Écritures et grandis avec Barnabas, ton coach IA foi & fitness.",
 
   // Marketing — nav & footer
   "mkt.nav.features": "Fonctionnalités",

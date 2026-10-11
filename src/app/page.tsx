@@ -33,6 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: { absolute: `${APP_NAME} — ${dict["mkt.tagline"]}` },
     description: dict["mkt.meta.homeDescription"],
+    alternates: { canonical: "/" },
   };
 }
 

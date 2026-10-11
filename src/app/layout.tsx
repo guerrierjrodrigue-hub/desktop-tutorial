@@ -6,12 +6,9 @@ import { AnalyticsProvider } from "@/components/providers/analytics-provider";
 import { LocaleSync } from "@/components/providers/locale-sync";
 import { TimezoneSync } from "@/components/providers/timezone-sync";
 import { DEFAULT_LOCALE } from "@/i18n/locales";
-import {
-  APP_NAME,
-  APP_TAGLINE,
-  APP_DESCRIPTION,
-  APP_URL,
-} from "@/lib/constants";
+import { getLocale } from "@/lib/locale";
+import { getDictionary } from "@/i18n/get-dictionary";
+import { APP_NAME, APP_URL } from "@/lib/constants";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -26,43 +23,55 @@ const fraunces = Fraunces({
   axes: ["opsz"],
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(APP_URL),
-  title: {
-    default: `${APP_NAME} — ${APP_TAGLINE}`,
-    template: `%s · ${APP_NAME}`,
-  },
-  description: APP_DESCRIPTION,
-  applicationName: APP_NAME,
-  keywords: [
-    "Christian fitness",
-    "faith and fitness",
-    "workout app",
-    "Bible reading plan",
-    "prayer journal",
-    "devotional",
-    "discipline",
-  ],
-  authors: [{ name: APP_NAME }],
-  manifest: "/manifest.webmanifest",
-  appleWebApp: {
-    capable: true,
-    title: APP_NAME,
-    statusBarStyle: "black-translucent",
-  },
-  openGraph: {
-    type: "website",
-    siteName: APP_NAME,
-    title: `${APP_NAME} — ${APP_TAGLINE}`,
-    description: APP_DESCRIPTION,
-    url: APP_URL,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${APP_NAME} — ${APP_TAGLINE}`,
-    description: APP_DESCRIPTION,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const dict = await getDictionary(locale);
+  const tagline = dict["mkt.tagline"];
+  const description = dict["mkt.meta.homeDescription"];
+  const title = `${APP_NAME} — ${tagline}`;
+  const ogLocale = locale === "fr" ? "fr_CA" : "en_US";
+
+  // The file-based opengraph-image.tsx / twitter-image.tsx are injected into the
+  // OG/Twitter image fields automatically, so they are not set here.
+  return {
+    metadataBase: new URL(APP_URL),
+    title: {
+      default: title,
+      template: `%s · ${APP_NAME}`,
+    },
+    description,
+    applicationName: APP_NAME,
+    keywords: [
+      "Christian fitness",
+      "faith and fitness",
+      "workout app",
+      "Bible reading plan",
+      "prayer journal",
+      "devotional",
+      "discipline",
+    ],
+    authors: [{ name: APP_NAME }],
+    manifest: "/manifest.webmanifest",
+    appleWebApp: {
+      capable: true,
+      title: APP_NAME,
+      statusBarStyle: "black-translucent",
+    },
+    openGraph: {
+      type: "website",
+      siteName: APP_NAME,
+      title,
+      description,
+      url: APP_URL,
+      locale: ogLocale,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: "#0d0b0a",
