@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { getAuthedContext } from "@/lib/supabase/auth";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { programs as mockPrograms, getProgram as getMockProgram } from "@/data/programs";
 import {
@@ -175,3 +176,27 @@ export async function getProgramBySlug(
 
   return { ...mapProgram(programRow, locale), schedule };
 }
+
+/**
+ * The workout-day ids the signed-in user has completed (ever), among the given
+ * day ids. Drives per-program progress — each day a user finishes is logged
+ * once in workout_logs (idempotent per day per date), so a day appears here
+ * after its first completion. Returns an empty set in demo mode or when nothing
+ * is logged.
+ */
+export async function getCompletedDayIds(dayIds: string[]): Promise<Set<string>> {
+  if (!dayIds.length) return new Set();
+  const ctx = await getAuthedContext();
+  if (!ctx) return new Set();
+
+  const { data } = await ctx.supabase
+    .from("workout_logs")
+    .select("workout_day_id")
+    .eq("user_id", ctx.userId)
+    .in("workout_day_id", dayIds);
+
+  const rows = (data ?? []) as { workout_day_id: string | null }[];
+  return new Set(rows.map((r) => r.workout_day_id).filter((id): id is string => Boolean(id)));
+}
+
+export { programProgress } from "@/lib/workout";

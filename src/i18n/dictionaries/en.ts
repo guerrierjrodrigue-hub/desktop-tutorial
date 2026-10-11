@@ -360,6 +360,11 @@ const en = {
   "fitness.start": "Start",
   "fitness.restSeconds": "{seconds}s rest",
   "fitness.workoutFallback": "Workout",
+  "fitness.progressDays": "{done} / {total} days done",
+  "fitness.dayDone": "Done",
+  "fitness.redo": "Redo",
+  "fitness.error.invalidDuration": "That workout length doesn't look right. Please try again.",
+  "fitness.error.dayNotInProgram": "That workout isn't part of this program.",
 
   // Bible page (text translation handled separately by BIBLE_TRANSLATIONS)
   "bible.metaTitle": "Bible",

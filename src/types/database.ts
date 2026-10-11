@@ -283,6 +283,8 @@ export interface WorkoutLogRow {
   workout_day_id: string | null;
   duration_minutes: number;
   completed_at: Timestamptz;
+  /** Generated (stored) UTC calendar date of completed_at; one log per day. */
+  log_date: DateStr;
 }
 
 export interface UserPreferencesRow {
