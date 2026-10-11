@@ -1,8 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 import { getAuthedContext } from "@/lib/supabase/auth";
 import { type ActionResult, demoOk } from "@/lib/actions/result";
+import { validate, logAndFail } from "@/lib/actions/errors";
 
 export interface ProfileUpdateInput {
   name: string;
@@ -18,11 +20,30 @@ export interface ProfileUpdateInput {
   reminderTime?: string;
 }
 
+const profileSchema = z.object({
+  name: z.string().trim().min(1, "errors.nameRequired").max(80, "errors.tooLong"),
+  bio: z.string().trim().max(500, "errors.tooLong"),
+  heightCm: z.number().finite().min(50).max(300).optional(),
+  weightKg: z.number().finite().min(20).max(500).optional(),
+  goal: z.string().trim().max(200, "errors.tooLong"),
+  church: z.string().trim().max(120, "errors.tooLong"),
+  favoriteVerse: z.string().trim().max(200, "errors.tooLong"),
+  level: z.enum(["beginner", "intermediate", "advanced"]).optional(),
+  equipment: z.string().trim().max(40).optional(),
+  trainingDays: z.number().int().min(1).max(7).optional(),
+  reminderTime: z
+    .string()
+    .regex(/^\d{2}:\d{2}$/, "errors.validation")
+    .optional(),
+});
+
 /** Update the signed-in user's profile details. */
 export async function updateProfileAction(
   input: ProfileUpdateInput,
 ): Promise<ActionResult> {
-  if (!input.name.trim()) return { ok: false, error: "Name is required." };
+  const check = validate(profileSchema, input);
+  if (!check.ok) return check.result;
+  const data = check.data;
 
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
@@ -30,20 +51,20 @@ export async function updateProfileAction(
   const { error } = await ctx.supabase
     .from("profiles")
     .update({
-      name: input.name.trim(),
-      bio: input.bio.trim() || null,
-      height_cm: input.heightCm ?? null,
-      weight_kg: input.weightKg ?? null,
-      goal: input.goal.trim() || null,
-      church: input.church.trim() || null,
-      favorite_verse: input.favoriteVerse.trim() || null,
-      ...(input.level ? { level: input.level } : {}),
-      ...(input.equipment ? { equipment: input.equipment } : {}),
-      ...(input.trainingDays ? { training_days: input.trainingDays } : {}),
-      ...(input.reminderTime ? { reminder_time: input.reminderTime } : {}),
+      name: data.name,
+      bio: data.bio || null,
+      height_cm: data.heightCm ?? null,
+      weight_kg: data.weightKg ?? null,
+      goal: data.goal || null,
+      church: data.church || null,
+      favorite_verse: data.favoriteVerse || null,
+      ...(data.level ? { level: data.level } : {}),
+      ...(data.equipment ? { equipment: data.equipment } : {}),
+      ...(data.trainingDays ? { training_days: data.trainingDays } : {}),
+      ...(data.reminderTime ? { reminder_time: data.reminderTime } : {}),
     })
     .eq("id", ctx.userId);
-  if (error) return { ok: false, error: error.message };
+  if (error) return logAndFail(error);
 
   revalidatePath("/profile");
   return { ok: true };
