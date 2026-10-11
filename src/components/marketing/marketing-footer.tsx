@@ -53,10 +53,10 @@ export async function MarketingFooter() {
     <footer className="mt-24 border-t border-border">
       <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-5">
         <div className="lg:col-span-1">
-          <Logo />
-          <p className="mt-4 max-w-xs text-sm text-muted">
-            {dict["mkt.footer.missionStatement"]}
-          </p>
+          <Link href="/" aria-label="Kingdom Athlete" className="inline-flex">
+            <Logo variant="inline" height={20} className="text-foreground" />
+          </Link>
+          <p className="mt-4 max-w-xs text-sm text-muted">{dict["mkt.tagline"]}</p>
         </div>
         {footerColumns.map((col) => (
           <div key={col.titleKey}>

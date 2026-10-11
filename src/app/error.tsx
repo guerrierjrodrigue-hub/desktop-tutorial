@@ -45,8 +45,9 @@ export default function Error({
   return (
     <div className="grid min-h-svh place-items-center px-6 text-center">
       <div>
-        <div className="mb-8 flex justify-center">
-          <Logo />
+        <div className="mb-8 flex items-center justify-center gap-2.5">
+          <Logo variant="mark" height={34} />
+          <Logo variant="inline" height={22} className="text-foreground" />
         </div>
         <p className="font-serif text-6xl font-semibold text-gradient-accent">
           {t.eyebrow}

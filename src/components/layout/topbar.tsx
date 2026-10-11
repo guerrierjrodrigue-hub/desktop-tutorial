@@ -19,7 +19,9 @@ export async function Topbar({ title }: { title?: string }) {
     <header className="glass sticky top-0 z-30 flex h-16 items-center justify-between gap-4 border-b border-border px-4 sm:px-6">
       <div className="flex items-center gap-3">
         <div className="lg:hidden">
-          <Logo showText={false} />
+          <Link href="/dashboard" aria-label="Kingdom Athlete" className="inline-flex">
+            <Logo variant="mark" height={28} />
+          </Link>
         </div>
         {title && (
           <h1 className="font-serif text-xl font-semibold tracking-tight">
