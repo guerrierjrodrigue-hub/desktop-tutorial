@@ -34,6 +34,7 @@ export function WorkoutSession({
   );
   const [finished, setFinished] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!resting) return;
@@ -66,12 +67,23 @@ export function WorkoutSession({
   }
 
   async function finish() {
+    if (saving) return; // guard against a double-click before state settles
     setSaving(true);
+    setError(null);
     track("workout_completed");
-    const result = await logWorkoutCompletion(day.durationMinutes);
-    if (result.ok) showXp(result.xp);
+    const result = await logWorkoutCompletion({
+      programId,
+      dayId: day.id,
+      durationMinutes: day.durationMinutes,
+    });
     setSaving(false);
-    setFinished(true);
+    if (result.ok) {
+      showXp(result.xp);
+      setFinished(true);
+    } else {
+      // Keep the user on the session so they can retry; surface a friendly note.
+      setError(result.error ? dict[result.error as keyof Dictionary] ?? null : null);
+    }
   }
 
   if (finished) {
@@ -202,6 +214,12 @@ export function WorkoutSession({
           );
         })}
       </div>
+
+      {error && (
+        <p role="alert" className="text-center text-sm text-ember">
+          {error}
+        </p>
+      )}
 
       <Button className="w-full" size="lg" onClick={finish} disabled={saving}>
         {completedSets >= totalSets

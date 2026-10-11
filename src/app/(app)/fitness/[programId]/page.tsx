@@ -2,14 +2,15 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { Clock, CalendarDays, Dumbbell, ChevronLeft, Lock } from "lucide-react";
+import { Clock, CalendarDays, Dumbbell, ChevronLeft, Lock, Check } from "lucide-react";
 import { Topbar } from "@/components/layout/topbar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { PremiumGate } from "@/components/billing/premium-gate";
 import { programs } from "@/data/programs";
-import { getProgramBySlug } from "@/lib/queries/programs";
+import { getProgramBySlug, getCompletedDayIds, programProgress } from "@/lib/queries/programs";
 import { getCurrentUser } from "@/lib/queries/profile";
 import { formatDuration } from "@/lib/utils";
 import { getLocale } from "@/lib/locale";
@@ -50,6 +51,10 @@ export default async function ProgramDetailPage({
   const user = await getCurrentUser();
   const dict = await getDictionary(locale);
   const locked = program.premium && !user.isPremium;
+
+  const allDayIds = program.schedule.flatMap((w) => w.days.map((d) => d.id));
+  const completedDays = locked ? new Set<string>() : await getCompletedDayIds(allDayIds);
+  const progress = programProgress(program, completedDays);
 
   const requestedWeek = Number(week) || 1;
   const activeWeek =
@@ -108,6 +113,19 @@ export default async function ProgramDetailPage({
               </Button>
             </Link>
           )}
+          {!locked && progress.total > 0 && (
+            <div className="mt-6 max-w-md">
+              <div className="mb-1.5 flex items-center justify-between text-xs font-medium text-foreground/80">
+                <span>
+                  {dict["fitness.progressDays"]
+                    .replace("{done}", String(progress.done))
+                    .replace("{total}", String(progress.total))}
+                </span>
+                <span>{Math.round(progress.fraction * 100)}%</span>
+              </div>
+              <Progress value={progress.fraction} />
+            </div>
+          )}
         </div>
 
         {locked && <PremiumGate />}
@@ -136,18 +154,33 @@ export default async function ProgramDetailPage({
           </p>
 
           <div className="mt-4 space-y-4">
-            {activeWeek?.days.map((day, i) => (
-              <Card key={day.id}>
+            {activeWeek?.days.map((day, i) => {
+              const dayDone = completedDays.has(day.id);
+              return (
+              <Card key={day.id} className={dayDone ? "border-green-bright/30 bg-green/5" : undefined}>
                 <div className="mb-3 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
                     <span className="grid size-9 place-items-center rounded-lg bg-green/20 text-sm font-semibold text-green-bright">
-                      {dict["fitness.dayShort"]}
-                      {i + 1}
+                      {dayDone ? (
+                        <Check className="size-4" />
+                      ) : (
+                        <>
+                          {dict["fitness.dayShort"]}
+                          {i + 1}
+                        </>
+                      )}
                     </span>
                     <div>
-                      <h3 className="font-serif text-lg font-semibold leading-tight">
-                        {day.title}
-                      </h3>
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-serif text-lg font-semibold leading-tight">
+                          {day.title}
+                        </h3>
+                        {dayDone && (
+                          <Badge variant="neutral" className="text-green-bright">
+                            {dict["fitness.dayDone"]}
+                          </Badge>
+                        )}
+                      </div>
                       <p className="text-xs text-muted">{day.focus}</p>
                     </div>
                   </div>
@@ -158,7 +191,7 @@ export default async function ProgramDetailPage({
                     </span>
                     <Link href={`/fitness/${program.id}/session/${day.id}`}>
                       <Button size="sm" variant="secondary">
-                        {dict["fitness.start"]}
+                        {dayDone ? dict["fitness.redo"] : dict["fitness.start"]}
                       </Button>
                     </Link>
                   </div>
@@ -202,7 +235,8 @@ export default async function ProgramDetailPage({
                   ))}
                 </ul>
               </Card>
-            ))}
+              );
+            })}
           </div>
         </div>
       </main>

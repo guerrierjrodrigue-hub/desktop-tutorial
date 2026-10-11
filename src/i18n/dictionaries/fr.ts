@@ -345,6 +345,11 @@ const fr: Dictionary = {
   "fitness.start": "Commencer",
   "fitness.restSeconds": "{seconds}s de repos",
   "fitness.workoutFallback": "Séance",
+  "fitness.progressDays": "{done} / {total} jours faits",
+  "fitness.dayDone": "Fait",
+  "fitness.redo": "Refaire",
+  "fitness.error.invalidDuration": "Cette durée de séance semble incorrecte. Réessaie.",
+  "fitness.error.dayNotInProgram": "Cette séance ne fait pas partie de ce programme.",
 
   // Page Bible (la traduction du texte est gérée séparément par BIBLE_TRANSLATIONS)
   "bible.metaTitle": "Bible",
