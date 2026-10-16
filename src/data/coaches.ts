@@ -8,8 +8,6 @@ export interface Coach {
   tagline: string;
   /** Complete Tailwind gradient stop classes, e.g. "from-accent-bright to-accent-deep". */
   avatarGradient: string;
-  /** A distinct, recognizable icon per coach (not a shared sparkle). */
-  icon: LucideIcon;
   greeting: string;
   suggestedPrompts: string[];
   systemPrompt: string;
@@ -28,7 +26,6 @@ export const COACHES: Coach[] = [
     name: "Barnabas",
     tagline: "Faith & fitness coach · son of encouragement",
     avatarGradient: "from-accent-bright to-accent-deep",
-    icon: HeartHandshake,
     greeting:
       "Hi, I'm Barnabas, your faith & fitness coach. I'm here to encourage you, plan your training, talk nutrition, or simply pray with you. How can I help today?",
     suggestedPrompts: [
@@ -65,7 +62,6 @@ Voice & values:
     name: "Coach Titan",
     tagline: "Performance & fitness coach",
     avatarGradient: "from-green-bright to-green-deep",
-    icon: Dumbbell,
     greeting:
       "I'm Coach Titan. Let's get after it. What are we training today, or what's the goal you're chasing?",
     suggestedPrompts: [
@@ -99,7 +95,6 @@ Voice & values:
     name: "Coach Forge",
     tagline: "Discipline & habits coach",
     avatarGradient: "from-ember to-ember-deep",
-    icon: Hammer,
     greeting:
       "Coach Forge here. Discipline isn't a feeling, it's a system. What are we building or fixing today?",
     suggestedPrompts: [
@@ -133,7 +128,6 @@ Voice & values:
     name: "Coach Haven",
     tagline: "Mindset & wellness coach",
     avatarGradient: "from-[#5bc0be] to-[#3a7ca5]",
-    icon: Leaf,
     greeting:
       "Hi, I'm Coach Haven. Let's slow down for a moment. How are you actually doing today?",
     suggestedPrompts: [
@@ -166,3 +160,15 @@ Voice & values:
 export function getCoach(id: string): Coach {
   return COACHES.find((c) => c.id === id) ?? COACHES[0];
 }
+
+/**
+ * A distinct, recognizable icon per coach (not a shared sparkle). Kept separate
+ * from the Coach data so the coach object stays serializable across the
+ * server→client boundary (a component function can't be a client-component prop).
+ */
+export const COACH_ICONS: Record<CoachId, LucideIcon> = {
+  barnabas: HeartHandshake,
+  titan: Dumbbell,
+  forge: Hammer,
+  haven: Leaf,
+};

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { COACHES } from "@/data/coaches";
+import { COACHES, COACH_ICONS } from "@/data/coaches";
 import { localizeCoach } from "@/lib/coaches";
 
 const EM_DASH = /—/;
@@ -27,8 +27,9 @@ describe("coach greetings and suggestions are clean (no em dash, no emoji)", () 
 
 describe("each coach is visually distinct", () => {
   it("has a unique icon per coach (not a shared sparkle)", () => {
-    const icons = new Set(COACHES.map((c) => c.icon));
+    const icons = new Set(COACHES.map((c) => COACH_ICONS[c.id]));
     expect(icons.size).toBe(COACHES.length);
+    for (const c of COACHES) expect(COACH_ICONS[c.id]).toBeTruthy();
   });
 
   it("has a unique avatar gradient per coach", () => {

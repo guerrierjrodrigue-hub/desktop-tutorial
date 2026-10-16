@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 import { setActiveCoach, clearCoachConversation } from "@/app/(app)/coach/actions";
-import type { Coach } from "@/data/coaches";
+import { COACH_ICONS, type Coach } from "@/data/coaches";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { ChatMessage } from "@/types";
 
@@ -209,6 +209,7 @@ export function CoachChat({
 
 function MessageBubble({ message, coach }: { message: ChatMessage; coach: Coach }) {
   const isUser = message.role === "user";
+  const Icon = COACH_ICONS[coach.id];
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -223,7 +224,7 @@ function MessageBubble({ message, coach }: { message: ChatMessage; coach: Coach 
             coach.avatarGradient,
           )}
         >
-          <coach.icon className="size-4" />
+          <Icon className="size-4" />
         </span>
       )}
       <div
@@ -241,6 +242,7 @@ function MessageBubble({ message, coach }: { message: ChatMessage; coach: Coach 
 }
 
 function TypingIndicator({ coach }: { coach: Coach }) {
+  const Icon = COACH_ICONS[coach.id];
   return (
     <AnimatePresence>
       <motion.div
@@ -254,7 +256,7 @@ function TypingIndicator({ coach }: { coach: Coach }) {
             coach.avatarGradient,
           )}
         >
-          <coach.icon className="size-4" />
+          <Icon className="size-4" />
         </span>
         <div className="flex items-center gap-1 rounded-2xl bg-surface-2 px-4 py-3">
           {[0, 1, 2].map((i) => (
