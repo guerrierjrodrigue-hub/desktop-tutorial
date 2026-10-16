@@ -55,13 +55,16 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"], baseURL: guardURL },
     },
     {
-      // Small phone (iPhone-class width).
+      // Small phone (iPhone-class width). isMobile gives overlay scrollbars
+      // like a real phone, so a tall page's vertical scrollbar doesn't add a
+      // phantom 15px of horizontal width (a desktop classic-scrollbar artifact).
       name: "mobile-390",
       testMatch: /mobile\.spec\.ts/,
       use: {
         ...devices["Desktop Chrome"],
         baseURL: demoURL,
         viewport: { width: 390, height: 844 },
+        isMobile: true,
         hasTouch: true,
       },
     },
@@ -73,6 +76,7 @@ export default defineConfig({
         ...devices["Desktop Chrome"],
         baseURL: demoURL,
         viewport: { width: 360, height: 740 },
+        isMobile: true,
         hasTouch: true,
       },
     },
