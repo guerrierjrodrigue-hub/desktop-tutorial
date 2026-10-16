@@ -42,7 +42,7 @@ export default async function CoachChatPage({
 
   return (
     <>
-      <Topbar />
+      <Topbar title={coach.name} />
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-4 py-6 sm:px-6">
         <Link
           href="/coach"

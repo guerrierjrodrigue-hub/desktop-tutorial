@@ -32,7 +32,7 @@ export default async function FitnessPage() {
   const [programs, dict] = await Promise.all([getPrograms(locale), getDictionary(locale)]);
   return (
     <>
-      <Topbar title="Fitness" />
+      <Topbar title={dict["nav.fitness"]} />
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6">
         <PageHeader title={dict["fitness.title"]} subtitle={dict["fitness.subtitle"]} />
 

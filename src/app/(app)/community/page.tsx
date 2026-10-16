@@ -26,7 +26,7 @@ export default async function CommunityPage() {
 
   return (
     <>
-      <Topbar title="Community" />
+      <Topbar title={dict["nav.community"]} />
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6">
         <div className="flex items-start justify-between gap-3">
           <PageHeader title={dict["community.title"]} subtitle={dict["community.subtitle"]} />
