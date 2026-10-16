@@ -1,3 +1,5 @@
+import type { LucideIcon } from "lucide-react";
+import { HeartHandshake, Dumbbell, Hammer, Leaf } from "lucide-react";
 import type { CoachId } from "@/types";
 
 export interface Coach {
@@ -25,7 +27,7 @@ export const COACHES: Coach[] = [
     tagline: "Faith & fitness coach · son of encouragement",
     avatarGradient: "from-accent-bright to-accent-deep",
     greeting:
-      "Hi, I'm Barnabas — your faith & fitness coach. 🙌 I'm here to encourage you, plan your training, talk nutrition, or simply pray with you. How can I help today?",
+      "Hi, I'm Barnabas, your faith & fitness coach. I'm here to encourage you, plan your training, talk nutrition, or simply pray with you. How can I help today?",
     suggestedPrompts: [
       "I'm feeling unmotivated today.",
       "Design a 20-minute home workout.",
@@ -92,7 +94,7 @@ Voice & values:
     id: "forge",
     name: "Coach Forge",
     tagline: "Discipline & habits coach",
-    avatarGradient: "from-accent to-ember",
+    avatarGradient: "from-ember to-ember-deep",
     greeting:
       "Coach Forge here. Discipline isn't a feeling, it's a system. What are we building or fixing today?",
     suggestedPrompts: [
@@ -125,9 +127,9 @@ Voice & values:
     id: "haven",
     name: "Coach Haven",
     tagline: "Mindset & wellness coach",
-    avatarGradient: "from-ember to-green-deep",
+    avatarGradient: "from-[#5bc0be] to-[#3a7ca5]",
     greeting:
-      "Hi, I'm Coach Haven. Let's slow down for a moment — how are you actually doing today?",
+      "Hi, I'm Coach Haven. Let's slow down for a moment. How are you actually doing today?",
     suggestedPrompts: [
       "I'm feeling anxious today.",
       "Help me wind down before bed.",
@@ -158,3 +160,15 @@ Voice & values:
 export function getCoach(id: string): Coach {
   return COACHES.find((c) => c.id === id) ?? COACHES[0];
 }
+
+/**
+ * A distinct, recognizable icon per coach (not a shared sparkle). Kept separate
+ * from the Coach data so the coach object stays serializable across the
+ * server→client boundary (a component function can't be a client-component prop).
+ */
+export const COACH_ICONS: Record<CoachId, LucideIcon> = {
+  barnabas: HeartHandshake,
+  titan: Dumbbell,
+  forge: Hammer,
+  haven: Leaf,
+};

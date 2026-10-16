@@ -24,7 +24,7 @@ const COACH_FR: Record<string, CoachText> = {
   barnabas: {
     tagline: "Coach foi & forme · fils d'encouragement",
     greeting:
-      "Salut, je suis Barnabas — ton coach foi & forme. 🙌 Je suis là pour t'encourager, planifier ton entraînement, parler nutrition, ou simplement prier avec toi. Comment puis-je t'aider aujourd'hui ?",
+      "Salut, je suis Barnabas, ton coach foi & forme. Je suis là pour t'encourager, planifier ton entraînement, parler nutrition, ou simplement prier avec toi. Comment puis-je t'aider aujourd'hui ?",
     suggestedPrompts: [
       "Je manque de motivation aujourd'hui.",
       "Propose un entraînement maison de 20 minutes.",
@@ -88,7 +88,7 @@ const COACH_FR: Record<string, CoachText> = {
   haven: {
     tagline: "Coach mental & bien-être",
     greeting:
-      "Salut, je suis Coach Haven. Ralentissons un instant — comment vas-tu vraiment aujourd'hui ?",
+      "Salut, je suis Coach Haven. Ralentissons un instant. Comment vas-tu vraiment aujourd'hui ?",
     suggestedPrompts: [
       "Je me sens anxieux aujourd'hui.",
       "Aide-moi à me détendre avant de dormir.",
