@@ -144,14 +144,14 @@ export function ChallengesList({
         const started = isCohort ? Boolean(c.started) : true;
         return (
           <Card key={c.id} data-testid={`challenge-${c.id}`}>
-            <div className="flex items-start gap-3">
+            <div className="flex flex-wrap items-start gap-3">
               <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-green/20 text-green-bright">
                 <meta.icon className="size-5" />
               </span>
               <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-serif text-lg font-semibold leading-tight">{c.title}</h3>
-                  <Badge variant="neutral">{dict[meta.labelKey]}</Badge>
+                <div className="flex min-w-0 flex-wrap items-center gap-2">
+                  <h3 className="min-w-0 break-words font-serif text-lg font-semibold leading-tight">{c.title}</h3>
+                  <Badge variant="neutral" className="shrink-0">{dict[meta.labelKey]}</Badge>
                 </div>
                 <p className="mt-1 text-sm text-muted">{c.description}</p>
                 {isCohort && !started && c.startDate && (

@@ -32,7 +32,9 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
-  reporter: process.env.CI ? "github" : "list",
+  // In CI also emit an HTML report (with embedded screenshots) so the mobile
+  // sweep's captures ship as the playwright-report artifact.
+  reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "list",
   use: {
     trace: "on-first-retry",
     colorScheme: "dark",
@@ -40,9 +42,10 @@ export default defineConfig({
   },
   projects: [
     {
-      // Everything except the auth-guard spec runs against the demo server.
+      // Everything except the auth-guard and mobile specs runs against the demo
+      // server at desktop size.
       name: "demo",
-      testIgnore: /guard\.spec\.ts/,
+      testIgnore: /(guard|mobile)\.spec\.ts/,
       use: { ...devices["Desktop Chrome"], baseURL: demoURL },
     },
     {
@@ -50,6 +53,28 @@ export default defineConfig({
       name: "guard",
       testMatch: /guard\.spec\.ts/,
       use: { ...devices["Desktop Chrome"], baseURL: guardURL },
+    },
+    {
+      // Small phone (iPhone-class width).
+      name: "mobile-390",
+      testMatch: /mobile\.spec\.ts/,
+      use: {
+        ...devices["Desktop Chrome"],
+        baseURL: demoURL,
+        viewport: { width: 390, height: 844 },
+        hasTouch: true,
+      },
+    },
+    {
+      // Narrower Android-class width.
+      name: "mobile-360",
+      testMatch: /mobile\.spec\.ts/,
+      use: {
+        ...devices["Desktop Chrome"],
+        baseURL: demoURL,
+        viewport: { width: 360, height: 740 },
+        hasTouch: true,
+      },
     },
   ],
   // Two servers from the same build, differing only in runtime env (middleware
