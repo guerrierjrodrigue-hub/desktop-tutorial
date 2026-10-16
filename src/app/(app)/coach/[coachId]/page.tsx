@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ChevronLeft, Sparkles } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { Topbar } from "@/components/layout/topbar";
 import { CoachChat } from "@/components/coach/coach-chat";
 import { COACHES, getCoach } from "@/data/coaches";
@@ -54,7 +54,7 @@ export default async function CoachChatPage({
           <span
             className={`grid size-11 place-items-center rounded-2xl bg-gradient-to-br ${coach.avatarGradient} text-background shadow-[0_6px_20px_-6px_rgba(0,0,0,0.5)]`}
           >
-            <Sparkles className="size-5" />
+            <coach.icon className="size-5" />
           </span>
           <div>
             <h1 className="font-serif text-2xl font-semibold tracking-tight">{coach.name}</h1>

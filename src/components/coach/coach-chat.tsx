@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect, useTransition } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Sparkles, Trash2 } from "lucide-react";
+import { Send, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
@@ -223,7 +223,7 @@ function MessageBubble({ message, coach }: { message: ChatMessage; coach: Coach 
             coach.avatarGradient,
           )}
         >
-          <Sparkles className="size-4" />
+          <coach.icon className="size-4" />
         </span>
       )}
       <div
@@ -254,7 +254,7 @@ function TypingIndicator({ coach }: { coach: Coach }) {
             coach.avatarGradient,
           )}
         >
-          <Sparkles className="size-4" />
+          <coach.icon className="size-4" />
         </span>
         <div className="flex items-center gap-1 rounded-2xl bg-surface-2 px-4 py-3">
           {[0, 1, 2].map((i) => (

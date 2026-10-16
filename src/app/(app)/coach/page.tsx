@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Sparkles } from "lucide-react";
 import { Topbar } from "@/components/layout/topbar";
 import { Card } from "@/components/ui/card";
 import { COACHES } from "@/data/coaches";
@@ -33,7 +32,7 @@ export default async function CoachPickerPage() {
                 <span
                   className={`grid size-12 place-items-center rounded-2xl bg-gradient-to-br ${coach.avatarGradient} text-background shadow-[0_6px_20px_-6px_rgba(0,0,0,0.5)]`}
                 >
-                  <Sparkles className="size-5" />
+                  <coach.icon className="size-5" />
                 </span>
                 <h2 className="mt-4 font-serif text-xl font-semibold">{coach.name}</h2>
                 <p className="mt-1 text-sm text-muted">{coach.tagline}</p>
