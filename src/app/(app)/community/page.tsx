@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function CommunityPage() {
   const locale = await getLocale();
   const [posts, groups, dict] = await timed("community", () =>
-    Promise.all([getCommunityPosts(), getGroups(), getDictionary(locale)]),
+    Promise.all([getCommunityPosts(), getGroups(locale), getDictionary(locale)]),
   );
 
   return (

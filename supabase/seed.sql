@@ -161,11 +161,13 @@ insert into recipes (name, calories, protein_g, carbs_g, fat_g, minutes, tags, c
   ('Protein Bar & Fruit Combo', 300, 20, 34, 10, 2, array['Quick', 'Snack'], 'quick-easy');
 
 -- Groups ---------------------------------------------------------------------
-insert into groups (name, emoji) values
-  ('Grace Community Athletes', '⛪'),
-  ('5AM Warriors', '🌅'),
-  ('Strong Moms in Christ', '💪'),
-  ('Marathon Disciples', '🏃');
+-- One official community group (no fictitious filler groups).
+insert into groups (name, name_fr, emoji, description, description_fr) values
+  ('Kingdom Athlete',
+   'Kingdom Athlete',
+   '⛪',
+   'The official Kingdom Athlete community. Train your body, grow in faith, and encourage one another.',
+   'La communauté officielle Kingdom Athlete. Entraîne ton corps, grandis dans la foi et encouragez-vous les uns les autres.');
 
 -- Challenges -----------------------------------------------------------------
 insert into challenges (title, title_fr, description, description_fr, type, ends_at, duration_days, metric) values

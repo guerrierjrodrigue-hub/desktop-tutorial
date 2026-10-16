@@ -1,19 +1,31 @@
 import { getAuthedContext } from "@/lib/supabase/auth";
 import { communityPosts as mockPosts, groups as mockGroups } from "@/data/community";
 import { timeAgo } from "@/lib/utils";
+import { pick } from "@/lib/content-i18n";
+import type { LocaleCode } from "@/i18n/locales";
 import type { CommunityPost } from "@/types";
 
 export interface CommunityGroup {
   id: string;
   name: string;
   emoji: string;
+  description: string;
   members: number;
   /** Whether the signed-in user is a member (drives "Your groups" vs "Discover"). */
   joined: boolean;
 }
 
+interface GroupRow {
+  id: string;
+  name: string;
+  name_fr: string | null;
+  emoji: string;
+  description: string | null;
+  description_fr: string | null;
+}
+
 /** The group catalog with real member counts and the user's membership (demo data when unconfigured). */
-export async function getGroups(): Promise<CommunityGroup[]> {
+export async function getGroups(locale: LocaleCode = "en"): Promise<CommunityGroup[]> {
   const ctx = await getAuthedContext();
   if (!ctx) return mockGroups;
 
@@ -22,7 +34,7 @@ export async function getGroups(): Promise<CommunityGroup[]> {
     ctx.supabase.from("groups").select("*"),
     ctx.supabase.from("group_members").select("group_id, user_id"),
   ]);
-  const groupRows = groupQuery.data;
+  const groupRows = groupQuery.data as GroupRow[] | null;
   if (!groupRows?.length) return [];
 
   const memberRows = memberQuery.data;
@@ -35,8 +47,9 @@ export async function getGroups(): Promise<CommunityGroup[]> {
 
   return groupRows.map((g) => ({
     id: g.id,
-    name: g.name,
+    name: pick(locale, g.name, g.name_fr),
     emoji: g.emoji,
+    description: pick(locale, g.description ?? "", g.description_fr),
     members: countByGroup.get(g.id) ?? 0,
     joined: mine.has(g.id),
   }));
