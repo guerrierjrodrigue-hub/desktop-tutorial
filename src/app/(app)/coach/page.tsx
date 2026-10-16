@@ -23,7 +23,7 @@ export default async function CoachPickerPage() {
 
   return (
     <>
-      <Topbar title="Coach" />
+      <Topbar title={dict["nav.coach"]} />
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6">
         <p className="mb-6 text-sm text-muted">{dict["coach.pickerSubtitle"]}</p>
         <div className="grid gap-4 sm:grid-cols-2">
