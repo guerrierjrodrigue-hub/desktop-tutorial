@@ -28,8 +28,11 @@ function GroupRow({
         {group.emoji}
       </span>
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-semibold">{group.name}</p>
-        <p className="text-xs text-faint">
+        <p className="text-sm font-semibold leading-snug break-words">{group.name}</p>
+        {group.description && (
+          <p className="mt-0.5 text-xs text-muted">{group.description}</p>
+        )}
+        <p className="mt-0.5 text-xs text-faint">
           {plural(
             group.members,
             { one: dict["plural.members.one"], other: dict["plural.members.other"] },
