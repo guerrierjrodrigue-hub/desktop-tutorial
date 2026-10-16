@@ -69,7 +69,7 @@ export default async function ProfilePage() {
                 <div
                   key={badge.id}
                   title={badge.description}
-                  className={`flex flex-col items-center gap-1.5 rounded-xl border p-3 text-center ${
+                  className={`flex min-w-0 flex-col items-center gap-1.5 rounded-xl border p-3 text-center ${
                     badge.earned
                       ? "border-accent/25 bg-accent/8"
                       : "border-border bg-surface-2 opacity-50"
@@ -84,7 +84,7 @@ export default async function ProfilePage() {
                   >
                     <Icon name={badge.icon} className="size-5" />
                   </span>
-                  <span className="text-xs font-medium leading-tight">
+                  <span className="w-full break-words hyphens-auto text-xs font-medium leading-tight">
                     {badge.name}
                   </span>
                 </div>
