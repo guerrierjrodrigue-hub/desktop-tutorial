@@ -57,11 +57,11 @@ export function Sidebar({
   const groups = getNavGroups(getPurposeNavItems());
 
   return (
-    <aside className="sticky top-0 hidden h-svh w-64 shrink-0 flex-col overflow-y-auto border-r border-border bg-surface/40 px-4 py-6 lg:flex">
+    <aside className="sticky top-0 hidden h-svh w-64 shrink-0 flex-col overflow-y-auto overflow-x-hidden border-r border-border bg-surface/40 px-4 py-6 lg:flex">
       <div className="px-2">
-        <Link href="/dashboard" aria-label="Kingdom Athlete" className="inline-flex items-center gap-2.5">
-          <Logo variant="mark" height={24} />
-          <Logo variant="inline" height={18} className="text-foreground" />
+        <Link href="/dashboard" aria-label="Kingdom Athlete" className="inline-flex items-center gap-2">
+          <Logo variant="mark" height={20} />
+          <Logo variant="inline" height={14} className="text-foreground" />
         </Link>
       </div>
 
