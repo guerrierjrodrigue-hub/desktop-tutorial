@@ -167,7 +167,7 @@ insert into groups (name, name_fr, emoji, description, description_fr) values
    'Kingdom Athlete',
    '⛪',
    'The official Kingdom Athlete community. Train your body, grow in faith, and encourage one another.',
-   'La communauté officielle Kingdom Athlete. Entraîne ton corps, grandis dans la foi et encouragez-vous les uns les autres.');
+   'La communauté officielle Kingdom Athlete. Entraîne ton corps, grandis dans la foi et encourage les autres.');
 
 -- Challenges -----------------------------------------------------------------
 insert into challenges (title, title_fr, description, description_fr, type, ends_at, duration_days, metric) values

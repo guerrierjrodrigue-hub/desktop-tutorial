@@ -232,7 +232,7 @@ function MessageBubble({ message, coach }: { message: ChatMessage; coach: Coach 
           "max-w-[80%] whitespace-pre-wrap rounded-2xl px-4 py-2.5 text-sm leading-relaxed",
           isUser
             ? "bg-surface-2 text-foreground"
-            : "bg-gradient-to-br from-green-deep to-green/30 text-foreground",
+            : "border border-accent/30 bg-surface text-foreground",
         )}
       >
         {message.content}
