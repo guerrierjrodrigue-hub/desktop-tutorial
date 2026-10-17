@@ -23,25 +23,33 @@ function GroupRow({
   joining?: boolean;
 }) {
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-border bg-surface-2 p-3">
-      <span className="grid size-10 place-items-center rounded-lg bg-elevated text-lg">
-        {group.emoji}
-      </span>
-      <div className="min-w-0 flex-1">
-        <p className="text-sm font-semibold leading-snug break-words">{group.name}</p>
-        {group.description && (
-          <p className="mt-0.5 text-xs text-muted">{group.description}</p>
-        )}
-        <p className="mt-0.5 text-xs text-faint">
-          {plural(
-            group.members,
-            { one: dict["plural.members.one"], other: dict["plural.members.other"] },
-            locale,
+    <div className="rounded-xl border border-border bg-surface-2 p-3">
+      <div className="flex items-start gap-3">
+        <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-elevated text-lg">
+          {group.emoji}
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-semibold leading-snug break-words">{group.name}</p>
+          {group.description && (
+            <p className="mt-0.5 text-xs text-muted">{group.description}</p>
           )}
-        </p>
+          <p className="mt-0.5 text-xs text-faint">
+            {plural(
+              group.members,
+              { one: dict["plural.members.one"], other: dict["plural.members.other"] },
+              locale,
+            )}
+          </p>
+        </div>
       </div>
       {onJoin && (
-        <Button size="sm" variant="secondary" onClick={() => onJoin(group.id)} disabled={joining}>
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={() => onJoin(group.id)}
+          disabled={joining}
+          className="mt-3 w-full"
+        >
           {dict["community.join"]}
         </Button>
       )}
