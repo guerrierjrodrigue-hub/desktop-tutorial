@@ -59,14 +59,15 @@ export async function getWorkoutDoneToday(): Promise<boolean> {
   const ctx = await getAuthedContext();
   if (!ctx) return false;
 
-  const startOfDay = new Date();
-  startOfDay.setHours(0, 0, 0, 0);
+  // Bound to the start of the user's LOCAL day (not the server's UTC midnight),
+  // so "done today" agrees with the timezone-aware XP day and dashboard views.
+  const startOfDay = startOfLocalDayUTC(await getUserTimezone());
 
   const { count } = await ctx.supabase
     .from("workout_logs")
     .select("*", { count: "exact", head: true })
     .eq("user_id", ctx.userId)
-    .gte("completed_at", startOfDay.toISOString());
+    .gte("completed_at", startOfDay);
 
   return (count ?? 0) > 0;
 }

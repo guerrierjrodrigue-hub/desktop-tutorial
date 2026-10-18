@@ -34,17 +34,33 @@ export async function getHabits(locale: LocaleCode = "en"): Promise<Habit[]> {
 
   const tz = await getUserTimezone();
   const todayStr = getUserToday(tz);
-  const { data: logRows } = await ctx.supabase
-    .from("habit_logs")
-    .select("*")
-    .eq("user_id", ctx.userId)
-    .gte("log_date", addDaysToDateStr(todayStr, -90));
+  const since = addDaysToDateStr(todayStr, -90);
+  const [{ data: logRows }, { data: workoutRows }] = await Promise.all([
+    ctx.supabase
+      .from("habit_logs")
+      .select("*")
+      .eq("user_id", ctx.userId)
+      .gte("log_date", since),
+    // Completed workouts auto-satisfy the "do the workout" habit, so finishing a
+    // session checks it off (and feeds its streak) without a second manual tap.
+    ctx.supabase
+      .from("workout_logs")
+      .select("completed_at")
+      .eq("user_id", ctx.userId)
+      .gte("completed_at", `${since}T00:00:00Z`),
+  ]);
 
   const logsByHabit = new Map<string, Set<string>>();
   for (const log of logRows ?? []) {
     if (!log.done) continue;
     if (!logsByHabit.has(log.habit_id)) logsByHabit.set(log.habit_id, new Set());
     logsByHabit.get(log.habit_id)!.add(log.log_date);
+  }
+
+  // Local days (user's timezone) on which a workout was completed.
+  const workoutDays = new Set<string>();
+  for (const w of (workoutRows ?? []) as { completed_at: string }[]) {
+    workoutDays.add(getUserToday(tz, new Date(w.completed_at)));
   }
 
   // Rest-day pattern from the user's weekly cadence (Mon→Sun). A planned rest
@@ -56,8 +72,10 @@ export async function getHabits(locale: LocaleCode = "en"): Promise<Habit[]> {
   const todayIsRest = isWorkoutRestDay(todayStr);
 
   return habitRows.map((row) => {
-    const doneDates = logsByHabit.get(row.id) ?? new Set<string>();
     const isWorkoutHabit = row.icon === WORKOUT_HABIT_ICON;
+    const doneDates = logsByHabit.get(row.id) ?? new Set<string>();
+    // The workout habit also counts every day a session was actually completed.
+    if (isWorkoutHabit) for (const d of workoutDays) doneDates.add(d);
     return {
       id: row.id,
       label: localizeHabitLabel(row.label, locale),

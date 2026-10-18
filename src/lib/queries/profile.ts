@@ -1,4 +1,5 @@
 import { cache } from "react";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getSessionUser } from "@/lib/supabase/auth";
 import { isFreeMode } from "@/lib/flags";
@@ -78,6 +79,18 @@ export const getCurrentUser = cache(async function getCurrentUser(): Promise<Use
       row.training_days ?? 3,
       todayStr,
     );
+    // Write the freshly computed streak back to the cached column so readers that
+    // query profiles.streak directly (leaderboard, coach context) stay in sync
+    // with the dashboard instead of showing a stale 0. Best-effort; a failed
+    // write never blocks the page.
+    if (row.streak !== profile.streak) {
+      // Permissive cast for the write: the hand-written Database type exposes no
+      // Update types (reads stay fully typed). Matches getAuthedContext's pattern.
+      await (supabase as SupabaseClient)
+        .from("profiles")
+        .update({ streak: profile.streak })
+        .eq("id", user.id);
+    }
     return profile;
   }
 

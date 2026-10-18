@@ -53,6 +53,15 @@ describe("xp progression", () => {
     expect(progress).toBeLessThanOrEqual(1);
   });
 
+  it("level 1 starts empty and fills toward level 2 at 100 XP", () => {
+    expect(xpForLevel(1)).toBe(0);
+    expect(xpForLevel(2)).toBe(100);
+    // 60 XP is a level-1 user 60% of the way to level 2 — not a stuck 0% bar.
+    const { level, progress } = levelFromXp(60);
+    expect(level).toBe(1);
+    expect(progress).toBeCloseTo(0.6, 5);
+  });
+
   it("keeps progress within [0,1] across a wide xp range", () => {
     for (const xp of [0, 100, 500, 4820, 25000, 100000]) {
       const { progress, level } = levelFromXp(xp);
