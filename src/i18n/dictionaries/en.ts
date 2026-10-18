@@ -444,6 +444,7 @@ const en = {
   "coach.fallbackUnreachable": "I couldn't reach my thoughts just now — but I'm still with you. Take a breath, and let's try again in a moment.",
   "coach.tooLong": "Your message is too long (2000 characters max). Please shorten it.",
   "coach.limitReached": "You've reached today's limit of {n} coach messages (free beta). Please come back tomorrow.",
+  "coach.unavailable": "{coach} is unavailable right now. Please try again in a moment.",
   "coach.metaSuffix": "AI Coach",
   "coach.metaFallback": "Coach",
 

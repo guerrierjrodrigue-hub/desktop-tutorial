@@ -426,6 +426,7 @@ const fr: Dictionary = {
   "coach.fallbackUnreachable": "Je n'ai pas pu rassembler mes pensées à l'instant, mais je suis toujours avec toi. Respire, et réessayons dans un instant.",
   "coach.tooLong": "Ton message est trop long (2000 caractères max). Raccourcis-le, s'il te plaît.",
   "coach.limitReached": "Tu as atteint la limite de {n} messages du coach pour aujourd'hui (bêta gratuite). Reviens demain.",
+  "coach.unavailable": "{coach} est indisponible pour le moment, réessaie dans un instant.",
   "coach.metaSuffix": "Coach IA",
   "coach.metaFallback": "Coach",
 
