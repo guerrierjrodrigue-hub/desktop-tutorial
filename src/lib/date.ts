@@ -87,6 +87,17 @@ export function startOfLocalDayUTC(tz: string, now: Date = new Date()): string {
   return new Date(guessUTC - offset).toISOString();
 }
 
+/**
+ * The local calendar day (YYYY-MM-DD) an XP event is credited to, for the user's
+ * timezone. This is the JS mirror of the SQL the xp_events triggers use
+ * (`(ts at time zone <profiles.timezone>)::date`, migration 0028). Kept in sync
+ * so the dashboard's "today" and the awarded XP always agree on the day, even
+ * near local midnight and across DST transitions.
+ */
+export function xpEventDay(ts: Date, tz: string): string {
+  return getUserToday(tz, ts);
+}
+
 export type Greeting = "morning" | "afternoon" | "evening";
 
 /** Which greeting to show for a given local hour. */
