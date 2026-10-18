@@ -260,6 +260,9 @@ const fr: Dictionary = {
   "dashboard.dayStreak": "Jours consécutifs",
   "dashboard.totalXp": "XP total",
   "dashboard.startWorkout": "Commencer l'entraînement",
+  "dashboard.workoutDoneTitle": "Séance terminée",
+  "dashboard.workoutDoneSubtitle": "Bien joué. Ta séance est enregistrée pour aujourd'hui.",
+  "dashboard.viewProgram": "Voir le programme",
 
   "settings.languageTitle": "Langue",
   "settings.languageSubtitle": "Choisis la langue d'affichage de Kingdom Athlete.",

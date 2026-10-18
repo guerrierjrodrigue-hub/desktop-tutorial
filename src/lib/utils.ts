@@ -37,9 +37,14 @@ export function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
 }
 
-/** Return the XP required to reach a given level (gentle exponential curve). */
+/**
+ * Return the total XP required to reach a given level (gentle exponential
+ * curve). Level 1 starts at 0 XP — a brand-new user is level 1 with an empty
+ * bar, and the bar fills toward level 2 at 100 XP. (Previously level 1 required
+ * 100 XP, so anyone under 100 XP showed a 0% bar even after earning some.)
+ */
 export function xpForLevel(level: number): number {
-  return Math.round(100 * Math.pow(level, 1.5));
+  return Math.round(100 * Math.pow(Math.max(0, level - 1), 1.5));
 }
 
 /** Derive level + progress from a total XP amount. */

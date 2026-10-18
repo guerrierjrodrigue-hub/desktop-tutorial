@@ -266,6 +266,9 @@ const en = {
   "dashboard.dayStreak": "Day streak",
   "dashboard.totalXp": "Total XP",
   "dashboard.startWorkout": "Start workout",
+  "dashboard.workoutDoneTitle": "Workout complete",
+  "dashboard.workoutDoneSubtitle": "Nicely done. Your session is logged for today.",
+  "dashboard.viewProgram": "View program",
 
   // Settings / language
   "settings.languageTitle": "Language",

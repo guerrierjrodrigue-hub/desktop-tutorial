@@ -1,4 +1,5 @@
 import { clamp, levelFromXp } from "@/lib/utils";
+import { XP_REWARDS } from "@/lib/gamification";
 import type { Habit } from "@/types";
 
 export interface Quest {
@@ -34,18 +35,22 @@ export function getDailyQuests(
   const habitsDone = habits.filter((h) => h.done).length;
   const habitTarget = Math.min(3, habits.length || 1);
 
+  // Quest XP must equal what the action actually awards server-side, so the
+  // "+N XP" shown here matches the XP the user receives (see XP_REWARDS, which
+  // mirrors the DB triggers). The training quest is one workout (XP_REWARDS.workout);
+  // recovery and the devotional each map to a single habit/reading award.
   const trainingQuest: Quest = options.isRestDay
     ? {
         id: "recovery",
         label: "Recover: stretch, hydrate, or pray",
         done: options.recoveryDoneToday ?? false,
-        xp: 50,
+        xp: XP_REWARDS.habit,
       }
     : {
         id: "workout",
         label: "Finish today's workout",
         done: workoutDoneToday,
-        xp: 50,
+        xp: XP_REWARDS.workout,
       };
 
   return [
@@ -54,14 +59,15 @@ export function getDailyQuests(
       label: `Complete ${habitTarget} habit${habitTarget > 1 ? "s" : ""} today`,
       target: habitTarget,
       done: habitsDone >= habitTarget,
-      xp: 30,
+      // Each habit awards XP_REWARDS.habit; the quest covers `habitTarget` of them.
+      xp: XP_REWARDS.habit * habitTarget,
     },
     trainingQuest,
     {
       id: "devotional",
       label: "Complete today's devotional",
       done: devotionalDoneToday,
-      xp: 20,
+      xp: XP_REWARDS.reading_day,
     },
   ];
 }

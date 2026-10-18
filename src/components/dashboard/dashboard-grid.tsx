@@ -132,12 +132,19 @@ export function DashboardGrid({
         </div>
       )}
 
-      <div className="grid gap-5 sm:grid-cols-2">
+      {/* Masonry (CSS multi-column) so cards pack by height instead of aligning
+          to the tallest card in each grid row — which left a large empty gap
+          under the shorter column. break-inside-avoid keeps each card whole. */}
+      <div className="gap-5 sm:columns-2">
         {layout
           .filter((entry) => !entry.hidden)
           .map((entry) => {
             const widget = widgetMap.get(entry.id);
-            return widget ? <div key={entry.id}>{widget.node}</div> : null;
+            return widget ? (
+              <div key={entry.id} className="mb-5 break-inside-avoid">
+                {widget.node}
+              </div>
+            ) : null;
           })}
       </div>
     </div>
