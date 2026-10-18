@@ -245,6 +245,10 @@ const fr: Dictionary = {
   "session.setAria": "Série {i} de {name}",
   "session.finish": "Terminer la séance",
   "session.finishPartial": "Terminer la séance ({done}/{total} séries)",
+  "session.finishAnyway": "Terminer quand même",
+  "session.halfConfirm":
+    "Tu n'as enregistré que {done} séries sur {total}. Appuie encore pour terminer quand même.",
+  "session.elapsedAria": "Temps écoulé",
   "dashboard.activeChallenge": "Défi en cours",
   "dashboard.recommendedChallenge": "Défi recommandé",
   "dashboard.recommended": "Recommandé pour toi",

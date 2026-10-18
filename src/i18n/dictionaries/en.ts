@@ -251,6 +251,10 @@ const en = {
   "session.setAria": "Set {i} of {name}",
   "session.finish": "Finish workout",
   "session.finishPartial": "Finish workout ({done}/{total} sets)",
+  "session.finishAnyway": "Finish anyway",
+  "session.halfConfirm":
+    "You have only logged {done} of {total} sets. Tap again to finish anyway.",
+  "session.elapsedAria": "Elapsed time",
   "dashboard.activeChallenge": "Active challenge",
   "dashboard.recommendedChallenge": "Recommended challenge",
   "dashboard.recommended": "Recommended for you",
