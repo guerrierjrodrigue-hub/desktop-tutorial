@@ -33,8 +33,13 @@ export function WorkoutSession({
     null,
   );
   const [finished, setFinished] = useState(false);
+  const [finishedMinutes, setFinishedMinutes] = useState(0);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [confirmPartial, setConfirmPartial] = useState(false);
+  // Real session clock: starts when the session screen opens.
+  const [startedAt] = useState(() => Date.now());
+  const [nowMs, setNowMs] = useState(() => Date.now());
 
   useEffect(() => {
     if (!resting) return;
@@ -48,9 +53,21 @@ export function WorkoutSession({
     return () => clearTimeout(t);
   }, [resting]);
 
+  // Tick the elapsed clock every second until the session is finished.
+  useEffect(() => {
+    if (finished) return;
+    const t = setInterval(() => setNowMs(Date.now()), 1000);
+    return () => clearInterval(t);
+  }, [finished]);
+
   const totalSets = day.exercises.reduce((sum, ex) => sum + ex.sets, 0);
   const completedSets = Object.values(setsDone).reduce((a, b) => a + b, 0);
   const progress = totalSets > 0 ? completedSets / totalSets : 0;
+
+  const elapsedSec = Math.max(0, Math.floor((nowMs - startedAt) / 1000));
+  const elapsedClock = `${Math.floor(elapsedSec / 60)}:${String(elapsedSec % 60).padStart(2, "0")}`;
+  // At least half the sets must be done to finish without an explicit confirm.
+  const halfReached = totalSets === 0 || completedSets >= totalSets / 2;
 
   function toggleSet(exerciseId: string, setIndex: number, restSeconds: number) {
     const current = setsDone[exerciseId] ?? 0;
@@ -68,17 +85,25 @@ export function WorkoutSession({
 
   async function finish() {
     if (saving) return; // guard against a double-click before state settles
+    // Require an explicit confirmation when under half the sets are done.
+    if (!halfReached && !confirmPartial) {
+      setConfirmPartial(true);
+      return;
+    }
     setSaving(true);
     setError(null);
     track("workout_completed");
+    // Real elapsed minutes (clamped to the action's 1–300 bound).
+    const minutes = Math.min(300, Math.max(1, Math.round((Date.now() - startedAt) / 60000)));
     const result = await logWorkoutCompletion({
       programId,
       dayId: day.id,
-      durationMinutes: day.durationMinutes,
+      durationMinutes: minutes,
     });
     setSaving(false);
     if (result.ok) {
       showXp(result.xp);
+      setFinishedMinutes(minutes);
       setFinished(true);
     } else {
       // Keep the user on the session so they can retry; surface a friendly note.
@@ -98,11 +123,11 @@ export function WorkoutSession({
         </span>
         <h1 className="font-serif text-2xl font-semibold">{dict["session.complete"]}</h1>
         <p className="max-w-sm text-sm text-muted">
-          {dict["session.greatWorkPre"]} <span className="text-foreground">{day.title}</span> —{" "}
+          {dict["session.greatWorkPre"]} <span className="text-foreground">{day.title}</span>.{" "}
           {dict["session.setsSummary"]
             .replace("{done}", String(completedSets))
             .replace("{total}", String(totalSets))
-            .replace("{min}", String(day.durationMinutes))}
+            .replace("{min}", String(finishedMinutes))}
         </p>
         <Button onClick={() => router.push("/dashboard")}>{dict["session.backToDashboard"]}</Button>
       </motion.div>
@@ -123,9 +148,9 @@ export function WorkoutSession({
           <span>
             {completedSets} / {totalSets} {dict["session.sets"]}
           </span>
-          <span className="flex items-center gap-1.5">
+          <span className="flex items-center gap-1.5 tabular-nums" aria-label={dict["session.elapsedAria"]}>
             <Clock className="size-4" />
-            {day.durationMinutes} {dict["session.minUnit"]}
+            {elapsedClock}
           </span>
         </div>
         <Progress value={progress} />
@@ -221,12 +246,22 @@ export function WorkoutSession({
         </p>
       )}
 
+      {confirmPartial && (
+        <p role="status" className="text-center text-sm text-muted">
+          {dict["session.halfConfirm"]
+            .replace("{done}", String(completedSets))
+            .replace("{total}", String(totalSets))}
+        </p>
+      )}
+
       <Button className="w-full" size="lg" onClick={finish} disabled={saving}>
-        {completedSets >= totalSets
-          ? dict["session.finish"]
-          : dict["session.finishPartial"]
-              .replace("{done}", String(completedSets))
-              .replace("{total}", String(totalSets))}
+        {confirmPartial
+          ? dict["session.finishAnyway"]
+          : completedSets >= totalSets
+            ? dict["session.finish"]
+            : dict["session.finishPartial"]
+                .replace("{done}", String(completedSets))
+                .replace("{total}", String(totalSets))}
       </Button>
     </div>
   );
