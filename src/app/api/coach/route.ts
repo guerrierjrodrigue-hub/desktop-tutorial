@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
+import * as Sentry from "@sentry/nextjs";
 import type { ChatMessage } from "@/types";
+import type { Dictionary } from "@/i18n/dictionaries/en";
 import { COACH_MODEL, offlineCoachReply, toClaudeMessages } from "@/lib/coaches";
-import { getCoach } from "@/data/coaches";
+import { getCoach, type Coach } from "@/data/coaches";
 import { getAuthedContext, type AuthedContext } from "@/lib/supabase/auth";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
@@ -34,6 +36,32 @@ function isRateLimited(userId: string): boolean {
   recent.push(now);
   requestLog.set(userId, recent);
   return recent.length > RATE_LIMIT_MAX_REQUESTS;
+}
+
+/** Honest, localized "AI is down" message. Never fake a coach reply. */
+function unavailableMessage(dict: Dictionary, coach: Coach): string {
+  return dict["coach.unavailable"].replace("{coach}", coach.name);
+}
+
+/**
+ * Log the exact Anthropic failure (status, type, message) to the server logs and
+ * Sentry — never the chat content. The SDK error's own message describes the API
+ * error, not the user's input.
+ */
+function logAnthropicError(err: unknown, userId: string): void {
+  const e = err as { status?: number; name?: string; message?: string; error?: { type?: string } };
+  const status = e?.status;
+  const type = e?.error?.type ?? e?.name;
+  console.error(
+    `[coach] anthropic error user=${userId} model=${COACH_MODEL} status=${status ?? "?"} type=${type ?? "?"} message=${e?.message ?? "?"}`,
+  );
+  Sentry.captureException(err, {
+    tags: {
+      feature: "coach",
+      anthropic_status: String(status ?? ""),
+      anthropic_type: String(type ?? ""),
+    },
+  });
 }
 
 function textResponse(text: string, source: string): Response {
@@ -125,11 +153,20 @@ export async function POST(req: Request) {
     return textResponse(reply, "safety");
   }
 
-  // No key, no user, or burst-limited → deterministic in-voice fallback.
-  if (!apiKey || !ctx || isRateLimited(ctx.userId)) {
-    const reply = offlineCoachReply(coachId, lastUser.content, locale);
-    if (ctx) await persist(ctx, coachId, "assistant", reply, null);
-    return textResponse(reply, "offline");
+  // Demo / unauthenticated: keep the deterministic in-voice reply so the app
+  // stays explorable without a backend.
+  if (!ctx) {
+    return textResponse(offlineCoachReply(coachId, lastUser.content, locale), "offline");
+  }
+
+  // Authenticated but the AI can't run (misconfigured key, or burst-limited):
+  // be honest, keep the user's message, and never fake a coach reply.
+  if (!apiKey || isRateLimited(ctx.userId)) {
+    if (!apiKey) {
+      console.error("[coach] ANTHROPIC_API_KEY is not configured");
+      Sentry.captureMessage("coach: ANTHROPIC_API_KEY not configured", "error");
+    }
+    return textResponse(unavailableMessage(dict, coach), "unavailable");
   }
 
   // Trusted, server-built context + safety protocol appended to the persona.
@@ -186,21 +223,25 @@ export async function POST(req: Request) {
             }
           }
           if (!streamedAny) {
-            full = offlineCoachReply(coachId, lastUser.content, locale);
-            controller.enqueue(encoder.encode(full));
+            Sentry.captureMessage("coach: model returned an empty stream", "warning");
+            controller.enqueue(encoder.encode(unavailableMessage(dict, coach)));
           }
-        } catch {
+        } catch (err) {
+          logAnthropicError(err, ctx.userId);
           if (!streamedAny) {
-            full = offlineCoachReply(coachId, lastUser.content, locale);
-            controller.enqueue(encoder.encode(full));
+            controller.enqueue(encoder.encode(unavailableMessage(dict, coach)));
           }
         } finally {
           controller.close();
-          const tokens = inputTokens + outputTokens;
-          console.log(
-            `[coach] user=${ctx.userId} model=${COACH_MODEL} in=${inputTokens} out=${outputTokens} total=${tokens}`,
-          );
-          await persist(ctx, coachId, "assistant", full, tokens || null);
+          // Only persist a genuine model reply — never the honest "unavailable"
+          // placeholder, so history stays truthful and the user message stands.
+          if (streamedAny) {
+            const tokens = inputTokens + outputTokens;
+            console.log(
+              `[coach] user=${ctx.userId} model=${COACH_MODEL} in=${inputTokens} out=${outputTokens} total=${tokens}`,
+            );
+            await persist(ctx, coachId, "assistant", full, tokens || null);
+          }
         }
       },
     });
@@ -212,9 +253,10 @@ export async function POST(req: Request) {
         "Cache-Control": "no-store",
       },
     });
-  } catch {
-    const reply = offlineCoachReply(coachId, lastUser.content, locale);
-    await persist(ctx, coachId, "assistant", reply, null);
-    return textResponse(reply, "fallback");
+  } catch (err) {
+    // The model call failed before streaming — log the exact error and return an
+    // honest message. The user's message was already saved; don't fake a reply.
+    logAnthropicError(err, ctx.userId);
+    return textResponse(unavailableMessage(dict, coach), "unavailable");
   }
 }
