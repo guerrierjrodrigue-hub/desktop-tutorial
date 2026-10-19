@@ -176,14 +176,14 @@ export interface Recipe {
   minutes: number;
   tags: string[];
   category: RecipeCategory | null;
-  /** An illustrative photo (may be a generated estimate). */
+  /** A real stored photo, if one exists (else the UI shows a palette placeholder). */
   imageUrl?: string;
-  /** Ingredients, localized. Real content if present, else an estimation. */
+  /** Hand-written ingredients, localized. Absent until a real recipe is written. */
   ingredients?: string[];
-  /** Step-by-step method, localized. Real content if present, else an estimation. */
+  /** Hand-written step-by-step method, localized. Absent until a real recipe is written. */
   steps?: string[];
-  /** True when ingredients/steps are the generated estimate, not stored content. */
-  estimatedDetails?: boolean;
+  /** True once a recipe has hand-written ingredients + steps (not just macros). */
+  hasFullRecipe?: boolean;
 }
 
 export interface ReadingPlan {

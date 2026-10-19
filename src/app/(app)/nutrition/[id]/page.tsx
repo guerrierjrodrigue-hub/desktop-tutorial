@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronLeft, Flame, Clock, Beef, Wheat, Droplet } from "lucide-react";
+import { ChevronLeft, Flame, Clock, Beef, Wheat, Droplet, UtensilsCrossed } from "lucide-react";
 import { Topbar } from "@/components/layout/topbar";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -49,24 +49,27 @@ export default async function RecipeDetailPage({
         </Link>
 
         <Card className="mt-4 overflow-hidden p-0">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={recipe.imageUrl}
-            alt=""
-            aria-hidden="true"
-            className="h-44 w-full object-cover sm:h-56"
-          />
-          <div className="p-5 sm:p-6">
-            <div className="flex flex-wrap items-center gap-2">
-              {recipe.estimatedDetails && (
-                <Badge variant="neutral">{dict["nutrition.estimation"]}</Badge>
-              )}
-              {recipe.tags.map((t) => (
-                <Badge key={t} variant="neutral" className="text-xs">
-                  {t}
-                </Badge>
-              ))}
+          {recipe.imageUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={recipe.imageUrl} alt="" aria-hidden="true" className="h-44 w-full object-cover sm:h-56" />
+          ) : (
+            <div
+              aria-hidden="true"
+              className="grid h-44 w-full place-items-center bg-gradient-to-br from-surface-2 to-elevated sm:h-56"
+            >
+              <UtensilsCrossed className="size-12 text-accent/70" />
             </div>
+          )}
+          <div className="p-5 sm:p-6">
+            {recipe.tags.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2">
+                {recipe.tags.map((t) => (
+                  <Badge key={t} variant="neutral" className="text-xs">
+                    {t}
+                  </Badge>
+                ))}
+              </div>
+            )}
             <h1 className="mt-3 font-serif text-3xl font-semibold">{recipe.name}</h1>
             <div className="mt-3 flex flex-wrap items-center gap-4 text-sm text-muted">
               <span className="flex items-center gap-1.5">
@@ -102,40 +105,44 @@ export default async function RecipeDetailPage({
           </div>
         </Card>
 
-        <div className="mt-5 grid gap-5 sm:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>{dict["nutrition.ingredients"]}</CardTitle>
-            </CardHeader>
-            <ul className="space-y-2 text-sm">
-              {(recipe.ingredients ?? []).map((item, i) => (
-                <li key={i} className="flex gap-2">
-                  <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-accent/60" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </Card>
+        {recipe.hasFullRecipe ? (
+          <div className="mt-5 grid gap-5 sm:grid-cols-2">
+            <Card>
+              <CardHeader>
+                <CardTitle>{dict["nutrition.ingredients"]}</CardTitle>
+              </CardHeader>
+              <ul className="space-y-2 text-sm">
+                {(recipe.ingredients ?? []).map((item, i) => (
+                  <li key={i} className="flex gap-2">
+                    <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-accent/60" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>{dict["nutrition.steps"]}</CardTitle>
-            </CardHeader>
-            <ol className="space-y-3 text-sm">
-              {(recipe.steps ?? []).map((step, i) => (
-                <li key={i} className="flex gap-3">
-                  <span className="grid size-6 shrink-0 place-items-center rounded-full bg-accent/15 text-xs font-semibold text-accent-bright">
-                    {i + 1}
-                  </span>
-                  <span>{step}</span>
-                </li>
-              ))}
-            </ol>
+            <Card>
+              <CardHeader>
+                <CardTitle>{dict["nutrition.steps"]}</CardTitle>
+              </CardHeader>
+              <ol className="space-y-3 text-sm">
+                {(recipe.steps ?? []).map((step, i) => (
+                  <li key={i} className="flex gap-3">
+                    <span className="grid size-6 shrink-0 place-items-center rounded-full bg-accent/15 text-xs font-semibold text-accent-bright">
+                      {i + 1}
+                    </span>
+                    <span>{step}</span>
+                  </li>
+                ))}
+              </ol>
+            </Card>
+          </div>
+        ) : (
+          <Card className="mt-5 flex flex-col items-center gap-2 py-8 text-center">
+            <UtensilsCrossed className="size-6 text-faint" />
+            <p className="font-serif text-lg font-semibold">{dict["nutrition.fullRecipeSoon"]}</p>
+            <p className="max-w-sm text-sm text-muted">{dict["nutrition.fullRecipeSoonNote"]}</p>
           </Card>
-        </div>
-
-        {recipe.estimatedDetails && (
-          <p className="mt-5 text-xs text-faint">{dict["nutrition.detailEstimateNote"]}</p>
         )}
       </main>
     </>

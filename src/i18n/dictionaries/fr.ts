@@ -107,9 +107,9 @@ const fr: Dictionary = {
   "nutrition.addToJournal": "Ajouter au journal alimentaire",
   "nutrition.addedToJournal": "Ajouté au journal d'aujourd'hui",
   "nutrition.backToRecipes": "Retour à la nutrition",
-  "nutrition.estimation": "Estimation",
-  "nutrition.detailEstimateNote":
-    "Les ingrédients et les étapes sont une estimation générée à partir des macros de la recette. Les quantités sont approximatives.",
+  "nutrition.fullRecipeSoon": "Recette complète à venir",
+  "nutrition.fullRecipeSoonNote":
+    "Nous rédigeons les ingrédients et les étapes de ce plat. En attendant, voici ses valeurs nutritionnelles.",
   "habits.namePlaceholder": "Nom de l'habitude…",
   "habits.addHabit": "Ajouter l'habitude",
   "habits.addCustom": "Ajouter une habitude",

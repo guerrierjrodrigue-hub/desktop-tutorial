@@ -111,9 +111,9 @@ const en = {
   "nutrition.addToJournal": "Add to food journal",
   "nutrition.addedToJournal": "Added to today's journal",
   "nutrition.backToRecipes": "Back to nutrition",
-  "nutrition.estimation": "Estimation",
-  "nutrition.detailEstimateNote":
-    "Ingredients and steps are an estimation generated from this recipe's macros. Amounts are approximate.",
+  "nutrition.fullRecipeSoon": "Full recipe coming soon",
+  "nutrition.fullRecipeSoonNote":
+    "We're writing out the ingredients and steps for this dish. For now, here are its nutrition facts.",
   "habits.namePlaceholder": "Habit name…",
   "habits.addHabit": "Add habit",
   "habits.addCustom": "Add custom habit",
