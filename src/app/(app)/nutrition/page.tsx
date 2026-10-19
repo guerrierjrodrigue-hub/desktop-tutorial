@@ -44,14 +44,19 @@ export default async function NutritionPage() {
     goals: user.primaryGoals,
   });
   const consumed = foodLogs.reduce(
-    (sum, e) => ({ calories: sum.calories + e.calories, proteinG: sum.proteinG + e.proteinG }),
-    { calories: 0, proteinG: 0 },
+    (sum, e) => ({
+      calories: sum.calories + e.calories,
+      proteinG: sum.proteinG + e.proteinG,
+      carbsG: sum.carbsG + e.carbsG,
+      fatG: sum.fatG + e.fatG,
+    }),
+    { calories: 0, proteinG: 0, carbsG: 0, fatG: 0 },
   );
 
   const macros = [
     { key: "protein", label: dict["nutrition.protein"], icon: Beef, value: consumed.proteinG, goal: targets.proteinG, color: "text-green-bright" },
-    { key: "carbs", label: dict["nutrition.carbs"], icon: Wheat, value: 0, goal: targets.carbsG, color: "text-accent" },
-    { key: "fat", label: dict["nutrition.fat"], icon: Droplet, value: 0, goal: targets.fatG, color: "text-ember" },
+    { key: "carbs", label: dict["nutrition.carbs"], icon: Wheat, value: consumed.carbsG, goal: targets.carbsG, color: "text-accent" },
+    { key: "fat", label: dict["nutrition.fat"], icon: Droplet, value: consumed.fatG, goal: targets.fatG, color: "text-ember" },
   ];
 
   return (
@@ -129,6 +134,7 @@ export default async function NutritionPage() {
               initialMl={todayStats.waterMl}
               goalMl={targets.waterMl}
               dict={dict}
+              locale={locale}
             />
           </Card>
         </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { Flame, Clock } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -50,30 +51,43 @@ export function RecipesSection({ recipes, dict }: { recipes: Recipe[]; dict: Dic
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {filtered.map((r) => (
-          <Card key={r.id} className="p-0">
-            <div className="h-24 rounded-t-[var(--radius)] bg-gradient-to-br from-green-deep to-surface-2" />
-            <div className="p-4">
-              <h3 className="font-serif font-semibold leading-tight">{r.name}</h3>
-              <div className="mt-2 flex flex-wrap gap-1.5">
-                {r.tags.map((t) => (
-                  <Badge key={t} variant="neutral" className="text-xs">
-                    {t}
-                  </Badge>
-                ))}
+          <Link
+            key={r.id}
+            href={`/nutrition/${r.id}`}
+            aria-label={dict["nutrition.viewRecipe"].replace("{name}", r.name)}
+            className="group rounded-[var(--radius)] outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+          >
+            <Card className="h-full p-0 transition group-hover:border-accent/40">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={r.imageUrl}
+                alt=""
+                aria-hidden="true"
+                className="h-24 w-full rounded-t-[var(--radius)] object-cover"
+              />
+              <div className="p-4">
+                <h3 className="font-serif font-semibold leading-tight">{r.name}</h3>
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {r.tags.map((t) => (
+                    <Badge key={t} variant="neutral" className="text-xs">
+                      {t}
+                    </Badge>
+                  ))}
+                </div>
+                <div className="mt-3 flex items-center justify-between text-xs text-muted">
+                  <span className="flex items-center gap-1">
+                    <Flame className="size-3.5 text-ember/70" />
+                    {r.calories} kcal
+                  </span>
+                  <span>P {r.proteinG}g</span>
+                  <span className="flex items-center gap-1">
+                    <Clock className="size-3.5" />
+                    {r.minutes}m
+                  </span>
+                </div>
               </div>
-              <div className="mt-3 flex items-center justify-between text-xs text-muted">
-                <span className="flex items-center gap-1">
-                  <Flame className="size-3.5 text-ember/70" />
-                  {r.calories} kcal
-                </span>
-                <span>P {r.proteinG}g</span>
-                <span className="flex items-center gap-1">
-                  <Clock className="size-3.5" />
-                  {r.minutes}m
-                </span>
-              </div>
-            </div>
-          </Card>
+            </Card>
+          </Link>
         ))}
         {filtered.length === 0 && (
           <p className="col-span-full py-8 text-center text-sm text-muted">{dict["nutrition.noRecipesInCategory"]}</p>

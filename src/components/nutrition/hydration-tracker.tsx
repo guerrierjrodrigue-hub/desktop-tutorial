@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { Droplet, Plus, Undo2 } from "lucide-react";
 import { addWater } from "@/app/(app)/nutrition/actions";
+import { formatLiters } from "@/lib/hydration";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 
 const SEGMENTS = 8;
@@ -16,10 +17,12 @@ export function HydrationTracker({
   initialMl,
   goalMl,
   dict,
+  locale = "en",
 }: {
   initialMl: number;
   goalMl: number;
   dict: Dictionary;
+  locale?: string;
 }) {
   const [ml, setMl] = useState(initialMl);
   const [pending, startTransition] = useTransition();
@@ -41,8 +44,8 @@ export function HydrationTracker({
         <span className="flex items-center gap-2 font-medium">
           <Droplet className="size-4 text-ember" /> {dict["hydration.title"]}
         </span>
-        <span className="text-muted">
-          {(ml / 1000).toFixed(1)}L / {(goalMl / 1000).toFixed(1)}L
+        <span className="text-muted tabular-nums">
+          {formatLiters(ml, locale)} / {formatLiters(goalMl, locale)}
         </span>
       </div>
 
