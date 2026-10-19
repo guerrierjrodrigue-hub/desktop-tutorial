@@ -2,10 +2,39 @@ import { describe, it, expect } from "vitest";
 import {
   programProgress,
   isValidWorkoutDuration,
+  earnsWorkoutXp,
+  WORKOUT_XP_MIN_MINUTES,
   MIN_WORKOUT_MINUTES,
   MAX_WORKOUT_MINUTES,
 } from "@/lib/workout";
 import type { Program } from "@/types";
+
+describe("earnsWorkoutXp", () => {
+  it("rewards a genuine session: at least half the sets and 5+ minutes", () => {
+    expect(earnsWorkoutXp(10, 10, 30)).toBe(true); // all sets
+    expect(earnsWorkoutXp(5, 10, 20)).toBe(true); // exactly half
+    expect(earnsWorkoutXp(3, 5, WORKOUT_XP_MIN_MINUTES)).toBe(true); // boundary minutes
+  });
+
+  it("denies an empty or barely-started session", () => {
+    expect(earnsWorkoutXp(0, 10, 30)).toBe(false); // no sets
+    expect(earnsWorkoutXp(4, 10, 30)).toBe(false); // under half
+  });
+
+  it("denies a too-short session even with the sets done", () => {
+    expect(earnsWorkoutXp(10, 10, 4)).toBe(false); // < 5 minutes
+    expect(earnsWorkoutXp(10, 10, 0)).toBe(false);
+  });
+
+  it("denies when there are no sets to do", () => {
+    expect(earnsWorkoutXp(0, 0, 30)).toBe(false);
+  });
+
+  it("rejects non-finite set counts", () => {
+    expect(earnsWorkoutXp(Number.NaN, 10, 30)).toBe(false);
+    expect(earnsWorkoutXp(5, Number.NaN, 30)).toBe(false);
+  });
+});
 
 describe("isValidWorkoutDuration", () => {
   it("accepts whole minutes within 1–300", () => {
