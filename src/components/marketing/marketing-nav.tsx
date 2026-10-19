@@ -20,9 +20,6 @@ export async function MarketingNav() {
           <Link href="/#features" className="transition hover:text-foreground">
             {dict["mkt.nav.features"]}
           </Link>
-          <Link href="/#barnabas" className="transition hover:text-foreground">
-            {dict["mkt.nav.barnabas"]}
-          </Link>
           <Link href="/pricing" className="transition hover:text-foreground">
             {dict["mkt.nav.pricing"]}
           </Link>

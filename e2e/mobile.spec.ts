@@ -16,8 +16,6 @@ const ROUTES: { path: string; name: string }[] = [
   { path: "/community", name: "community" },
   { path: "/community/rules", name: "community-rules" },
   { path: "/challenges", name: "challenges" },
-  { path: "/coach", name: "coach" },
-  { path: "/coach/barnabas", name: "coach-chat" },
   { path: "/focus", name: "focus" },
   { path: "/profile", name: "profile" },
 ];

@@ -8,6 +8,7 @@ import { getCoach, type Coach } from "@/data/coaches";
 import { getAuthedContext, type AuthedContext } from "@/lib/supabase/auth";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { isCoachEnabled } from "@/lib/flags";
 import { getUserTimezone } from "@/lib/timezone";
 import { startOfLocalDayUTC } from "@/lib/date";
 import { buildCoachContext } from "@/lib/coach-context";
@@ -98,6 +99,11 @@ async function persist(
 }
 
 export async function POST(req: Request) {
+  // Coach disabled: 404 before touching Anthropic or reading ANTHROPIC_API_KEY.
+  if (!isCoachEnabled()) {
+    return new NextResponse(null, { status: 404 });
+  }
+
   let body: CoachRequest;
   try {
     body = (await req.json()) as CoachRequest;

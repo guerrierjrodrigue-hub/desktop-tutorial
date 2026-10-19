@@ -132,7 +132,7 @@ export default async function ProfilePage() {
                 Unlock your full potential
               </h3>
               <p className="text-sm text-muted">
-                Go Premium for every program, unlimited Barnabas, and advanced
+                Go Premium for every program, nutrition tools, and advanced
                 insights.
               </p>
             </div>

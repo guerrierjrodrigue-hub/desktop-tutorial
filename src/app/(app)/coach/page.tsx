@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
 import { Card } from "@/components/ui/card";
 import { COACHES, COACH_ICONS } from "@/data/coaches";
 import { localizeCoach } from "@/lib/coaches";
+import { isCoachEnabled } from "@/lib/flags";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
@@ -16,6 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function CoachPickerPage() {
+  if (!isCoachEnabled()) redirect("/dashboard");
   const locale = await getLocale();
   const dict = await getDictionary(locale);
   const coaches = COACHES.map((c) => localizeCoach(c, locale));

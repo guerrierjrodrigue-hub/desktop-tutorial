@@ -38,9 +38,9 @@ export const notifications: AppNotification[] = [
   },
   {
     id: "n4",
-    icon: "Sparkles",
-    title: "Barnabas checked in",
-    body: "“How did today's workout feel? I'm here when you're ready.”",
+    icon: "Flame",
+    title: "Keep your streak alive",
+    body: "You're building real momentum. A short session today keeps it going.",
     time: "yesterday",
     read: true,
     accent: "accent",

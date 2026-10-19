@@ -34,7 +34,6 @@ export const plans: Plan[] = [
     descriptionKey: "mkt.plan.disciple.description",
     featureKeys: [
       "mkt.plan.disciple.feature1",
-      "mkt.plan.disciple.feature2",
       "mkt.plan.disciple.feature3",
       "mkt.plan.disciple.feature4",
       "mkt.plan.disciple.feature5",

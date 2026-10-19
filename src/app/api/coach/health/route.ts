@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import * as Sentry from "@sentry/nextjs";
 import { COACH_MODEL } from "@/lib/coaches";
+import { isCoachEnabled } from "@/lib/flags";
 import { getAuthedContext } from "@/lib/supabase/auth";
 
 /**
@@ -11,6 +12,11 @@ import { getAuthedContext } from "@/lib/supabase/auth";
  * Never echoes any chat content.
  */
 export async function GET() {
+  // Coach disabled: 404 before touching Anthropic or reading ANTHROPIC_API_KEY.
+  if (!isCoachEnabled()) {
+    return new NextResponse(null, { status: 404 });
+  }
+
   const ctx = await getAuthedContext();
   if (!ctx) {
     return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });

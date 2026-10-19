@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import type { DictionaryKey } from "@/i18n/dictionaries/en";
+import { isCoachEnabled } from "@/lib/flags";
 import {
   LayoutDashboard,
   Dumbbell,
@@ -93,11 +94,18 @@ export function getNavGroups(purposeItems: NavItem[]): NavGroup[] {
   ];
 }
 
-/** Cross-cutting items rendered below the pillar groups (not pillar-specific). */
-export const standaloneNavItems: NavItem[] = [
-  { href: "/coach", label: "Coach", labelKey: "nav.coach", icon: Sparkles },
-  { href: "/profile", label: "Profile", labelKey: "nav.profile", icon: User },
-];
+/**
+ * Cross-cutting items rendered below the pillar groups (not pillar-specific).
+ * The Coach entry only appears while the AI coach is enabled (see isCoachEnabled).
+ */
+export function getStandaloneNavItems(): NavItem[] {
+  const items: NavItem[] = [];
+  if (isCoachEnabled()) {
+    items.push({ href: "/coach", label: "Coach", labelKey: "nav.coach", icon: Sparkles });
+  }
+  items.push({ href: "/profile", label: "Profile", labelKey: "nav.profile", icon: User });
+  return items;
+}
 
 /**
  * Curated 5-item bottom bar for mobile — one shortcut per pillar. The Purpose

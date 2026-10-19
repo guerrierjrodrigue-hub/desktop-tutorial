@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { Topbar } from "@/components/layout/topbar";
@@ -7,6 +7,7 @@ import { CoachChat } from "@/components/coach/coach-chat";
 import { COACHES, COACH_ICONS, getCoach } from "@/data/coaches";
 import { localizeCoach } from "@/lib/coaches";
 import { getCoachHistory } from "@/lib/queries/coach";
+import { isCoachEnabled } from "@/lib/flags";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
@@ -34,6 +35,7 @@ export default async function CoachChatPage({
   params: Promise<{ coachId: string }>;
 }) {
   const { coachId } = await params;
+  if (!isCoachEnabled()) redirect("/dashboard");
   if (!COACHES.some((c) => c.id === coachId)) notFound();
   const locale = await getLocale();
   const coach = localizeCoach(getCoach(coachId), locale);

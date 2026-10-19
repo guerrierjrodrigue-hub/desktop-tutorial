@@ -39,7 +39,7 @@ export async function sendWelcomeEmail(to: string, name: string): Promise<void> 
           </p>
           <p style="font-size: 15px; line-height: 1.6;">
             You've just started a journey of discipline for body and soul. Your
-            dashboard is ready — habits to build, a coach to talk to, and a
+            dashboard is ready — habits to build, Scripture to read, and a
             training program waiting for day one.
           </p>
           <p style="margin-top: 24px;">

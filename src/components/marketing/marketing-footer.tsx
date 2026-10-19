@@ -14,7 +14,6 @@ export const footerColumns: {
     links: [
       { labelKey: "mkt.nav.features", href: "/#features" },
       { labelKey: "mkt.footer.programs", href: "/fitness" },
-      { labelKey: "mkt.nav.barnabas", href: "/#barnabas" },
       { labelKey: "mkt.nav.pricing", href: "/pricing" },
     ],
   },
