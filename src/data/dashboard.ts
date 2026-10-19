@@ -37,7 +37,7 @@ export const challenges: Challenge[] = [
   {
     id: "c2",
     title: "Church vs. Church: 30 workouts this month",
-    description: "Your church vs. others — log 30 workouts this month.",
+    description: "Your church vs. others: log 30 workouts this month.",
     participants: 312,
     durationDays: 30,
     daysLeft: 30,

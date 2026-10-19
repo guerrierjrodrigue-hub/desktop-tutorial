@@ -135,11 +135,13 @@ export async function GET(req: Request) {
       const useVerse = dayOfYear % 2 === 0;
       const quote = getQuoteOfDay(locale, now);
       const devotional = getDailyDevotional(locale, now);
-      const body = useVerse ? `"${devotional.verse.text}" — ${devotional.verse.reference}` : quote;
+      const body = useVerse
+        ? `"${devotional.verse.text}" (${devotional.verse.reference})`
+        : quote;
 
       for (const sub of subscriptions) {
         const result = await sendPush(sub, {
-          title: locale === "fr" ? "Ton encouragement du jour 🙏" : "Today's encouragement 🙏",
+          title: locale === "fr" ? "Ton encouragement du jour" : "Today's encouragement",
           body,
           url: "/dashboard",
         });
@@ -158,11 +160,11 @@ export async function GET(req: Request) {
     if (dueWorkout) {
       for (const sub of subscriptions) {
         const result = await sendPush(sub, {
-          title: locale === "fr" ? "C'est l'heure de s'entraîner 💪" : "Time to train 💪",
+          title: locale === "fr" ? "C'est l'heure de s'entraîner" : "Time to train",
           body:
             locale === "fr"
-              ? "Ton entraînement du jour t'attend — garde ta série en vie."
-              : "Your workout is waiting — keep the streak alive.",
+              ? "Ton entraînement du jour t'attend. Garde ta série en vie."
+              : "Your workout is waiting. Keep the streak alive.",
           url: "/fitness",
         });
         if (result.gone) {

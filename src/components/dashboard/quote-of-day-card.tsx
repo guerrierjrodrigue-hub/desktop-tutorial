@@ -22,7 +22,7 @@ export async function QuoteOfDayCard() {
         “{text}”
       </blockquote>
       {reference && (
-        <p className="mt-2 text-sm not-italic text-muted">— {reference}</p>
+        <p className="mt-2 text-sm not-italic text-muted">{reference}</p>
       )}
     </Card>
   );
