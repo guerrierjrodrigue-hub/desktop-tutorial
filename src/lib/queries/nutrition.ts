@@ -2,21 +2,21 @@ import { getAuthedContext } from "@/lib/supabase/auth";
 import { getUserToday } from "@/lib/date";
 import { getUserTimezone } from "@/lib/timezone";
 import { pick, localizeTags, localizeRecipeName } from "@/lib/content-i18n";
-import { generateRecipeDetails } from "@/lib/recipe-details";
 import { recipes as mockRecipes } from "@/data/nutrition";
 import type { LocaleCode } from "@/i18n/locales";
 import type { RecipeRow } from "@/types/database";
 import type { FoodLogEntry, Recipe } from "@/types";
 
 /**
- * Build the detail fields (ingredients, steps, photo) for a recipe. Prefers real
- * stored content; falls back to the deterministic estimate when the columns are
- * empty (as they are for the whole catalog today). The English name drives the
- * estimate's keyword matching, so it is passed explicitly.
+ * Attach a recipe's detail fields ONLY from real, hand-written content stored in
+ * the DB. We no longer fabricate ingredients/steps from macros — generated text
+ * read like a real recipe and could omit allergens that aren't in the dish name.
+ * Until a recipe has written content, ingredients/steps stay undefined and the
+ * UI shows the macros plus a "full recipe coming soon" note. A real photo is used
+ * when one is stored; otherwise the UI falls back to a palette placeholder.
  */
 function withDetails(
   base: Recipe,
-  englishName: string,
   locale: LocaleCode,
   stored?: Partial<
     Pick<RecipeRow, "ingredients" | "ingredients_fr" | "steps" | "steps_fr" | "image_url">
@@ -30,32 +30,16 @@ function withDetails(
   const ingFr = stored?.ingredients_fr ?? [];
   const stepEn = stored?.steps ?? [];
   const stepFr = stored?.steps_fr ?? [];
-  const hasStored = (ingEn.length || ingFr.length) && (stepEn.length || stepFr.length);
+  const hasFullRecipe = Boolean(
+    (ingEn.length || ingFr.length) && (stepEn.length || stepFr.length),
+  );
 
-  if (hasStored) {
-    return {
-      ...base,
-      ingredients: arr(ingEn, ingFr),
-      steps: arr(stepEn, stepFr),
-      imageUrl: stored?.image_url ?? undefined,
-      estimatedDetails: false,
-    };
-  }
-
-  const gen = generateRecipeDetails({
-    name: englishName,
-    category: base.category,
-    proteinG: base.proteinG,
-    carbsG: base.carbsG,
-    fatG: base.fatG,
-    minutes: base.minutes,
-  });
   return {
     ...base,
-    ingredients: arr(gen.ingredients, gen.ingredientsFr),
-    steps: arr(gen.steps, gen.stepsFr),
-    imageUrl: stored?.image_url ?? gen.imageUrl,
-    estimatedDetails: true,
+    imageUrl: stored?.image_url ?? undefined,
+    ingredients: hasFullRecipe ? arr(ingEn, ingFr) : undefined,
+    steps: hasFullRecipe ? arr(stepEn, stepFr) : undefined,
+    hasFullRecipe,
   };
 }
 
@@ -99,7 +83,7 @@ function mapRow(row: RecipeRow, locale: LocaleCode): Recipe {
     tags: localizeTags(row.tags, locale),
     category: row.category,
   };
-  return withDetails(base, row.name, locale, row);
+  return withDetails(base, locale, row);
 }
 
 /** The recipe catalog, localized by `locale` (demo data when unconfigured). */
@@ -109,7 +93,6 @@ export async function getRecipes(locale: LocaleCode = "en"): Promise<Recipe[]> {
     return mockRecipes.map((r) =>
       withDetails(
         { ...r, name: localizeRecipeName(r.name, locale), tags: localizeTags(r.tags, locale) },
-        r.name,
         locale,
       ),
     );
@@ -128,7 +111,6 @@ export async function getRecipe(id: string, locale: LocaleCode = "en"): Promise<
     if (!r) return null;
     return withDetails(
       { ...r, name: localizeRecipeName(r.name, locale), tags: localizeTags(r.tags, locale) },
-      r.name,
       locale,
     );
   }

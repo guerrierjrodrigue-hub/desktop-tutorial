@@ -2,11 +2,29 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { Flame, Clock } from "lucide-react";
+import { Flame, Clock, UtensilsCrossed } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { Recipe, RecipeCategory } from "@/types";
 import type { Dictionary } from "@/i18n/dictionaries/en";
+
+/** Recipe thumbnail: a real stored photo when one exists, else a palette
+ *  placeholder (dark surface with a discreet gold utensils mark) — no random
+ *  colours. */
+function RecipeThumb({ recipe, className }: { recipe: Recipe; className: string }) {
+  if (recipe.imageUrl) {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={recipe.imageUrl} alt="" aria-hidden="true" className={`${className} object-cover`} />;
+  }
+  return (
+    <div
+      aria-hidden="true"
+      className={`${className} grid place-items-center bg-gradient-to-br from-surface-2 to-elevated`}
+    >
+      <UtensilsCrossed className="size-7 text-accent/70" />
+    </div>
+  );
+}
 
 const CATEGORIES: { key: RecipeCategory | "all"; labelKey: keyof Dictionary }[] = [
   { key: "all", labelKey: "nutrition.categoryAll" },
@@ -58,13 +76,7 @@ export function RecipesSection({ recipes, dict }: { recipes: Recipe[]; dict: Dic
             className="group rounded-[var(--radius)] outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
           >
             <Card className="h-full p-0 transition group-hover:border-accent/40">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={r.imageUrl}
-                alt=""
-                aria-hidden="true"
-                className="h-24 w-full rounded-t-[var(--radius)] object-cover"
-              />
+              <RecipeThumb recipe={r} className="h-24 w-full rounded-t-[var(--radius)]" />
               <div className="p-4">
                 <h3 className="font-serif font-semibold leading-tight">{r.name}</h3>
                 <div className="mt-2 flex flex-wrap gap-1.5">
