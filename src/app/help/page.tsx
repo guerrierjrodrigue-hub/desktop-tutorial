@@ -36,13 +36,6 @@ const categories: {
     ],
   },
   {
-    titleKey: "mkt.help.cat3.title",
-    faqs: [
-      { q: "mkt.help.cat3.q1", a: "mkt.help.cat3.a1" },
-      { q: "mkt.help.cat3.q2", a: "mkt.help.cat3.a2" },
-    ],
-  },
-  {
     titleKey: "mkt.help.cat4.title",
     faqs: [
       { q: "mkt.help.cat4.q1", a: "mkt.help.cat4.a1" },

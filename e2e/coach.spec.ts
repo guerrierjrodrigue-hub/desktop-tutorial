@@ -1,41 +1,31 @@
 import { test, expect } from "./fixtures";
 
-test.describe("Coach picker", () => {
-  test("lists every persona and links into their chat", async ({ page }) => {
+// The AI coach (Barnabas) is disabled by default via COACH_ENABLED /
+// NEXT_PUBLIC_COACH_ENABLED. These tests assert the off state; when the flag is
+// turned back on, restore the picker/chat coverage from git history.
+test.describe("AI coach disabled", () => {
+  test("/coach redirects to the dashboard", async ({ page }) => {
     await page.goto("/coach");
-    await expect(page.getByRole("heading", { name: "Barnabas" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Coach Titan" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Coach Forge" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Coach Haven" })).toBeVisible();
-
-    await page.getByRole("heading", { name: "Coach Titan" }).click();
-    await expect(page).toHaveURL(/\/coach\/titan$/);
-    await expect(page.getByText(/coach titan/i).first()).toBeVisible();
+    await expect(page).toHaveURL(/\/dashboard(\/|$|\?)/);
   });
-});
 
-test.describe("Barnabas AI coach", () => {
-  test("greets, then replies to a suggested prompt", async ({ page }) => {
+  test("/coach/[coachId] redirects to the dashboard", async ({ page }) => {
     await page.goto("/coach/barnabas");
-    await expect(page.getByText(/i'm barnabas/i)).toBeVisible();
+    await expect(page).toHaveURL(/\/dashboard(\/|$|\?)/);
+  });
 
-    await page.getByRole("button", { name: /i'm feeling unmotivated today/i }).click();
-
-    // The user's message appears...
-    await expect(
-      page.getByText("I'm feeling unmotivated today.").last(),
-    ).toBeVisible();
-
-    // ...and Barnabas responds (offline fallback in demo mode).
-    await expect(page.getByText(/thank you for showing up/i)).toBeVisible({
-      timeout: 15_000,
+  test("the coach API 404s without invoking the model", async ({ request }) => {
+    const chat = await request.post("/api/coach", {
+      data: { coachId: "barnabas", messages: [{ role: "user", content: "hi" }] },
     });
+    expect(chat.status()).toBe(404);
+
+    const health = await request.get("/api/coach/health");
+    expect(health.status()).toBe(404);
   });
 
-  test("can send a typed message", async ({ page }) => {
-    await page.goto("/coach/barnabas");
-    await page.getByRole("textbox", { name: /message barnabas/i }).fill("What should I eat after training?");
-    await page.getByRole("button", { name: /^send$/i }).click();
-    await expect(page.getByText(/protein/i)).toBeVisible({ timeout: 15_000 });
+  test("the sidebar shows no Coach link", async ({ page }) => {
+    await page.goto("/dashboard");
+    await expect(page.getByRole("link", { name: /^coach$/i })).toHaveCount(0);
   });
 });

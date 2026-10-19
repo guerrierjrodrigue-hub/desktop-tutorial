@@ -1,15 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  Dumbbell,
-  Apple,
-  BookOpen,
-  Sparkles,
-  Trophy,
-  Users,
-  Check,
-  Quote,
-} from "lucide-react";
+import { Dumbbell, Apple, BookOpen, Trophy, Users, Quote } from "lucide-react";
 import { MarketingNav } from "@/components/marketing/marketing-nav";
 import { MarketingFooter } from "@/components/marketing/marketing-footer";
 import { Hero } from "@/components/marketing/hero";
@@ -19,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { programs } from "@/data/programs";
 import { readingPlans } from "@/data/spiritual";
-import { COACHES } from "@/data/coaches";
 import { testimonials } from "@/data/testimonials";
 import { APP_NAME } from "@/lib/constants";
 import { getLocale } from "@/lib/locale";
@@ -41,7 +31,6 @@ const features: { icon: typeof Dumbbell; title: DictionaryKey; body: DictionaryK
   { icon: Dumbbell, title: "mkt.features.programs.title", body: "mkt.features.programs.body" },
   { icon: Apple, title: "mkt.features.nutrition.title", body: "mkt.features.nutrition.body" },
   { icon: BookOpen, title: "mkt.features.scripture.title", body: "mkt.features.scripture.body" },
-  { icon: Sparkles, title: "mkt.features.coach.title", body: "mkt.features.coach.body" },
   { icon: Trophy, title: "mkt.features.gamified.title", body: "mkt.features.gamified.body" },
   { icon: Users, title: "mkt.features.community.title", body: "mkt.features.community.body" },
 ];
@@ -54,14 +43,6 @@ const pillars: { value: number; label: DictionaryKey }[] = [
     label: "mkt.inside.sessions",
   },
   { value: readingPlans.length, label: "mkt.inside.readingPlans" },
-  { value: COACHES.length, label: "mkt.inside.coaches" },
-];
-
-const barnabasPoints: DictionaryKey[] = [
-  "mkt.barnabas.point1",
-  "mkt.barnabas.point2",
-  "mkt.barnabas.point3",
-  "mkt.barnabas.point4",
 ];
 
 export default async function LandingPage({
@@ -99,7 +80,7 @@ export default async function LandingPage({
           >
             {dict["mkt.inside.heading"]}
           </h2>
-          <div className="mx-auto mt-6 grid max-w-5xl grid-cols-2 gap-6 px-6 sm:grid-cols-4">
+          <div className="mx-auto mt-6 grid max-w-4xl grid-cols-3 gap-6 px-6">
             {pillars.map((p) => (
               <div key={p.label} className="text-center">
                 <p className="font-serif text-3xl font-semibold text-gradient-accent">
@@ -140,37 +121,6 @@ export default async function LandingPage({
           </div>
         </section>
 
-        {/* Barnabas */}
-        <section id="barnabas" className="mx-auto max-w-6xl px-6 py-16">
-          <div className="glass overflow-hidden rounded-3xl border border-border">
-            <div className="grid items-center gap-10 p-8 sm:p-12 lg:grid-cols-2">
-              <Reveal>
-                <Badge variant="premium">{dict["mkt.barnabas.badge"]}</Badge>
-                <h2 className="mt-4 font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
-                  {dict["mkt.barnabas.title"]}
-                </h2>
-                <p className="mt-4 text-muted">{dict["mkt.barnabas.body"]}</p>
-                <ul className="mt-6 space-y-3 text-sm">
-                  {barnabasPoints.map((key) => (
-                    <li key={key} className="flex items-start gap-2.5">
-                      <Check className="mt-0.5 size-4 shrink-0 text-green-bright" />
-                      <span className="text-muted">{dict[key]}</span>
-                    </li>
-                  ))}
-                </ul>
-              </Reveal>
-
-              <Reveal delay={0.1}>
-                <div className="rounded-2xl border border-border bg-surface p-5">
-                  <ChatBubble role="assistant">{dict["mkt.chat.coach1"]}</ChatBubble>
-                  <ChatBubble role="user">{dict["mkt.chat.user1"]}</ChatBubble>
-                  <ChatBubble role="assistant">{dict["mkt.chat.coach2"]}</ChatBubble>
-                </div>
-              </Reveal>
-            </div>
-          </div>
-        </section>
-
         {/* Conviction */}
         <section className="mx-auto max-w-4xl px-6 py-20 text-center">
           <Reveal>
@@ -205,29 +155,6 @@ export default async function LandingPage({
         </section>
       </main>
       <MarketingFooter />
-    </div>
-  );
-}
-
-function ChatBubble({
-  role,
-  children,
-}: {
-  role: "user" | "assistant";
-  children: React.ReactNode;
-}) {
-  const isUser = role === "user";
-  return (
-    <div className={`mb-3 flex ${isUser ? "justify-end" : "justify-start"}`}>
-      <div
-        className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${
-          isUser
-            ? "bg-surface-2 text-foreground"
-            : "bg-gradient-to-br from-green-deep to-green/40 text-foreground"
-        }`}
-      >
-        {children}
-      </div>
     </div>
   );
 }

@@ -7,8 +7,8 @@ export function PremiumGate({
   title = "This is a Premium program",
   perks = [
     "Every program & workout",
-    "Unlimited Barnabas AI coaching",
     "Nutrition & macro tools",
+    "Advanced insights & badges",
   ],
 }: {
   title?: string;

@@ -6,7 +6,7 @@ import { Logo } from "@/components/brand/logo";
 import {
   dashboardNavItem,
   getNavGroups,
-  standaloneNavItems,
+  getStandaloneNavItems,
   type NavItem,
 } from "@/lib/nav";
 import { getPurposeNavItems } from "@/lib/personalization";
@@ -55,6 +55,7 @@ export function Sidebar({
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + "/");
   const groups = getNavGroups(getPurposeNavItems());
+  const standaloneNavItems = getStandaloneNavItems();
 
   return (
     <aside className="sticky top-0 hidden h-svh w-64 shrink-0 flex-col overflow-y-auto overflow-x-hidden border-r border-border bg-surface/40 px-4 py-6 lg:flex">

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Mail, MessageCircle, HelpCircle } from "lucide-react";
+import { Mail, HelpCircle } from "lucide-react";
 import { MarketingNav } from "@/components/marketing/marketing-nav";
 import { MarketingFooter } from "@/components/marketing/marketing-footer";
 import { ContactForm } from "@/components/marketing/contact-form";
@@ -59,15 +59,6 @@ export default async function ContactPage() {
                   {APP_SUPPORT_EMAIL}
                 </a>
                 <p className="mt-1 text-xs text-faint">{dict["mkt.contact.replyTime"]}</p>
-              </div>
-            </Card>
-            <Card className="flex items-start gap-3">
-              <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-green/20 text-green-bright">
-                <MessageCircle className="size-4" />
-              </span>
-              <div>
-                <h3 className="font-semibold">{dict["mkt.contact.barnabasTitle"]}</h3>
-                <p className="text-sm text-muted">{dict["mkt.contact.barnabasBody"]}</p>
               </div>
             </Card>
             <Card className="flex items-start gap-3">

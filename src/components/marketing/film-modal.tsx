@@ -64,23 +64,6 @@ function buildScenes(dict: Dictionary): Scene[] {
     {
       kind: "feature",
       eyebrow: chapter(2),
-      title: dict["mkt.film.alone.title"],
-      caption: dict["mkt.film.alone.caption"],
-      duration: 4500,
-      render: () => (
-        <div className="space-y-2 rounded-2xl border border-border bg-surface-2 p-6">
-          <div className="ml-auto max-w-[80%] rounded-2xl bg-surface px-3 py-2 text-right text-sm">
-            {dict["mkt.film.alone.user"]}
-          </div>
-          <div className="max-w-[80%] rounded-2xl bg-gradient-to-br from-green-deep to-green/30 px-3 py-2 text-sm">
-            {dict["mkt.film.alone.coach"]}
-          </div>
-        </div>
-      ),
-    },
-    {
-      kind: "feature",
-      eyebrow: chapter(3),
       title: dict["mkt.hero.title2"],
       caption: dict["mkt.film.faith.caption"],
       duration: 4500,
@@ -96,7 +79,7 @@ function buildScenes(dict: Dictionary): Scene[] {
     },
     {
       kind: "feature",
-      eyebrow: chapter(4),
+      eyebrow: chapter(3),
       title: dict["mkt.film.habits.title"],
       caption: dict["mkt.film.habits.caption"],
       duration: 4500,
@@ -116,7 +99,7 @@ function buildScenes(dict: Dictionary): Scene[] {
     },
     {
       kind: "feature",
-      eyebrow: chapter(5),
+      eyebrow: chapter(4),
       title: dict["mkt.film.people.title"],
       caption: dict["mkt.film.people.caption"],
       duration: 4500,
