@@ -3,8 +3,15 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getAuthedContext } from "@/lib/supabase/auth";
+import { getUserToday } from "@/lib/date";
+import { getUserTimezone } from "@/lib/timezone";
 import { XP_REWARDS } from "@/lib/gamification";
-import { isValidWorkoutDuration, MIN_WORKOUT_MINUTES, MAX_WORKOUT_MINUTES } from "@/lib/workout";
+import {
+  isValidWorkoutDuration,
+  earnsWorkoutXp,
+  MIN_WORKOUT_MINUTES,
+  MAX_WORKOUT_MINUTES,
+} from "@/lib/workout";
 import { type ActionResult, demoOk } from "@/lib/actions/result";
 import { validate, logAndFail } from "@/lib/actions/errors";
 
@@ -14,6 +21,9 @@ export interface LogWorkoutInput {
   /** workout_days.id of the day being completed. */
   dayId: string;
   durationMinutes: number;
+  /** Sets actually checked off, and the day's total — drive the XP eligibility. */
+  setsDone: number;
+  setsTotal: number;
 }
 
 const logWorkoutSchema = z.object({
@@ -24,6 +34,8 @@ const logWorkoutSchema = z.object({
     .int("fitness.error.invalidDuration")
     .min(MIN_WORKOUT_MINUTES, "fitness.error.invalidDuration")
     .max(MAX_WORKOUT_MINUTES, "fitness.error.invalidDuration"),
+  setsDone: z.number().int().min(0).max(1000),
+  setsTotal: z.number().int().min(0).max(1000),
 });
 
 /**
@@ -38,7 +50,7 @@ const logWorkoutSchema = z.object({
 export async function logWorkoutCompletion(input: LogWorkoutInput): Promise<ActionResult> {
   const check = validate(logWorkoutSchema, input);
   if (!check.ok) return check.result;
-  const { programId, dayId, durationMinutes } = check.data;
+  const { programId, dayId, durationMinutes, setsDone, setsTotal } = check.data;
 
   // Belt-and-suspenders with the shared pure guard (also used by the client).
   if (!isValidWorkoutDuration(durationMinutes)) {
@@ -59,10 +71,33 @@ export async function logWorkoutCompletion(input: LogWorkoutInput): Promise<Acti
     return { ok: false, error: "fitness.error.dayNotInProgram" };
   }
 
+  // Does this session earn XP? At least half the sets AND >= 5 real minutes.
+  // A "finish anyway" / too-short session is still recorded (history) below.
+  // Mirror of the ka_xp_workout trigger — which is the real source of truth.
+  const eligible = earnsWorkoutXp(setsDone, setsTotal, durationMinutes);
+
+  // Workout XP is capped at one reward per local day. Check whether today's
+  // reward is already banked, so the toast reports the true amount (the trigger
+  // enforces the cap regardless).
+  let alreadyEarnedToday = false;
+  if (eligible) {
+    const today = getUserToday(await getUserTimezone());
+    const { count } = await ctx.supabase
+      .from("xp_events")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", ctx.userId)
+      .eq("type", "workout")
+      .eq("ref_id", "")
+      .eq("day", today);
+    alreadyEarnedToday = (count ?? 0) > 0;
+  }
+
   const { error } = await ctx.supabase.from("workout_logs").insert({
     user_id: ctx.userId,
     workout_day_id: dayId,
     duration_minutes: durationMinutes,
+    sets_done: setsDone,
+    sets_total: setsTotal,
   });
 
   if (error) {
@@ -70,7 +105,7 @@ export async function logWorkoutCompletion(input: LogWorkoutInput): Promise<Acti
     // repeat as a successful no-op (no duplicate XP, no double progress).
     if (error.code === "23505") {
       revalidatePath(`/fitness/${programId}`);
-      return { ok: true };
+      return { ok: true, xp: 0 };
     }
     return logAndFail(error);
   }
@@ -78,5 +113,5 @@ export async function logWorkoutCompletion(input: LogWorkoutInput): Promise<Acti
   revalidatePath("/dashboard");
   revalidatePath("/profile");
   revalidatePath(`/fitness/${programId}`);
-  return { ok: true, xp: XP_REWARDS.workout };
+  return { ok: true, xp: eligible && !alreadyEarnedToday ? XP_REWARDS.workout : 0 };
 }

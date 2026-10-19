@@ -99,10 +99,14 @@ export function WorkoutSession({
       programId,
       dayId: day.id,
       durationMinutes: minutes,
+      setsDone: completedSets,
+      setsTotal: totalSets,
     });
     setSaving(false);
     if (result.ok) {
-      showXp(result.xp);
+      // XP is only awarded for a genuine session (half the sets, 5+ min) and
+      // once a day; show the toast only when something was actually earned.
+      if (result.xp && result.xp > 0) showXp(result.xp);
       setFinishedMinutes(minutes);
       setFinished(true);
     } else {
