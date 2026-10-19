@@ -162,6 +162,11 @@ export interface RecipeRow {
   minutes: number;
   tags: string[];
   category: RecipeCategory | null;
+  ingredients: string[] | null;
+  ingredients_fr: string[] | null;
+  steps: string[] | null;
+  steps_fr: string[] | null;
+  image_url: string | null;
 }
 
 export interface PrayerRequestRow {

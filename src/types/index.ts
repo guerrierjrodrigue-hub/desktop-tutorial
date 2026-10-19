@@ -160,6 +160,8 @@ export interface FoodLogEntry {
   name: string;
   calories: number;
   proteinG: number;
+  carbsG: number;
+  fatG: number;
 }
 
 export type RecipeCategory = "weight-loss" | "muscle-gain" | "fasting" | "breakfast" | "quick-easy";
@@ -174,6 +176,14 @@ export interface Recipe {
   minutes: number;
   tags: string[];
   category: RecipeCategory | null;
+  /** An illustrative photo (may be a generated estimate). */
+  imageUrl?: string;
+  /** Ingredients, localized. Real content if present, else an estimation. */
+  ingredients?: string[];
+  /** Step-by-step method, localized. Real content if present, else an estimation. */
+  steps?: string[];
+  /** True when ingredients/steps are the generated estimate, not stored content. */
+  estimatedDetails?: boolean;
 }
 
 export interface ReadingPlan {
