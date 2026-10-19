@@ -19,13 +19,15 @@ export interface DailyQuote {
 
 /**
  * Split a quote string into its text and optional reference. Some quotes carry
- * an attribution after an em dash ("… — 1 Cor. 9:24"); the UI quotes only the
- * text and shows the reference beneath it.
+ * an attribution in trailing parentheses ("… (1 Cor. 9:24)"); the UI quotes only
+ * the text and shows the reference beneath it. (Parentheses, not an em dash, so
+ * the raw quote stays clean punctuation in messages like the daily reminder.)
  */
 export function splitQuote(raw: string): DailyQuote {
-  const sep = raw.lastIndexOf(" — ");
-  if (sep === -1) return { text: raw.trim() };
-  return { text: raw.slice(0, sep).trim(), reference: raw.slice(sep + 3).trim() };
+  const trimmed = raw.trim();
+  const m = trimmed.match(/^(.+?)\s+\(([^()]+)\)$/);
+  if (!m) return { text: trimmed };
+  return { text: m[1].trim(), reference: m[2].trim() };
 }
 
 /** The quote of the day, split into text + optional reference. */

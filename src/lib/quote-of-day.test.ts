@@ -9,16 +9,22 @@ describe("splitQuote", () => {
     expect(q.reference).toBeUndefined();
   });
 
-  it("separates the reference after an em dash", () => {
-    const q = splitQuote("Run in such a way as to get the prize. — 1 Cor. 9:24");
+  it("separates a trailing parenthetical reference", () => {
+    const q = splitQuote("Run in such a way as to get the prize. (1 Cor. 9:24)");
     expect(q.text).toBe("Run in such a way as to get the prize.");
     expect(q.reference).toBe("1 Cor. 9:24");
   });
 
-  it("splits on the LAST em dash only", () => {
-    const q = splitQuote("Fall down — get up — Proverbs 24:16");
-    expect(q.text).toBe("Fall down — get up");
+  it("splits only on the final trailing parenthetical", () => {
+    const q = splitQuote("Pace yourself (not a sprint), stay steady (Proverbs 24:16)");
+    expect(q.text).toBe("Pace yourself (not a sprint), stay steady");
     expect(q.reference).toBe("Proverbs 24:16");
+  });
+
+  it("keeps text with no trailing parenthetical intact", () => {
+    const q = splitQuote("Be stronger than your excuses.");
+    expect(q.text).toBe("Be stronger than your excuses.");
+    expect(q.reference).toBeUndefined();
   });
 });
 

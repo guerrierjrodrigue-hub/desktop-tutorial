@@ -4,8 +4,8 @@ import type { LocaleCode } from "@/i18n/locales";
 /**
  * A week's worth of devotionals per language, rotating by day-of-year (same
  * scheme as `getInspirationalQuotes` below). Verse texts are the real World
- * English Bible / Louis Segond 1910 wording — the same two public-domain
- * translations used by the Bible reader — not paraphrases.
+ * English Bible / Louis Segond 1910 wording, the same two public-domain
+ * translations used by the Bible reader, not paraphrases.
  */
 const devotionalsByLocale: Record<LocaleCode, DevotionalContent[]> = {
   en: [
@@ -20,7 +20,7 @@ const devotionalsByLocale: Record<LocaleCode, DevotionalContent[]> = {
       prayer:
         "Father, thank You for this new day and for the body You have entrusted to me. Give me the discipline to train it well, the humility to depend on You, and the joy of honoring You in every rep, every meal, and every quiet moment. In Jesus' name, amen.",
       reflection:
-        "Physical training has value, but godliness holds promise for both this life and the next. Today, let your workout be worship — an offering of strength back to the One who gave it.",
+        "Physical training has value, but godliness holds promise for both this life and the next. Today, let your workout be worship, an offering of strength back to the One who gave it.",
     },
     {
       quote: "Strength isn't hurried. It's renewed in waiting.",
@@ -30,9 +30,9 @@ const devotionalsByLocale: Record<LocaleCode, DevotionalContent[]> = {
         translation: "WEB",
       },
       prayer:
-        "Lord, when I'm tired and my legs feel heavy, remind me that my strength comes from You, not from my own reserves. Teach me to wait on You before I push through — to pray before I perform. In Jesus' name, amen.",
+        "Lord, when I'm tired and my legs feel heavy, remind me that my strength comes from You, not from my own reserves. Teach me to wait on You before I push through, to pray before I perform. In Jesus' name, amen.",
       reflection:
-        "Waiting on God isn't passive — it's the posture that precedes real strength. Before your next hard set or hard day, pause and remember where your endurance actually comes from.",
+        "Waiting on God isn't passive, it's the posture that precedes real strength. Before your next hard set or hard day, pause and remember where your endurance actually comes from.",
     },
     {
       quote: "Your strength has a source. Stay connected to it.",
@@ -44,10 +44,10 @@ const devotionalsByLocale: Record<LocaleCode, DevotionalContent[]> = {
       prayer:
         "Father, I don't have unlimited willpower, but You have unlimited strength. Fill the gap between what I can do and what today demands of me. In Jesus' name, amen.",
       reflection:
-        "This verse isn't a promise that you'll win every competition or hit every goal — it's a promise that Christ's strength is sufficient for whatever today actually asks of you.",
+        "This verse isn't a promise that you'll win every competition or hit every goal, it's a promise that Christ's strength is sufficient for whatever today actually asks of you.",
     },
     {
-      quote: "Train like it matters, because it does — just not for the reasons the world says.",
+      quote: "Train like it matters, because it does, just not for the reasons the world says.",
       verse: {
         reference: "1 Corinthians 9:24–25",
         text: "Don't you know that those who run in a race all run, but one receives the prize? Run like that, so that you may win. Every man who strives in the games exercises self-control in all things. Now they do it to receive a corruptible crown, but we an incorruptible.",
@@ -56,7 +56,7 @@ const devotionalsByLocale: Record<LocaleCode, DevotionalContent[]> = {
       prayer:
         "Lord, give me the same discipline an athlete gives their body, but aimed at something that lasts forever. Let my self-control today be an act of worship, not just a training plan. In Jesus' name, amen.",
       reflection:
-        "Every athlete trains for a prize that fades. Paul isn't against discipline — he's redirecting it. Let today's training point past the mirror, toward something eternal.",
+        "Every athlete trains for a prize that fades. Paul isn't against discipline, he's redirecting it. Let today's training point past the mirror, toward something eternal.",
     },
     {
       quote: "You're not running alone. Run light, and run with perseverance.",
@@ -66,9 +66,9 @@ const devotionalsByLocale: Record<LocaleCode, DevotionalContent[]> = {
         translation: "WEB",
       },
       prayer:
-        "God, show me what weight I'm carrying that isn't mine to carry — habits, fears, distractions. Help me set them down so I can run today's race unhindered. In Jesus' name, amen.",
+        "God, show me what weight I'm carrying that isn't mine to carry, habits, fears, distractions. Help me set them down so I can run today's race unhindered. In Jesus' name, amen.",
       reflection:
-        "Before this verse talks about running, it talks about laying weight down. Progress often isn't about adding more effort — it's about removing what's slowing you down.",
+        "Before this verse talks about running, it talks about laying weight down. Progress often isn't about adding more effort, it's about removing what's slowing you down.",
     },
     {
       quote: "No one's watching your first rep of the day. God is. Show up anyway.",
@@ -78,9 +78,9 @@ const devotionalsByLocale: Record<LocaleCode, DevotionalContent[]> = {
         translation: "WEB",
       },
       prayer:
-        "Lord, let today's work — whatever it is, seen or unseen — be done for You first. Change my motivation before You change my results. In Jesus' name, amen.",
+        "Lord, let today's work, whatever it is, seen or unseen, be done for You first. Change my motivation before You change my results. In Jesus' name, amen.",
       reflection:
-        "Motivation fades when no one's watching. But this verse reframes every rep, every meal, every quiet act of discipline as an offering — done for an audience of One.",
+        "Motivation fades when no one's watching. But this verse reframes every rep, every meal, every quiet act of discipline as an offering, done for an audience of One.",
     },
     {
       quote: "Your body isn't a distraction from worship. Rightly stewarded, it's a form of it.",
@@ -90,9 +90,9 @@ const devotionalsByLocale: Record<LocaleCode, DevotionalContent[]> = {
         translation: "WEB",
       },
       prayer:
-        "Father, I offer You this body — my training, my rest, my meals today — as a living act of worship. Let stewardship of what You've given me be one way I say thank You. In Jesus' name, amen.",
+        "Father, I offer You this body, my training, my rest, my meals today, as a living act of worship. Let stewardship of what You've given me be one way I say thank You. In Jesus' name, amen.",
       reflection:
-        "A 'living sacrifice' isn't offered once and done — it's offered daily, in ordinary choices. Today's workout and today's meals can be part of that ongoing offering.",
+        "A 'living sacrifice' isn't offered once and done, it's offered daily, in ordinary choices. Today's workout and today's meals can be part of that ongoing offering.",
     },
   ],
   fr: [
@@ -107,7 +107,7 @@ const devotionalsByLocale: Record<LocaleCode, DevotionalContent[]> = {
       prayer:
         "Père, merci pour ce jour nouveau et pour le corps que Tu m'as confié. Donne-moi la discipline de bien l'entraîner, l'humilité de dépendre de Toi, et la joie de T'honorer dans chaque répétition, chaque repas et chaque moment de silence. Au nom de Jésus, amen.",
       reflection:
-        "L'entraînement physique a de la valeur, mais la piété est utile à tous égards, pour cette vie et pour celle à venir. Aujourd'hui, que ton entraînement soit un acte d'adoration — une offrande de force à Celui qui te l'a donnée.",
+        "L'entraînement physique a de la valeur, mais la piété est utile à tous égards, pour cette vie et pour celle à venir. Aujourd'hui, que ton entraînement soit un acte d'adoration, une offrande de force à Celui qui te l'a donnée.",
     },
     {
       quote: "La force ne se précipite pas. Elle se renouvelle dans l'attente.",
@@ -117,9 +117,9 @@ const devotionalsByLocale: Record<LocaleCode, DevotionalContent[]> = {
         translation: "LSG",
       },
       prayer:
-        "Seigneur, quand je suis fatigué et que mes jambes sont lourdes, rappelle-moi que ma force vient de Toi, et non de mes propres réserves. Apprends-moi à T'attendre avant de forcer — à prier avant de performer. Au nom de Jésus, amen.",
+        "Seigneur, quand je suis fatigué et que mes jambes sont lourdes, rappelle-moi que ma force vient de Toi, et non de mes propres réserves. Apprends-moi à T'attendre avant de forcer, à prier avant de performer. Au nom de Jésus, amen.",
       reflection:
-        "Attendre Dieu n'est pas passif — c'est la posture qui précède la vraie force. Avant ta prochaine série difficile ou ta prochaine journée difficile, arrête-toi et souviens-toi d'où vient réellement ton endurance.",
+        "Attendre Dieu n'est pas passif, c'est la posture qui précède la vraie force. Avant ta prochaine série difficile ou ta prochaine journée difficile, arrête-toi et souviens-toi d'où vient réellement ton endurance.",
     },
     {
       quote: "Ta force a une source. Reste connecté à elle.",
@@ -131,10 +131,10 @@ const devotionalsByLocale: Record<LocaleCode, DevotionalContent[]> = {
       prayer:
         "Père, je n'ai pas une volonté illimitée, mais Toi Tu as une force illimitée. Comble l'écart entre ce que je peux faire et ce que cette journée exige de moi. Au nom de Jésus, amen.",
       reflection:
-        "Ce verset n'est pas une promesse que tu gagneras chaque compétition ou atteindras chaque objectif — c'est la promesse que la force du Christ suffit pour ce que cette journée te demande réellement.",
+        "Ce verset n'est pas une promesse que tu gagneras chaque compétition ou atteindras chaque objectif, c'est la promesse que la force du Christ suffit pour ce que cette journée te demande réellement.",
     },
     {
-      quote: "Entraîne-toi comme si ça comptait, parce que c'est le cas — mais pas pour les raisons que le monde avance.",
+      quote: "Entraîne-toi comme si ça comptait, parce que c'est le cas, mais pas pour les raisons que le monde avance.",
       verse: {
         reference: "1 Corinthiens 9.24-25",
         text: "Ne savez-vous pas que ceux qui courent dans le stade courent tous, mais qu'un seul remporte le prix ? Courez de manière à le remporter. Tous ceux qui combattent s'imposent toute espèce d'abstinences, et ils le font pour obtenir une couronne corruptible ; mais nous, faisons-le pour une couronne incorruptible.",
@@ -143,7 +143,7 @@ const devotionalsByLocale: Record<LocaleCode, DevotionalContent[]> = {
       prayer:
         "Seigneur, donne-moi la même discipline qu'un athlète donne à son corps, mais orientée vers quelque chose qui dure pour toujours. Que ma maîtrise de moi aujourd'hui soit un acte d'adoration, pas seulement un plan d'entraînement. Au nom de Jésus, amen.",
       reflection:
-        "Chaque athlète s'entraîne pour un prix qui se fane. Paul n'est pas contre la discipline — il la réoriente. Que l'entraînement d'aujourd'hui pointe au-delà du miroir, vers quelque chose d'éternel.",
+        "Chaque athlète s'entraîne pour un prix qui se fane. Paul n'est pas contre la discipline, il la réoriente. Que l'entraînement d'aujourd'hui pointe au-delà du miroir, vers quelque chose d'éternel.",
     },
     {
       quote: "Tu ne cours pas seul. Cours léger, et cours avec persévérance.",
@@ -153,9 +153,9 @@ const devotionalsByLocale: Record<LocaleCode, DevotionalContent[]> = {
         translation: "LSG",
       },
       prayer:
-        "Dieu, montre-moi le poids que je porte et qui n'est pas à moi de porter — habitudes, peurs, distractions. Aide-moi à les déposer pour courir la course d'aujourd'hui sans entrave. Au nom de Jésus, amen.",
+        "Dieu, montre-moi le poids que je porte et qui n'est pas à moi de porter, habitudes, peurs, distractions. Aide-moi à les déposer pour courir la course d'aujourd'hui sans entrave. Au nom de Jésus, amen.",
       reflection:
-        "Avant de parler de courir, ce verset parle de déposer un poids. Le progrès, ce n'est souvent pas ajouter plus d'effort — c'est retirer ce qui te ralentit.",
+        "Avant de parler de courir, ce verset parle de déposer un poids. Le progrès, ce n'est souvent pas ajouter plus d'effort, c'est retirer ce qui te ralentit.",
     },
     {
       quote: "Personne ne regarde ta première répétition de la journée. Dieu, si. Présente-toi quand même.",
@@ -165,9 +165,9 @@ const devotionalsByLocale: Record<LocaleCode, DevotionalContent[]> = {
         translation: "LSG",
       },
       prayer:
-        "Seigneur, que le travail d'aujourd'hui — quel qu'il soit, vu ou invisible — soit fait pour Toi en premier. Change ma motivation avant de changer mes résultats. Au nom de Jésus, amen.",
+        "Seigneur, que le travail d'aujourd'hui, quel qu'il soit, vu ou invisible, soit fait pour Toi en premier. Change ma motivation avant de changer mes résultats. Au nom de Jésus, amen.",
       reflection:
-        "La motivation s'estompe quand personne ne regarde. Mais ce verset transforme chaque répétition, chaque repas, chaque acte discret de discipline en offrande — fait pour un public d'un seul : Dieu.",
+        "La motivation s'estompe quand personne ne regarde. Mais ce verset transforme chaque répétition, chaque repas, chaque acte discret de discipline en offrande, fait pour un public d'un seul : Dieu.",
     },
     {
       quote: "Ton corps n'est pas une distraction par rapport à l'adoration. Bien géré, il en est une forme.",
@@ -177,9 +177,9 @@ const devotionalsByLocale: Record<LocaleCode, DevotionalContent[]> = {
         translation: "LSG",
       },
       prayer:
-        "Père, je T'offre ce corps — mon entraînement, mon repos, mes repas d'aujourd'hui — comme un acte d'adoration vivant. Que la bonne gestion de ce que Tu m'as donné soit une façon de Te dire merci. Au nom de Jésus, amen.",
+        "Père, je T'offre ce corps, mon entraînement, mon repos, mes repas d'aujourd'hui, comme un acte d'adoration vivant. Que la bonne gestion de ce que Tu m'as donné soit une façon de Te dire merci. Au nom de Jésus, amen.",
       reflection:
-        "Un « sacrifice vivant » ne s'offre pas une fois pour toutes — il s'offre chaque jour, dans des choix ordinaires. L'entraînement et les repas d'aujourd'hui peuvent faire partie de cette offrande continue.",
+        "Un « sacrifice vivant » ne s'offre pas une fois pour toutes, il s'offre chaque jour, dans des choix ordinaires. L'entraînement et les repas d'aujourd'hui peuvent faire partie de cette offrande continue.",
     },
   ],
 };
@@ -198,13 +198,13 @@ const inspirationalQuotesByLocale: Record<LocaleCode, string[]> = {
     "Discipline is choosing between what you want now and what you want most.",
     "Your body is a gift. Stewardship is your worship.",
     "Small daily wins compound into a transformed life.",
-    "Run in such a way as to get the prize. — 1 Cor. 9:24",
+    "Run in such a way as to get the prize. (1 Cor. 9:24)",
     "Strength of body, steadiness of soul.",
     "Motivation gets you started. Discipline keeps you going.",
     "You don't have to be extreme, just consistent.",
     "The pain of discipline weighs ounces; the pain of regret weighs tons.",
     "Progress, not perfection.",
-    "Every rep, every rest, every meal is a choice — choose the version of you that you're building.",
+    "Every rep, every rest, every meal is a choice, choose the version of you that you're building.",
     "Champions keep playing until they get it right.",
     "The body achieves what the mind believes.",
     "A river cuts through rock not because of its power, but its persistence.",
@@ -231,13 +231,13 @@ const inspirationalQuotesByLocale: Record<LocaleCode, string[]> = {
     "La discipline, c'est choisir entre ce que tu veux maintenant et ce que tu veux le plus.",
     "Ton corps est un don. En prendre soin, c'est ton culte.",
     "De petites victoires quotidiennes se transforment en une vie transformée.",
-    "Courez de manière à remporter le prix. — 1 Co 9.24",
+    "Courez de manière à remporter le prix. (1 Co 9.24)",
     "Force du corps, stabilité de l'âme.",
     "La motivation te fait démarrer. La discipline te fait continuer.",
     "Tu n'as pas besoin d'être extrême, juste constant(e).",
     "La douleur de la discipline pèse quelques grammes ; la douleur du regret pèse des tonnes.",
     "Progrès, pas perfection.",
-    "Chaque répétition, chaque repos, chaque repas est un choix — choisis la version de toi que tu es en train de construire.",
+    "Chaque répétition, chaque repos, chaque repas est un choix, choisis la version de toi que tu es en train de construire.",
     "Les champions persévèrent jusqu'à réussir.",
     "Le corps accomplit ce que l'esprit croit.",
     "Une rivière traverse la roche non par sa force, mais par sa persévérance.",
