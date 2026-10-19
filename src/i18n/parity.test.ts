@@ -59,6 +59,8 @@ const IDENTICAL_ALLOWED = new Set<string>([
   "mkt.about.signature",
   // "Estimation" is the same word in French.
   "nutrition.estimation",
+  // "Gratitude" is the same word in French.
+  "journal.promptGratitude",
 ]);
 
 describe("i18n en/fr parity", () => {
