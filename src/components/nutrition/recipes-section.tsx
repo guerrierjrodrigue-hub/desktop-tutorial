@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { Flame, Clock, UtensilsCrossed } from "lucide-react";
+import { Flame, Clock, UtensilsCrossed, Search } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { Recipe, RecipeCategory } from "@/types";
@@ -35,13 +35,36 @@ const CATEGORIES: { key: RecipeCategory | "all"; labelKey: keyof Dictionary }[] 
   { key: "quick-easy", labelKey: "nutrition.categoryQuickEasy" },
 ];
 
+const PAGE_SIZE = 18;
+
 export function RecipesSection({ recipes, dict }: { recipes: Recipe[]; dict: Dictionary }) {
   const [category, setCategory] = useState<RecipeCategory | "all">("all");
+  const [query, setQuery] = useState("");
+  const [visible, setVisible] = useState(PAGE_SIZE);
 
+  const q = query.trim().toLowerCase();
   const filtered = useMemo(
-    () => (category === "all" ? recipes : recipes.filter((r) => r.category === category)),
-    [recipes, category],
+    () =>
+      recipes.filter(
+        (r) =>
+          (category === "all" || r.category === category) &&
+          (q === "" || r.name.toLowerCase().includes(q)),
+      ),
+    [recipes, category, q],
   );
+
+  // Any filter change resets pagination back to the first page. Adjusting state
+  // during render (the React-recommended alternative to a reset effect) keeps
+  // the visible count in sync without a cascading re-render.
+  const filterKey = `${category}|${q}`;
+  const [shownFilterKey, setShownFilterKey] = useState(filterKey);
+  if (filterKey !== shownFilterKey) {
+    setShownFilterKey(filterKey);
+    setVisible(PAGE_SIZE);
+  }
+
+  const shown = filtered.slice(0, visible);
+  const hasMore = filtered.length > visible;
 
   return (
     <div className="mt-8">
@@ -53,6 +76,17 @@ export function RecipesSection({ recipes, dict }: { recipes: Recipe[]; dict: Dic
       </div>
 
       <p className="mb-4 text-xs text-faint">{dict["nutrition.recipesEstimateNote"]}</p>
+
+      <label className="mb-4 flex items-center gap-2 rounded-lg border border-border bg-surface-2 px-3 py-2">
+        <Search className="size-4 shrink-0 text-faint" />
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={dict["nutrition.searchRecipesPlaceholder"]}
+          aria-label={dict["nutrition.searchRecipesAria"]}
+          className="w-full bg-transparent text-sm outline-none placeholder:text-faint"
+        />
+      </label>
 
       <div className="mb-4 flex flex-wrap gap-2">
         {CATEGORIES.map((c) => (
@@ -68,7 +102,7 @@ export function RecipesSection({ recipes, dict }: { recipes: Recipe[]; dict: Dic
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((r) => (
+        {shown.map((r) => (
           <Link
             key={r.id}
             href={`/nutrition/${r.id}`}
@@ -102,9 +136,25 @@ export function RecipesSection({ recipes, dict }: { recipes: Recipe[]; dict: Dic
           </Link>
         ))}
         {filtered.length === 0 && (
-          <p className="col-span-full py-8 text-center text-sm text-muted">{dict["nutrition.noRecipesInCategory"]}</p>
+          <p className="col-span-full py-8 text-center text-sm text-muted">
+            {query.trim()
+              ? dict["nutrition.noRecipesMatch"]
+              : dict["nutrition.noRecipesInCategory"]}
+          </p>
         )}
       </div>
+
+      {hasMore && (
+        <div className="mt-6 flex justify-center">
+          <button
+            type="button"
+            onClick={() => setVisible((v) => v + PAGE_SIZE)}
+            className="rounded-full border border-border bg-surface-2 px-5 py-2 text-sm font-medium transition hover:border-accent/40 hover:text-foreground"
+          >
+            {dict["nutrition.seeMore"]}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
