@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { Plus, Flame, X, UtensilsCrossed, Pencil, Trash2, Check } from "lucide-react";
+import { useEffect, useRef, useState, useTransition } from "react";
+import { Plus, Flame, X, UtensilsCrossed, Pencil, Trash2, Check, Undo2 } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { createFoodLog, updateFoodLog, deleteFoodLog } from "@/app/(app)/nutrition/actions";
@@ -103,6 +103,11 @@ export function FoodLogger({ initial, dict }: { initial: FoodLogEntry[]; dict: D
   // or deleting one would hit a phantom row, so those actions stay disabled.
   const [pending, setPending] = useState<Set<string>>(new Set());
   const [error, setError] = useState<string | null>(null);
+  // A just-deleted meal, shown with an Undo button. The actual DB delete is
+  // deferred for 5 seconds so the delete can be taken back without a round-trip.
+  const [undo, setUndo] = useState<{ name: string } | null>(null);
+  const undoTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const deferredDelete = useRef<{ id: string; entry: FoodLogEntry; index: number } | null>(null);
   const [, startTransition] = useTransition();
 
   const total = entries.reduce((s, e) => s + e.calories, 0);
@@ -187,19 +192,76 @@ export function FoodLogger({ initial, dict }: { initial: FoodLogEntry[]; dict: D
     });
   }
 
-  function remove(id: string) {
-    const snapshot = entries;
-    setEntries((prev) => prev.filter((x) => x.id !== id));
-    if (editingId === id) setEditingId(null);
-    setError(null);
+  /** Actually persist a deferred delete, rolling back the row on failure. */
+  function commitDelete(target: { id: string; entry: FoodLogEntry; index: number }) {
     startTransition(async () => {
-      const res = await deleteFoodLog(id);
+      const res = await deleteFoodLog(target.id);
       if (!res.ok) {
-        setEntries(snapshot); // restore the row the delete didn't actually remove
+        // Delete didn't happen: put the row back where it was.
+        setEntries((prev) => {
+          if (prev.some((x) => x.id === target.id)) return prev;
+          const next = [...prev];
+          next.splice(Math.min(target.index, next.length), 0, target.entry);
+          return next;
+        });
         setError(failMessage(res.error));
       }
     });
   }
+
+  /** Clear the undo window and persist the pending delete, if any. */
+  function flushDeferredDelete() {
+    if (undoTimer.current) {
+      clearTimeout(undoTimer.current);
+      undoTimer.current = null;
+    }
+    const target = deferredDelete.current;
+    deferredDelete.current = null;
+    setUndo(null);
+    if (target) commitDelete(target);
+  }
+
+  function remove(id: string) {
+    // Commit any delete still inside its undo window before starting a new one.
+    flushDeferredDelete();
+    const index = entries.findIndex((x) => x.id === id);
+    if (index === -1) return;
+    const entry = entries[index];
+    setEntries((prev) => prev.filter((x) => x.id !== id));
+    if (editingId === id) setEditingId(null);
+    setError(null);
+    deferredDelete.current = { id, entry, index };
+    setUndo({ name: entry.name });
+    undoTimer.current = setTimeout(flushDeferredDelete, 5000);
+  }
+
+  function undoDelete() {
+    if (undoTimer.current) {
+      clearTimeout(undoTimer.current);
+      undoTimer.current = null;
+    }
+    const target = deferredDelete.current;
+    deferredDelete.current = null;
+    setUndo(null);
+    if (!target) return;
+    // Restore the removed meal at its original position.
+    setEntries((prev) => {
+      if (prev.some((x) => x.id === target.id)) return prev;
+      const next = [...prev];
+      next.splice(Math.min(target.index, next.length), 0, target.entry);
+      return next;
+    });
+  }
+
+  // If the component unmounts while a delete is still pending, persist it so the
+  // meal doesn't quietly reappear on the next load.
+  useEffect(() => {
+    return () => {
+      if (undoTimer.current) clearTimeout(undoTimer.current);
+      const target = deferredDelete.current;
+      if (target) void deleteFoodLog(target.id);
+    };
+  }, []);
 
   return (
     <Card>
@@ -224,6 +286,22 @@ export function FoodLogger({ initial, dict }: { initial: FoodLogEntry[]; dict: D
         <p role="alert" className="mb-3 text-center text-sm text-ember">
           {error}
         </p>
+      )}
+
+      {undo && (
+        <div
+          role="status"
+          className="mb-3 flex items-center justify-between gap-3 rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm"
+        >
+          <span className="min-w-0 truncate text-muted">{dict["nutrition.mealDeleted"]}</span>
+          <button
+            type="button"
+            onClick={undoDelete}
+            className="inline-flex shrink-0 items-center gap-1.5 font-semibold text-accent-bright transition hover:text-accent"
+          >
+            <Undo2 className="size-4" /> {dict["common.undo"]}
+          </button>
+        </div>
       )}
 
       {entries.length === 0 ? (
