@@ -42,9 +42,11 @@ export function PostComposer({
       const result = await createPost({ content: text, kind });
       if (result.ok) {
         // Only surface the post once the server accepted it (so a rate-limited
-        // or rejected post never appears in the feed).
+        // or rejected post never appears in the feed). Use the real DB id when
+        // the server returns one so a like/delete right after targets the real
+        // row; demo mode has no id, where a session-only id is fine.
         onPost({
-          id: crypto.randomUUID(),
+          id: result.id ?? crypto.randomUUID(),
           author: dict["community.you"],
           avatarColor: "var(--color-green)",
           timeAgo: dict["community.justNow"],

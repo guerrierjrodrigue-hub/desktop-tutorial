@@ -43,7 +43,20 @@ export function Journal({
   const [editTitle, setEditTitle] = useState("");
   const [editBody, setEditBody] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
+  // Entries whose real DB id isn't known yet — edit/delete stay disabled until
+  // the create resolves, so a mutation never targets a phantom temp row.
+  const [pending, setPending] = useState<Set<string>>(new Set());
+  const [error, setError] = useState<string | null>(null);
   const [, startTransition] = useTransition();
+
+  const clearPending = (id: string) =>
+    setPending((p) => {
+      const next = new Set(p);
+      next.delete(id);
+      return next;
+    });
+  const failMessage = (code?: string) =>
+    (code && (dict[code as keyof Dictionary] as string)) || dict["errors.writeNoRows"];
 
   const prompts = [
     { icon: Heart, label: dict["journal.promptGratitude"], hint: dict["journal.promptGratitudeHint"] },
@@ -70,13 +83,29 @@ export function Journal({
       body: body.trim(),
       createdAt: new Date().toISOString(),
     };
+    const tempId = optimistic.id;
     setEntries((prev) => [optimistic, ...prev]);
+    setPending((p) => new Set(p).add(tempId));
     setTitle("");
     setBody("");
     setComposing(false);
+    setError(null);
     startTransition(async () => {
       const result = await createJournalEntry({ title: optimistic.title, body: optimistic.body });
-      if (result.ok) showXp(result.xp);
+      if (result.ok) {
+        // Swap the temp id for the real one so edit/delete target the real row.
+        if (result.id) {
+          const realId = result.id;
+          setEntries((prev) => prev.map((x) => (x.id === tempId ? { ...x, id: realId } : x)));
+        }
+        clearPending(tempId); // demo mode (no id) still becomes editable in-session
+        showXp(result.xp);
+      } else {
+        // Create failed: drop the optimistic entry and surface the error.
+        setEntries((prev) => prev.filter((x) => x.id !== tempId));
+        clearPending(tempId);
+        setError(failMessage(result.error));
+      }
     });
   }
 
@@ -97,21 +126,34 @@ export function Journal({
   function saveEdit(e: React.FormEvent) {
     e.preventDefault();
     if (!openEntry || !editTitle.trim()) return;
+    const previous = openEntry;
     const updated = { ...openEntry, title: editTitle.trim(), body: editBody.trim() };
     setEntries((prev) => prev.map((x) => (x.id === updated.id ? updated : x)));
     setEditing(false);
+    setError(null);
     startTransition(async () => {
-      await updateJournalEntry({ id: updated.id, title: updated.title, body: updated.body });
+      const res = await updateJournalEntry({ id: updated.id, title: updated.title, body: updated.body });
+      if (!res.ok) {
+        // Roll back the optimistic edit and surface the error.
+        setEntries((prev) => prev.map((x) => (x.id === previous.id ? previous : x)));
+        setError(failMessage(res.error));
+      }
     });
   }
 
   function remove() {
     if (!openEntry) return;
     const id = openEntry.id;
+    const snapshot = entries;
     setEntries((prev) => prev.filter((x) => x.id !== id));
     closeModal();
+    setError(null);
     startTransition(async () => {
-      await deleteJournalEntry(id);
+      const res = await deleteJournalEntry(id);
+      if (!res.ok) {
+        setEntries(snapshot); // restore the row the delete didn't actually remove
+        setError(failMessage(res.error));
+      }
     });
   }
 
@@ -174,6 +216,12 @@ export function Journal({
         </form>
       )}
 
+      {error && (
+        <p role="alert" className="mb-3 text-center text-sm text-ember">
+          {error}
+        </p>
+      )}
+
       {entries.length === 0 ? (
         <p className="rounded-xl border border-dashed border-border bg-surface-2 p-6 text-center text-sm text-muted">
           {dict["journal.empty"]}
@@ -205,8 +253,9 @@ export function Journal({
                     openFull(entry);
                     setEditing(true);
                   }}
+                  disabled={pending.has(entry.id)}
                   aria-label={dict["journal.editAria"].replace("{title}", entry.title)}
-                  className="grid size-7 place-items-center rounded-md text-muted transition hover:bg-elevated hover:text-foreground"
+                  className="grid size-7 place-items-center rounded-md text-muted transition hover:bg-elevated hover:text-foreground disabled:opacity-40"
                 >
                   <Pencil className="size-3.5" />
                 </button>
@@ -280,6 +329,7 @@ export function Journal({
                     size="sm"
                     variant="secondary"
                     onClick={() => setEditing(true)}
+                    disabled={pending.has(openEntry.id)}
                     aria-label={dict["journal.editAria"].replace("{title}", openEntry.title)}
                   >
                     <Pencil className="size-4" /> {dict["common.edit"]}
@@ -299,6 +349,7 @@ export function Journal({
                       size="sm"
                       variant="ghost"
                       onClick={() => setConfirmDelete(true)}
+                      disabled={pending.has(openEntry.id)}
                       aria-label={dict["journal.deleteAria"].replace("{title}", openEntry.title)}
                     >
                       <Trash2 className="size-4" /> {dict["common.delete"]}

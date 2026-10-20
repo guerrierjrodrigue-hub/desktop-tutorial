@@ -42,7 +42,21 @@ export function ChallengesList({
   const [days, setDays] = useState(14);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [confirmingLeaveId, setConfirmingLeaveId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  // Challenges whose real DB id isn't known yet (optimistic create in flight).
+  // Join/leave on one would hit a phantom row, so they stay disabled until the
+  // create resolves with the real id.
+  const [pendingIds, setPendingIds] = useState<Set<string>>(new Set());
   const [pending, startTransition] = useTransition();
+
+  const clearPending = (id: string) =>
+    setPendingIds((p) => {
+      const next = new Set(p);
+      next.delete(id);
+      return next;
+    });
+  const failMessage = (code?: string) =>
+    (code && (dict[code as keyof Dictionary] as string)) || dict["errors.writeNoRows"];
 
   async function invite(c: Challenge) {
     if (!c.inviteCode) return;
@@ -70,8 +84,9 @@ export function ChallengesList({
     const trimmed = title.trim();
     if (!trimmed) return;
 
+    const tempId = crypto.randomUUID();
     const optimistic: Challenge = {
-      id: crypto.randomUUID(),
+      id: tempId,
       title: trimmed,
       description: description.trim(),
       type,
@@ -83,15 +98,30 @@ export function ChallengesList({
       progress: 0,
     };
     setChallenges((prev) => [optimistic, ...prev]);
+    setPendingIds((p) => new Set(p).add(tempId));
     setTitle("");
     setDescription("");
     setComposing(false);
+    setError(null);
     startTransition(async () => {
-      await createChallenge({ title: trimmed, description: description.trim(), type, endsInDays: days });
+      const result = await createChallenge({ title: trimmed, description: description.trim(), type, endsInDays: days });
+      if (result.ok) {
+        // Swap the temp id for the real one so join/leave target the real row.
+        if (result.id) {
+          const realId = result.id;
+          setChallenges((prev) => prev.map((c) => (c.id === tempId ? { ...c, id: realId } : c)));
+        }
+        clearPending(tempId);
+      } else {
+        setChallenges((prev) => prev.filter((c) => c.id !== tempId));
+        clearPending(tempId);
+        setError(failMessage(result.error));
+      }
     });
   }
 
   function join(id: string) {
+    const snapshot = challenges;
     // The window starts now, so a freshly joined challenge shows its full duration.
     setChallenges((prev) =>
       prev.map((c) =>
@@ -106,13 +136,20 @@ export function ChallengesList({
           : c,
       ),
     );
+    setError(null);
     startTransition(async () => {
       const result = await joinChallenge(id);
-      if (result.ok) showXp(result.xp);
+      if (result.ok) {
+        showXp(result.xp);
+      } else {
+        setChallenges(snapshot); // the join didn't persist
+        setError(failMessage(result.error));
+      }
     });
   }
 
   function leave(id: string) {
+    const snapshot = challenges;
     // Drop the user from the challenge and its participant count; the server
     // removes the row (and the leaderboard entry) on the next load.
     setChallenges((prev) =>
@@ -123,13 +160,24 @@ export function ChallengesList({
       ),
     );
     setConfirmingLeaveId(null);
+    setError(null);
     startTransition(async () => {
-      await leaveChallenge(id);
+      const result = await leaveChallenge(id);
+      if (!result.ok) {
+        setChallenges(snapshot); // the leave didn't persist
+        setError(failMessage(result.error));
+      }
     });
   }
 
   return (
     <div className="space-y-4">
+      {error && (
+        <p role="alert" className="text-center text-sm text-ember">
+          {error}
+        </p>
+      )}
+
       {challenges.length === 0 && (
         <Card>
           <p className="text-sm text-muted">{dict["empty.noChallengesAvailable"]}</p>
@@ -189,13 +237,13 @@ export function ChallengesList({
                     size="sm"
                     variant="secondary"
                     onClick={() => setConfirmingLeaveId(c.id)}
-                    disabled={pending}
+                    disabled={pending || pendingIds.has(c.id)}
                   >
                     {dict["challenges.leave"]}
                   </Button>
                 )
               ) : (
-                <Button size="sm" onClick={() => join(c.id)} disabled={pending}>
+                <Button size="sm" onClick={() => join(c.id)} disabled={pending || pendingIds.has(c.id)}>
                   {dict["challenges.join"]}
                 </Button>
               )}

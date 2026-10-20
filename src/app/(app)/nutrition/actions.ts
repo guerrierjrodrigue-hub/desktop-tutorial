@@ -32,19 +32,25 @@ export async function createFoodLog(input: {
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
 
-  const { error } = await ctx.supabase.from("food_logs").insert({
-    user_id: ctx.userId,
-    name: check.data.name,
-    calories: Math.round(check.data.calories),
-    protein_g: Math.round(check.data.proteinG),
-    carbs_g: Math.round(check.data.carbsG ?? 0),
-    fat_g: Math.round(check.data.fatG ?? 0),
-    log_date: getUserToday(await getUserTimezone()),
-  });
+  const { data, error } = await ctx.supabase
+    .from("food_logs")
+    .insert({
+      user_id: ctx.userId,
+      name: check.data.name,
+      calories: Math.round(check.data.calories),
+      protein_g: Math.round(check.data.proteinG),
+      carbs_g: Math.round(check.data.carbsG ?? 0),
+      fat_g: Math.round(check.data.fatG ?? 0),
+      log_date: getUserToday(await getUserTimezone()),
+    })
+    .select("id")
+    .single();
   if (error) return logAndFail(error);
 
   revalidatePath("/nutrition");
-  return { ok: true };
+  // Return the real row id so the client can replace its temporary id and allow
+  // an immediate edit/delete to target the real row.
+  return { ok: true, id: (data as { id: string }).id };
 }
 
 const updateFoodLogSchema = foodLogSchema.extend({ id: z.string().uuid("errors.invalidId") });
@@ -58,13 +64,15 @@ export async function updateFoodLog(input: {
   carbsG?: number;
   fatG?: number;
 }): Promise<ActionResult> {
-  const check = validate(updateFoodLogSchema, input);
-  if (!check.ok) return check.result;
-
+  // Demo mode first: seed ids aren't real uuids, so returning the no-op success
+  // before validation keeps optimistic UI intact instead of a spurious failure.
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
 
-  const { error } = await ctx.supabase
+  const check = validate(updateFoodLogSchema, input);
+  if (!check.ok) return check.result;
+
+  const { data, error } = await ctx.supabase
     .from("food_logs")
     .update({
       name: check.data.name,
@@ -74,8 +82,12 @@ export async function updateFoodLog(input: {
       fat_g: Math.round(check.data.fatG ?? 0),
     })
     .eq("id", check.data.id)
-    .eq("user_id", ctx.userId);
+    .eq("user_id", ctx.userId)
+    .select("id");
   if (error) return logAndFail(error);
+  // No row matched (phantom/temp id, or not the owner's) — surface it, never a
+  // silent success, so the client can roll back the optimistic change.
+  if (!data || data.length === 0) return { ok: false, error: "errors.writeNoRows" };
 
   revalidatePath("/nutrition");
   return { ok: true };
@@ -83,18 +95,22 @@ export async function updateFoodLog(input: {
 
 /** Delete one of the signed-in user's food log entries (owner-only via RLS). */
 export async function deleteFoodLog(id: string): Promise<ActionResult> {
-  const check = validate(z.object({ id: z.string().uuid("errors.invalidId") }), { id });
-  if (!check.ok) return check.result;
-
+  // Demo mode first: seed ids aren't real uuids, so returning the no-op success
+  // before validation keeps optimistic UI intact instead of a spurious failure.
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
 
-  const { error } = await ctx.supabase
+  const check = validate(z.object({ id: z.string().uuid("errors.invalidId") }), { id });
+  if (!check.ok) return check.result;
+
+  const { data, error } = await ctx.supabase
     .from("food_logs")
     .delete()
     .eq("id", check.data.id)
-    .eq("user_id", ctx.userId);
+    .eq("user_id", ctx.userId)
+    .select("id");
   if (error) return logAndFail(error);
+  if (!data || data.length === 0) return { ok: false, error: "errors.writeNoRows" };
 
   revalidatePath("/nutrition");
   return { ok: true };

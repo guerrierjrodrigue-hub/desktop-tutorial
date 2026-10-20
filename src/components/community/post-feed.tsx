@@ -44,6 +44,7 @@ export function PostFeed({ initial, dict }: { initial: CommunityPost[]; dict: Di
 
   function like(id: string) {
     let nextLiked = false;
+    const snapshot = posts;
     setPosts((prev) =>
       prev.map((p) => {
         if (p.id !== id) return p;
@@ -52,15 +53,24 @@ export function PostFeed({ initial, dict }: { initial: CommunityPost[]; dict: Di
       }),
     );
     startTransition(async () => {
-      await toggleLike(id, nextLiked);
+      const result = await toggleLike(id, nextLiked);
+      if (!result.ok) {
+        setPosts(snapshot); // the like/unlike didn't persist
+        flash(dict["errors.writeNoRows"]);
+      }
     });
   }
 
   function remove(id: string) {
     setMenuId(null);
+    const snapshot = posts;
     setPosts((prev) => prev.filter((p) => p.id !== id));
     startTransition(async () => {
-      await deletePost(id);
+      const result = await deletePost(id);
+      if (!result.ok) {
+        setPosts(snapshot); // restore the post the delete didn't actually remove
+        flash(dict["errors.writeNoRows"]);
+      }
     });
   }
 

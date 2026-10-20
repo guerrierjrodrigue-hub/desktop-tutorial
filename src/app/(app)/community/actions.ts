@@ -51,33 +51,45 @@ export async function createPost(input: {
   const times = ((recent ?? []) as { created_at: string }[]).map((r) => r.created_at);
   if (exceedsPostRate(times)) return { ok: false, error: "community.error.rateLimited" };
 
-  const { error } = await ctx.supabase.from("community_posts").insert({
-    user_id: ctx.userId,
-    content,
-    kind: check.data.kind,
-  });
+  const { data, error } = await ctx.supabase
+    .from("community_posts")
+    .insert({
+      user_id: ctx.userId,
+      content,
+      kind: check.data.kind,
+    })
+    .select("id")
+    .single();
   if (error) return logAndFail(error);
 
   revalidatePath("/community");
-  return { ok: true };
+  // Return the real id so the feed renders the new post with its DB id and a
+  // like/delete right after posting targets the real row, not a phantom one.
+  return { ok: true, id: (data as { id: string }).id };
 }
 
 /** Delete a post the signed-in user owns. Comments and likes cascade in the DB. */
 export async function deletePost(postId: string): Promise<ActionResult> {
-  const check = validate(targetIdSchema, postId);
-  if (!check.ok) return check.result;
-
+  // Demo mode first: seed ids aren't real uuids, so returning the no-op success
+  // before validation keeps optimistic UI intact instead of a spurious failure.
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
 
+  const check = validate(targetIdSchema, postId);
+  if (!check.ok) return check.result;
+
   // RLS restricts deletes to the owner (or an admin); scope by user_id too so a
   // non-owner request is a clear no-op rather than relying on RLS alone.
-  const { error } = await ctx.supabase
+  const { data, error } = await ctx.supabase
     .from("community_posts")
     .delete()
     .eq("id", check.data)
-    .eq("user_id", ctx.userId);
+    .eq("user_id", ctx.userId)
+    .select("id");
   if (error) return logAndFail(error);
+  // No row matched (phantom/temp id, already gone, or not the owner's) — surface
+  // it so the client can restore the optimistically removed post.
+  if (!data || data.length === 0) return { ok: false, error: "errors.writeNoRows" };
 
   revalidatePath("/community");
   return { ok: true };
@@ -181,14 +193,16 @@ export async function toggleLike(
   postId: string,
   liked: boolean,
 ): Promise<ActionResult> {
+  // Demo mode first: seed ids aren't real uuids, so returning the no-op success
+  // before validation keeps optimistic UI intact instead of a spurious failure.
+  const ctx = await getAuthedContext();
+  if (!ctx) return demoOk;
+
   const check = validate(z.object({ postId: z.string().uuid(), liked: z.boolean() }), {
     postId,
     liked,
   });
   if (!check.ok) return check.result;
-
-  const ctx = await getAuthedContext();
-  if (!ctx) return demoOk;
 
   const { error } = check.data.liked
     ? await ctx.supabase
@@ -206,11 +220,13 @@ export async function toggleLike(
 
 /** Join a community group. Idempotent — re-joining is a no-op. */
 export async function joinGroup(groupId: string): Promise<ActionResult> {
-  const check = validate(z.string().uuid(), groupId);
-  if (!check.ok) return check.result;
-
+  // Demo mode first: seed ids aren't real uuids, so returning the no-op success
+  // before validation keeps optimistic UI intact instead of a spurious failure.
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
+
+  const check = validate(z.string().uuid(), groupId);
+  if (!check.ok) return check.result;
 
   const { error } = await ctx.supabase
     .from("group_members")
