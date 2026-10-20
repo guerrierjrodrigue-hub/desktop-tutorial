@@ -40,7 +40,11 @@ export function BibleReader({
   const [highlights, setHighlights] = useState(() => new Set(initialHighlights));
   const [memorized, setMemorized] = useState<Set<number>>(() => new Set());
   const [read, setRead] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [, startTransition] = useTransition();
+
+  const failMessage = (code?: string) =>
+    (code && (dict[code as keyof Dictionary] as string)) || dict["errors.writeNoRows"];
 
   const q = query.trim().toLowerCase();
   const verses = useMemo(
@@ -56,19 +60,35 @@ export function BibleReader({
   function onToggle(verse: number, kind: "bookmark" | "highlight") {
     const set = kind === "bookmark" ? bookmarks : highlights;
     const setter = kind === "bookmark" ? setBookmarks : setHighlights;
+    const snapshot = set;
     const next = new Set(set);
     if (next.has(verse)) next.delete(verse);
     else next.add(verse);
     setter(next);
+    setError(null);
     startTransition(async () => {
-      await toggleBibleMark(ref(verse), kind);
+      const result = await toggleBibleMark(ref(verse), kind);
+      if (!result.ok) {
+        setter(snapshot); // roll back the mark that didn't persist
+        setError(failMessage(result.error));
+      }
     });
   }
 
   function onMemorize(verse: number, text: string) {
     setMemorized((prev) => new Set(prev).add(verse));
+    setError(null);
     startTransition(async () => {
-      await memorizeVerse({ reference: `${bookName} ${chapter}:${verse}`, text });
+      const result = await memorizeVerse({ reference: `${bookName} ${chapter}:${verse}`, text });
+      if (!result.ok) {
+        // Roll back the optimistic "memorized" checkmark if the insert failed.
+        setMemorized((prev) => {
+          const back = new Set(prev);
+          back.delete(verse);
+          return back;
+        });
+        setError(failMessage(result.error));
+      }
     });
   }
 
@@ -91,8 +111,13 @@ export function BibleReader({
   function onMarkRead() {
     if (!plan) return;
     setRead(true);
+    setError(null);
     startTransition(async () => {
-      await markReadingDay(plan.planId, plan.day);
+      const result = await markReadingDay(plan.planId, plan.day);
+      if (!result.ok) {
+        setRead(false); // roll back if the day wasn't recorded
+        setError(failMessage(result.error));
+      }
     });
   }
 
@@ -114,6 +139,11 @@ export function BibleReader({
       {q && (
         <p className="mt-2 text-xs text-muted">
           {matchCount} {dict["bible.searchResults"]}
+        </p>
+      )}
+      {error && (
+        <p role="alert" className="mt-2 text-sm text-ember">
+          {error}
         </p>
       )}
 

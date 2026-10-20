@@ -33,15 +33,21 @@ export async function createPrayerRequest(input: {
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
 
-  const { error } = await ctx.supabase.from("prayer_requests").insert({
-    user_id: ctx.userId,
-    title: check.data.title,
-    body: check.data.body,
-  });
+  const { data, error } = await ctx.supabase
+    .from("prayer_requests")
+    .insert({
+      user_id: ctx.userId,
+      title: check.data.title,
+      body: check.data.body,
+    })
+    .select("id")
+    .single();
   if (error) return logAndFail(error);
 
   revalidatePath("/spiritual");
-  return { ok: true, xp: XP_REWARDS.prayer };
+  // Return the real id so the client swaps its temp id and a toggle right after
+  // adding targets the real prayer row instead of a phantom one.
+  return { ok: true, xp: XP_REWARDS.prayer, id: (data as { id: string }).id };
 }
 
 /** Advance a reading plan by one day for the signed-in user (idempotent-ish). */
@@ -75,18 +81,24 @@ export async function setPrayerAnswered(
   id: string,
   answered: boolean,
 ): Promise<ActionResult> {
-  const check = validate(setAnsweredSchema, { id, answered });
-  if (!check.ok) return check.result;
-
+  // Demo mode first: seed ids aren't real uuids, so returning the no-op success
+  // before validation keeps optimistic UI intact instead of a spurious failure.
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
 
-  const { error } = await ctx.supabase
+  const check = validate(setAnsweredSchema, { id, answered });
+  if (!check.ok) return check.result;
+
+  const { data, error } = await ctx.supabase
     .from("prayer_requests")
     .update({ answered: check.data.answered })
     .eq("id", check.data.id)
-    .eq("user_id", ctx.userId);
+    .eq("user_id", ctx.userId)
+    .select("id");
   if (error) return logAndFail(error);
+  // No row matched (phantom/temp id, or not the owner's) — surface it instead of
+  // a silent success, so the client can roll back the optimistic toggle.
+  if (!data || data.length === 0) return { ok: false, error: "errors.writeNoRows" };
 
   revalidatePath("/spiritual");
   return { ok: true };

@@ -67,17 +67,24 @@ export function GroupsPanel({
   locale: LocaleCode;
 }) {
   const [groups, setGroups] = useState(initial);
+  const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
   const joined = groups.filter((g) => g.joined);
   const discover = groups.filter((g) => !g.joined);
 
   function join(id: string) {
+    const snapshot = groups;
     setGroups((prev) =>
       prev.map((g) => (g.id === id ? { ...g, joined: true, members: g.members + 1 } : g)),
     );
+    setError(null);
     startTransition(async () => {
-      await joinGroup(id);
+      const result = await joinGroup(id);
+      if (!result.ok) {
+        setGroups(snapshot); // the join didn't persist
+        setError((result.error && (dict[result.error as keyof Dictionary] as string)) || dict["errors.writeNoRows"]);
+      }
     });
   }
 
@@ -86,6 +93,11 @@ export function GroupsPanel({
       <CardHeader>
         <CardTitle>{dict["community.yourGroups"]}</CardTitle>
       </CardHeader>
+      {error && (
+        <p role="alert" className="mb-3 text-center text-sm text-ember">
+          {error}
+        </p>
+      )}
       <div className="space-y-2">
         {joined.length === 0 ? (
           <p className="text-sm text-muted">{dict["community.noGroupsYet"]}</p>

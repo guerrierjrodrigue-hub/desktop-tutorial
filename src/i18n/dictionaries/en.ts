@@ -47,6 +47,7 @@ const en = {
   "errors.foodNameRequired": "A food name is required.",
   "errors.amountInvalid": "Enter a valid amount.",
   "errors.invalidId": "Invalid identifier.",
+  "errors.writeNoRows": "Couldn't save the change, please try again.",
   "errors.verseRequired": "A verse is required.",
   "errors.challengeTitleRequired": "A title is required.",
   "errors.goalRequired": "Choose at least one goal.",

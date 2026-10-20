@@ -58,7 +58,9 @@ export async function createChallenge(input: CreateChallengeInput): Promise<Acti
 
   revalidatePath("/challenges");
   revalidatePath("/dashboard");
-  return { ok: true };
+  // Return the real id so the client swaps its temp id; a leave/join/share-link
+  // right after creating then targets the real challenge, not a phantom one.
+  return { ok: true, id: (data as { id: string }).id };
 }
 
 /**
@@ -69,11 +71,13 @@ export async function createChallenge(input: CreateChallengeInput): Promise<Acti
  * revalidated pages. Idempotent — leaving when not joined is a no-op.
  */
 export async function leaveChallenge(challengeId: string): Promise<ActionResult> {
-  const check = validate(z.string().uuid(), challengeId);
-  if (!check.ok) return check.result;
-
+  // Demo mode first: seed ids aren't real uuids, so returning the no-op success
+  // before validation keeps optimistic UI intact instead of a spurious failure.
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
+
+  const check = validate(z.string().uuid(), challengeId);
+  if (!check.ok) return check.result;
 
   const { error } = await ctx.supabase
     .from("challenge_participants")
@@ -96,11 +100,13 @@ export async function joinChallenge(
   challengeId: string,
   referredBy?: string | null,
 ): Promise<ActionResult> {
-  const check = validate(z.string().uuid(), challengeId);
-  if (!check.ok) return check.result;
-
+  // Demo mode first: seed ids aren't real uuids, so returning the no-op success
+  // before validation keeps optimistic UI intact instead of a spurious failure.
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
+
+  const check = validate(z.string().uuid(), challengeId);
+  if (!check.ok) return check.result;
 
   // Credit the referrer only when it's a valid, different user.
   const referrer = resolveReferrer(referredBy, ctx.userId);

@@ -25,11 +25,13 @@ export async function toggleHabit(
   habitId: string,
   done: boolean,
 ): Promise<ActionResult> {
-  const check = validate(toggleHabitSchema, { habitId, done });
-  if (!check.ok) return check.result;
-
+  // Demo mode first: seed ids aren't real uuids, so returning the no-op success
+  // before validation keeps optimistic UI intact instead of a spurious failure.
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
+
+  const check = validate(toggleHabitSchema, { habitId, done });
+  if (!check.ok) return check.result;
 
   const today = getUserToday(await getUserTimezone());
   const { error } = await ctx.supabase

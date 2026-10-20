@@ -27,10 +27,25 @@ export function HabitsList({
   const [composing, setComposing] = useState(false);
   const [label, setLabel] = useState("");
   const [icon, setIcon] = useState(ICON_CHOICES[0]);
+  const [error, setError] = useState<string | null>(null);
+  // Habits whose real DB id isn't known yet (optimistic insert in flight).
+  // Toggling one would upsert a log against a phantom habit id, so it stays
+  // disabled until the create resolves with the real id.
+  const [pending, setPending] = useState<Set<string>>(new Set());
   const [, startTransition] = useTransition();
+
+  const clearPending = (id: string) =>
+    setPending((p) => {
+      const next = new Set(p);
+      next.delete(id);
+      return next;
+    });
+  const failMessage = (code?: string) =>
+    (code && (dict[code as keyof Dictionary] as string)) || dict["errors.writeNoRows"];
 
   function toggle(id: string) {
     let nextDone = false;
+    const snapshot = habits;
     setHabits((prev) =>
       prev.map((h) => {
         if (h.id !== id) return h;
@@ -38,9 +53,16 @@ export function HabitsList({
         return { ...h, done: nextDone, streak: nextDone ? h.streak + 1 : h.streak - 1 };
       }),
     );
+    setError(null);
     startTransition(async () => {
       const result = await toggleHabit(id, nextDone);
-      if (result.ok) showXp(result.xp);
+      if (result.ok) {
+        showXp(result.xp);
+      } else {
+        // Toggle didn't persist: roll back and surface the error.
+        setHabits(snapshot);
+        setError(failMessage(result.error));
+      }
     });
   }
 
@@ -49,18 +71,33 @@ export function HabitsList({
     const trimmed = label.trim();
     if (!trimmed) return;
 
+    const tempId = crypto.randomUUID();
     const optimistic: Habit = {
-      id: crypto.randomUUID(),
+      id: tempId,
       label: trimmed,
       icon,
       done: false,
       streak: 0,
     };
     setHabits((prev) => [...prev, optimistic]);
+    setPending((p) => new Set(p).add(tempId));
     setLabel("");
     setComposing(false);
+    setError(null);
     startTransition(async () => {
-      await createHabit(trimmed, icon);
+      const result = await createHabit(trimmed, icon);
+      if (result.ok) {
+        // Swap the temp id for the real one so a toggle targets the real row.
+        if (result.id) {
+          const realId = result.id;
+          setHabits((prev) => prev.map((h) => (h.id === tempId ? { ...h, id: realId } : h)));
+        }
+        clearPending(tempId);
+      } else {
+        setHabits((prev) => prev.filter((h) => h.id !== tempId));
+        clearPending(tempId);
+        setError(failMessage(result.error));
+      }
     });
   }
 
@@ -75,14 +112,21 @@ export function HabitsList({
         </span>
       </CardHeader>
 
+      {error && (
+        <p role="alert" className="mb-3 text-center text-sm text-ember">
+          {error}
+        </p>
+      )}
+
       <ul className="space-y-2">
         {habits.map((habit) => (
           <li key={habit.id}>
             <button
               onClick={() => toggle(habit.id)}
               aria-pressed={habit.done}
+              disabled={pending.has(habit.id)}
               className={cn(
-                "flex w-full items-center gap-3 rounded-xl border p-3 text-left transition",
+                "flex w-full items-center gap-3 rounded-xl border p-3 text-left transition disabled:opacity-50",
                 habit.done
                   ? "border-green-bright/30 bg-green/15"
                   : "border-border bg-surface-2 hover:border-accent/30",

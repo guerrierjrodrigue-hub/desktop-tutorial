@@ -97,11 +97,13 @@ export async function memorizeVerse(input: {
 
 /** Mark a reading-plan day as read (progress = the day just read). */
 export async function markReadingDay(planId: string, day: number): Promise<ActionResult> {
-  const check = validate(readingDaySchema, { planId, day });
-  if (!check.ok) return check.result;
-
+  // Demo mode first: seed ids aren't real uuids, so returning the no-op success
+  // before validation keeps optimistic UI intact instead of a spurious failure.
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
+
+  const check = validate(readingDaySchema, { planId, day });
+  if (!check.ok) return check.result;
 
   const { data: existing } = await ctx.supabase
     .from("reading_progress")

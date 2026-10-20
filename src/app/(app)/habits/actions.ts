@@ -19,14 +19,20 @@ export async function createHabit(label: string, icon: string): Promise<ActionRe
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
 
-  const { error } = await ctx.supabase.from("habits").insert({
-    user_id: ctx.userId,
-    label: check.data.label,
-    icon: check.data.icon,
-  });
+  const { data, error } = await ctx.supabase
+    .from("habits")
+    .insert({
+      user_id: ctx.userId,
+      label: check.data.label,
+      icon: check.data.icon,
+    })
+    .select("id")
+    .single();
   if (error) return logAndFail(error);
 
   revalidatePath("/habits");
   revalidatePath("/dashboard");
-  return { ok: true };
+  // Return the real id so the client swaps its temp id and a toggle right after
+  // adding targets the real habit row instead of a phantom one.
+  return { ok: true, id: (data as { id: string }).id };
 }

@@ -23,15 +23,20 @@ export async function createJournalEntry(input: {
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
 
-  const { error } = await ctx.supabase.from("journal_entries").insert({
-    user_id: ctx.userId,
-    title: check.data.title,
-    body: check.data.body,
-  });
+  const { data, error } = await ctx.supabase
+    .from("journal_entries")
+    .insert({
+      user_id: ctx.userId,
+      title: check.data.title,
+      body: check.data.body,
+    })
+    .select("id")
+    .single();
   if (error) return logAndFail(error);
 
   revalidatePath("/journal");
-  return { ok: true, xp: XP_REWARDS.journal };
+  // Return the real id so the client swaps its temp id (enables edit/delete).
+  return { ok: true, xp: XP_REWARDS.journal, id: (data as { id: string }).id };
 }
 
 const updateJournalSchema = journalSchema.extend({ id: z.string().uuid("errors.invalidId") });
@@ -42,18 +47,22 @@ export async function updateJournalEntry(input: {
   title: string;
   body: string;
 }): Promise<ActionResult> {
-  const check = validate(updateJournalSchema, input);
-  if (!check.ok) return check.result;
-
+  // Demo mode first: seed ids aren't real uuids, so returning the no-op success
+  // before validation keeps optimistic UI intact instead of a spurious failure.
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
 
-  const { error } = await ctx.supabase
+  const check = validate(updateJournalSchema, input);
+  if (!check.ok) return check.result;
+
+  const { data, error } = await ctx.supabase
     .from("journal_entries")
     .update({ title: check.data.title, body: check.data.body })
     .eq("id", check.data.id)
-    .eq("user_id", ctx.userId);
+    .eq("user_id", ctx.userId)
+    .select("id");
   if (error) return logAndFail(error);
+  if (!data || data.length === 0) return { ok: false, error: "errors.writeNoRows" };
 
   revalidatePath("/journal");
   return { ok: true };
@@ -61,18 +70,22 @@ export async function updateJournalEntry(input: {
 
 /** Delete one of the signed-in user's journal entries (owner-only via RLS). */
 export async function deleteJournalEntry(id: string): Promise<ActionResult> {
-  const check = validate(z.object({ id: z.string().uuid("errors.invalidId") }), { id });
-  if (!check.ok) return check.result;
-
+  // Demo mode first: seed ids aren't real uuids, so returning the no-op success
+  // before validation keeps optimistic UI intact instead of a spurious failure.
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
 
-  const { error } = await ctx.supabase
+  const check = validate(z.object({ id: z.string().uuid("errors.invalidId") }), { id });
+  if (!check.ok) return check.result;
+
+  const { data, error } = await ctx.supabase
     .from("journal_entries")
     .delete()
     .eq("id", check.data.id)
-    .eq("user_id", ctx.userId);
+    .eq("user_id", ctx.userId)
+    .select("id");
   if (error) return logAndFail(error);
+  if (!data || data.length === 0) return { ok: false, error: "errors.writeNoRows" };
 
   revalidatePath("/journal");
   return { ok: true };

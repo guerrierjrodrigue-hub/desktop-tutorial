@@ -14,7 +14,21 @@ export function PrayerJournal({ initial, dict }: { initial: PrayerRequest[]; dic
   const [composing, setComposing] = useState(false);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  // Prayers whose real DB id isn't known yet (optimistic insert in flight).
+  // Toggling one would update a phantom row, so it stays disabled until the
+  // create resolves with the real id.
+  const [pending, setPending] = useState<Set<string>>(new Set());
   const [, startTransition] = useTransition();
+
+  const clearPending = (id: string) =>
+    setPending((p) => {
+      const next = new Set(p);
+      next.delete(id);
+      return next;
+    });
+  const failMessage = (code?: string) =>
+    (code && (dict[code as keyof Dictionary] as string)) || dict["errors.writeNoRows"];
 
   function addPrayer(e: React.FormEvent) {
     e.preventDefault();
@@ -22,31 +36,52 @@ export function PrayerJournal({ initial, dict }: { initial: PrayerRequest[]; dic
     if (!trimmed) return;
 
     // Optimistic insert.
+    const tempId = crypto.randomUUID();
     const optimistic: PrayerRequest = {
-      id: crypto.randomUUID(),
+      id: tempId,
       title: trimmed,
       body: body.trim(),
       answered: false,
       createdAt: new Date().toISOString(),
     };
     setPrayers((prev) => [optimistic, ...prev]);
+    setPending((p) => new Set(p).add(tempId));
     setTitle("");
     setBody("");
     setComposing(false);
+    setError(null);
 
     startTransition(async () => {
       const result = await createPrayerRequest({ title: optimistic.title, body: optimistic.body });
-      if (result.ok) showXp(result.xp);
+      if (result.ok) {
+        // Swap the temp id for the real one so a toggle targets the real row.
+        if (result.id) {
+          const realId = result.id;
+          setPrayers((prev) => prev.map((p) => (p.id === tempId ? { ...p, id: realId } : p)));
+        }
+        clearPending(tempId);
+        showXp(result.xp);
+      } else {
+        setPrayers((prev) => prev.filter((p) => p.id !== tempId));
+        clearPending(tempId);
+        setError(failMessage(result.error));
+      }
     });
   }
 
   function toggleAnswered(id: string) {
+    const snapshot = prayers;
+    const next = !prayers.find((p) => p.id === id)?.answered;
     setPrayers((prev) =>
       prev.map((p) => (p.id === id ? { ...p, answered: !p.answered } : p)),
     );
-    const next = !prayers.find((p) => p.id === id)?.answered;
+    setError(null);
     startTransition(async () => {
-      await setPrayerAnswered(id, next);
+      const result = await setPrayerAnswered(id, next);
+      if (!result.ok) {
+        setPrayers(snapshot); // roll back the toggle that didn't persist
+        setError(failMessage(result.error));
+      }
     });
   }
 
@@ -89,6 +124,12 @@ export function PrayerJournal({ initial, dict }: { initial: PrayerRequest[]; dic
         </form>
       )}
 
+      {error && (
+        <p role="alert" className="mb-3 text-center text-sm text-ember">
+          {error}
+        </p>
+      )}
+
       {prayers.length === 0 ? (
         <p className="rounded-xl border border-dashed border-border bg-surface-2 p-6 text-center text-sm text-muted">
           {dict["spiritual.noPrayers"]}
@@ -104,8 +145,9 @@ export function PrayerJournal({ initial, dict }: { initial: PrayerRequest[]; dic
                 <button
                   onClick={() => toggleAnswered(p.id)}
                   aria-pressed={p.answered}
+                  disabled={pending.has(p.id)}
                   aria-label={p.answered ? dict["spiritual.markUnanswered"] : dict["spiritual.markAnswered"]}
-                  className="mt-0.5 shrink-0 transition hover:scale-110"
+                  className="mt-0.5 shrink-0 transition hover:scale-110 disabled:opacity-40"
                 >
                   {p.answered ? (
                     <CheckCircle2 className="size-4 text-green-bright" />

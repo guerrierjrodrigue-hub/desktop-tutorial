@@ -99,25 +99,55 @@ export function FoodLogger({ initial, dict }: { initial: FoodLogEntry[]; dict: D
   const [draft, setDraft] = useState<Draft>(emptyDraft);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editDraft, setEditDraft] = useState<Draft>(emptyDraft);
+  // Ids whose real DB id isn't known yet (optimistic insert in flight). Editing
+  // or deleting one would hit a phantom row, so those actions stay disabled.
+  const [pending, setPending] = useState<Set<string>>(new Set());
+  const [error, setError] = useState<string | null>(null);
   const [, startTransition] = useTransition();
 
   const total = entries.reduce((s, e) => s + e.calories, 0);
 
+  const clearPending = (id: string) =>
+    setPending((p) => {
+      const next = new Set(p);
+      next.delete(id);
+      return next;
+    });
+
+  const failMessage = (code?: string) =>
+    (code && (dict[code as keyof Dictionary] as string)) || dict["errors.writeNoRows"];
+
   function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!draft.name.trim()) return;
-    const entry = toEntry(draft, crypto.randomUUID());
+    const tempId = crypto.randomUUID();
+    const entry = toEntry(draft, tempId);
     setEntries((prev) => [...prev, entry]);
+    setPending((p) => new Set(p).add(tempId));
     setDraft(emptyDraft);
     setOpen(false);
+    setError(null);
     startTransition(async () => {
-      await createFoodLog({
+      const res = await createFoodLog({
         name: entry.name,
         calories: entry.calories,
         proteinG: entry.proteinG,
         carbsG: entry.carbsG,
         fatG: entry.fatG,
       });
+      if (res.ok) {
+        // Swap the temp id for the real one so edit/delete target the real row.
+        if (res.id) {
+          const realId = res.id;
+          setEntries((prev) => prev.map((x) => (x.id === tempId ? { ...x, id: realId } : x)));
+        }
+        clearPending(tempId); // demo mode (no id) still becomes editable in-session
+      } else {
+        // Insert failed: drop the optimistic row and surface the error.
+        setEntries((prev) => prev.filter((x) => x.id !== tempId));
+        clearPending(tempId);
+        setError(failMessage(res.error));
+      }
     });
   }
 
@@ -135,11 +165,14 @@ export function FoodLogger({ initial, dict }: { initial: FoodLogEntry[]; dict: D
   function saveEdit(e: React.FormEvent) {
     e.preventDefault();
     if (!editingId || !editDraft.name.trim()) return;
-    const updated = toEntry(editDraft, editingId);
-    setEntries((prev) => prev.map((x) => (x.id === editingId ? updated : x)));
+    const id = editingId;
+    const previous = entries.find((x) => x.id === id);
+    const updated = toEntry(editDraft, id);
+    setEntries((prev) => prev.map((x) => (x.id === id ? updated : x)));
     setEditingId(null);
+    setError(null);
     startTransition(async () => {
-      await updateFoodLog({
+      const res = await updateFoodLog({
         id: updated.id,
         name: updated.name,
         calories: updated.calories,
@@ -147,14 +180,24 @@ export function FoodLogger({ initial, dict }: { initial: FoodLogEntry[]; dict: D
         carbsG: updated.carbsG,
         fatG: updated.fatG,
       });
+      if (!res.ok) {
+        if (previous) setEntries((prev) => prev.map((x) => (x.id === id ? previous : x)));
+        setError(failMessage(res.error));
+      }
     });
   }
 
   function remove(id: string) {
+    const snapshot = entries;
     setEntries((prev) => prev.filter((x) => x.id !== id));
     if (editingId === id) setEditingId(null);
+    setError(null);
     startTransition(async () => {
-      await deleteFoodLog(id);
+      const res = await deleteFoodLog(id);
+      if (!res.ok) {
+        setEntries(snapshot); // restore the row the delete didn't actually remove
+        setError(failMessage(res.error));
+      }
     });
   }
 
@@ -175,6 +218,12 @@ export function FoodLogger({ initial, dict }: { initial: FoodLogEntry[]; dict: D
             {dict["nutrition.logIt"]}
           </Button>
         </form>
+      )}
+
+      {error && (
+        <p role="alert" className="mb-3 text-center text-sm text-ember">
+          {error}
+        </p>
       )}
 
       {entries.length === 0 ? (
@@ -224,16 +273,18 @@ export function FoodLogger({ initial, dict }: { initial: FoodLogEntry[]; dict: D
                     <button
                       type="button"
                       onClick={() => startEdit(e)}
+                      disabled={pending.has(e.id)}
                       aria-label={dict["nutrition.editMealAria"].replace("{name}", e.name)}
-                      className="grid size-7 place-items-center rounded-md text-muted transition hover:bg-elevated hover:text-foreground"
+                      className="grid size-7 place-items-center rounded-md text-muted transition hover:bg-elevated hover:text-foreground disabled:opacity-40"
                     >
                       <Pencil className="size-3.5" />
                     </button>
                     <button
                       type="button"
                       onClick={() => remove(e.id)}
+                      disabled={pending.has(e.id)}
                       aria-label={dict["nutrition.deleteMealAria"].replace("{name}", e.name)}
-                      className="grid size-7 place-items-center rounded-md text-muted transition hover:bg-elevated hover:text-ember"
+                      className="grid size-7 place-items-center rounded-md text-muted transition hover:bg-elevated hover:text-ember disabled:opacity-40"
                     >
                       <Trash2 className="size-3.5" />
                     </button>

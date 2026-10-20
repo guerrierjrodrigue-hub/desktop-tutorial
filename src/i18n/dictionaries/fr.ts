@@ -43,6 +43,7 @@ const fr: Dictionary = {
   "errors.foodNameRequired": "Un nom d'aliment est requis.",
   "errors.amountInvalid": "Saisis une quantité valide.",
   "errors.invalidId": "Identifiant invalide.",
+  "errors.writeNoRows": "Impossible d'appliquer le changement, réessaie.",
   "errors.verseRequired": "Un verset est requis.",
   "errors.challengeTitleRequired": "Un titre est requis.",
   "errors.goalRequired": "Choisis au moins un objectif.",
