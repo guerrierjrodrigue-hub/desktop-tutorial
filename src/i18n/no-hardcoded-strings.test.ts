@@ -25,6 +25,9 @@ const GUARDED_FILES = [
   "profile/profile-editor.tsx",
   "coach/coach-chat.tsx",
   "layout/topbar.tsx",
+  "course/new-run-form.tsx",
+  "course/interval-timer.tsx",
+  "course/running-tools.tsx",
 ];
 
 // Proper nouns, brand/product names and bare units are not translatable.

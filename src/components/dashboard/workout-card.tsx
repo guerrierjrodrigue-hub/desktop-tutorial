@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { getPrograms, getProgramBySlug } from "@/lib/queries/programs";
 import { getTodayPlan } from "@/lib/queries/today-plan";
 import { getWorkoutDoneToday } from "@/lib/queries/stats";
+import { getCurrentUser } from "@/lib/queries/profile";
+import { RunTodayCard } from "@/components/dashboard/run-today-card";
 import { formatDuration } from "@/lib/utils";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
@@ -13,6 +15,12 @@ import { getDictionary } from "@/i18n/get-dictionary";
 export async function WorkoutCard() {
   const locale = await getLocale();
   const dict = await getDictionary(locale);
+
+  // Pure runners get the run session of the day instead of a strength workout.
+  const user = await getCurrentUser();
+  if (user.primaryActivity === "running") {
+    return <RunTodayCard />;
+  }
   const [programs, today, workoutDone] = await Promise.all([
     getPrograms(locale),
     getTodayPlan(locale),

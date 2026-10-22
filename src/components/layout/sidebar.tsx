@@ -47,14 +47,16 @@ function NavLink({ item, active, dict }: { item: NavItem; active: boolean; dict:
 export function Sidebar({
   dict,
   freeMode = false,
+  primaryActivity,
 }: {
   dict: Dictionary;
   freeMode?: boolean;
+  primaryActivity?: "strength" | "running" | "both";
 }) {
   const pathname = usePathname();
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + "/");
-  const groups = getNavGroups(getPurposeNavItems());
+  const groups = getNavGroups(getPurposeNavItems(), primaryActivity);
   const standaloneNavItems = getStandaloneNavItems();
 
   return (

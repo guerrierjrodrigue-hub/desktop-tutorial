@@ -14,6 +14,7 @@ import {
   Trophy,
   User,
   Compass,
+  Footprints,
 } from "lucide-react";
 
 export interface NavItem {
@@ -45,17 +46,27 @@ export const dashboardNavItem: NavItem = {
  * adapt to the signed-in user's identities — see `getPurposeNavItems` in
  * `@/lib/personalization` — but always include Spiritual + Bible.
  */
-export function getNavGroups(purposeItems: NavItem[]): NavGroup[] {
+export function getNavGroups(
+  purposeItems: NavItem[],
+  primaryActivity?: "strength" | "running" | "both",
+): NavGroup[] {
+  // Runners (and "both") get a Running entry in the Body pillar.
+  const showRunning = primaryActivity === "running" || primaryActivity === "both";
+  const bodyItems: NavItem[] = [
+    { href: "/fitness", label: "Fitness", labelKey: "nav.fitness", icon: Dumbbell },
+  ];
+  if (showRunning) {
+    bodyItems.push({ href: "/course", label: "Running", labelKey: "nav.course", icon: Footprints });
+  }
+  bodyItems.push({ href: "/nutrition", label: "Nutrition", labelKey: "nav.nutrition", icon: Apple });
+
   return [
     {
       id: "body",
       label: "Body",
       labelKey: "nav.body",
       icon: Dumbbell,
-      items: [
-        { href: "/fitness", label: "Fitness", labelKey: "nav.fitness", icon: Dumbbell },
-        { href: "/nutrition", label: "Nutrition", labelKey: "nav.nutrition", icon: Apple },
-      ],
+      items: bodyItems,
     },
     {
       id: "mind",

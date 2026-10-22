@@ -9,6 +9,7 @@ const onboardingSchema = z.object({
   goals: z.array(z.string().min(1)).min(1, "errors.goalRequired").max(20),
   identities: z.array(z.string().min(1)).min(1, "errors.identityRequired").max(20),
   level: z.enum(["beginner", "intermediate", "advanced"]).optional(),
+  primaryActivity: z.enum(["strength", "running", "both"]).optional(),
   equipment: z.enum(["none", "home", "gym"]).optional(),
   trainingDays: z.number().int().min(1).max(7).optional(),
   reminderTime: z.string().regex(/^\d{2}:\d{2}$/).optional(),
@@ -21,6 +22,7 @@ export interface OnboardingInput {
   goals: string[];
   identities: string[];
   level?: "beginner" | "intermediate" | "advanced";
+  primaryActivity?: "strength" | "running" | "both";
   equipment?: "none" | "home" | "gym";
   trainingDays?: number;
   reminderTime?: string;
@@ -65,6 +67,7 @@ export async function saveOnboarding(input: OnboardingInput): Promise<ActionResu
     onboarded_at: new Date().toISOString(),
   };
   if (input.level) update.level = input.level;
+  if (input.primaryActivity) update.primary_activity = input.primaryActivity;
   if (input.equipment) update.equipment = input.equipment;
   if (input.trainingDays) update.training_days = input.trainingDays;
   if (input.reminderTime) update.reminder_time = input.reminderTime;

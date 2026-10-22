@@ -35,3 +35,20 @@ export async function signedVerseImageUrl(input: {
   if (sig) qs.set("sig", sig);
   return `/api/verse-image?${qs.toString()}`;
 }
+
+/** Build a signed /api/run-image URL for an after-run share card. */
+export async function signedRunImageUrl(input: {
+  distance: string;
+  time: string;
+  pace: string;
+}): Promise<string> {
+  const params: Record<string, string> = {
+    distance: input.distance,
+    time: input.time,
+    pace: input.pace,
+  };
+  const sig = signShareParams(params);
+  const qs = new URLSearchParams(params);
+  if (sig) qs.set("sig", sig);
+  return `/api/run-image?${qs.toString()}`;
+}

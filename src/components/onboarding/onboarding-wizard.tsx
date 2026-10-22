@@ -39,6 +39,7 @@ export function OnboardingWizard({
   const [goals, setGoals] = useState<string[]>(initialGoals ?? []);
   const [identities, setIdentities] = useState<string[]>(initialIdentities ?? []);
   const [level, setLevel] = useState<"beginner" | "intermediate" | "advanced">("beginner");
+  const [primaryActivity, setPrimaryActivity] = useState<"strength" | "running" | "both">("strength");
   const [equipment, setEquipment] = useState<"none" | "home" | "gym">("home");
   const [trainingDays, setTrainingDays] = useState(3);
   const [reminderTime, setReminderTime] = useState("07:00");
@@ -75,6 +76,7 @@ export function OnboardingWizard({
         goals,
         identities,
         level,
+        primaryActivity,
         equipment,
         trainingDays,
         reminderTime,
@@ -215,6 +217,32 @@ export function OnboardingWizard({
               {dict["onboarding.trainingSubtitle"]}
             </p>
             <div className="mt-6 space-y-4 text-sm">
+              <div>
+                <p className="mb-1.5 text-xs font-semibold text-muted">{dict["onboarding.activityTitle"]}</p>
+                <p className="mb-2 text-xs text-faint">{dict["onboarding.activitySubtitle"]}</p>
+                <div className="flex flex-wrap gap-2">
+                  {([
+                    ["strength", dict["onboarding.activityStrength"]],
+                    ["running", dict["onboarding.activityRunning"]],
+                    ["both", dict["onboarding.activityBoth"]],
+                  ] as const).map(([id, label]) => (
+                    <button
+                      key={id}
+                      type="button"
+                      onClick={() => setPrimaryActivity(id)}
+                      aria-pressed={primaryActivity === id}
+                      className={cn(
+                        "rounded-full border px-3 py-1.5 text-sm transition",
+                        primaryActivity === id
+                          ? "border-accent/50 bg-accent/10 text-foreground"
+                          : "border-border bg-surface-2 text-muted hover:border-accent/30",
+                      )}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
               <div>
                 <p className="mb-1.5 text-xs font-semibold text-muted">{dict["onboarding.levelLabel"]}</p>
                 <div className="flex flex-wrap gap-2">

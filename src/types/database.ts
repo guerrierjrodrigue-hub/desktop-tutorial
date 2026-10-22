@@ -55,6 +55,77 @@ export interface ProfileRow {
   joined_at: Timestamptz;
   updated_at: Timestamptz;
   timezone: string;
+  /** Runner mode: "strength" | "running" | "both" (null until onboarded). */
+  primary_activity: "strength" | "running" | "both" | null;
+}
+
+/** One logged run (owner-only). pace_s_per_km is DB-generated. */
+export interface RunRow {
+  id: string;
+  user_id: string;
+  ran_on: DateStr;
+  distance_m: number;
+  duration_s: number;
+  pace_s_per_km: number;
+  kind: "easy" | "tempo" | "intervals" | "long" | "race";
+  effort: number | null;
+  note: string | null;
+  source: "manual" | "chrono";
+  plan_session_id: string | null;
+  created_at: Timestamptz;
+}
+
+/** One segment of a plan session. */
+export interface RunSegment {
+  kind: "warmup" | "run" | "walk" | "cooldown";
+  seconds: number;
+}
+
+/** Per-week verse + prayer carried on a run plan (fr/en). */
+export interface RunWeekMeta {
+  week: number;
+  verse_ref: string;
+  verse_text: string;
+  verse_ref_en: string;
+  verse_text_en: string;
+  prayer: string;
+  prayer_en: string;
+}
+
+export interface RunPlanRow {
+  id: string;
+  slug: string;
+  title: string;
+  title_fr: string | null;
+  description: string | null;
+  description_fr: string | null;
+  weeks: number;
+  goal_distance_m: number | null;
+  weeks_meta: RunWeekMeta[];
+  sort_order: number;
+  created_at: Timestamptz;
+}
+
+export interface RunPlanSessionRow {
+  id: string;
+  plan_id: string;
+  week: number;
+  day_in_week: number;
+  title: string;
+  title_fr: string | null;
+  segments: RunSegment[];
+  sort_order: number;
+  created_at: Timestamptz;
+}
+
+export interface RunGoalRow {
+  id: string;
+  user_id: string;
+  target_distance_m: number;
+  race_date: DateStr | null;
+  target_time_s: number | null;
+  created_at: Timestamptz;
+  updated_at: Timestamptz;
 }
 
 export interface ProgramRow {
@@ -389,6 +460,10 @@ export interface Database {
       push_subscriptions: T<PushSubscriptionRow>;
       notification_preferences: T<NotificationPreferencesRow>;
       xp_events: T<XpEventRow>;
+      runs: T<RunRow>;
+      run_plans: T<RunPlanRow>;
+      run_plan_sessions: T<RunPlanSessionRow>;
+      run_goals: T<RunGoalRow>;
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
