@@ -44,6 +44,77 @@ export interface UserProfile {
   onboardedAt?: string;
   /** Whether the member appears (by name) in leaderboards and groups. */
   showOnLeaderboard: boolean;
+  /** Runner mode: "strength" | "running" | "both". */
+  primaryActivity?: "strength" | "running" | "both";
+}
+
+export type RunKind = "easy" | "tempo" | "intervals" | "long" | "race";
+
+/** A logged run (metric units; pace is seconds per kilometre). */
+export interface Run {
+  id: string;
+  ranOn: string;
+  distanceM: number;
+  durationS: number;
+  paceSPerKm: number;
+  kind: RunKind;
+  effort?: number;
+  note?: string;
+  source: "manual" | "chrono";
+  planSessionId?: string;
+}
+
+export interface RunSegment {
+  kind: "warmup" | "run" | "walk" | "cooldown";
+  seconds: number;
+}
+
+export interface RunPlanSession {
+  id: string;
+  planId: string;
+  week: number;
+  dayInWeek: number;
+  title: string;
+  segments: RunSegment[];
+}
+
+export interface RunWeek {
+  week: number;
+  verseRef: string;
+  verseText: string;
+  prayer: string;
+  sessions: RunPlanSession[];
+}
+
+export interface RunPlan {
+  id: string;
+  slug: string;
+  title: string;
+  description: string;
+  weeks: number;
+  goalDistanceM?: number;
+  weekMeta: RunWeek[];
+}
+
+export interface RunGoal {
+  id: string;
+  targetDistanceM: number;
+  raceDate?: string;
+  targetTimeS?: number;
+}
+
+/** Current-week running summary for the /course dashboard. */
+export interface RunWeekStats {
+  distanceM: number;
+  runs: number;
+  longestM: number;
+}
+
+/** Personal records at the standard distances (fastest duration in seconds). */
+export interface RunRecords {
+  oneK?: number;
+  fiveK?: number;
+  tenK?: number;
 }
 
 export interface Exercise {
