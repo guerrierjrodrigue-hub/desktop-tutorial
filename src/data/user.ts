@@ -19,5 +19,5 @@ export const currentUser: UserProfile = {
   primaryGoals: ["become-disciplined", "grow-spiritually"],
   onboardedAt: "2025-11-02",
   showOnLeaderboard: true,
-  primaryActivity: "both",
+  // No primary activity chosen yet, so demo shows the runner-mode discovery card.
 };

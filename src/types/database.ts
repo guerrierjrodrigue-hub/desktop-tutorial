@@ -113,6 +113,8 @@ export interface RunPlanSessionRow {
   day_in_week: number;
   title: string;
   title_fr: string | null;
+  instructions: string | null;
+  instructions_fr: string | null;
   segments: RunSegment[];
   sort_order: number;
   created_at: Timestamptz;

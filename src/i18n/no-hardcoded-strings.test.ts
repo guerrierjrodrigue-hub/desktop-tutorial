@@ -28,6 +28,9 @@ const GUARDED_FILES = [
   "course/new-run-form.tsx",
   "course/interval-timer.tsx",
   "course/running-tools.tsx",
+  "course/run-list.tsx",
+  "profile/activity-setting.tsx",
+  "dashboard/runner-mode-promo.tsx",
 ];
 
 // Proper nouns, brand/product names and bare units are not translatable.
