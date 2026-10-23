@@ -1,37 +1,22 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Plus, Route, Timer, Footprints, Flame } from "lucide-react";
+import { Plus, Route, Timer, Footprints } from "lucide-react";
 import { Topbar } from "@/components/layout/topbar";
 import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { RunList } from "@/components/course/run-list";
 import { getRuns, weekStats, weeklyDistances, records } from "@/lib/queries/running";
 import { getUserTimezone } from "@/lib/timezone";
 import { getUserToday } from "@/lib/date";
 import { formatDuration, formatKm, formatPace } from "@/lib/running";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
-import type { Dictionary } from "@/i18n/dictionaries/en";
-import type { LocaleCode } from "@/i18n/locales";
-import type { RunKind } from "@/types";
 
 export async function generateMetadata(): Promise<Metadata> {
   const dict = await getDictionary(await getLocale());
   return { title: dict["meta.course"] };
-}
-
-function kindLabel(kind: RunKind, dict: Dictionary): string {
-  return dict[`course.kind.${kind}` as keyof Dictionary] as string;
-}
-
-function formatRunDate(iso: string, locale: LocaleCode): string {
-  const tag = locale === "fr" ? "fr-CA" : "en-US";
-  return new Date(iso + "T00:00:00").toLocaleDateString(tag, {
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-  });
 }
 
 export default async function CoursePage() {
@@ -47,8 +32,10 @@ export default async function CoursePage() {
   const prs = records(runs);
   const maxWeek = Math.max(1, ...series.map((s) => s.distanceM));
 
-  const recordRows: { label: string; value?: number }[] = [
-    { label: "1 km", value: prs.oneK },
+  // The 1 km record is a best pace (no measured splits yet), shown as m:ss /km;
+  // the 5/10 km records are finish-time estimates shown as a duration.
+  const recordRows: { label: string; value?: number; isPace?: boolean }[] = [
+    { label: dict["course.recordBestPace"], value: prs.oneK, isPace: true },
     { label: "5 km", value: prs.fiveK },
     { label: "10 km", value: prs.tenK },
   ];
@@ -119,7 +106,18 @@ export default async function CoursePage() {
               <div key={r.label} className="rounded-xl border border-border bg-surface-2 p-4 text-center">
                 <p className="text-xs font-semibold uppercase tracking-wide text-faint">{r.label}</p>
                 <p className="mt-1 font-serif text-2xl font-semibold">
-                  {r.value ? formatDuration(r.value) : <span className="text-base text-muted">{dict["course.noRecord"]}</span>}
+                  {r.value ? (
+                    r.isPace ? (
+                      <>
+                        {formatPace(r.value)}
+                        <span className="ml-1 text-sm text-muted">{dict["course.tools.perKm"]}</span>
+                      </>
+                    ) : (
+                      formatDuration(r.value)
+                    )
+                  ) : (
+                    <span className="text-base text-muted">{dict["course.noRecord"]}</span>
+                  )}
                 </p>
               </div>
             ))}
@@ -131,34 +129,7 @@ export default async function CoursePage() {
           <CardHeader>
             <CardTitle>{dict["course.recentRuns"]}</CardTitle>
           </CardHeader>
-          {runs.length === 0 ? (
-            <p className="rounded-xl border border-dashed border-border bg-surface-2 p-6 text-center text-sm text-muted">
-              {dict["course.noRuns"]}
-            </p>
-          ) : (
-            <ul className="space-y-2">
-              {runs.map((r) => (
-                <li
-                  key={r.id}
-                  data-testid="run-row"
-                  className="flex items-center justify-between gap-2 rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm"
-                >
-                  <span className="flex min-w-0 flex-col">
-                    <span className="font-medium">{formatKm(r.distanceM)} km</span>
-                    <span className="text-xs text-faint">{formatRunDate(r.ranOn, locale)}</span>
-                  </span>
-                  <span className="flex shrink-0 items-center gap-3 text-xs text-muted">
-                    <span>{formatDuration(r.durationS)}</span>
-                    <span className="flex items-center gap-1">
-                      <Flame className="size-3.5 text-ember/70" />
-                      {formatPace(r.paceSPerKm)}
-                    </span>
-                    <span className="hidden rounded-full bg-elevated px-2 py-0.5 sm:inline">{kindLabel(r.kind, dict)}</span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
+          <RunList initial={runs} dict={dict} locale={locale} />
         </Card>
       </main>
     </>

@@ -81,6 +81,78 @@ export async function createRun(input: {
   return { ok: true, id: (inserted as { id: string }).id, xp: earnsXp ? XP_REWARDS.workout : undefined };
 }
 
+const updateRunSchema = z.object({
+  id: z.string().uuid("errors.invalidId"),
+  distanceM: z.number().int().positive("course.error.distance").max(100000, "course.error.tooFar"),
+  durationS: z.number().int().positive("course.error.duration"),
+  kind: z.enum(["easy", "tempo", "intervals", "long", "race"]),
+  effort: z.number().int().min(1).max(10).optional(),
+  note: z.string().trim().max(500, "errors.tooLong").optional(),
+});
+
+/** Edit one of the signed-in user's runs, with the same plausibility limits. */
+export async function updateRun(input: {
+  id: string;
+  distanceM: number;
+  durationS: number;
+  kind: "easy" | "tempo" | "intervals" | "long" | "race";
+  effort?: number;
+  note?: string;
+}): Promise<ActionResult> {
+  const ctx = await getAuthedContext();
+  if (!ctx) return demoOk;
+
+  const check = validate(updateRunSchema, input);
+  if (!check.ok) return check.result;
+  const data = check.data;
+
+  const limit = validateRun(data.distanceM, data.durationS);
+  if (!limit.ok) return { ok: false, error: limit.error };
+
+  const { data: rows, error } = await ctx.supabase
+    .from("runs")
+    .update({
+      distance_m: data.distanceM,
+      duration_s: data.durationS,
+      kind: data.kind,
+      effort: data.effort ?? null,
+      note: data.note ?? null,
+    })
+    .eq("id", data.id)
+    .eq("user_id", ctx.userId)
+    .select("id");
+  if (error) return logAndFail(error);
+  if (!rows || rows.length === 0) return { ok: false, error: "errors.writeNoRows" };
+
+  revalidatePath("/course");
+  return { ok: true };
+}
+
+/**
+ * Delete one of the signed-in user's runs. A DB trigger (ka_unaward_run_xp)
+ * takes back the day's run XP when the removed run was its only qualifying one.
+ */
+export async function deleteRun(id: string): Promise<ActionResult> {
+  const ctx = await getAuthedContext();
+  if (!ctx) return demoOk;
+
+  const check = validate(z.string().uuid("errors.invalidId"), id);
+  if (!check.ok) return check.result;
+
+  const { data: rows, error } = await ctx.supabase
+    .from("runs")
+    .delete()
+    .eq("id", check.data)
+    .eq("user_id", ctx.userId)
+    .select("id");
+  if (error) return logAndFail(error);
+  if (!rows || rows.length === 0) return { ok: false, error: "errors.writeNoRows" };
+
+  revalidatePath("/course");
+  revalidatePath("/dashboard");
+  return { ok: true };
+}
+
 const goalSchema = z.object({
   targetDistanceM: z.number().int().positive("course.error.distance").max(100000, "course.error.tooFar"),
   raceDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),

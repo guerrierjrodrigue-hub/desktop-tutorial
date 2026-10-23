@@ -46,19 +46,13 @@ export const dashboardNavItem: NavItem = {
  * adapt to the signed-in user's identities — see `getPurposeNavItems` in
  * `@/lib/personalization` — but always include Spiritual + Bible.
  */
-export function getNavGroups(
-  purposeItems: NavItem[],
-  primaryActivity?: "strength" | "running" | "both",
-): NavGroup[] {
-  // Runners (and "both") get a Running entry in the Body pillar.
-  const showRunning = primaryActivity === "running" || primaryActivity === "both";
+export function getNavGroups(purposeItems: NavItem[]): NavGroup[] {
+  // Running is shown to everyone so the mode is discoverable (Y2).
   const bodyItems: NavItem[] = [
     { href: "/fitness", label: "Fitness", labelKey: "nav.fitness", icon: Dumbbell },
+    { href: "/course", label: "Running", labelKey: "nav.course", icon: Footprints },
+    { href: "/nutrition", label: "Nutrition", labelKey: "nav.nutrition", icon: Apple },
   ];
-  if (showRunning) {
-    bodyItems.push({ href: "/course", label: "Running", labelKey: "nav.course", icon: Footprints });
-  }
-  bodyItems.push({ href: "/nutrition", label: "Nutrition", labelKey: "nav.nutrition", icon: Apple });
 
   return [
     {

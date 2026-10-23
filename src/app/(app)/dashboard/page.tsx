@@ -14,7 +14,9 @@ import { TransformationScoreCard } from "@/components/dashboard/transformation-s
 import { RecommendationsCard } from "@/components/dashboard/recommendations-card";
 import { QuoteOfDayCard } from "@/components/dashboard/quote-of-day-card";
 import { DashboardGrid } from "@/components/dashboard/dashboard-grid";
+import { RunnerModePromo } from "@/components/dashboard/runner-mode-promo";
 import { getUserPreferences } from "@/lib/queries/preferences";
+import { getCurrentUser } from "@/lib/queries/profile";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { timed } from "@/lib/perf";
@@ -28,8 +30,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function DashboardPage() {
   const locale = await getLocale();
-  const [{ dashboardLayout }, dict] = await timed("dashboard", () =>
-    Promise.all([getUserPreferences(), getDictionary(locale)]),
+  const [{ dashboardLayout }, dict, user] = await timed("dashboard", () =>
+    Promise.all([getUserPreferences(), getDictionary(locale), getCurrentUser()]),
   );
 
   const widgets = [
@@ -52,6 +54,11 @@ export default async function DashboardPage() {
       <Topbar />
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6">
         <Greeting />
+        {!user.primaryActivity && (
+          <div className="mt-6">
+            <RunnerModePromo dict={dict} />
+          </div>
+        )}
         <div className="mt-6">
           <DashboardGrid widgets={widgets} initialLayout={dashboardLayout} dict={dict} />
         </div>

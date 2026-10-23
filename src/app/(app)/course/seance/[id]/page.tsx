@@ -36,6 +36,11 @@ export default async function RunSessionPage({
           <ArrowLeft className="size-4" /> {planTitle}
         </Link>
         <PageHeader title={session.title} subtitle={dict["course.timer.title"]} />
+        {session.instructions && (
+          <p className="mb-4 rounded-xl border border-border bg-surface-2 p-3 text-sm text-muted">
+            {session.instructions}
+          </p>
+        )}
         <IntervalTimer sessionId={session.id} segments={session.segments} dict={dict} locale={locale} />
       </main>
     </>

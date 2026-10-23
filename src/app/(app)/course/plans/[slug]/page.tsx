@@ -72,15 +72,20 @@ export default async function RunPlanDetailPage({
                   <li key={session.id}>
                     <Link
                       href={`/course/seance/${session.id}`}
-                      className="flex items-center justify-between gap-2 rounded-lg border border-border bg-surface-2 px-3 py-2.5 text-sm transition hover:border-accent/40"
+                      className="flex items-start justify-between gap-2 rounded-lg border border-border bg-surface-2 px-3 py-2.5 text-sm transition hover:border-accent/40"
                     >
                       <span className="min-w-0">
-                        <span className="font-medium">{session.title}</span>
-                        <span className="ml-2 text-xs text-faint">
-                          {formatDuration(segmentsTotalSeconds(session.segments))}
+                        <span className="flex items-baseline gap-2">
+                          <span className="font-medium">{session.title}</span>
+                          <span className="text-xs text-faint">
+                            {formatDuration(segmentsTotalSeconds(session.segments))}
+                          </span>
                         </span>
+                        {session.instructions && (
+                          <span className="mt-0.5 block text-xs text-muted">{session.instructions}</span>
+                        )}
                       </span>
-                      <span className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-accent-bright">
+                      <span className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-xs font-semibold text-accent-bright">
                         <Timer className="size-3.5" /> {dict["course.plan.startSession"]}
                       </span>
                     </Link>

@@ -37,6 +37,27 @@ const profileSchema = z.object({
     .optional(),
 });
 
+/** Set the signed-in user's primary activity (strength / running / both). */
+export async function setPrimaryActivity(
+  value: "strength" | "running" | "both",
+): Promise<ActionResult> {
+  const check = validate(z.enum(["strength", "running", "both"]), value);
+  if (!check.ok) return check.result;
+
+  const ctx = await getAuthedContext();
+  if (!ctx) return demoOk;
+
+  const { error } = await ctx.supabase
+    .from("profiles")
+    .update({ primary_activity: check.data })
+    .eq("id", ctx.userId);
+  if (error) return logAndFail(error);
+
+  revalidatePath("/profile");
+  revalidatePath("/dashboard");
+  return { ok: true };
+}
+
 /** Update the signed-in user's profile details. */
 export async function updateProfileAction(
   input: ProfileUpdateInput,

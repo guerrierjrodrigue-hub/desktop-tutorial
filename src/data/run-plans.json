@@ -1,0 +1,2678 @@
+{
+  "plans": [
+    {
+      "slug": "c5k-8",
+      "title": {
+        "fr": "5 km en 8 semaines",
+        "en": "5k in 8 weeks"
+      },
+      "description": {
+        "fr": "De la marche-course au 5 km en continu, trois séances par semaine: facile, rythme et sortie longue.",
+        "en": "From walk-run intervals to a continuous 5k, three sessions a week: easy, tempo and long."
+      },
+      "goalDistanceM": 5000,
+      "weeks": [
+        {
+          "week": 1,
+          "verseRef": {
+            "fr": "1 Corinthiens 9.24",
+            "en": "1 Corinthians 9:24"
+          },
+          "verseText": {
+            "fr": "Ne savez-vous pas que ceux qui courent dans le stade courent tous, mais qu'un seul remporte le prix? Courez de manière à le remporter.",
+            "en": "Don't you know that those who run in a race all run, but one receives the prize? Run like that, that you may win."
+          },
+          "prayer": {
+            "fr": "Seigneur, merci pour ce corps que tu m'as donné. Donne-moi de commencer avec humilité et de finir avec joie.",
+            "en": "Lord, thank you for this body you gave me. Help me begin in humility and finish with joy."
+          },
+          "sessions": [
+            {
+              "dayInWeek": 1,
+              "type": "easy",
+              "title": {
+                "fr": "Footing facile",
+                "en": "Easy run"
+              },
+              "instructions": {
+                "fr": "Cours à une allure où tu peux parler. Alterne course et marche sans forcer.",
+                "en": "Run at a pace where you can talk. Alternate running and walking without straining."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 60
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "run",
+                  "seconds": 60
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "run",
+                  "seconds": 60
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "run",
+                  "seconds": 60
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "run",
+                  "seconds": 60
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "run",
+                  "seconds": 60
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "run",
+                  "seconds": 60
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "run",
+                  "seconds": 60
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 2,
+              "type": "tempo",
+              "title": {
+                "fr": "Séance de rythme",
+                "en": "Tempo session"
+              },
+              "instructions": {
+                "fr": "Sur les portions de course, accélère légèrement: un effort soutenu mais maîtrisé.",
+                "en": "On the running portions, pick it up slightly: a strong but controlled effort."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 30
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 30
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 30
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 30
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 30
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 30
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 30
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 30
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 30
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 30
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 3,
+              "type": "long",
+              "title": {
+                "fr": "Sortie longue",
+                "en": "Long run"
+              },
+              "instructions": {
+                "fr": "Allonge le temps de course et reste très à l'aise. L'objectif est la durée, pas la vitesse.",
+                "en": "Extend your running time and stay very relaxed. The goal is time on feet, not speed."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 120
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "run",
+                  "seconds": 120
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "run",
+                  "seconds": 120
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "run",
+                  "seconds": 120
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "week": 2,
+          "verseRef": {
+            "fr": "Hébreux 12.1",
+            "en": "Hebrews 12:1"
+          },
+          "verseText": {
+            "fr": "Nous donc aussi, puisque nous sommes environnés d'une si grande nuée de témoins, rejetons tout fardeau, et le péché qui nous enveloppe si facilement, et courons avec persévérance dans la carrière qui nous est ouverte,",
+            "en": "Therefore let us also, seeing we are surrounded by so great a cloud of witnesses, lay aside every weight and the sin which so easily entangles us, and let's run with perseverance the race that is set before us,"
+          },
+          "prayer": {
+            "fr": "Père, quand mon souffle devient court, rappelle-moi que ta force se montre dans ma faiblesse.",
+            "en": "Father, when my breath runs short, remind me that your strength shows in my weakness."
+          },
+          "sessions": [
+            {
+              "dayInWeek": 1,
+              "type": "easy",
+              "title": {
+                "fr": "Footing facile",
+                "en": "Easy run"
+              },
+              "instructions": {
+                "fr": "Cours à une allure où tu peux parler. Alterne course et marche sans forcer.",
+                "en": "Run at a pace where you can talk. Alternate running and walking without straining."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 90
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "run",
+                  "seconds": 90
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "run",
+                  "seconds": 90
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "run",
+                  "seconds": 90
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "run",
+                  "seconds": 90
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "run",
+                  "seconds": 90
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 2,
+              "type": "tempo",
+              "title": {
+                "fr": "Séance de rythme",
+                "en": "Tempo session"
+              },
+              "instructions": {
+                "fr": "Sur les portions de course, accélère légèrement: un effort soutenu mais maîtrisé.",
+                "en": "On the running portions, pick it up slightly: a strong but controlled effort."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 45
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 45
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 45
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 45
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 45
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 45
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 45
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 45
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 3,
+              "type": "long",
+              "title": {
+                "fr": "Sortie longue",
+                "en": "Long run"
+              },
+              "instructions": {
+                "fr": "Allonge le temps de course et reste très à l'aise. L'objectif est la durée, pas la vitesse.",
+                "en": "Extend your running time and stay very relaxed. The goal is time on feet, not speed."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 180
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "run",
+                  "seconds": 180
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "run",
+                  "seconds": 180
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "run",
+                  "seconds": 180
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "week": 3,
+          "verseRef": {
+            "fr": "Ésaïe 40.31",
+            "en": "Isaiah 40:31"
+          },
+          "verseText": {
+            "fr": "Mais ceux qui se confient en l'Éternel renouvellent leur force. Ils prennent le vol comme les aigles; Ils courent, et ne se lassent point, Ils marchent, et ne se fatiguent point.",
+            "en": "but those who wait for Yahweh will renew their strength. They will mount up with wings like eagles. They will run, and not be weary. They will walk, and not faint."
+          },
+          "prayer": {
+            "fr": "Jésus, apprends-moi la persévérance: un pas après l'autre, un jour après l'autre, pour ta gloire.",
+            "en": "Jesus, teach me perseverance: one step after another, one day after another, for your glory."
+          },
+          "sessions": [
+            {
+              "dayInWeek": 1,
+              "type": "easy",
+              "title": {
+                "fr": "Footing facile",
+                "en": "Easy run"
+              },
+              "instructions": {
+                "fr": "Cours à une allure où tu peux parler. Alterne course et marche sans forcer.",
+                "en": "Run at a pace where you can talk. Alternate running and walking without straining."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 180
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "run",
+                  "seconds": 180
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "run",
+                  "seconds": 180
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "run",
+                  "seconds": 180
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "run",
+                  "seconds": 180
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 2,
+              "type": "tempo",
+              "title": {
+                "fr": "Séance de rythme",
+                "en": "Tempo session"
+              },
+              "instructions": {
+                "fr": "Sur les portions de course, accélère légèrement: un effort soutenu mais maîtrisé.",
+                "en": "On the running portions, pick it up slightly: a strong but controlled effort."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 60
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 60
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 60
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 60
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 60
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 60
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 3,
+              "type": "long",
+              "title": {
+                "fr": "Sortie longue",
+                "en": "Long run"
+              },
+              "instructions": {
+                "fr": "Allonge le temps de course et reste très à l'aise. L'objectif est la durée, pas la vitesse.",
+                "en": "Extend your running time and stay very relaxed. The goal is time on feet, not speed."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 300
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "run",
+                  "seconds": 300
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "run",
+                  "seconds": 300
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "week": 4,
+          "verseRef": {
+            "fr": "2 Timothée 4.7",
+            "en": "2 Timothy 4:7"
+          },
+          "verseText": {
+            "fr": "J'ai combattu le bon combat, j'ai achevé la course, j'ai gardé la foi.",
+            "en": "I have fought the good fight. I have finished the course. I have kept the faith."
+          },
+          "prayer": {
+            "fr": "Seigneur, je dépose ma hâte. Donne-moi un cœur paisible et des jambes fidèles sur la distance.",
+            "en": "Lord, I lay down my hurry. Give me a peaceful heart and faithful legs for the distance."
+          },
+          "sessions": [
+            {
+              "dayInWeek": 1,
+              "type": "easy",
+              "title": {
+                "fr": "Footing facile",
+                "en": "Easy run"
+              },
+              "instructions": {
+                "fr": "Cours à une allure où tu peux parler. Alterne course et marche sans forcer.",
+                "en": "Run at a pace where you can talk. Alternate running and walking without straining."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 300
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "run",
+                  "seconds": 300
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "run",
+                  "seconds": 300
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "run",
+                  "seconds": 300
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 2,
+              "type": "tempo",
+              "title": {
+                "fr": "Séance de rythme",
+                "en": "Tempo session"
+              },
+              "instructions": {
+                "fr": "Sur les portions de course, accélère légèrement: un effort soutenu mais maîtrisé.",
+                "en": "On the running portions, pick it up slightly: a strong but controlled effort."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 90
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 90
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 90
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 90
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 90
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 90
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 3,
+              "type": "long",
+              "title": {
+                "fr": "Sortie longue",
+                "en": "Long run"
+              },
+              "instructions": {
+                "fr": "Allonge le temps de course et reste très à l'aise. L'objectif est la durée, pas la vitesse.",
+                "en": "Extend your running time and stay very relaxed. The goal is time on feet, not speed."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 420
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "run",
+                  "seconds": 420
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "run",
+                  "seconds": 420
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "week": 5,
+          "verseRef": {
+            "fr": "Philippiens 3.13-14",
+            "en": "Philippians 3:13-14"
+          },
+          "verseText": {
+            "fr": "Frères, je ne pense pas l'avoir saisi; mais je fais une chose: oubliant ce qui est en arrière et me portant vers ce qui est en avant, je cours vers le but, pour remporter le prix de la vocation céleste de Dieu en Jésus-Christ.",
+            "en": "Brothers, I don't regard myself as yet having taken hold, but one thing I do. Forgetting the things which are behind, and stretching forward to the things which are before, I press on toward the goal for the prize of the high calling of God in Christ Jesus."
+          },
+          "prayer": {
+            "fr": "Père, garde mes yeux fixés sur le but et mon cœur reconnaissant pour chaque foulée.",
+            "en": "Father, keep my eyes fixed on the goal and my heart thankful for every stride."
+          },
+          "sessions": [
+            {
+              "dayInWeek": 1,
+              "type": "easy",
+              "title": {
+                "fr": "Footing facile",
+                "en": "Easy run"
+              },
+              "instructions": {
+                "fr": "Cours à une allure où tu peux parler. Alterne course et marche sans forcer.",
+                "en": "Run at a pace where you can talk. Alternate running and walking without straining."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 480
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 150
+                },
+                {
+                  "kind": "run",
+                  "seconds": 480
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 150
+                },
+                {
+                  "kind": "run",
+                  "seconds": 480
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 150
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 2,
+              "type": "tempo",
+              "title": {
+                "fr": "Séance de rythme",
+                "en": "Tempo session"
+              },
+              "instructions": {
+                "fr": "Sur les portions de course, accélère légèrement: un effort soutenu mais maîtrisé.",
+                "en": "On the running portions, pick it up slightly: a strong but controlled effort."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 120
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 120
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 120
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 120
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 120
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 3,
+              "type": "long",
+              "title": {
+                "fr": "Sortie longue",
+                "en": "Long run"
+              },
+              "instructions": {
+                "fr": "Allonge le temps de course et reste très à l'aise. L'objectif est la durée, pas la vitesse.",
+                "en": "Extend your running time and stay very relaxed. The goal is time on feet, not speed."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 720
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 150
+                },
+                {
+                  "kind": "run",
+                  "seconds": 720
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 150
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "week": 6,
+          "verseRef": {
+            "fr": "1 Corinthiens 9.24",
+            "en": "1 Corinthians 9:24"
+          },
+          "verseText": {
+            "fr": "Ne savez-vous pas que ceux qui courent dans le stade courent tous, mais qu'un seul remporte le prix? Courez de manière à le remporter.",
+            "en": "Don't you know that those who run in a race all run, but one receives the prize? Run like that, that you may win."
+          },
+          "prayer": {
+            "fr": "Seigneur, merci pour ce corps que tu m'as donné. Donne-moi de commencer avec humilité et de finir avec joie.",
+            "en": "Lord, thank you for this body you gave me. Help me begin in humility and finish with joy."
+          },
+          "sessions": [
+            {
+              "dayInWeek": 1,
+              "type": "easy",
+              "title": {
+                "fr": "Footing facile",
+                "en": "Easy run"
+              },
+              "instructions": {
+                "fr": "Cours à une allure où tu peux parler. Alterne course et marche sans forcer.",
+                "en": "Run at a pace where you can talk. Alternate running and walking without straining."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 900
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 180
+                },
+                {
+                  "kind": "run",
+                  "seconds": 900
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 180
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 2,
+              "type": "tempo",
+              "title": {
+                "fr": "Séance de rythme",
+                "en": "Tempo session"
+              },
+              "instructions": {
+                "fr": "Sur les portions de course, accélère légèrement: un effort soutenu mais maîtrisé.",
+                "en": "On the running portions, pick it up slightly: a strong but controlled effort."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 180
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 180
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 180
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 180
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 3,
+              "type": "long",
+              "title": {
+                "fr": "Sortie longue",
+                "en": "Long run"
+              },
+              "instructions": {
+                "fr": "Allonge le temps de course et reste très à l'aise. L'objectif est la durée, pas la vitesse.",
+                "en": "Extend your running time and stay very relaxed. The goal is time on feet, not speed."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 1200
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 180
+                },
+                {
+                  "kind": "run",
+                  "seconds": 600
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "week": 7,
+          "verseRef": {
+            "fr": "Hébreux 12.1",
+            "en": "Hebrews 12:1"
+          },
+          "verseText": {
+            "fr": "Nous donc aussi, puisque nous sommes environnés d'une si grande nuée de témoins, rejetons tout fardeau, et le péché qui nous enveloppe si facilement, et courons avec persévérance dans la carrière qui nous est ouverte,",
+            "en": "Therefore let us also, seeing we are surrounded by so great a cloud of witnesses, lay aside every weight and the sin which so easily entangles us, and let's run with perseverance the race that is set before us,"
+          },
+          "prayer": {
+            "fr": "Père, quand mon souffle devient court, rappelle-moi que ta force se montre dans ma faiblesse.",
+            "en": "Father, when my breath runs short, remind me that your strength shows in my weakness."
+          },
+          "sessions": [
+            {
+              "dayInWeek": 1,
+              "type": "easy",
+              "title": {
+                "fr": "Footing facile",
+                "en": "Easy run"
+              },
+              "instructions": {
+                "fr": "Cours à une allure où tu peux parler. Alterne course et marche sans forcer.",
+                "en": "Run at a pace where you can talk. Alternate running and walking without straining."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 1500
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "run",
+                  "seconds": 600
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 2,
+              "type": "tempo",
+              "title": {
+                "fr": "Séance de rythme",
+                "en": "Tempo session"
+              },
+              "instructions": {
+                "fr": "Sur les portions de course, accélère légèrement: un effort soutenu mais maîtrisé.",
+                "en": "On the running portions, pick it up slightly: a strong but controlled effort."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 180
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 45
+                },
+                {
+                  "kind": "run",
+                  "seconds": 180
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 45
+                },
+                {
+                  "kind": "run",
+                  "seconds": 180
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 45
+                },
+                {
+                  "kind": "run",
+                  "seconds": 180
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 45
+                },
+                {
+                  "kind": "run",
+                  "seconds": 180
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 45
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 3,
+              "type": "long",
+              "title": {
+                "fr": "Sortie longue",
+                "en": "Long run"
+              },
+              "instructions": {
+                "fr": "Allonge le temps de course et reste très à l'aise. L'objectif est la durée, pas la vitesse.",
+                "en": "Extend your running time and stay very relaxed. The goal is time on feet, not speed."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 1800
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "run",
+                  "seconds": 600
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "week": 8,
+          "verseRef": {
+            "fr": "Ésaïe 40.31",
+            "en": "Isaiah 40:31"
+          },
+          "verseText": {
+            "fr": "Mais ceux qui se confient en l'Éternel renouvellent leur force. Ils prennent le vol comme les aigles; Ils courent, et ne se lassent point, Ils marchent, et ne se fatiguent point.",
+            "en": "but those who wait for Yahweh will renew their strength. They will mount up with wings like eagles. They will run, and not be weary. They will walk, and not faint."
+          },
+          "prayer": {
+            "fr": "Jésus, apprends-moi la persévérance: un pas après l'autre, un jour après l'autre, pour ta gloire.",
+            "en": "Jesus, teach me perseverance: one step after another, one day after another, for your glory."
+          },
+          "sessions": [
+            {
+              "dayInWeek": 1,
+              "type": "easy",
+              "title": {
+                "fr": "Footing facile",
+                "en": "Easy run"
+              },
+              "instructions": {
+                "fr": "Cours à une allure où tu peux parler. Alterne course et marche sans forcer.",
+                "en": "Run at a pace where you can talk. Alternate running and walking without straining."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 1800
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 2,
+              "type": "tempo",
+              "title": {
+                "fr": "Séance de rythme",
+                "en": "Tempo session"
+              },
+              "instructions": {
+                "fr": "Sur les portions de course, accélère légèrement: un effort soutenu mais maîtrisé.",
+                "en": "On the running portions, pick it up slightly: a strong but controlled effort."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 120
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 30
+                },
+                {
+                  "kind": "run",
+                  "seconds": 120
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 30
+                },
+                {
+                  "kind": "run",
+                  "seconds": 120
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 30
+                },
+                {
+                  "kind": "run",
+                  "seconds": 120
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 30
+                },
+                {
+                  "kind": "run",
+                  "seconds": 120
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 30
+                },
+                {
+                  "kind": "run",
+                  "seconds": 120
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 30
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 3,
+              "type": "long",
+              "title": {
+                "fr": "Sortie longue",
+                "en": "Long run"
+              },
+              "instructions": {
+                "fr": "Allonge le temps de course et reste très à l'aise. L'objectif est la durée, pas la vitesse.",
+                "en": "Extend your running time and stay very relaxed. The goal is time on feet, not speed."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 2100
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "c10k-10",
+      "title": {
+        "fr": "10 km en 10 semaines",
+        "en": "10k in 10 weeks"
+      },
+      "description": {
+        "fr": "D'une base de 5 km au 10 km avec un footing, une séance de rythme et une sortie longue chaque semaine.",
+        "en": "From a 5k base to 10k with an easy run, a tempo session and a long run every week."
+      },
+      "goalDistanceM": 10000,
+      "weeks": [
+        {
+          "week": 1,
+          "verseRef": {
+            "fr": "1 Corinthiens 9.24",
+            "en": "1 Corinthians 9:24"
+          },
+          "verseText": {
+            "fr": "Ne savez-vous pas que ceux qui courent dans le stade courent tous, mais qu'un seul remporte le prix? Courez de manière à le remporter.",
+            "en": "Don't you know that those who run in a race all run, but one receives the prize? Run like that, that you may win."
+          },
+          "prayer": {
+            "fr": "Seigneur, merci pour ce corps que tu m'as donné. Donne-moi de commencer avec humilité et de finir avec joie.",
+            "en": "Lord, thank you for this body you gave me. Help me begin in humility and finish with joy."
+          },
+          "sessions": [
+            {
+              "dayInWeek": 1,
+              "type": "easy",
+              "title": {
+                "fr": "Footing facile",
+                "en": "Easy run"
+              },
+              "instructions": {
+                "fr": "Cours à une allure où tu peux parler. Alterne course et marche sans forcer.",
+                "en": "Run at a pace where you can talk. Alternate running and walking without straining."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 1500
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 2,
+              "type": "tempo",
+              "title": {
+                "fr": "Séance de rythme",
+                "en": "Tempo session"
+              },
+              "instructions": {
+                "fr": "Sur les portions de course, accélère légèrement: un effort soutenu mais maîtrisé.",
+                "en": "On the running portions, pick it up slightly: a strong but controlled effort."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 120
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 120
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 120
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 120
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 120
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 120
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 3,
+              "type": "long",
+              "title": {
+                "fr": "Sortie longue",
+                "en": "Long run"
+              },
+              "instructions": {
+                "fr": "Allonge le temps de course et reste très à l'aise. L'objectif est la durée, pas la vitesse.",
+                "en": "Extend your running time and stay very relaxed. The goal is time on feet, not speed."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 2400
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "week": 2,
+          "verseRef": {
+            "fr": "Hébreux 12.1",
+            "en": "Hebrews 12:1"
+          },
+          "verseText": {
+            "fr": "Nous donc aussi, puisque nous sommes environnés d'une si grande nuée de témoins, rejetons tout fardeau, et le péché qui nous enveloppe si facilement, et courons avec persévérance dans la carrière qui nous est ouverte,",
+            "en": "Therefore let us also, seeing we are surrounded by so great a cloud of witnesses, lay aside every weight and the sin which so easily entangles us, and let's run with perseverance the race that is set before us,"
+          },
+          "prayer": {
+            "fr": "Père, quand mon souffle devient court, rappelle-moi que ta force se montre dans ma faiblesse.",
+            "en": "Father, when my breath runs short, remind me that your strength shows in my weakness."
+          },
+          "sessions": [
+            {
+              "dayInWeek": 1,
+              "type": "easy",
+              "title": {
+                "fr": "Footing facile",
+                "en": "Easy run"
+              },
+              "instructions": {
+                "fr": "Cours à une allure où tu peux parler. Alterne course et marche sans forcer.",
+                "en": "Run at a pace where you can talk. Alternate running and walking without straining."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 1800
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 2,
+              "type": "tempo",
+              "title": {
+                "fr": "Séance de rythme",
+                "en": "Tempo session"
+              },
+              "instructions": {
+                "fr": "Sur les portions de course, accélère légèrement: un effort soutenu mais maîtrisé.",
+                "en": "On the running portions, pick it up slightly: a strong but controlled effort."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 150
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 150
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 150
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 150
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 150
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 150
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 3,
+              "type": "long",
+              "title": {
+                "fr": "Sortie longue",
+                "en": "Long run"
+              },
+              "instructions": {
+                "fr": "Allonge le temps de course et reste très à l'aise. L'objectif est la durée, pas la vitesse.",
+                "en": "Extend your running time and stay very relaxed. The goal is time on feet, not speed."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 3000
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "week": 3,
+          "verseRef": {
+            "fr": "Ésaïe 40.31",
+            "en": "Isaiah 40:31"
+          },
+          "verseText": {
+            "fr": "Mais ceux qui se confient en l'Éternel renouvellent leur force. Ils prennent le vol comme les aigles; Ils courent, et ne se lassent point, Ils marchent, et ne se fatiguent point.",
+            "en": "but those who wait for Yahweh will renew their strength. They will mount up with wings like eagles. They will run, and not be weary. They will walk, and not faint."
+          },
+          "prayer": {
+            "fr": "Jésus, apprends-moi la persévérance: un pas après l'autre, un jour après l'autre, pour ta gloire.",
+            "en": "Jesus, teach me perseverance: one step after another, one day after another, for your glory."
+          },
+          "sessions": [
+            {
+              "dayInWeek": 1,
+              "type": "easy",
+              "title": {
+                "fr": "Footing facile",
+                "en": "Easy run"
+              },
+              "instructions": {
+                "fr": "Cours à une allure où tu peux parler. Alterne course et marche sans forcer.",
+                "en": "Run at a pace where you can talk. Alternate running and walking without straining."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 1800
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 2,
+              "type": "tempo",
+              "title": {
+                "fr": "Séance de rythme",
+                "en": "Tempo session"
+              },
+              "instructions": {
+                "fr": "Sur les portions de course, accélère légèrement: un effort soutenu mais maîtrisé.",
+                "en": "On the running portions, pick it up slightly: a strong but controlled effort."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 240
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 240
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 240
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 240
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "run",
+                  "seconds": 240
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 60
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 3,
+              "type": "long",
+              "title": {
+                "fr": "Sortie longue",
+                "en": "Long run"
+              },
+              "instructions": {
+                "fr": "Allonge le temps de course et reste très à l'aise. L'objectif est la durée, pas la vitesse.",
+                "en": "Extend your running time and stay very relaxed. The goal is time on feet, not speed."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 3600
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "week": 4,
+          "verseRef": {
+            "fr": "2 Timothée 4.7",
+            "en": "2 Timothy 4:7"
+          },
+          "verseText": {
+            "fr": "J'ai combattu le bon combat, j'ai achevé la course, j'ai gardé la foi.",
+            "en": "I have fought the good fight. I have finished the course. I have kept the faith."
+          },
+          "prayer": {
+            "fr": "Seigneur, je dépose ma hâte. Donne-moi un cœur paisible et des jambes fidèles sur la distance.",
+            "en": "Lord, I lay down my hurry. Give me a peaceful heart and faithful legs for the distance."
+          },
+          "sessions": [
+            {
+              "dayInWeek": 1,
+              "type": "easy",
+              "title": {
+                "fr": "Footing facile",
+                "en": "Easy run"
+              },
+              "instructions": {
+                "fr": "Cours à une allure où tu peux parler. Alterne course et marche sans forcer.",
+                "en": "Run at a pace where you can talk. Alternate running and walking without straining."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 2100
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 2,
+              "type": "tempo",
+              "title": {
+                "fr": "Séance de rythme",
+                "en": "Tempo session"
+              },
+              "instructions": {
+                "fr": "Sur les portions de course, accélère légèrement: un effort soutenu mais maîtrisé.",
+                "en": "On the running portions, pick it up slightly: a strong but controlled effort."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 360
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "run",
+                  "seconds": 360
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "run",
+                  "seconds": 360
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "run",
+                  "seconds": 360
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 3,
+              "type": "long",
+              "title": {
+                "fr": "Sortie longue",
+                "en": "Long run"
+              },
+              "instructions": {
+                "fr": "Allonge le temps de course et reste très à l'aise. L'objectif est la durée, pas la vitesse.",
+                "en": "Extend your running time and stay very relaxed. The goal is time on feet, not speed."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 2400
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "week": 5,
+          "verseRef": {
+            "fr": "Philippiens 3.13-14",
+            "en": "Philippians 3:13-14"
+          },
+          "verseText": {
+            "fr": "Frères, je ne pense pas l'avoir saisi; mais je fais une chose: oubliant ce qui est en arrière et me portant vers ce qui est en avant, je cours vers le but, pour remporter le prix de la vocation céleste de Dieu en Jésus-Christ.",
+            "en": "Brothers, I don't regard myself as yet having taken hold, but one thing I do. Forgetting the things which are behind, and stretching forward to the things which are before, I press on toward the goal for the prize of the high calling of God in Christ Jesus."
+          },
+          "prayer": {
+            "fr": "Père, garde mes yeux fixés sur le but et mon cœur reconnaissant pour chaque foulée.",
+            "en": "Father, keep my eyes fixed on the goal and my heart thankful for every stride."
+          },
+          "sessions": [
+            {
+              "dayInWeek": 1,
+              "type": "easy",
+              "title": {
+                "fr": "Footing facile",
+                "en": "Easy run"
+              },
+              "instructions": {
+                "fr": "Cours à une allure où tu peux parler. Alterne course et marche sans forcer.",
+                "en": "Run at a pace where you can talk. Alternate running and walking without straining."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 2100
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 2,
+              "type": "tempo",
+              "title": {
+                "fr": "Séance de rythme",
+                "en": "Tempo session"
+              },
+              "instructions": {
+                "fr": "Sur les portions de course, accélère légèrement: un effort soutenu mais maîtrisé.",
+                "en": "On the running portions, pick it up slightly: a strong but controlled effort."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 480
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "run",
+                  "seconds": 480
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "run",
+                  "seconds": 480
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 3,
+              "type": "long",
+              "title": {
+                "fr": "Sortie longue",
+                "en": "Long run"
+              },
+              "instructions": {
+                "fr": "Allonge le temps de course et reste très à l'aise. L'objectif est la durée, pas la vitesse.",
+                "en": "Extend your running time and stay very relaxed. The goal is time on feet, not speed."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 4200
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "week": 6,
+          "verseRef": {
+            "fr": "1 Corinthiens 9.24",
+            "en": "1 Corinthians 9:24"
+          },
+          "verseText": {
+            "fr": "Ne savez-vous pas que ceux qui courent dans le stade courent tous, mais qu'un seul remporte le prix? Courez de manière à le remporter.",
+            "en": "Don't you know that those who run in a race all run, but one receives the prize? Run like that, that you may win."
+          },
+          "prayer": {
+            "fr": "Seigneur, merci pour ce corps que tu m'as donné. Donne-moi de commencer avec humilité et de finir avec joie.",
+            "en": "Lord, thank you for this body you gave me. Help me begin in humility and finish with joy."
+          },
+          "sessions": [
+            {
+              "dayInWeek": 1,
+              "type": "easy",
+              "title": {
+                "fr": "Footing facile",
+                "en": "Easy run"
+              },
+              "instructions": {
+                "fr": "Cours à une allure où tu peux parler. Alterne course et marche sans forcer.",
+                "en": "Run at a pace where you can talk. Alternate running and walking without straining."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 2400
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 2,
+              "type": "tempo",
+              "title": {
+                "fr": "Séance de rythme",
+                "en": "Tempo session"
+              },
+              "instructions": {
+                "fr": "Sur les portions de course, accélère légèrement: un effort soutenu mais maîtrisé.",
+                "en": "On the running portions, pick it up slightly: a strong but controlled effort."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 720
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "run",
+                  "seconds": 720
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 3,
+              "type": "long",
+              "title": {
+                "fr": "Sortie longue",
+                "en": "Long run"
+              },
+              "instructions": {
+                "fr": "Allonge le temps de course et reste très à l'aise. L'objectif est la durée, pas la vitesse.",
+                "en": "Extend your running time and stay very relaxed. The goal is time on feet, not speed."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 4800
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "week": 7,
+          "verseRef": {
+            "fr": "Hébreux 12.1",
+            "en": "Hebrews 12:1"
+          },
+          "verseText": {
+            "fr": "Nous donc aussi, puisque nous sommes environnés d'une si grande nuée de témoins, rejetons tout fardeau, et le péché qui nous enveloppe si facilement, et courons avec persévérance dans la carrière qui nous est ouverte,",
+            "en": "Therefore let us also, seeing we are surrounded by so great a cloud of witnesses, lay aside every weight and the sin which so easily entangles us, and let's run with perseverance the race that is set before us,"
+          },
+          "prayer": {
+            "fr": "Père, quand mon souffle devient court, rappelle-moi que ta force se montre dans ma faiblesse.",
+            "en": "Father, when my breath runs short, remind me that your strength shows in my weakness."
+          },
+          "sessions": [
+            {
+              "dayInWeek": 1,
+              "type": "easy",
+              "title": {
+                "fr": "Footing facile",
+                "en": "Easy run"
+              },
+              "instructions": {
+                "fr": "Cours à une allure où tu peux parler. Alterne course et marche sans forcer.",
+                "en": "Run at a pace where you can talk. Alternate running and walking without straining."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 2400
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 2,
+              "type": "tempo",
+              "title": {
+                "fr": "Séance de rythme",
+                "en": "Tempo session"
+              },
+              "instructions": {
+                "fr": "Sur les portions de course, accélère légèrement: un effort soutenu mais maîtrisé.",
+                "en": "On the running portions, pick it up slightly: a strong but controlled effort."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 1200
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 3,
+              "type": "long",
+              "title": {
+                "fr": "Sortie longue",
+                "en": "Long run"
+              },
+              "instructions": {
+                "fr": "Allonge le temps de course et reste très à l'aise. L'objectif est la durée, pas la vitesse.",
+                "en": "Extend your running time and stay very relaxed. The goal is time on feet, not speed."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 5400
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "week": 8,
+          "verseRef": {
+            "fr": "Ésaïe 40.31",
+            "en": "Isaiah 40:31"
+          },
+          "verseText": {
+            "fr": "Mais ceux qui se confient en l'Éternel renouvellent leur force. Ils prennent le vol comme les aigles; Ils courent, et ne se lassent point, Ils marchent, et ne se fatiguent point.",
+            "en": "but those who wait for Yahweh will renew their strength. They will mount up with wings like eagles. They will run, and not be weary. They will walk, and not faint."
+          },
+          "prayer": {
+            "fr": "Jésus, apprends-moi la persévérance: un pas après l'autre, un jour après l'autre, pour ta gloire.",
+            "en": "Jesus, teach me perseverance: one step after another, one day after another, for your glory."
+          },
+          "sessions": [
+            {
+              "dayInWeek": 1,
+              "type": "easy",
+              "title": {
+                "fr": "Footing facile",
+                "en": "Easy run"
+              },
+              "instructions": {
+                "fr": "Cours à une allure où tu peux parler. Alterne course et marche sans forcer.",
+                "en": "Run at a pace where you can talk. Alternate running and walking without straining."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 2700
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 2,
+              "type": "tempo",
+              "title": {
+                "fr": "Séance de rythme",
+                "en": "Tempo session"
+              },
+              "instructions": {
+                "fr": "Sur les portions de course, accélère légèrement: un effort soutenu mais maîtrisé.",
+                "en": "On the running portions, pick it up slightly: a strong but controlled effort."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 360
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "run",
+                  "seconds": 360
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "run",
+                  "seconds": 360
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "run",
+                  "seconds": 360
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 90
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 3,
+              "type": "long",
+              "title": {
+                "fr": "Sortie longue",
+                "en": "Long run"
+              },
+              "instructions": {
+                "fr": "Allonge le temps de course et reste très à l'aise. L'objectif est la durée, pas la vitesse.",
+                "en": "Extend your running time and stay very relaxed. The goal is time on feet, not speed."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 3000
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "week": 9,
+          "verseRef": {
+            "fr": "2 Timothée 4.7",
+            "en": "2 Timothy 4:7"
+          },
+          "verseText": {
+            "fr": "J'ai combattu le bon combat, j'ai achevé la course, j'ai gardé la foi.",
+            "en": "I have fought the good fight. I have finished the course. I have kept the faith."
+          },
+          "prayer": {
+            "fr": "Seigneur, je dépose ma hâte. Donne-moi un cœur paisible et des jambes fidèles sur la distance.",
+            "en": "Lord, I lay down my hurry. Give me a peaceful heart and faithful legs for the distance."
+          },
+          "sessions": [
+            {
+              "dayInWeek": 1,
+              "type": "easy",
+              "title": {
+                "fr": "Footing facile",
+                "en": "Easy run"
+              },
+              "instructions": {
+                "fr": "Cours à une allure où tu peux parler. Alterne course et marche sans forcer.",
+                "en": "Run at a pace where you can talk. Alternate running and walking without straining."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 2700
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 2,
+              "type": "tempo",
+              "title": {
+                "fr": "Séance de rythme",
+                "en": "Tempo session"
+              },
+              "instructions": {
+                "fr": "Sur les portions de course, accélère légèrement: un effort soutenu mais maîtrisé.",
+                "en": "On the running portions, pick it up slightly: a strong but controlled effort."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 900
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "run",
+                  "seconds": 900
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 3,
+              "type": "long",
+              "title": {
+                "fr": "Sortie longue",
+                "en": "Long run"
+              },
+              "instructions": {
+                "fr": "Allonge le temps de course et reste très à l'aise. L'objectif est la durée, pas la vitesse.",
+                "en": "Extend your running time and stay very relaxed. The goal is time on feet, not speed."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 6000
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "week": 10,
+          "verseRef": {
+            "fr": "Philippiens 3.13-14",
+            "en": "Philippians 3:13-14"
+          },
+          "verseText": {
+            "fr": "Frères, je ne pense pas l'avoir saisi; mais je fais une chose: oubliant ce qui est en arrière et me portant vers ce qui est en avant, je cours vers le but, pour remporter le prix de la vocation céleste de Dieu en Jésus-Christ.",
+            "en": "Brothers, I don't regard myself as yet having taken hold, but one thing I do. Forgetting the things which are behind, and stretching forward to the things which are before, I press on toward the goal for the prize of the high calling of God in Christ Jesus."
+          },
+          "prayer": {
+            "fr": "Père, garde mes yeux fixés sur le but et mon cœur reconnaissant pour chaque foulée.",
+            "en": "Father, keep my eyes fixed on the goal and my heart thankful for every stride."
+          },
+          "sessions": [
+            {
+              "dayInWeek": 1,
+              "type": "easy",
+              "title": {
+                "fr": "Footing facile",
+                "en": "Easy run"
+              },
+              "instructions": {
+                "fr": "Cours à une allure où tu peux parler. Alterne course et marche sans forcer.",
+                "en": "Run at a pace where you can talk. Alternate running and walking without straining."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 1800
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 2,
+              "type": "tempo",
+              "title": {
+                "fr": "Séance de rythme",
+                "en": "Tempo session"
+              },
+              "instructions": {
+                "fr": "Sur les portions de course, accélère légèrement: un effort soutenu mais maîtrisé.",
+                "en": "On the running portions, pick it up slightly: a strong but controlled effort."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 300
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "run",
+                  "seconds": 300
+                },
+                {
+                  "kind": "walk",
+                  "seconds": 120
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            },
+            {
+              "dayInWeek": 3,
+              "type": "long",
+              "title": {
+                "fr": "Sortie longue",
+                "en": "Long run"
+              },
+              "instructions": {
+                "fr": "Allonge le temps de course et reste très à l'aise. L'objectif est la durée, pas la vitesse.",
+                "en": "Extend your running time and stay very relaxed. The goal is time on feet, not speed."
+              },
+              "segments": [
+                {
+                  "kind": "warmup",
+                  "seconds": 300
+                },
+                {
+                  "kind": "run",
+                  "seconds": 3600
+                },
+                {
+                  "kind": "cooldown",
+                  "seconds": 300
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

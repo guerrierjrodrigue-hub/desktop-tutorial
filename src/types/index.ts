@@ -75,6 +75,8 @@ export interface RunPlanSession {
   week: number;
   dayInWeek: number;
   title: string;
+  /** Short coaching cue for this session (localized). */
+  instructions?: string;
   segments: RunSegment[];
 }
 

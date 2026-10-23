@@ -39,6 +39,7 @@ function mapPlan(plan: RunPlanRow, sessions: RunPlanSessionRow[], locale: Locale
       week: s.week,
       dayInWeek: s.day_in_week,
       title: (fr ? s.title_fr : s.title) ?? s.title,
+      instructions: (fr ? s.instructions_fr : s.instructions) ?? s.instructions ?? undefined,
       segments: Array.isArray(s.segments) ? s.segments : [],
     });
     byWeek.set(s.week, list);

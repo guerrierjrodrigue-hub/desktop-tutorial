@@ -14,6 +14,7 @@ import { ProfileEditor } from "@/components/profile/profile-editor";
 import { PrivacySection } from "@/components/profile/privacy-section";
 import { LanguageSwitcher } from "@/components/settings/language-switcher";
 import { NotificationSettings } from "@/components/settings/notification-settings";
+import { ActivitySetting } from "@/components/profile/activity-setting";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { isFreeMode } from "@/lib/flags";
@@ -92,6 +93,10 @@ export default async function ProfilePage() {
             </div>
           </Card>
         </ProfileEditor>
+
+        <div className="mt-5">
+          <ActivitySetting dict={dict} initial={currentUser.primaryActivity} />
+        </div>
 
         <div className="mt-5 grid gap-5 sm:grid-cols-2">
           <LanguageSwitcher currentLocale={locale} dict={dict} />
