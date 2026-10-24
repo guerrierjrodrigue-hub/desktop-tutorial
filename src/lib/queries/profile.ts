@@ -47,6 +47,8 @@ function mapProfile(row: ProfileRow): UserProfile {
     onboardedAt: row.onboarded_at ?? undefined,
     showOnLeaderboard: row.show_on_leaderboard,
     primaryActivity: row.primary_activity ?? undefined,
+    runLevel: row.run_level ?? null,
+    runGoalKind: row.run_goal_kind ?? null,
   };
 }
 

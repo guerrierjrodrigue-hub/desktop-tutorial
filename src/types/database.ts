@@ -57,6 +57,10 @@ export interface ProfileRow {
   timezone: string;
   /** Runner mode: "strength" | "running" | "both" (null until onboarded). */
   primary_activity: "strength" | "running" | "both" | null;
+  /** Runner onboarding: experience level (null until the 2 questions are answered). */
+  run_level: "new" | "5k" | "10k" | null;
+  /** Runner onboarding: chosen objective (null until answered). "free" = no plan. */
+  run_goal_kind: "5k" | "10k" | "half" | "free" | null;
 }
 
 /** One logged run (owner-only). pace_s_per_km is DB-generated. */
@@ -72,6 +76,18 @@ export interface RunRow {
   note: string | null;
   source: "manual" | "chrono";
   plan_session_id: string | null;
+  /** Optional shoe pair this run counts toward (null if removed or none). */
+  shoe_id: string | null;
+  created_at: Timestamptz;
+}
+
+/** A pair of running shoes with cumulative distance (owner-only). */
+export interface RunShoeRow {
+  id: string;
+  user_id: string;
+  name: string;
+  distance_m: number;
+  retired: boolean;
   created_at: Timestamptz;
 }
 
@@ -466,6 +482,7 @@ export interface Database {
       run_plans: T<RunPlanRow>;
       run_plan_sessions: T<RunPlanSessionRow>;
       run_goals: T<RunGoalRow>;
+      run_shoes: T<RunShoeRow>;
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

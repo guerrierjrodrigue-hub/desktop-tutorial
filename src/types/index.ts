@@ -46,7 +46,17 @@ export interface UserProfile {
   showOnLeaderboard: boolean;
   /** Runner mode: "strength" | "running" | "both". */
   primaryActivity?: "strength" | "running" | "both";
+  /** Runner onboarding: current experience (null until the 2 questions are answered). */
+  runLevel?: RunLevel | null;
+  /** Runner onboarding: chosen objective (null until answered). */
+  runGoalKind?: RunGoalKind | null;
 }
+
+/** Runner experience answered at the first /course visit. */
+export type RunLevel = "new" | "5k" | "10k";
+
+/** Runner objective answered at the first /course visit. "free" = no plan, journal only. */
+export type RunGoalKind = "5k" | "10k" | "half" | "free";
 
 export type RunKind = "easy" | "tempo" | "intervals" | "long" | "race";
 
@@ -62,6 +72,17 @@ export interface Run {
   note?: string;
   source: "manual" | "chrono";
   planSessionId?: string;
+  /** The shoe pair this run was logged against, if any. */
+  shoeId?: string | null;
+}
+
+/** A pair of running shoes with cumulative distance, for wear tracking (owner-only). */
+export interface Shoe {
+  id: string;
+  name: string;
+  distanceM: number;
+  retired: boolean;
+  createdAt: string;
 }
 
 export interface RunSegment {

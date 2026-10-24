@@ -29,6 +29,9 @@ const GUARDED_FILES = [
   "course/interval-timer.tsx",
   "course/running-tools.tsx",
   "course/run-list.tsx",
+  "course/runner-onboarding.tsx",
+  "course/shoe-manager.tsx",
+  "course/gpx-import.tsx",
   "profile/activity-setting.tsx",
   "dashboard/runner-mode-promo.tsx",
 ];
