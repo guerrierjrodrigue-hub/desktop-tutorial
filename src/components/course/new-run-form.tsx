@@ -18,7 +18,7 @@ import {
   RUN_KINDS,
 } from "@/lib/running";
 import type { Dictionary } from "@/i18n/dictionaries/en";
-import type { Run, RunKind } from "@/types";
+import type { Run, RunKind, Shoe } from "@/types";
 
 const inputClass =
   "h-10 w-full rounded-lg border border-border bg-surface-2 px-3 text-sm outline-none focus:border-accent/40 focus:ring-2 focus:ring-accent/20";
@@ -26,9 +26,11 @@ const inputClass =
 export function NewRunForm({
   dict,
   today,
+  shoes = [],
 }: {
   dict: Dictionary;
   today: string;
+  shoes?: Shoe[];
 }) {
   const [date, setDate] = useState(today);
   const [km, setKm] = useState("");
@@ -38,6 +40,7 @@ export function NewRunForm({
   const [kind, setKind] = useState<RunKind>("easy");
   const [effort, setEffort] = useState("");
   const [note, setNote] = useState("");
+  const [shoeId, setShoeId] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [added, setAdded] = useState<Run[]>([]);
   const [journalDone, setJournalDone] = useState(false);
@@ -70,6 +73,7 @@ export function NewRunForm({
         effort: effortNum,
         note: note.trim() || undefined,
         source: "manual",
+        shoeId: shoeId || undefined,
       });
       if (res.ok) {
         if (res.xp) showXp(res.xp);
@@ -167,6 +171,20 @@ export function NewRunForm({
             </label>
             <input id="run-effort" type="number" min={1} max={10} value={effort} onChange={(e) => setEffort(e.target.value)} className={inputClass} />
           </div>
+
+          {shoes.length > 0 && (
+            <div>
+              <label htmlFor="run-shoe" className="mb-1 block text-sm font-medium">
+                {dict["course.shoes.select"]}
+              </label>
+              <select id="run-shoe" value={shoeId} onChange={(e) => setShoeId(e.target.value)} className={inputClass}>
+                <option value="">{dict["course.shoes.selectNone"]}</option>
+                {shoes.map((shoe) => (
+                  <option key={shoe.id} value={shoe.id}>{shoe.name}</option>
+                ))}
+              </select>
+            </div>
+          )}
 
           <div>
             <label htmlFor="run-note" className="mb-1 block text-sm font-medium">

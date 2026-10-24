@@ -4,6 +4,8 @@ import { ArrowLeft } from "lucide-react";
 import { Topbar } from "@/components/layout/topbar";
 import { PageHeader } from "@/components/layout/page-header";
 import { NewRunForm } from "@/components/course/new-run-form";
+import { GpxImport } from "@/components/course/gpx-import";
+import { getRunShoes } from "@/lib/queries/running";
 import { getUserTimezone } from "@/lib/timezone";
 import { getUserToday } from "@/lib/date";
 import { getLocale } from "@/lib/locale";
@@ -16,8 +18,13 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function NewRunPage() {
   const locale = await getLocale();
-  const [dict, tz] = await Promise.all([getDictionary(locale), getUserTimezone()]);
+  const [dict, tz, shoes] = await Promise.all([
+    getDictionary(locale),
+    getUserTimezone(),
+    getRunShoes(),
+  ]);
   const today = getUserToday(tz);
+  const activeShoes = shoes.filter((s) => !s.retired);
 
   return (
     <>
@@ -30,7 +37,10 @@ export default async function NewRunPage() {
           <ArrowLeft className="size-4" /> {dict["course.title"]}
         </Link>
         <PageHeader title={dict["course.new.title"]} subtitle={dict["course.new.subtitle"]} />
-        <NewRunForm dict={dict} today={today} />
+        <NewRunForm dict={dict} today={today} shoes={activeShoes} />
+        <div className="mt-5">
+          <GpxImport dict={dict} />
+        </div>
       </main>
     </>
   );

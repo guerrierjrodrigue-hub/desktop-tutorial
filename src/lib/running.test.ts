@@ -9,8 +9,16 @@ import {
   validateRun,
   segmentsTotalSeconds,
   cleanSegments,
+  trainingPaces,
+  daysUntil,
+  buildIntervalSegments,
+  weeklyLoadWarning,
+  shoeWearAlert,
+  recommendPlanSlug,
+  goalKindDistanceM,
   MIN_PACE_S_PER_KM,
   MAX_PACE_S_PER_KM,
+  SHOE_WEAR_ALERT_M,
 } from "@/lib/running";
 
 describe("pace", () => {
@@ -115,5 +123,107 @@ describe("segments", () => {
   });
   it("drops zero-length segments", () => {
     expect(cleanSegments(segs)).toHaveLength(3);
+  });
+});
+
+describe("training paces (estimation)", () => {
+  it("derives ordered zones from a recent race", () => {
+    // 5 km in 25:00 -> 5k pace 300 s/km; zones are multiples of that.
+    const tp = trainingPaces(5000, 1500);
+    expect(tp).not.toBeNull();
+    expect(tp!.fiveKPaceSPerKm).toBe(300);
+    // Easy is slower than tempo, which is slower than interval/repetition.
+    expect(tp!.zones.easy.slowSPerKm).toBeGreaterThan(tp!.zones.tempo.slowSPerKm);
+    expect(tp!.zones.tempo.slowSPerKm).toBeGreaterThan(tp!.zones.interval.slowSPerKm);
+    expect(tp!.zones.interval.fastSPerKm).toBeGreaterThan(tp!.zones.repetition.fastSPerKm);
+    // Each range is slow >= fast (slower number is the larger sec/km).
+    expect(tp!.zones.easy.slowSPerKm).toBeGreaterThanOrEqual(tp!.zones.easy.fastSPerKm);
+  });
+  it("returns null for invalid inputs", () => {
+    expect(trainingPaces(0, 1500)).toBeNull();
+    expect(trainingPaces(5000, 0)).toBeNull();
+    expect(trainingPaces(NaN, 1500)).toBeNull();
+  });
+});
+
+describe("race countdown", () => {
+  it("counts whole days between dates", () => {
+    expect(daysUntil("2026-10-24", "2026-10-31")).toBe(7);
+    expect(daysUntil("2026-10-24", "2026-10-24")).toBe(0);
+  });
+  it("is negative once the race has passed", () => {
+    expect(daysUntil("2026-10-31", "2026-10-24")).toBe(-7);
+  });
+  it("is null for an unparseable date", () => {
+    expect(daysUntil("nope", "2026-10-24")).toBeNull();
+  });
+});
+
+describe("interval builder", () => {
+  it("builds warmup, reps with recovery between, cooldown (duration mode)", () => {
+    const segs = buildIntervalSegments({
+      reps: 3, mode: "duration", runSeconds: 60, recoverySeconds: 90,
+      warmupSeconds: 300, cooldownSeconds: 300,
+    });
+    // warmup, run, walk, run, walk, run, cooldown = 7 segments (no trailing walk).
+    expect(segs.map((s) => s.kind)).toEqual([
+      "warmup", "run", "walk", "run", "walk", "run", "cooldown",
+    ]);
+    expect(segs.filter((s) => s.kind === "run")).toHaveLength(3);
+  });
+  it("converts a distance rep to seconds with pace", () => {
+    // 400 m at 300 s/km = 120 s per rep.
+    const segs = buildIntervalSegments({
+      reps: 2, mode: "distance", runDistanceM: 400, paceSPerKm: 300, recoverySeconds: 60,
+    });
+    expect(segs.filter((s) => s.kind === "run").every((s) => s.seconds === 120)).toBe(true);
+  });
+  it("rejects distance mode without a pace, and out-of-range reps", () => {
+    expect(buildIntervalSegments({ reps: 2, mode: "distance", runDistanceM: 400, recoverySeconds: 60 })).toEqual([]);
+    expect(buildIntervalSegments({ reps: 0, mode: "duration", runSeconds: 60, recoverySeconds: 60 })).toEqual([]);
+    expect(buildIntervalSegments({ reps: 99, mode: "duration", runSeconds: 60, recoverySeconds: 60 })).toEqual([]);
+  });
+});
+
+describe("weekly load warning (10% rule)", () => {
+  it("flags growth over 10%", () => {
+    expect(weeklyLoadWarning(22000, 20000)).toEqual({ ratio: 1.1, over: false });
+    expect(weeklyLoadWarning(23000, 20000)!.over).toBe(true);
+    expect(weeklyLoadWarning(18000, 20000)!.over).toBe(false);
+  });
+  it("has no baseline when last week is zero", () => {
+    expect(weeklyLoadWarning(10000, 0)).toBeNull();
+  });
+});
+
+describe("shoe wear alert (700 km)", () => {
+  it("alerts at or beyond the threshold", () => {
+    expect(shoeWearAlert(SHOE_WEAR_ALERT_M)).toBe(true);
+    expect(shoeWearAlert(SHOE_WEAR_ALERT_M + 1)).toBe(true);
+    expect(shoeWearAlert(SHOE_WEAR_ALERT_M - 1)).toBe(false);
+    expect(shoeWearAlert(0)).toBe(false);
+  });
+});
+
+describe("plan recommendation", () => {
+  it("sends a complete beginner aiming at 5k to the 8-week plan", () => {
+    expect(recommendPlanSlug("new", "5k")).toBe("c5k-8");
+  });
+  it("sends an experienced runner aiming at 5k to the faster plan", () => {
+    expect(recommendPlanSlug("5k", "5k")).toBe("c5k-faster-6");
+    expect(recommendPlanSlug("10k", "5k")).toBe("c5k-faster-6");
+  });
+  it("maps 10k and half to their plans", () => {
+    expect(recommendPlanSlug("5k", "10k")).toBe("c10k-10");
+    expect(recommendPlanSlug("10k", "half")).toBe("half-12");
+  });
+  it("recommends no plan for free running", () => {
+    expect(recommendPlanSlug("new", "free")).toBeNull();
+  });
+  it("maps goal kinds to distances", () => {
+    expect(goalKindDistanceM("5k")).toBe(5000);
+    expect(goalKindDistanceM("10k")).toBe(10000);
+    expect(goalKindDistanceM("half")).toBe(21097);
+    expect(goalKindDistanceM("free")).toBeNull();
   });
 });

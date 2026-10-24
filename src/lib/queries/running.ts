@@ -5,10 +5,10 @@ import { paceSecPerKm } from "@/lib/running";
 import { demoRunPlans, demoRuns } from "@/data/running";
 import type { LocaleCode } from "@/i18n/locales";
 import type {
-  Run, RunGoal, RunPlan, RunPlanSession, RunWeek,
+  Run, RunGoal, RunGoalKind, RunLevel, RunPlan, RunPlanSession, RunWeek, Shoe,
 } from "@/types";
 import type {
-  RunRow, RunPlanRow, RunPlanSessionRow, RunGoalRow,
+  RunRow, RunPlanRow, RunPlanSessionRow, RunGoalRow, RunShoeRow, ProfileRow,
 } from "@/types/database";
 
 const isFr = (locale: LocaleCode) => locale === "fr";
@@ -25,6 +25,7 @@ function mapRun(row: RunRow): Run {
     note: row.note ?? undefined,
     source: row.source,
     planSessionId: row.plan_session_id ?? undefined,
+    shoeId: row.shoe_id ?? undefined,
   };
 }
 
@@ -148,6 +149,64 @@ export async function getRunGoal(): Promise<RunGoal | null> {
     targetTimeS: g.target_time_s ?? undefined,
   };
 }
+
+/** The signed-in user's runner onboarding answers (null fields until answered). */
+export async function getRunnerOnboarding(): Promise<{
+  level: RunLevel | null;
+  goalKind: RunGoalKind | null;
+  answered: boolean;
+}> {
+  const user = await getSessionUser();
+  // Demo mode (no user) shows the full runner dashboard with a sample
+  // recommendation rather than blocking on the first-visit questions.
+  if (!user) return { level: "new", goalKind: "10k", answered: true };
+  const supabase = await createSupabaseServerClient();
+  const { data } = await supabase
+    .from("profiles")
+    .select("run_level, run_goal_kind")
+    .eq("id", user.id)
+    .maybeSingle();
+  const row = (data ?? null) as Pick<ProfileRow, "run_level" | "run_goal_kind"> | null;
+  const level = row?.run_level ?? null;
+  const goalKind = row?.run_goal_kind ?? null;
+  return { level, goalKind, answered: level !== null && goalKind !== null };
+}
+
+/**
+ * The user's shoe pairs (active first, then retired, newest within each).
+ * Cumulative distance is the pair's baseline (metres already on it when added)
+ * plus the distance of every run linked to it, so it never drifts from reality.
+ */
+export const getRunShoes = cache(async function getRunShoes(): Promise<Shoe[]> {
+  const user = await getSessionUser();
+  if (!user) return [];
+  const supabase = await createSupabaseServerClient();
+  const [{ data: shoes }, { data: runs }] = await Promise.all([
+    supabase
+      .from("run_shoes")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("retired", { ascending: true })
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("runs")
+      .select("shoe_id, distance_m")
+      .eq("user_id", user.id)
+      .not("shoe_id", "is", null),
+  ]);
+  const byShoe = new Map<string, number>();
+  for (const r of (runs ?? []) as Pick<RunRow, "shoe_id" | "distance_m">[]) {
+    if (!r.shoe_id) continue;
+    byShoe.set(r.shoe_id, (byShoe.get(r.shoe_id) ?? 0) + r.distance_m);
+  }
+  return ((shoes ?? []) as RunShoeRow[]).map((row) => ({
+    id: row.id,
+    name: row.name,
+    distanceM: row.distance_m + (byShoe.get(row.id) ?? 0),
+    retired: row.retired,
+    createdAt: row.created_at,
+  }));
+});
 
 export { paceSecPerKm };
 export { isoWeekStart, weekStats, weeklyDistances, records } from "@/lib/run-stats";
