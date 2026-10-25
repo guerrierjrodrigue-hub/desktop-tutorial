@@ -22,23 +22,30 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: dict["meta.course"] };
 }
 
-export default async function CoursePage() {
+export default async function CoursePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ vue?: string }>;
+}) {
   const locale = await getLocale();
-  const [dict, runs, tz, onboarding] = await Promise.all([
+  const [dict, runs, tz, onboarding, params] = await Promise.all([
     getDictionary(locale),
     getRuns(),
     getUserTimezone(),
     getRunnerOnboarding(),
+    searchParams,
   ]);
 
-  // First visit: ask the two questions before anything else.
-  if (!onboarding.answered) {
+  // First visit: ask the two questions before anything else, unless the user
+  // chose to skip (?vue=1) — the questions stay reachable from the overview.
+  const skipped = params.vue === "1";
+  if (!onboarding.answered && !skipped) {
     return (
       <>
         <Topbar title={dict["course.title"]} />
         <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-6 sm:px-6">
           <PageHeader title={dict["course.title"]} subtitle={dict["course.subtitle"]} />
-          <RunnerOnboarding dict={dict} initialLevel={onboarding.level} initialGoal={onboarding.goalKind} />
+          <RunnerOnboarding dict={dict} initialLevel={onboarding.level} initialGoal={onboarding.goalKind} showSkip />
         </main>
       </>
     );
@@ -201,7 +208,7 @@ export default async function CoursePage() {
           <CardHeader>
             <CardTitle>{dict["course.recentRuns"]}</CardTitle>
           </CardHeader>
-          <RunList initial={runs} dict={dict} locale={locale} />
+          <RunList initial={runs} dict={dict} locale={locale} today={today} />
         </Card>
       </main>
     </>

@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { ShieldAlert } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -22,10 +23,13 @@ export function RunnerOnboarding({
   dict,
   initialLevel = null,
   initialGoal = null,
+  showSkip = false,
 }: {
   dict: Dictionary;
   initialLevel?: RunLevel | null;
   initialGoal?: RunGoalKind | null;
+  /** First-visit only: offer a "Skip" link to the overview without a plan. */
+  showSkip?: boolean;
 }) {
   const router = useRouter();
   const [level, setLevel] = useState<RunLevel | null>(initialLevel);
@@ -104,6 +108,13 @@ export function RunnerOnboarding({
       {saved && (
         <p role="status" className="mt-2 text-center text-sm text-green-bright">
           {dict["course.start.saved"]}
+        </p>
+      )}
+      {showSkip && (
+        <p className="mt-3 text-center text-sm">
+          <Link href="/course?vue=1" className="text-muted underline-offset-2 transition hover:text-foreground hover:underline">
+            {dict["course.start.skip"]}
+          </Link>
         </p>
       )}
     </Card>

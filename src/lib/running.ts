@@ -5,6 +5,7 @@
  * (metres, seconds, seconds-per-kilometre).
  */
 
+import { addDaysToDateStr } from "@/lib/date";
 import type { RunGoalKind, RunKind, RunLevel, RunSegment } from "@/types";
 
 /** Plausible human pace bounds, in seconds per kilometre. */
@@ -12,8 +13,12 @@ export const MIN_PACE_S_PER_KM = 150; // 2:30 /km
 export const MAX_PACE_S_PER_KM = 900; // 15:00 /km
 /** A single manual entry may not exceed this distance. */
 export const MAX_RUN_DISTANCE_M = 100_000; // 100 km
-/** At most this many runs may be logged for one day. */
+/** At most this many runs may be logged in one calendar day (by creation date). */
 export const MAX_RUNS_PER_DAY = 5;
+/** A run entry may not be dated more than this many days in the past. */
+export const MAX_RUN_AGE_DAYS = 30;
+/** XP is granted only for a run dated today or within this many days back. */
+export const XP_WINDOW_DAYS = 1;
 /** Riegel endurance exponent (1.06 is the classic fatigue factor). */
 export const RIEGEL_EXPONENT = 1.06;
 
@@ -77,6 +82,26 @@ export interface RunValidation {
   ok: boolean;
   /** Dictionary key for the error, when not ok. */
   error?: string;
+}
+
+/**
+ * Whether a run's date is acceptable for logging: not in the future, and no more
+ * than MAX_RUN_AGE_DAYS before `today` (both YYYY-MM-DD in the user's timezone).
+ */
+export function validateRunDate(ranOn: string, today: string): RunValidation {
+  if (ranOn > today) return { ok: false, error: "course.error.future" };
+  if (ranOn < addDaysToDateStr(today, -MAX_RUN_AGE_DAYS)) return { ok: false, error: "course.error.tooOld" };
+  return { ok: true };
+}
+
+/**
+ * Whether a run qualifies for the daily XP reward: a genuine effort (at least
+ * 10 minutes and 1 km) AND dated today or yesterday in the user's timezone.
+ * Mirrors the ka_xp_run database trigger so the "+XP" toast matches reality.
+ */
+export function runEarnsXp(distanceM: number, durationS: number, ranOn: string, today: string): boolean {
+  if (durationS < 600 || distanceM < 1000) return false;
+  return ranOn <= today && ranOn >= addDaysToDateStr(today, -XP_WINDOW_DAYS);
 }
 
 /**
