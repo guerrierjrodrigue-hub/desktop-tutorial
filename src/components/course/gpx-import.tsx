@@ -5,20 +5,25 @@ import { useRouter } from "next/navigation";
 import { Upload, FileUp, Check } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { importGpxRun } from "@/app/(app)/course/actions";
+import { previewGpxRun, importGpxRun, type GpxPreviewResult } from "@/app/(app)/course/actions";
 import { showXp } from "@/components/gamification/xp-toast";
+import { formatDuration, formatKm, formatPace } from "@/lib/running";
 import { MAX_GPX_BYTES } from "@/lib/gpx";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 
+type Preview = Extract<GpxPreviewResult, { ok: true }>["preview"];
+
 /**
- * Upload a .gpx file: the distance, time and date are read on the server and a
- * run is logged. No track is stored. The 5 MB cap is checked before upload and
- * re-checked server-side. Limits mirror a manual entry.
+ * Upload a .gpx file: the distance, time and date are read on the server and
+ * shown as a preview. Nothing is saved until the user confirms. The run is
+ * stored with source "import"; no track is kept. The 5 MB cap is checked before
+ * upload and re-checked server-side.
  */
 export function GpxImport({ dict }: { dict: Dictionary }) {
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
-  const [fileName, setFileName] = useState<string | null>(null);
+  const [content, setContent] = useState<string | null>(null);
+  const [preview, setPreview] = useState<Preview | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
   const [pending, startTransition] = useTransition();
@@ -26,31 +31,49 @@ export function GpxImport({ dict }: { dict: Dictionary }) {
   const fail = (code?: string) =>
     (code && (dict[code as keyof Dictionary] as string)) || dict["course.gpx.unreadable"];
 
+  function reset() {
+    setContent(null);
+    setPreview(null);
+    setError(null);
+    if (fileRef.current) fileRef.current.value = "";
+  }
+
   async function onFile(e: React.ChangeEvent<HTMLInputElement>) {
     setError(null);
     setDone(false);
+    setPreview(null);
+    setContent(null);
     const file = e.target.files?.[0];
     if (!file) return;
-    setFileName(file.name);
     if (file.size > MAX_GPX_BYTES) {
       setError(dict["course.gpx.tooBig"]);
       return;
     }
-    let content: string;
+    let text: string;
     try {
-      content = await file.text();
+      text = await file.text();
     } catch {
       setError(dict["course.gpx.unreadable"]);
       return;
     }
     startTransition(async () => {
+      const res = await previewGpxRun({ content: text });
+      if (res.ok) {
+        setContent(text);
+        setPreview(res.preview);
+      } else {
+        setError(fail(res.error));
+      }
+    });
+  }
+
+  function save() {
+    if (!content) return;
+    startTransition(async () => {
       const res = await importGpxRun({ content });
       if (res.ok) {
         if (res.xp) showXp(res.xp);
-        // The server recomputed distance/duration; show success and let the
-        // page revalidate the run list and stats.
-        setFileName(null);
-        if (fileRef.current) fileRef.current.value = "";
+        reset();
         setDone(true);
         router.refresh();
       } else {
@@ -86,10 +109,39 @@ export function GpxImport({ dict }: { dict: Dictionary }) {
         >
           <Upload className="size-4" /> {pending ? dict["course.gpx.reading"] : dict["course.gpx.choose"]}
         </Button>
-        {fileName && !done && !error && (
-          <p className="mt-2 truncate text-xs text-faint">{fileName}</p>
-        )}
       </div>
+
+      {preview && (
+        <div className="mt-4" data-testid="gpx-preview">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-faint">{dict["course.gpx.preview"]}</p>
+          <dl className="grid grid-cols-2 gap-3 rounded-xl border border-border bg-surface-2 p-4 text-sm">
+            <div>
+              <dt className="text-xs text-faint">{dict["course.tools.distanceKm"]}</dt>
+              <dd className="font-semibold">{formatKm(preview.distanceM)} km</dd>
+            </div>
+            <div>
+              <dt className="text-xs text-faint">{dict["course.tools.time"]}</dt>
+              <dd className="font-semibold tabular-nums">{formatDuration(preview.durationS)}</dd>
+            </div>
+            <div>
+              <dt className="text-xs text-faint">{dict["course.pace"]}</dt>
+              <dd className="font-semibold tabular-nums">{formatPace(preview.paceSPerKm)} {dict["course.tools.perKm"]}</dd>
+            </div>
+            <div>
+              <dt className="text-xs text-faint">{dict["course.new.date"]}</dt>
+              <dd className="font-semibold tabular-nums">{preview.ranOn}</dd>
+            </div>
+          </dl>
+          <div className="mt-3 flex gap-2">
+            <Button type="button" size="sm" onClick={save} disabled={pending}>
+              <Check className="size-4" /> {dict["course.gpx.import"]}
+            </Button>
+            <Button type="button" size="sm" variant="ghost" onClick={reset} disabled={pending}>
+              {dict["common.cancel"]}
+            </Button>
+          </div>
+        </div>
+      )}
 
       {done && (
         <p role="status" className="mt-3 flex items-center gap-1.5 text-sm text-green-bright">

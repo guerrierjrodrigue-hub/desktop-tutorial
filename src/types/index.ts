@@ -70,7 +70,7 @@ export interface Run {
   kind: RunKind;
   effort?: number;
   note?: string;
-  source: "manual" | "chrono";
+  source: "manual" | "chrono" | "import";
   planSessionId?: string;
   /** The shoe pair this run was logged against, if any. */
   shoeId?: string | null;

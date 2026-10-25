@@ -15,8 +15,11 @@ import {
   formatDuration,
   formatKm,
   validateRun,
+  validateRunDate,
+  MAX_RUN_AGE_DAYS,
   RUN_KINDS,
 } from "@/lib/running";
+import { addDaysToDateStr } from "@/lib/date";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { Run, RunKind, Shoe } from "@/types";
 
@@ -49,6 +52,7 @@ export function NewRunForm({
   const distanceM = Math.round((Number(km) || 0) * 1000);
   const durationS = durationToSeconds(Number(h), Number(m), Number(s));
   const livePace = paceSecPerKm(distanceM, durationS);
+  const minDate = addDaysToDateStr(today, -MAX_RUN_AGE_DAYS);
 
   const canSubmit = distanceM > 0 && durationS > 0 && !pending;
 
@@ -60,6 +64,11 @@ export function NewRunForm({
     const local = validateRun(distanceM, durationS);
     if (!local.ok) {
       setError(failMessage(local.error));
+      return;
+    }
+    const localDate = validateRunDate(date, today);
+    if (!localDate.ok) {
+      setError(failMessage(localDate.error));
       return;
     }
     setError(null);
@@ -115,6 +124,7 @@ export function NewRunForm({
               id="run-date"
               type="date"
               value={date}
+              min={minDate}
               max={today}
               onChange={(e) => setDate(e.target.value)}
               className={inputClass}

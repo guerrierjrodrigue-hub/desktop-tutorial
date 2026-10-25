@@ -11,8 +11,11 @@ import {
   formatKm,
   formatPace,
   validateRun,
+  validateRunDate,
+  MAX_RUN_AGE_DAYS,
   RUN_KINDS,
 } from "@/lib/running";
+import { addDaysToDateStr } from "@/lib/date";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { LocaleCode } from "@/i18n/locales";
 import type { Run, RunKind } from "@/types";
@@ -25,16 +28,18 @@ function formatRunDate(iso: string, locale: LocaleCode): string {
   return new Date(iso + "T00:00:00").toLocaleDateString(tag, { weekday: "short", day: "numeric", month: "short" });
 }
 
-interface EditDraft { km: string; h: string; m: string; s: string; kind: RunKind; effort: string }
+interface EditDraft { ranOn: string; km: string; h: string; m: string; s: string; kind: RunKind; effort: string }
 
 export function RunList({
   initial,
   dict,
   locale,
+  today,
 }: {
   initial: Run[];
   dict: Dictionary;
   locale: LocaleCode;
+  today: string;
 }) {
   const [runs, setRuns] = useState<Run[]>(initial);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -51,6 +56,7 @@ export function RunList({
     setError(null);
     setEditingId(r.id);
     setDraft({
+      ranOn: r.ranOn,
       km: String(r.distanceM / 1000),
       h: String(Math.floor(r.durationS / 3600) || ""),
       m: String(Math.floor((r.durationS % 3600) / 60) || ""),
@@ -69,10 +75,16 @@ export function RunList({
       setError(failMessage(local.error));
       return;
     }
+    const localDate = validateRunDate(draft.ranOn, today);
+    if (!localDate.ok) {
+      setError(failMessage(localDate.error));
+      return;
+    }
     const previous = runs.find((r) => r.id === id);
     const effort = draft.effort ? Math.min(10, Math.max(1, Number(draft.effort))) : undefined;
     const updated: Run = {
       ...(previous as Run),
+      ranOn: draft.ranOn,
       distanceM,
       durationS,
       paceSPerKm: paceSecPerKm(distanceM, durationS),
@@ -83,7 +95,7 @@ export function RunList({
     setEditingId(null);
     setError(null);
     startTransition(async () => {
-      const res = await updateRun({ id, distanceM, durationS, kind: draft.kind, effort });
+      const res = await updateRun({ id, ranOn: draft.ranOn, distanceM, durationS, kind: draft.kind, effort });
       if (!res.ok) {
         if (previous) setRuns((prev) => prev.map((r) => (r.id === id ? previous : r)));
         setError(failMessage(res.error));
@@ -121,6 +133,15 @@ export function RunList({
           editingId === r.id && draft ? (
             <li key={r.id} className="rounded-lg border border-accent/30 bg-surface-2 p-3">
               <div className="space-y-2">
+                <input
+                  aria-label={dict["course.new.date"]}
+                  type="date"
+                  min={addDaysToDateStr(today, -MAX_RUN_AGE_DAYS)}
+                  max={today}
+                  value={draft.ranOn}
+                  onChange={(e) => setDraft({ ...draft, ranOn: e.target.value })}
+                  className={inputClass}
+                />
                 <input
                   aria-label={dict["course.new.distanceKm"]}
                   type="number"

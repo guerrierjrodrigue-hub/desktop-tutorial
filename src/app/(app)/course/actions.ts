@@ -3,12 +3,14 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getAuthedContext } from "@/lib/supabase/auth";
-import { getUserToday } from "@/lib/date";
+import { getUserToday, startOfLocalDayUTC } from "@/lib/date";
 import { getUserTimezone } from "@/lib/timezone";
 import { XP_REWARDS } from "@/lib/gamification";
 import { type ActionResult, demoOk } from "@/lib/actions/result";
 import { validate, logAndFail } from "@/lib/actions/errors";
-import { validateRun, MAX_RUNS_PER_DAY, goalKindDistanceM } from "@/lib/running";
+import {
+  validateRun, validateRunDate, runEarnsXp, paceSecPerKm, MAX_RUNS_PER_DAY, goalKindDistanceM,
+} from "@/lib/running";
 import { parseGpx, MAX_GPX_BYTES } from "@/lib/gpx";
 
 const runSchema = z.object({
@@ -46,16 +48,18 @@ export async function createRun(input: {
   const limit = validateRun(data.distanceM, data.durationS);
   if (!limit.ok) return { ok: false, error: limit.error };
 
-  // The run's day must not be in the future (user's local calendar).
-  const today = getUserToday(await getUserTimezone());
-  if (data.ranOn > today) return { ok: false, error: "course.error.generic" };
+  // The run's date: not in the future, not more than 30 days old.
+  const tz = await getUserTimezone();
+  const today = getUserToday(tz);
+  const dateCheck = validateRunDate(data.ranOn, today);
+  if (!dateCheck.ok) return { ok: false, error: dateCheck.error };
 
-  // At most five runs per day.
+  // At most five runs CREATED per local calendar day (back-dating can't bypass).
   const { count } = await ctx.supabase
     .from("runs")
     .select("id", { count: "exact", head: true })
     .eq("user_id", ctx.userId)
-    .eq("ran_on", data.ranOn);
+    .gte("created_at", startOfLocalDayUTC(tz));
   if ((count ?? 0) >= MAX_RUNS_PER_DAY) return { ok: false, error: "course.error.tooMany" };
 
   // Only link a shoe the user actually owns (ignore a stale/foreign id).
@@ -91,14 +95,15 @@ export async function createRun(input: {
   revalidatePath("/course");
   revalidatePath("/dashboard");
   // XP is awarded server-side by the ka_xp_run trigger only for a genuine run
-  // (>= 10 min and >= 1 km) and at most once per day; mirror the gate here so
-  // the "+XP" toast matches what the trigger actually granted.
-  const earnsXp = data.durationS >= 600 && data.distanceM >= 1000;
+  // (>= 10 min and >= 1 km) dated today or yesterday, at most once per day;
+  // mirror that gate here so the "+XP" toast matches what the trigger granted.
+  const earnsXp = runEarnsXp(data.distanceM, data.durationS, data.ranOn, today);
   return { ok: true, id: (inserted as { id: string }).id, xp: earnsXp ? XP_REWARDS.workout : undefined };
 }
 
 const updateRunSchema = z.object({
   id: z.string().uuid("errors.invalidId"),
+  ranOn: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "course.error.generic").optional(),
   distanceM: z.number().int().positive("course.error.distance").max(100000, "course.error.tooFar"),
   durationS: z.number().int().positive("course.error.duration"),
   kind: z.enum(["easy", "tempo", "intervals", "long", "race"]),
@@ -106,9 +111,14 @@ const updateRunSchema = z.object({
   note: z.string().trim().max(500, "errors.tooLong").optional(),
 });
 
-/** Edit one of the signed-in user's runs, with the same plausibility limits. */
+/**
+ * Edit one of the signed-in user's runs, with the same plausibility and date
+ * limits as a new entry. Editing never grants XP (the ka_xp_run trigger fires on
+ * insert only), so moving a run's date into the past cannot create a reward.
+ */
 export async function updateRun(input: {
   id: string;
+  ranOn?: string;
   distanceM: number;
   durationS: number;
   kind: "easy" | "tempo" | "intervals" | "long" | "race";
@@ -125,15 +135,25 @@ export async function updateRun(input: {
   const limit = validateRun(data.distanceM, data.durationS);
   if (!limit.ok) return { ok: false, error: limit.error };
 
+  // If the date is being changed, apply the same future / 30-day rules.
+  if (data.ranOn) {
+    const today = getUserToday(await getUserTimezone());
+    const dateCheck = validateRunDate(data.ranOn, today);
+    if (!dateCheck.ok) return { ok: false, error: dateCheck.error };
+  }
+
+  const patch: Record<string, unknown> = {
+    distance_m: data.distanceM,
+    duration_s: data.durationS,
+    kind: data.kind,
+    effort: data.effort ?? null,
+    note: data.note ?? null,
+  };
+  if (data.ranOn) patch.ran_on = data.ranOn;
+
   const { data: rows, error } = await ctx.supabase
     .from("runs")
-    .update({
-      distance_m: data.distanceM,
-      duration_s: data.durationS,
-      kind: data.kind,
-      effort: data.effort ?? null,
-      note: data.note ?? null,
-    })
+    .update(patch)
     .eq("id", data.id)
     .eq("user_id", ctx.userId)
     .select("id");
@@ -345,50 +365,92 @@ export async function deleteShoe(id: string): Promise<ActionResult> {
   return { ok: true };
 }
 
-const gpxSchema = z.object({
-  content: z.string().min(1, "course.gpx.unreadable").max(MAX_GPX_BYTES, "course.gpx.tooBig"),
+const gpxContentSchema = z.string().min(1, "course.gpx.unreadable").max(MAX_GPX_BYTES, "course.gpx.tooBig");
+
+interface GpxRun {
+  distanceM: number;
+  durationS: number;
+  ranOn: string;
+  paceSPerKm: number;
+}
+
+/**
+ * Parse a GPX document and apply the same plausibility and date limits as a
+ * manual entry. Returns the fields we would store, or a localized error code.
+ * No track, route or elevation is ever kept. Shared by preview and import so
+ * what the user confirms is exactly what gets saved.
+ */
+function readGpxRun(content: string, today: string): { ok: true; run: GpxRun } | { ok: false; error: string } {
+  // Byte length, not character count, is what the 5 MB cap means.
+  if (Buffer.byteLength(content, "utf8") > MAX_GPX_BYTES) return { ok: false, error: "course.gpx.tooBig" };
+
+  const summary = parseGpx(content);
+  if (summary.points === 0) return { ok: false, error: "course.gpx.noPoints" };
+  const distanceM = Math.round(summary.distanceM);
+  const durationS = Math.round(summary.durationS);
+  if (distanceM <= 0 || durationS <= 0) return { ok: false, error: "course.gpx.noPoints" };
+
+  const limit = validateRun(distanceM, durationS);
+  if (!limit.ok) return { ok: false, error: limit.error ?? "course.gpx.unreadable" };
+
+  // Use the file's date when present (within the 30-day window), else today.
+  let ranOn = today;
+  if (summary.date) {
+    const dateCheck = validateRunDate(summary.date, today);
+    if (!dateCheck.ok) return { ok: false, error: dateCheck.error ?? "course.error.tooOld" };
+    ranOn = summary.date;
+  }
+
+  return { ok: true, run: { distanceM, durationS, ranOn, paceSPerKm: paceSecPerKm(distanceM, durationS) } };
+}
+
+export type GpxPreviewResult =
+  | { ok: true; preview: GpxRun }
+  | { ok: false; error: string };
+
+/** Read a GPX file and return a preview (nothing is saved). */
+export async function previewGpxRun(input: { content: string }): Promise<GpxPreviewResult> {
+  const today = getUserToday(await getUserTimezone());
+  // Demo mode still previews (parse only); it just never writes on save.
+  const content = (await getAuthedContext()) ? input.content : (input.content ?? "");
+  if (typeof content !== "string" || content.length === 0 || content.length > MAX_GPX_BYTES) {
+    return { ok: false, error: content && content.length > MAX_GPX_BYTES ? "course.gpx.tooBig" : "course.gpx.unreadable" };
+  }
+  const read = readGpxRun(content, today);
+  return read.ok ? { ok: true, preview: read.run } : read;
+}
+
+const gpxImportSchema = z.object({
+  content: gpxContentSchema,
   kind: z.enum(["easy", "tempo", "intervals", "long", "race"]).default("easy"),
 });
 
 /**
- * Import one run from a GPX file. The distance, duration and date are read
- * server-side; no track, route or elevation is stored. The same plausibility
- * limits and per-day cap as a manual entry apply.
+ * Save one run from a GPX file after the user has confirmed the preview. The
+ * distance, duration and date are re-read server-side (authoritative); only
+ * those three are stored, and the source is marked "import". Same date window,
+ * plausibility limits and per-creation-day cap as a manual entry.
  */
 export async function importGpxRun(input: { content: string; kind?: string }): Promise<ActionResult> {
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
 
-  // Byte length, not character count, is what the 5 MB cap means.
-  if (typeof input.content === "string") {
-    const bytes = Buffer.byteLength(input.content, "utf8");
-    if (bytes > MAX_GPX_BYTES) return { ok: false, error: "course.gpx.tooBig" };
-  }
-
-  const check = validate(gpxSchema, input);
+  const check = validate(gpxImportSchema, input);
   if (!check.ok) return check.result;
   const data = check.data;
 
-  const summary = parseGpx(data.content);
-  if (summary.points === 0) return { ok: false, error: "course.gpx.noPoints" };
-  if (summary.distanceM <= 0 || summary.durationS <= 0) return { ok: false, error: "course.gpx.noPoints" };
+  const tz = await getUserTimezone();
+  const today = getUserToday(tz);
+  const read = readGpxRun(data.content, today);
+  if (!read.ok) return { ok: false, error: read.error };
+  const { distanceM, durationS, ranOn } = read.run;
 
-  const distanceM = Math.round(summary.distanceM);
-  const durationS = Math.round(summary.durationS);
-
-  // Same plausibility band and max distance as a manual entry.
-  const limit = validateRun(distanceM, durationS);
-  if (!limit.ok) return { ok: false, error: limit.error };
-
-  const today = getUserToday(await getUserTimezone());
-  const ranOn = summary.date && summary.date <= today ? summary.date : today;
-
-  // At most five runs per day.
+  // At most five runs CREATED per local calendar day.
   const { count } = await ctx.supabase
     .from("runs")
     .select("id", { count: "exact", head: true })
     .eq("user_id", ctx.userId)
-    .eq("ran_on", ranOn);
+    .gte("created_at", startOfLocalDayUTC(tz));
   if ((count ?? 0) >= MAX_RUNS_PER_DAY) return { ok: false, error: "course.error.tooMany" };
 
   const { data: inserted, error } = await ctx.supabase
@@ -399,7 +461,7 @@ export async function importGpxRun(input: { content: string; kind?: string }): P
       distance_m: distanceM,
       duration_s: durationS,
       kind: data.kind,
-      source: "chrono",
+      source: "import",
     })
     .select("id")
     .single();
@@ -407,6 +469,6 @@ export async function importGpxRun(input: { content: string; kind?: string }): P
 
   revalidatePath("/course");
   revalidatePath("/dashboard");
-  const earnsXp = durationS >= 600 && distanceM >= 1000;
+  const earnsXp = runEarnsXp(distanceM, durationS, ranOn, today);
   return { ok: true, id: (inserted as { id: string }).id, xp: earnsXp ? XP_REWARDS.workout : undefined };
 }

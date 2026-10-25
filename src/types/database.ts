@@ -74,7 +74,7 @@ export interface RunRow {
   kind: "easy" | "tempo" | "intervals" | "long" | "race";
   effort: number | null;
   note: string | null;
-  source: "manual" | "chrono";
+  source: "manual" | "chrono" | "import";
   plan_session_id: string | null;
   /** Optional shoe pair this run counts toward (null if removed or none). */
   shoe_id: string | null;

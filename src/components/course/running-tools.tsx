@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { IntervalTimer } from "@/components/course/interval-timer";
 import {
   durationToSeconds,
@@ -95,6 +96,15 @@ export function RunningTools({ dict, locale }: { dict: Dictionary; locale: Local
   const [built, setBuilt] = useState<RunSegment[]>([]);
   const [buildNonce, setBuildNonce] = useState(0);
   const [builderError, setBuilderError] = useState(false);
+  const [highlight, setHighlight] = useState(false);
+  const timerRef = useRef<HTMLDivElement>(null);
+
+  // After a successful build, scroll the timer into view (DOM-only side effect;
+  // the highlight flash is started from the click handler, not here).
+  useEffect(() => {
+    if (buildNonce === 0 || built.length === 0) return;
+    timerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [buildNonce, built.length]);
 
   function build() {
     const segs = buildIntervalSegments({
@@ -115,6 +125,8 @@ export function RunningTools({ dict, locale }: { dict: Dictionary; locale: Local
     setBuilderError(false);
     setBuilt(segs);
     setBuildNonce((n) => n + 1);
+    setHighlight(true);
+    window.setTimeout(() => setHighlight(false), 1600);
   }
 
   return (
@@ -306,7 +318,16 @@ export function RunningTools({ dict, locale }: { dict: Dictionary; locale: Local
       </Card>
 
       {built.length > 0 && (
-        <IntervalTimer key={buildNonce} sessionId="builder" segments={built} dict={dict} locale={locale} />
+        <div
+          ref={timerRef}
+          data-testid="builder-timer"
+          className={cn(
+            "rounded-2xl transition-all duration-500",
+            highlight && "ring-2 ring-accent/70 ring-offset-2 ring-offset-surface",
+          )}
+        >
+          <IntervalTimer key={buildNonce} sessionId="builder" segments={built} dict={dict} locale={locale} />
+        </div>
       )}
     </div>
   );

@@ -16,6 +16,8 @@ import {
   shoeWearAlert,
   recommendPlanSlug,
   goalKindDistanceM,
+  validateRunDate,
+  runEarnsXp,
   MIN_PACE_S_PER_KM,
   MAX_PACE_S_PER_KM,
   SHOE_WEAR_ALERT_M,
@@ -202,6 +204,41 @@ describe("shoe wear alert (700 km)", () => {
     expect(shoeWearAlert(SHOE_WEAR_ALERT_M + 1)).toBe(true);
     expect(shoeWearAlert(SHOE_WEAR_ALERT_M - 1)).toBe(false);
     expect(shoeWearAlert(0)).toBe(false);
+  });
+});
+
+describe("run date window", () => {
+  const today = "2026-10-25";
+  it("accepts today, yesterday and up to 30 days back", () => {
+    expect(validateRunDate(today, today)).toEqual({ ok: true });
+    expect(validateRunDate("2026-10-24", today)).toEqual({ ok: true });
+    expect(validateRunDate("2026-09-25", today)).toEqual({ ok: true }); // exactly 30 days
+  });
+  it("rejects a future date", () => {
+    expect(validateRunDate("2026-10-26", today)).toEqual({ ok: false, error: "course.error.future" });
+  });
+  it("rejects a date more than 30 days ago", () => {
+    expect(validateRunDate("2026-09-24", today).error).toBe("course.error.tooOld");
+    expect(validateRunDate("2025-01-01", today).error).toBe("course.error.tooOld");
+  });
+});
+
+describe("run earns XP only for today or yesterday", () => {
+  const today = "2026-10-25";
+  it("rewards a genuine run dated today or yesterday", () => {
+    expect(runEarnsXp(5000, 1800, today, today)).toBe(true);
+    expect(runEarnsXp(5000, 1800, "2026-10-24", today)).toBe(true);
+  });
+  it("gives no XP for an older date, even if genuine", () => {
+    expect(runEarnsXp(5000, 1800, "2026-10-23", today)).toBe(false);
+    expect(runEarnsXp(5000, 1800, "2025-01-01", today)).toBe(false);
+  });
+  it("gives no XP for a future date", () => {
+    expect(runEarnsXp(5000, 1800, "2026-10-26", today)).toBe(false);
+  });
+  it("gives no XP below the effort floor (10 min and 1 km)", () => {
+    expect(runEarnsXp(900, 1800, today, today)).toBe(false);
+    expect(runEarnsXp(5000, 500, today, today)).toBe(false);
   });
 });
 
