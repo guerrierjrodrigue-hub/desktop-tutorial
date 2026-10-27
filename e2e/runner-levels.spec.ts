@@ -93,3 +93,37 @@ test.describe("Running — new tools", () => {
     await expect(page.getByText("Run imported.")).toBeVisible();
   });
 });
+
+test.describe("Running — no-XP note", () => {
+  const NOTE = /XP is only given for runs from today and yesterday/;
+
+  test("a run below the minimums shows the note under 'Run saved.'", async ({ page }) => {
+    await page.goto("/course/nouvelle");
+    // 0.5 km in 5 min today: a valid entry, but below the 1 km / 10 min floor.
+    await page.getByLabel("Distance (km)").fill("0.5");
+    await page.getByLabel("Minutes", { exact: true }).fill("5");
+    await page.getByRole("button", { name: "Save run" }).click();
+    await expect(page.getByText("Run saved.")).toBeVisible();
+    await expect(page.getByText(NOTE)).toBeVisible();
+  });
+
+  test("an imported run dated before yesterday shows the note", async ({ page }) => {
+    await page.goto("/course/nouvelle");
+    // A genuine run (~2 km, 15 min) but dated three days ago: no XP.
+    const d = new Date(Date.now() - 3 * 86_400_000).toISOString().slice(0, 10);
+    const gpx = `<?xml version="1.0"?>
+<gpx version="1.1" creator="e2e"><trk><trkseg>
+<trkpt lat="48.0000" lon="2.0000"><time>${d}T06:00:00Z</time></trkpt>
+<trkpt lat="48.0180" lon="2.0000"><time>${d}T06:15:00Z</time></trkpt>
+</trkseg></trk></gpx>`;
+    await page.locator("#gpx-file").setInputFiles({
+      name: "old.gpx",
+      mimeType: "application/gpx+xml",
+      buffer: Buffer.from(gpx, "utf8"),
+    });
+    await expect(page.getByTestId("gpx-preview")).toBeVisible();
+    await page.getByRole("button", { name: "Import this run" }).click();
+    await expect(page.getByText("Run imported.")).toBeVisible();
+    await expect(page.getByText(NOTE)).toBeVisible();
+  });
+});

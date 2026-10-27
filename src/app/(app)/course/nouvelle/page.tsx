@@ -39,7 +39,7 @@ export default async function NewRunPage() {
         <PageHeader title={dict["course.new.title"]} subtitle={dict["course.new.subtitle"]} />
         <NewRunForm dict={dict} today={today} shoes={activeShoes} />
         <div className="mt-5">
-          <GpxImport dict={dict} />
+          <GpxImport dict={dict} today={today} />
         </div>
       </main>
     </>

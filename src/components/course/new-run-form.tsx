@@ -16,6 +16,7 @@ import {
   formatKm,
   validateRun,
   validateRunDate,
+  runEarnsXp,
   MAX_RUN_AGE_DAYS,
   RUN_KINDS,
 } from "@/lib/running";
@@ -47,6 +48,7 @@ export function NewRunForm({
   const [error, setError] = useState<string | null>(null);
   const [added, setAdded] = useState<Run[]>([]);
   const [journalDone, setJournalDone] = useState(false);
+  const [noXpNote, setNoXpNote] = useState(false);
   const [pending, startTransition] = useTransition();
 
   const distanceM = Math.round((Number(km) || 0) * 1000);
@@ -99,6 +101,7 @@ export function NewRunForm({
         };
         setAdded((prev) => [run, ...prev]);
         setJournalDone(false);
+        setNoXpNote(!runEarnsXp(distanceM, durationS, date, today));
         // Reset the entry fields for the next run (keep the date).
         setKm("");
         setH("");
@@ -217,7 +220,9 @@ export function NewRunForm({
             <CardTitle>{dict["course.after.title"]}</CardTitle>
             <Check className="size-4 text-green-bright" />
           </CardHeader>
-          <p role="status" className="mb-3 text-sm text-green-bright">{dict["course.new.saved"]}</p>
+          <p role="status" className="text-sm text-green-bright">{dict["course.new.saved"]}</p>
+          {noXpNote && <p className="mb-3 mt-1 text-sm text-muted">{dict["course.noXpNote"]}</p>}
+          {!noXpNote && <div className="mb-3" />}
           <AfterRun run={added[0]} dict={dict} journalDone={journalDone} onJournalDone={() => setJournalDone(true)} />
 
           <ul className="mt-4 space-y-2" aria-label={dict["course.recentRuns"]}>
