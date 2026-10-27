@@ -366,6 +366,7 @@ const fr: Dictionary = {
   "course.new.notePlaceholder": "Comment c'était ?",
   "course.new.submit": "Enregistrer",
   "course.new.saved": "Sortie enregistrée.",
+  "course.noXpNote": "Cette sortie est enregistrée. L'XP n'est donnée que pour les sorties d'aujourd'hui et d'hier (au moins 10 minutes et 1 km).",
   "course.computedPace": "Allure",
   "course.error.distance": "Saisis une distance supérieure à zéro.",
   "course.error.duration": "Saisis un temps supérieur à zéro.",

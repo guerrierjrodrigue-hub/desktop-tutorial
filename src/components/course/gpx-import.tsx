@@ -7,7 +7,7 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { previewGpxRun, importGpxRun, type GpxPreviewResult } from "@/app/(app)/course/actions";
 import { showXp } from "@/components/gamification/xp-toast";
-import { formatDuration, formatKm, formatPace } from "@/lib/running";
+import { formatDuration, formatKm, formatPace, runEarnsXp } from "@/lib/running";
 import { MAX_GPX_BYTES } from "@/lib/gpx";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 
@@ -19,13 +19,14 @@ type Preview = Extract<GpxPreviewResult, { ok: true }>["preview"];
  * stored with source "import"; no track is kept. The 5 MB cap is checked before
  * upload and re-checked server-side.
  */
-export function GpxImport({ dict }: { dict: Dictionary }) {
+export function GpxImport({ dict, today }: { dict: Dictionary; today: string }) {
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
   const [content, setContent] = useState<string | null>(null);
   const [preview, setPreview] = useState<Preview | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
+  const [noXpNote, setNoXpNote] = useState(false);
   const [pending, startTransition] = useTransition();
 
   const fail = (code?: string) =>
@@ -41,6 +42,7 @@ export function GpxImport({ dict }: { dict: Dictionary }) {
   async function onFile(e: React.ChangeEvent<HTMLInputElement>) {
     setError(null);
     setDone(false);
+    setNoXpNote(false);
     setPreview(null);
     setContent(null);
     const file = e.target.files?.[0];
@@ -68,12 +70,14 @@ export function GpxImport({ dict }: { dict: Dictionary }) {
   }
 
   function save() {
-    if (!content) return;
+    if (!content || !preview) return;
+    const earns = runEarnsXp(preview.distanceM, preview.durationS, preview.ranOn, today);
     startTransition(async () => {
       const res = await importGpxRun({ content });
       if (res.ok) {
         if (res.xp) showXp(res.xp);
         reset();
+        setNoXpNote(!earns);
         setDone(true);
         router.refresh();
       } else {
@@ -144,9 +148,12 @@ export function GpxImport({ dict }: { dict: Dictionary }) {
       )}
 
       {done && (
-        <p role="status" className="mt-3 flex items-center gap-1.5 text-sm text-green-bright">
-          <Check className="size-4" /> {dict["course.gpx.imported"]}
-        </p>
+        <div className="mt-3">
+          <p role="status" className="flex items-center gap-1.5 text-sm text-green-bright">
+            <Check className="size-4" /> {dict["course.gpx.imported"]}
+          </p>
+          {noXpNote && <p className="mt-1 text-sm text-muted">{dict["course.noXpNote"]}</p>}
+        </div>
       )}
       {error && <p role="alert" className="mt-3 text-sm text-ember">{error}</p>}
     </Card>

@@ -377,6 +377,7 @@ const en = {
   "course.new.notePlaceholder": "How did it feel?",
   "course.new.submit": "Save run",
   "course.new.saved": "Run saved.",
+  "course.noXpNote": "This run is saved. XP is only given for runs from today and yesterday (at least 10 minutes and 1 km).",
   "course.computedPace": "Pace",
   "course.error.distance": "Enter a distance greater than zero.",
   "course.error.duration": "Enter a time greater than zero.",

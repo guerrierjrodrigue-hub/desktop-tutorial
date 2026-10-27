@@ -12,6 +12,7 @@ import {
   formatPace,
   validateRun,
   validateRunDate,
+  runEarnsXp,
   MAX_RUN_AGE_DAYS,
   RUN_KINDS,
 } from "@/lib/running";
@@ -46,6 +47,7 @@ export function RunList({
   const [draft, setDraft] = useState<EditDraft | null>(null);
   const [confirmId, setConfirmId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [savedNoXp, setSavedNoXp] = useState(false);
   const [, startTransition] = useTransition();
 
   const failMessage = (code?: string) =>
@@ -54,6 +56,7 @@ export function RunList({
   function startEdit(r: Run) {
     setConfirmId(null);
     setError(null);
+    setSavedNoXp(false);
     setEditingId(r.id);
     setDraft({
       ranOn: r.ranOn,
@@ -94,6 +97,7 @@ export function RunList({
     setRuns((prev) => prev.map((r) => (r.id === id ? updated : r)));
     setEditingId(null);
     setError(null);
+    setSavedNoXp(!runEarnsXp(distanceM, durationS, draft.ranOn, today));
     startTransition(async () => {
       const res = await updateRun({ id, ranOn: draft.ranOn, distanceM, durationS, kind: draft.kind, effort });
       if (!res.ok) {
@@ -108,6 +112,7 @@ export function RunList({
     setRuns((prev) => prev.filter((r) => r.id !== id));
     setConfirmId(null);
     setError(null);
+    setSavedNoXp(false);
     startTransition(async () => {
       const res = await deleteRun(id);
       if (!res.ok) {
@@ -128,6 +133,12 @@ export function RunList({
   return (
     <div>
       {error && <p role="alert" className="mb-3 text-center text-sm text-ember">{error}</p>}
+      {savedNoXp && (
+        <div className="mb-3 text-center" data-testid="edit-noxp-note">
+          <p role="status" className="text-sm text-green-bright">{dict["course.new.saved"]}</p>
+          <p className="text-sm text-muted">{dict["course.noXpNote"]}</p>
+        </div>
+      )}
       <ul className="space-y-2">
         {runs.map((r) =>
           editingId === r.id && draft ? (
