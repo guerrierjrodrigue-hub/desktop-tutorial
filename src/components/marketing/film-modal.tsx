@@ -321,7 +321,7 @@ function LogoScene({
           onClick={onClose}
           className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-accent-bright to-accent-deep px-6 py-2.5 text-sm font-semibold text-accent-fg transition hover:opacity-90"
         >
-          {dict["mkt.hero.cta"]}
+          {dict["mkt.cta.tryFree"]}
         </Link>
         <button
           onClick={onReplay}

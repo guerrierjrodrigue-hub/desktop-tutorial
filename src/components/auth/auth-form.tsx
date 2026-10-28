@@ -5,6 +5,7 @@ import { useFormStatus } from "react-dom";
 import Link from "next/link";
 import { Mail, Lock, User, ArrowRight, AlertCircle, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { TurnstileWidget } from "@/components/auth/turnstile-widget";
 import {
   emailAuthAction,
   oauthAction,
@@ -82,6 +83,10 @@ export function AuthForm({ mode, dict }: { mode: "login" | "signup"; dict: Dicti
           <form action={formAction} className="space-y-3">
             <input type="hidden" name="mode" value={mode} />
             <input type="hidden" name="consent" value={consentValue} />
+            {/* Honeypot: hidden from users and assistive tech; bots fill it. */}
+            <div aria-hidden className="absolute left-[-9999px] top-[-9999px] h-0 w-0 overflow-hidden" role="presentation">
+              <input type="text" name="company" tabIndex={-1} autoComplete="off" />
+            </div>
             {isSignup && (
               <Field icon={User} name="name" type="text" placeholder={dict["auth.fullName"]} autoComplete="name" />
             )}
@@ -99,9 +104,12 @@ export function AuthForm({ mode, dict }: { mode: "login" | "signup"; dict: Dicti
               type="password"
               placeholder={dict["auth.password"]}
               autoComplete={isSignup ? "new-password" : "current-password"}
-              minLength={6}
+              minLength={isSignup ? 10 : 6}
               required
             />
+            {isSignup && <p className="px-1 text-xs text-faint">{dict["auth.passwordHint"]}</p>}
+
+            <TurnstileWidget />
 
             {!isSignup && (
               <div className="text-right">

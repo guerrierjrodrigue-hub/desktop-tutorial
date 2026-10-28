@@ -8,6 +8,7 @@ import { Icon } from "@/components/ui/icon";
 import { toggleHabit } from "@/app/(app)/dashboard/actions";
 import { createHabit } from "@/app/(app)/habits/actions";
 import { showXp } from "@/components/gamification/xp-toast";
+import { track, EVENTS } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { Habit } from "@/types";
@@ -57,6 +58,7 @@ export function HabitsList({
     startTransition(async () => {
       const result = await toggleHabit(id, nextDone);
       if (result.ok) {
+        if (nextDone) track(EVENTS.habitChecked);
         showXp(result.xp);
       } else {
         // Toggle didn't persist: roll back and surface the error.

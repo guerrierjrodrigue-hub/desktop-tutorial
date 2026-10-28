@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/marketing/legal-page";
-import { APP_SUPPORT_EMAIL } from "@/lib/constants";
+import { fillLegalPlaceholders } from "@/config/legal";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 import type { Dictionary, DictionaryKey } from "@/i18n/dictionaries/en";
@@ -10,13 +10,14 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: dict["mkt.terms.metaTitle"],
     description: dict["mkt.terms.metaDescription"],
+    alternates: { canonical: "/terms" },
   };
 }
 
 function section(dict: Dictionary, h: DictionaryKey, b: DictionaryKey) {
   return {
     heading: dict[h],
-    body: dict[b].replace("{email}", APP_SUPPORT_EMAIL).split("\n\n"),
+    body: fillLegalPlaceholders(dict[b]).split("\n\n"),
   };
 }
 
@@ -27,7 +28,7 @@ export default async function TermsPage() {
     <LegalPage
       title={dict["mkt.terms.title"]}
       updated={dict["mkt.legal.updated"]}
-      intro={dict["mkt.terms.intro"]}
+      intro={fillLegalPlaceholders(dict["mkt.terms.intro"])}
       sections={[
         section(dict, "mkt.terms.s1.h", "mkt.terms.s1.b"),
         section(dict, "mkt.terms.s2.h", "mkt.terms.s2.b"),
@@ -38,6 +39,7 @@ export default async function TermsPage() {
         section(dict, "mkt.terms.s7.h", "mkt.terms.s7.b"),
         section(dict, "mkt.terms.s8.h", "mkt.terms.s8.b"),
         section(dict, "mkt.terms.s9.h", "mkt.terms.s9.b"),
+        section(dict, "mkt.terms.s10.h", "mkt.terms.s10.b"),
       ]}
     />
   );

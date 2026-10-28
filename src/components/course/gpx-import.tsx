@@ -7,6 +7,7 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { previewGpxRun, importGpxRun, type GpxPreviewResult } from "@/app/(app)/course/actions";
 import { showXp } from "@/components/gamification/xp-toast";
+import { track, EVENTS } from "@/lib/analytics";
 import { formatDuration, formatKm, formatPace, runEarnsXp } from "@/lib/running";
 import { MAX_GPX_BYTES } from "@/lib/gpx";
 import type { Dictionary } from "@/i18n/dictionaries/en";
@@ -75,6 +76,7 @@ export function GpxImport({ dict, today }: { dict: Dictionary; today: string }) 
     startTransition(async () => {
       const res = await importGpxRun({ content });
       if (res.ok) {
+        track(EVENTS.runLogged, { source: "import" });
         if (res.xp) showXp(res.xp);
         reset();
         setNoXpNote(!earns);

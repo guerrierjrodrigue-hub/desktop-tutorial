@@ -14,6 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: dict["mkt.careers.metaTitle"],
     description: dict["mkt.careers.metaDescription"],
+    alternates: { canonical: "/careers" },
   };
 }
 

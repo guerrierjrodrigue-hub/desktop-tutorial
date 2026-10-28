@@ -1,0 +1,74 @@
+name: Database backup
+
+# Weekly encrypted logical backup of the Supabase Postgres database, kept 30
+# days as a workflow artifact. Can also be run on demand.
+#
+# Required repository secrets:
+#   SUPABASE_DB_URL        Postgres connection string (direct connection, not the
+#                          transaction pooler), e.g.
+#                          postgresql://postgres:<pwd>@db.<ref>.supabase.co:5432/postgres
+#   BACKUP_PASSPHRASE      Passphrase used to encrypt the dump (AES-256). Keep it
+#                          somewhere safe and separate; it is required to restore.
+#
+# Restore (locally, with the passphrase):
+#   gpg --batch --yes --passphrase "$BACKUP_PASSPHRASE" -o backup.dump -d backup.dump.gpg
+#   pg_restore --no-owner --no-privileges -d "$TARGET_DB_URL" backup.dump
+
+on:
+  schedule:
+    - cron: "17 5 * * 1" # Mondays 05:17 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: db-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    name: Encrypted pg_dump
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check required secrets
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+        run: |
+          if [ -z "$SUPABASE_DB_URL" ]; then
+            echo "::error::SUPABASE_DB_URL secret is not set." && exit 1
+          fi
+          if [ -z "$BACKUP_PASSPHRASE" ]; then
+            echo "::error::BACKUP_PASSPHRASE secret is not set." && exit 1
+          fi
+
+      - name: Install PostgreSQL client 17
+        run: |
+          sudo install -d /usr/share/postgresql-common/pgdg
+          sudo curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc --fail \
+            https://www.postgresql.org/media/keys/ACCC4CF8.asc
+          echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" \
+            | sudo tee /etc/apt/sources.list.d/pgdg.list
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client-17
+
+      - name: Dump and encrypt
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+        run: |
+          set -euo pipefail
+          STAMP=$(date -u +%Y%m%d-%H%M%S)
+          FILE="kingdom-athlete-${STAMP}.dump"
+          # Custom format (-Fc), data + schema, no owner/ACL noise.
+          pg_dump --no-owner --no-privileges --format=custom --file="$FILE" "$SUPABASE_DB_URL"
+          gpg --batch --yes --symmetric --cipher-algo AES256 \
+            --passphrase "$BACKUP_PASSPHRASE" -o "${FILE}.gpg" "$FILE"
+          rm -f "$FILE"
+          echo "ARTIFACT_NAME=db-backup-${STAMP}" >> "$GITHUB_ENV"
+
+      - name: Upload encrypted backup (30-day retention)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: "*.dump.gpg"
+          retention-days: 30
+          if-no-files-found: error

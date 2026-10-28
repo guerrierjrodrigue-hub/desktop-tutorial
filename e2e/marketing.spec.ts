@@ -6,9 +6,9 @@ test.describe("Marketing", () => {
     await expect(
       page.getByRole("heading", { name: /grow your faith/i }),
     ).toBeVisible();
-    // Free-beta mode (APP_FREE_MODE) shows the "try it free" CTA.
+    // The single primary CTA across the site.
     await expect(
-      page.getByRole("link", { name: /try it free/i }),
+      page.getByRole("link", { name: /try for free/i }).first(),
     ).toBeVisible();
   });
 
@@ -21,7 +21,7 @@ test.describe("Marketing", () => {
     await expect(main.getByText(/free beta version/i)).toBeVisible();
     await expect(main.getByText(/free unlimited access/i)).toBeVisible();
     await expect(
-      main.getByRole("link", { name: /get started/i }),
+      main.getByRole("link", { name: /try for free/i }),
     ).toBeVisible();
   });
 

@@ -24,7 +24,11 @@ export async function generateMetadata({
   const raw = getBlogPost(slug);
   if (!raw) return { title: (await getDictionary(locale))["mkt.blog.metaTitle"] };
   const post = localizeBlogPost(raw, locale);
-  return { title: post.title, description: post.excerpt };
+  return {
+    title: post.title,
+    description: post.excerpt,
+    alternates: { canonical: `/blog/${post.slug}` },
+  };
 }
 
 function formatDate(iso: string, locale: LocaleCode) {

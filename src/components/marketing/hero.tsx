@@ -75,14 +75,18 @@ function HeroContent({ dict, freeMode }: { dict: Dictionary; freeMode: boolean }
         >
           <Link href="/signup">
             <Button size="lg" className="group">
-              {dict[freeMode ? "mkt.hero.ctaFree" : "mkt.hero.cta"]}
+              {dict["mkt.cta.tryFree"]}
               <ArrowRight className="transition-transform group-hover:translate-x-0.5" />
             </Button>
           </Link>
-          <Button size="lg" variant="secondary" onClick={() => setFilmOpen(true)}>
-            <Play className="fill-current" />
+          <button
+            type="button"
+            onClick={() => setFilmOpen(true)}
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-muted underline-offset-4 transition hover:text-foreground hover:underline"
+          >
+            <Play className="size-3.5 fill-current" />
             {dict["mkt.hero.watchFilm"]}
-          </Button>
+          </button>
         </motion.div>
 
         <motion.p

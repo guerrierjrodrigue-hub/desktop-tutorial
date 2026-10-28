@@ -32,7 +32,7 @@ export async function MarketingNav() {
             </Button>
           </Link>
           <Link href="/signup">
-            <Button size="sm">{dict["mkt.nav.startFree"]}</Button>
+            <Button size="sm">{dict["mkt.cta.tryFree"]}</Button>
           </Link>
         </div>
       </div>

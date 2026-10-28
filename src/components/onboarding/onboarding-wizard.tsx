@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
@@ -16,6 +16,7 @@ import { saveOnboarding } from "@/app/onboarding/actions";
 import { setLocale } from "@/app/actions/locale";
 import { LOCALES, type LocaleCode } from "@/i18n/locales";
 import { cn } from "@/lib/utils";
+import { track, EVENTS } from "@/lib/analytics";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 import type { IdentityId } from "@/types";
 
@@ -34,6 +35,18 @@ export function OnboardingWizard({
   initialIdentities?: string[];
 }) {
   const router = useRouter();
+
+  // Reaching onboarding is the first screen after signing up. Fire the signup
+  // event once per browser, so it is not re-counted on later visits.
+  useEffect(() => {
+    try {
+      if (localStorage.getItem("ka_signed_up") === "1") return;
+      localStorage.setItem("ka_signed_up", "1");
+    } catch {
+      return;
+    }
+    track(EVENTS.signedUp);
+  }, []);
   const [step, setStep] = useState(0);
   const [language, setLanguage] = useState<LocaleCode>(locale);
   const [goals, setGoals] = useState<string[]>(initialGoals ?? []);
@@ -90,6 +103,7 @@ export function OnboardingWizard({
         setStep(3);
         return;
       }
+      track(EVENTS.onboardingCompleted, { primaryActivity });
       router.push("/dashboard");
     });
   }

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { createRun } from "@/app/(app)/course/actions";
 import { createJournalEntry } from "@/app/(app)/journal/actions";
 import { signedRunImageUrl } from "@/lib/actions/share";
+import { track, EVENTS } from "@/lib/analytics";
 import { showXp } from "@/components/gamification/xp-toast";
 import {
   durationToSeconds,
@@ -87,6 +88,7 @@ export function NewRunForm({
         shoeId: shoeId || undefined,
       });
       if (res.ok) {
+        track(EVENTS.runLogged, { source: "manual" });
         if (res.xp) showXp(res.xp);
         const run: Run = {
           id: res.id ?? crypto.randomUUID(),
@@ -273,6 +275,7 @@ function AfterRun({
   }
 
   async function share() {
+    track(EVENTS.shared, { kind: "run" });
     const url = await signedRunImageUrl({
       distance: `${formatKm(run.distanceM)} km`,
       time: formatDuration(run.durationS),

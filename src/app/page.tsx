@@ -148,7 +148,7 @@ export default async function LandingPage({
             </p>
             <div className="mt-8 flex justify-center">
               <Link href="/signup">
-                <Button size="lg">{dict["mkt.cta.button"]}</Button>
+                <Button size="lg">{dict["mkt.cta.tryFree"]}</Button>
               </Link>
             </div>
           </Reveal>
