@@ -3,6 +3,7 @@ import { Inter, Fraunces } from "next/font/google";
 import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { AnalyticsProvider } from "@/components/providers/analytics-provider";
+import { ConsentBanner } from "@/components/providers/consent-banner";
 import { LocaleSync } from "@/components/providers/locale-sync";
 import { TimezoneSync } from "@/components/providers/timezone-sync";
 import { DEFAULT_LOCALE } from "@/i18n/locales";
@@ -33,6 +34,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
   // The file-based opengraph-image.tsx / twitter-image.tsx are injected into the
   // OG/Twitter image fields automatically, so they are not set here.
+  // Google Search Console verification, rendered only when the token is set.
+  const googleVerification = process.env.GOOGLE_SITE_VERIFICATION;
+
   return {
     metadataBase: new URL(APP_URL),
     title: {
@@ -41,6 +45,7 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description,
     applicationName: APP_NAME,
+    ...(googleVerification ? { verification: { google: googleVerification } } : {}),
     keywords: [
       "Christian fitness",
       "faith and fitness",
@@ -80,11 +85,12 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const dict = await getDictionary(await getLocale());
   return (
     <html
       lang={DEFAULT_LOCALE}
@@ -94,6 +100,7 @@ export default function RootLayout({
         <LocaleSync />
         <TimezoneSync />
         <AnalyticsProvider>{children}</AnalyticsProvider>
+        <ConsentBanner dict={dict} />
         <SpeedInsights />
       </body>
     </html>

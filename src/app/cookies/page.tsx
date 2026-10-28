@@ -10,6 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: dict["mkt.cookies.metaTitle"],
     description: dict["mkt.cookies.metaDescription"],
+    alternates: { canonical: "/cookies" },
   };
 }
 

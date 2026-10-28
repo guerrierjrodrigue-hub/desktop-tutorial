@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Mail, HelpCircle } from "lucide-react";
+import { Mail, HelpCircle, Building2 } from "lucide-react";
 import { MarketingNav } from "@/components/marketing/marketing-nav";
 import { MarketingFooter } from "@/components/marketing/marketing-footer";
 import { ContactForm } from "@/components/marketing/contact-form";
@@ -8,6 +8,7 @@ import { Reveal } from "@/components/ui/reveal";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { APP_SUPPORT_EMAIL } from "@/lib/constants";
+import { resolvedLegal } from "@/config/legal";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
@@ -16,11 +17,13 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: dict["mkt.contact.metaTitle"],
     description: dict["mkt.contact.metaDescription"],
+    alternates: { canonical: "/contact" },
   };
 }
 
 export default async function ContactPage() {
   const dict = await getDictionary(await getLocale());
+  const legal = resolvedLegal();
 
   return (
     <div className="flex min-h-svh flex-col">
@@ -73,6 +76,25 @@ export default async function ContactPage() {
                     {dict["mkt.footer.help"]}
                   </Link>
                   .
+                </p>
+              </div>
+            </Card>
+            <Card className="flex items-start gap-3">
+              <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-accent/12 text-accent-bright">
+                <Building2 className="size-4" />
+              </span>
+              <div className="text-sm">
+                <h3 className="font-semibold">{dict["mkt.contact.legalTitle"]}</h3>
+                <p className="mt-0.5 text-muted">{legal.legalName}</p>
+                {legal.address && <p className="text-muted">{legal.address}</p>}
+                {legal.neq && (
+                  <p className="text-muted">{dict["mkt.contact.legalNeq"]}: {legal.neq}</p>
+                )}
+                <p className="mt-1 text-xs text-faint">
+                  {dict["mkt.contact.privacyOfficer"]}:{" "}
+                  <a href={`mailto:${legal.privacyEmail}`} className="text-accent-bright hover:underline">
+                    {legal.privacyEmail}
+                  </a>
                 </p>
               </div>
             </Card>

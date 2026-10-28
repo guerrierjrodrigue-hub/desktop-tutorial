@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/marketing/legal-page";
-import { APP_SUPPORT_EMAIL } from "@/lib/constants";
+import { fillLegalPlaceholders } from "@/config/legal";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 import type { Dictionary, DictionaryKey } from "@/i18n/dictionaries/en";
@@ -10,6 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: dict["mkt.privacy.metaTitle"],
     description: dict["mkt.privacy.metaDescription"],
+    alternates: { canonical: "/privacy" },
   };
 }
 
@@ -18,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
 function section(dict: Dictionary, h: DictionaryKey, b: DictionaryKey) {
   return {
     heading: dict[h],
-    body: dict[b].replace("{email}", APP_SUPPORT_EMAIL).split("\n\n"),
+    body: fillLegalPlaceholders(dict[b]).split("\n\n"),
   };
 }
 
@@ -29,7 +30,7 @@ export default async function PrivacyPage() {
     <LegalPage
       title={dict["mkt.privacy.title"]}
       updated={dict["mkt.legal.updated"]}
-      intro={dict["mkt.privacy.intro"]}
+      intro={fillLegalPlaceholders(dict["mkt.privacy.intro"])}
       sections={[
         section(dict, "mkt.privacy.s1.h", "mkt.privacy.s1.b"),
         section(dict, "mkt.privacy.s2.h", "mkt.privacy.s2.b"),

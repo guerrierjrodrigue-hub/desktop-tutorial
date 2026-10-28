@@ -59,7 +59,7 @@ export default async function PricingPage() {
                 </h2>
                 <div className="mt-8 flex justify-center">
                   <Link href="/signup">
-                    <Button size="lg">{dict["mkt.freeMode.cta"]}</Button>
+                    <Button size="lg">{dict["mkt.cta.tryFree"]}</Button>
                   </Link>
                 </div>
               </div>

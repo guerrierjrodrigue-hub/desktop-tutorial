@@ -162,6 +162,14 @@ const fr: Dictionary = {
   "auth.error.invalidCredentials": "E-mail ou mot de passe incorrect.",
   "auth.error.emailInUse": "Cet e-mail est déjà enregistré.",
   "auth.error.weakPassword": "Le mot de passe doit comporter au moins 6 caractères.",
+  "auth.error.passwordTooShort": "Choisis un mot de passe d'au moins 10 caractères.",
+  "auth.error.tooMany": "Trop de tentatives. Patiente quelques minutes avant de réessayer.",
+  "auth.error.captcha": "La vérification de sécurité a échoué. Réessaie.",
+  "auth.passwordHint": "Au moins 10 caractères.",
+  "consent.text": "Nous utilisons un outil d'analyse sans témoin pour améliorer l'application. Il ne démarre que si tu acceptes.",
+  "consent.accept": "Accepter",
+  "consent.refuse": "Refuser",
+  "consent.learnMore": "En savoir plus",
   "auth.error.passwordMismatch": "Les mots de passe ne correspondent pas.",
   "auth.error.ageInvalid": "Tu dois avoir au moins 13 ans pour créer un compte.",
   "auth.error.generic": "Nous n'avons pas pu finaliser. Réessaie.",
@@ -768,13 +776,16 @@ const fr: Dictionary = {
 
   // Page Contact
   "mkt.contact.metaTitle": "Contact",
-  "mkt.contact.metaDescription": "Contacte l'équipe Kingdom Athlete.",
+  "mkt.contact.metaDescription": "Écris à l'équipe de Kingdom Athlete pour une question, un retour ou une idée de partenariat. Nous lisons chaque message et répondons vite.",
   "mkt.contact.badge": "Contact",
   "mkt.contact.title": "J'aimerais avoir de tes nouvelles",
   "mkt.contact.subtitle":
     "Questions, retours, idées de partenariat, ou simplement envie de dire bonjour ? Écris-moi et je te répondrai en personne.",
   "mkt.contact.emailTitle": "Écris-moi",
   "mkt.contact.replyTime": "Je réponds sous 1 à 2 jours ouvrés.",
+  "mkt.contact.legalTitle": "Exploitant",
+  "mkt.contact.privacyOfficer": "Responsable de la protection des renseignements personnels",
+  "mkt.contact.legalNeq": "Numéro d'entreprise du Québec (NEQ)",
   "mkt.contact.faqTitle": "Questions fréquentes",
   "mkt.contact.faqBody":
     "Facturation, programmes, compte : la plupart des réponses se trouvent dans mon ",
@@ -788,7 +799,7 @@ const fr: Dictionary = {
 
   // Page À propos
   "mkt.about.metaTitle": "À propos",
-  "mkt.about.metaDescription": "L'histoire du fondateur derrière Kingdom Athlete.",
+  "mkt.about.metaDescription": "Rencontre le fondateur de Kingdom Athlete et découvre pourquoi la foi, l'entraînement et la discipline avancent ensemble dans une seule application.",
   "mkt.about.badge": "Mon histoire",
   "mkt.about.title": "Pourquoi j'ai créé Kingdom Athlete",
   "mkt.about.subtitle":
@@ -824,15 +835,15 @@ const fr: Dictionary = {
 
   // Politique de confidentialité
   "mkt.privacy.metaTitle": "Politique de confidentialité",
-  "mkt.privacy.metaDescription": "Comment Kingdom Athlete collecte, utilise et protège vos données.",
+  "mkt.privacy.metaDescription": "Découvre comment Kingdom Athlete recueille, utilise et protège tes renseignements personnels selon la Loi 25 du Québec, et tes choix possibles.",
   "mkt.privacy.title": "Politique de confidentialité",
-  "mkt.privacy.intro": "Cette politique décrit quelles informations Kingdom Athlete collecte lorsque vous utilisez l'application, pourquoi nous les collectons et les choix dont vous disposez.",
+  "mkt.privacy.intro": "Cette politique décrit quelles informations Kingdom Athlete collecte lorsque vous utilisez l'application, pourquoi nous les collectons et les choix dont vous disposez. Kingdom Athlete est exploité par {legalName}.",
   "mkt.privacy.s1.h": "1. Informations que nous collectons",
-  "mkt.privacy.s1.b": "Informations de compte : votre nom, votre adresse e-mail et les détails d'authentification lors de votre inscription (y compris via la connexion Google ou Apple).\n\nDonnées de profil et d'activité : taille, poids, objectifs de forme, journaux d'entraînement, habitudes accomplies, entrées de nutrition, demandes de prière et autres contenus que vous ajoutez dans l'application.\n\nInformations de paiement : si vous souscrivez à une offre payante, la facturation est gérée par Stripe. Nous ne stockons jamais votre numéro de carte complet — Stripe le traite et le conserve pour nous.\n\nDonnées d'utilisation : pages visitées, fonctionnalités utilisées et informations sur l'appareil/le navigateur, collectées via PostHog pour nous aider à comprendre comment l'application est utilisée et à l'améliorer.\n\nDiagnostics d'erreur : en cas de problème, Sentry peut capturer des détails techniques (comme une trace d'erreur) pour nous aider à le corriger. Nous le configurons pour éviter de capturer du contenu personnel sensible.",
+  "mkt.privacy.s1.b": "Informations de compte : votre nom, votre adresse e-mail et les détails d'authentification lors de votre inscription (y compris via la connexion Google ou Apple).\n\nDonnées de profil et d'activité : taille, poids, objectifs de forme, journaux d'entraînement, habitudes accomplies, entrées de nutrition, demandes de prière et autres contenus que vous ajoutez dans l'application.\n\nInformations de paiement : si vous souscrivez à une offre payante, la facturation est gérée par Stripe. Nous ne stockons jamais votre numéro de carte complet — Stripe le traite et le conserve pour nous.\n\nDonnées d'utilisation : pages visitées, fonctionnalités utilisées et informations sur l'appareil/le navigateur, collectées via PostHog (uniquement si vous acceptez l'analytique, et sans témoin) pour nous aider à comprendre comment l'application est utilisée et à l'améliorer.\n\nDiagnostics d'erreur : en cas de problème, Sentry peut capturer des détails techniques (comme une trace d'erreur) pour nous aider à le corriger. Nous le configurons pour éviter de capturer du contenu personnel sensible.",
   "mkt.privacy.s2.h": "2. Comment nous utilisons vos informations",
-  "mkt.privacy.s2.b": "Pour fournir l'expérience principale de l'application — vos programmes, votre progression et vos séries.\n\nPour traiter les paiements d'abonnement et gérer votre statut de facturation.\n\nPour comprendre l'usage du produit de manière agrégée afin d'améliorer les fonctionnalités (via l'analytique PostHog).\n\nPour détecter, diagnostiquer et corriger les bogues (via la surveillance d'erreurs Sentry).\n\nPour communiquer avec vous au sujet de votre compte, comme les reçus de facturation ou les mises à jour importantes du service.",
+  "mkt.privacy.s2.b": "Pour fournir l'expérience principale de l'application — vos programmes, votre progression et vos séries.\n\nPour traiter les paiements d'abonnement et gérer votre statut de facturation.\n\nPour comprendre l'usage du produit de manière agrégée afin d'améliorer les fonctionnalités (via l'analytique PostHog, uniquement avec votre consentement).\n\nPour détecter, diagnostiquer et corriger les bogues (via la surveillance d'erreurs Sentry).\n\nPour communiquer avec vous au sujet de votre compte, comme les reçus de facturation ou les mises à jour importantes du service.",
   "mkt.privacy.s3.h": "3. Services tiers",
-  "mkt.privacy.s3.b": "Nous nous appuyons sur un petit nombre de sous-traitants de confiance pour faire fonctionner Kingdom Athlete : Supabase (authentification et hébergement de base de données), Stripe (facturation des abonnements), PostHog (analytique produit) et Sentry (surveillance d'erreurs). Chacun de ces prestataires ne traite les données que dans la mesure nécessaire à la fourniture de son service, selon ses propres conditions de confidentialité et de sécurité.",
+  "mkt.privacy.s3.b": "Nous nous appuyons sur un petit nombre de sous-traitants de confiance pour faire fonctionner Kingdom Athlete : Supabase (authentification et base de données), Vercel (hébergement de l'application), Stripe (facturation des abonnements), Resend (courriels transactionnels), PostHog (analytique produit, chargée uniquement avec votre consentement) et Sentry (surveillance d'erreurs). Chacun de ces prestataires ne traite les données que dans la mesure nécessaire à la fourniture de son service, selon ses propres conditions de confidentialité et de sécurité.",
   "mkt.privacy.s4.h": "4. Vos choix et vos droits",
   "mkt.privacy.s4.b": "Vous pouvez consulter et modifier la plupart des informations de votre profil directement depuis la page Profil de l'application.\n\nVous pouvez résilier votre abonnement à tout moment depuis le portail de facturation — cela ne supprime ni votre compte ni vos données.\n\nVous pouvez demander une copie de vos données ou la suppression de votre compte en nous contactant. Nous traiterons les demandes valides dans un délai raisonnable, sauf lorsque la loi nous oblige à conserver certains enregistrements (par exemple l'historique de facturation).",
   "mkt.privacy.s5.h": "5. Conservation et sécurité des données",
@@ -846,11 +857,11 @@ const fr: Dictionary = {
   "mkt.privacy.s10.h": "9. Visibilité auprès des autres membres",
   "mkt.privacy.s10.b": "Pour aider les membres à s'encourager, les classements et les fonctions de groupe affichent un nom raccourci — ton prénom et l'initiale de ton nom de famille seulement (par exemple « Jean G. »). Nous ne montrons jamais ton nom de famille complet ni ton adresse courriel aux autres membres. Tu peux masquer entièrement ton nom des classements et des groupes depuis Profil → Confidentialité → « Apparaître dans les classements et groupes » ; une fois désactivé, tu apparais uniquement comme « Membre anonyme ».",
   "mkt.privacy.s8.h": "10. Nous contacter",
-  "mkt.privacy.s8.b": "Des questions sur cette politique ? Écrivez-nous à {email}.",
+  "mkt.privacy.s8.b": "Des questions sur cette politique, ou une demande concernant vos renseignements personnels ? Écrivez à notre responsable de la protection des renseignements personnels à {privacyEmail}. Kingdom Athlete est exploité par {legalName}.",
 
   // Conditions d'utilisation
   "mkt.terms.metaTitle": "Conditions d'utilisation",
-  "mkt.terms.metaDescription": "Les conditions qui régissent votre utilisation de Kingdom Athlete.",
+  "mkt.terms.metaDescription": "Les conditions qui encadrent ton usage de Kingdom Athlete : compte, usage acceptable, abonnements et droit applicable. À lire avant de t'inscrire.",
   "mkt.terms.title": "Conditions d'utilisation",
   "mkt.terms.intro": "Ces conditions régissent votre accès à Kingdom Athlete et votre utilisation de l'application. En créant un compte ou en utilisant l'application, vous les acceptez.",
   "mkt.terms.s1.h": "1. Utilisation de Kingdom Athlete",
@@ -869,18 +880,20 @@ const fr: Dictionary = {
   "mkt.terms.s7.b": "Vous pouvez cesser d'utiliser l'application et supprimer votre compte à tout moment. Nous pouvons suspendre ou résilier les comptes qui enfreignent ces conditions.",
   "mkt.terms.s8.h": "8. Modifications de ces conditions",
   "mkt.terms.s8.b": "Nous pouvons mettre à jour ces conditions de temps à autre. La poursuite de l'utilisation de l'application après l'entrée en vigueur des changements vaut acceptation des conditions mises à jour.",
-  "mkt.terms.s9.h": "9. Nous contacter",
-  "mkt.terms.s9.b": "Des questions sur ces conditions ? Écrivez-nous à {email}.",
+  "mkt.terms.s9.h": "9. Droit applicable",
+  "mkt.terms.s9.b": "Les présentes conditions sont régies par les lois de la province de Québec et les lois fédérales du Canada qui y sont applicables. Tout litige découlant des présentes conditions ou de votre utilisation de l'application sera soumis à la compétence exclusive des tribunaux du district judiciaire de Montréal, au Québec, sous réserve des droits impératifs que la Loi sur la protection du consommateur peut vous accorder.",
+  "mkt.terms.s10.h": "10. Nous contacter",
+  "mkt.terms.s10.b": "Des questions sur ces conditions ? Écrivez-nous à {email}.",
 
   // Politique relative aux cookies
   "mkt.cookies.metaTitle": "Politique relative aux cookies",
-  "mkt.cookies.metaDescription": "Comment Kingdom Athlete utilise les cookies et technologies similaires.",
+  "mkt.cookies.metaDescription": "Comment Kingdom Athlete utilise les témoins et technologies similaires, lesquels sont nécessaires, et comment contrôler l'analytique et tes choix.",
   "mkt.cookies.title": "Politique relative aux cookies",
   "mkt.cookies.intro": "Les cookies sont de petits fichiers texte stockés sur votre appareil. Nous en utilisons un petit nombre pour vous garder connecté et pour comprendre comment l'application est utilisée.",
   "mkt.cookies.s1.h": "1. Cookies essentiels",
   "mkt.cookies.s1.b": "Ils sont nécessaires au fonctionnement de l'application — par exemple, pour vous garder connecté entre les visites (géré par Supabase Auth) et mémoriser votre session pendant le paiement (géré par Stripe). L'application ne fonctionne pas correctement sans eux, ils ne peuvent donc pas être désactivés.",
-  "mkt.cookies.s2.h": "2. Cookies d'analyse",
-  "mkt.cookies.s2.b": "Nous utilisons PostHog pour comprendre, de manière agrégée, quelles fonctionnalités sont utilisées et où les personnes rencontrent des difficultés — cela nous aide à prioriser nos prochains développements. Ces cookies ne vous identifient pas par votre nom d'une manière que nous exploiterions individuellement.",
+  "mkt.cookies.s2.h": "2. Analytique",
+  "mkt.cookies.s2.b": "Nous utilisons PostHog pour comprendre, de manière agrégée, quelles fonctionnalités sont utilisées et où les personnes rencontrent des difficultés, ce qui nous aide à prioriser nos prochains développements. Il ne se charge qu'après votre acceptation, et il est configuré sans témoin (en mémoire uniquement). Vous pouvez refuser, et rien de lié à l'analytique ne s'exécute.",
   "mkt.cookies.s3.h": "3. Surveillance des erreurs",
   "mkt.cookies.s3.b": "Sentry peut utiliser un stockage local minimal pour nous aider à capturer et diagnostiquer les plantages ou les erreurs. Ceci sert strictement à la stabilité et au débogage, pas à la publicité.",
   "mkt.cookies.s4.h": "4. Gestion des cookies",
@@ -890,7 +903,7 @@ const fr: Dictionary = {
 
   // Page Carrières
   "mkt.careers.metaTitle": "Carrières",
-  "mkt.careers.metaDescription": "Kingdom Athlete, c'est moi, Rodrigue. Voici comment me joindre.",
+  "mkt.careers.metaDescription": "Kingdom Athlete est porté par un seul fondateur, Rodrigue. Aucun poste n'est ouvert pour l'instant, mais voici comment proposer ton aide au projet.",
   "mkt.careers.title": "Je ne recrute pas pour le moment",
   "mkt.careers.subtitle": "Je construis Kingdom Athlete en solo. Je n'ai pas de postes ouverts aujourd'hui, mais je suis toujours ravi d'échanger avec des personnes qui tiennent à la fois au travail bien fait et à la vocation. Garde-moi en tête quand cela changera.",
   "mkt.careers.helloPre": "Envie de dire bonjour quand même ? ",
@@ -902,7 +915,7 @@ const fr: Dictionary = {
 
   // Page Centre d'aide
   "mkt.help.metaTitle": "Centre d'aide",
-  "mkt.help.metaDescription": "Réponses aux questions fréquentes sur Kingdom Athlete.",
+  "mkt.help.metaDescription": "Trouve des réponses sur Kingdom Athlete : compte, programmes, mode course, nutrition, habitudes, facturation et confidentialité, en étapes claires.",
   "mkt.help.title": "Comment pouvons-nous t'aider ?",
   "mkt.help.subtitlePre": "Les réponses aux questions que l'on nous pose le plus. Tu ne trouves pas la tienne ? ",
   "mkt.help.subtitleLink": "Contacte-nous directement",
@@ -926,7 +939,7 @@ const fr: Dictionary = {
 
   // Page Blog (index)
   "mkt.blog.metaTitle": "Blog",
-  "mkt.blog.metaDescription": "Réflexions sur l'entraînement, la discipline et la foi par l'équipe Kingdom Athlete.",
+  "mkt.blog.metaDescription": "Réflexions sur l'entraînement, la discipline, la nutrition et la foi par Kingdom Athlete : des idées concrètes pour grandir de corps et d'esprit.",
   "mkt.blog.badge": "Le blog",
   "mkt.blog.title": "Notes d'entraînement pour le corps et l'âme",
   "mkt.blog.subtitle": "Réflexions pratiques sur la discipline, la nutrition et la foi par l'équipe qui construit Kingdom Athlete.",
@@ -942,7 +955,7 @@ const fr: Dictionary = {
   "mkt.todaysWorkout": "Séance du jour",
   "mkt.workout.name": "Puissance bas du corps",
   "mkt.workout.meta": "4 exercices · 45 min",
-  "mkt.meta.homeDescription": "Kingdom Athlete est une application de fitness chrétienne qui réunit entraînement, nutrition et foi. Suis des programmes guidés, tes habitudes, lis les Écritures et grandis dans la discipline au quotidien.",
+  "mkt.meta.homeDescription": "Kingdom Athlete réunit entraînement, nutrition et foi au même endroit : programmes guidés, suivi d'habitudes, lecture biblique et mode course.",
 
   // Marketing — nav & footer
   "mkt.nav.features": "Fonctionnalités",
@@ -977,6 +990,7 @@ const fr: Dictionary = {
   "mkt.hero.cta": "Commence ton essai gratuit d'un mois",
   "mkt.hero.madeIn": "Fait à Montréal, par Rodrigue.",
   "mkt.hero.watchFilm": "Voir le film",
+  "mkt.cta.tryFree": "Essayer gratuitement",
   "mkt.hero.footnote": "Entraîne-toi avec un but · 1 mois offert · Sans carte bancaire",
   // Variantes bêta gratuite (affichées quand APP_FREE_MODE est actif) — pas d'essai limité dans le temps.
   "mkt.hero.ctaFree": "Essaie gratuitement, sans limite",
@@ -1063,7 +1077,7 @@ const fr: Dictionary = {
   "mkt.plan.legacy.feature3": "Accès anticipé aux nouveaux programmes",
   "mkt.plan.legacy.feature4": "Défis exclusifs",
   "mkt.plan.legacy.cta": "Passer à l'annuel",
-  "mkt.pricingPage.metaDescription": "Des tarifs simples pour Kingdom Athlete. Commence gratuitement, évolue quand tu veux.",
+  "mkt.pricingPage.metaDescription": "Découvre les tarifs de Kingdom Athlete. Commence gratuitement, puis choisis un abonnement mensuel ou annuel pour débloquer tous les programmes.",
   "mkt.pricingPage.secure": "Paiements sécurisés par Stripe · Satisfait ou remboursé pendant 30 jours",
   "mkt.pricingPage.faqTitle": "Questions et réponses",
   "mkt.faq.cancel.q": "Puis-je résilier à tout moment ?",
