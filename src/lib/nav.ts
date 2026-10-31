@@ -1,6 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import type { DictionaryKey } from "@/i18n/dictionaries/en";
 import { isCoachEnabled } from "@/lib/flags";
+import { showsRunning, showsStrength, type ActivityMode } from "@/lib/activity";
 import {
   LayoutDashboard,
   Dumbbell,
@@ -46,13 +47,17 @@ export const dashboardNavItem: NavItem = {
  * adapt to the signed-in user's identities — see `getPurposeNavItems` in
  * `@/lib/personalization` — but always include Spiritual + Bible.
  */
-export function getNavGroups(purposeItems: NavItem[]): NavGroup[] {
-  // Running is shown to everyone so the mode is discoverable (Y2).
-  const bodyItems: NavItem[] = [
-    { href: "/fitness", label: "Fitness", labelKey: "nav.fitness", icon: Dumbbell },
-    { href: "/course", label: "Running", labelKey: "nav.course", icon: Footprints },
-    { href: "/nutrition", label: "Nutrition", labelKey: "nav.nutrition", icon: Apple },
-  ];
+export function getNavGroups(purposeItems: NavItem[], mode?: ActivityMode | null): NavGroup[] {
+  // Body items follow the activity mode (A1): Fitness for strength/both,
+  // Course for running/both; an unset mode shows both so it stays discoverable.
+  const bodyItems: NavItem[] = [];
+  if (showsStrength(mode)) {
+    bodyItems.push({ href: "/fitness", label: "Fitness", labelKey: "nav.fitness", icon: Dumbbell });
+  }
+  if (showsRunning(mode)) {
+    bodyItems.push({ href: "/course", label: "Running", labelKey: "nav.course", icon: Footprints });
+  }
+  bodyItems.push({ href: "/nutrition", label: "Nutrition", labelKey: "nav.nutrition", icon: Apple });
 
   return [
     {
@@ -117,10 +122,15 @@ export function getStandaloneNavItems(): NavItem[] {
  * slot always points at Spiritual (which contains the Bible), so every user can
  * reach it from the bottom bar.
  */
-export function getMobileNavItems(purposeItem: NavItem): NavItem[] {
+export function getMobileNavItems(purposeItem: NavItem, mode?: ActivityMode | null): NavItem[] {
+  // The Body shortcut points at the mode's home: Course for pure runners,
+  // Fitness otherwise (strength, both, or unset).
+  const bodyShortcut: NavItem = mode === "running"
+    ? { href: "/course", label: "Body", labelKey: "nav.body", icon: Footprints }
+    : { href: "/fitness", label: "Body", labelKey: "nav.body", icon: Dumbbell };
   return [
     dashboardNavItem,
-    { href: "/fitness", label: "Body", labelKey: "nav.body", icon: Dumbbell },
+    bodyShortcut,
     { href: "/habits", label: "Habits", labelKey: "nav.habits", icon: Repeat },
     purposeItem,
     { href: "/community", label: "Community", labelKey: "nav.community", icon: Users },

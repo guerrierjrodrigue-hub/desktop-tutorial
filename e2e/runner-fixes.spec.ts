@@ -33,13 +33,13 @@ test.describe("Running — discovery", () => {
     await expect(page.getByRole("link", { name: "Running" }).first()).toBeVisible();
   });
 
-  test("dashboard shows the runner-mode promo, which can be hidden", async ({ page }) => {
+  test("dashboard offers the 'choose your mode' card for an account with no mode", async ({ page }) => {
     await page.goto("/dashboard");
-    const promo = page.getByText("New: runner mode");
-    await expect(promo).toBeVisible();
-    await expect(page.getByRole("link", { name: "Try it" })).toHaveAttribute("href", "/course");
-    await page.getByRole("button", { name: "Hide" }).click();
-    await expect(promo).toHaveCount(0);
+    // The demo account has no primary_activity set, so the chooser is shown.
+    await expect(page.getByText("Choose your mode")).toBeVisible();
+    const card = page.locator("section, div").filter({ hasText: "Choose your mode" }).first();
+    await expect(card.getByRole("button", { name: "Running", exact: true })).toBeVisible();
+    await expect(card.getByRole("button", { name: "Strength", exact: true })).toBeVisible();
   });
 
   test("profile has the main-activity setting", async ({ page }) => {

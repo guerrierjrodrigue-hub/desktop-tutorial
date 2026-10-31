@@ -4,15 +4,21 @@ import { z } from "zod";
 import { getAuthedContext } from "@/lib/supabase/auth";
 import { type ActionResult, demoOk } from "@/lib/actions/result";
 import { validate, logAndFail } from "@/lib/actions/errors";
+import { goalKindDistanceM } from "@/lib/running";
 
 const onboardingSchema = z.object({
-  goals: z.array(z.string().min(1)).min(1, "errors.goalRequired").max(20),
+  // A pure runner answers the run questions instead of strength goals, so goals
+  // may legitimately be empty; identities (the spiritual step) stay required.
+  goals: z.array(z.string().min(1)).max(20),
   identities: z.array(z.string().min(1)).min(1, "errors.identityRequired").max(20),
   level: z.enum(["beginner", "intermediate", "advanced"]).optional(),
   primaryActivity: z.enum(["strength", "running", "both"]).optional(),
   equipment: z.enum(["none", "home", "gym"]).optional(),
   trainingDays: z.number().int().min(1).max(7).optional(),
   reminderTime: z.string().regex(/^\d{2}:\d{2}$/).optional(),
+  runLevel: z.enum(["new", "5k", "10k"]).optional(),
+  runGoalKind: z.enum(["5k", "10k", "half", "free"]).optional(),
+  favoriteVerse: z.string().trim().max(200, "errors.tooLong").optional(),
   heightCm: z.number().finite().min(50).max(300).nullable().optional(),
   weightKg: z.number().finite().min(20).max(500).nullable().optional(),
   birthDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
@@ -26,6 +32,9 @@ export interface OnboardingInput {
   equipment?: "none" | "home" | "gym";
   trainingDays?: number;
   reminderTime?: string;
+  runLevel?: "new" | "5k" | "10k";
+  runGoalKind?: "5k" | "10k" | "half" | "free";
+  favoriteVerse?: string;
   // Optional metrics — the user may skip them.
   heightCm?: number | null;
   weightKg?: number | null;
@@ -71,12 +80,38 @@ export async function saveOnboarding(input: OnboardingInput): Promise<ActionResu
   if (input.equipment) update.equipment = input.equipment;
   if (input.trainingDays) update.training_days = input.trainingDays;
   if (input.reminderTime) update.reminder_time = input.reminderTime;
+  if (input.runLevel) update.run_level = input.runLevel;
+  if (input.runGoalKind) update.run_goal_kind = input.runGoalKind;
+  if (input.favoriteVerse) update.favorite_verse = input.favoriteVerse;
   if (input.heightCm) update.height_cm = input.heightCm;
   if (input.weightKg) update.weight_kg = input.weightKg;
   if (input.birthDate) update.birth_date = input.birthDate;
 
   const { error } = await ctx.supabase.from("profiles").update(update).eq("id", ctx.userId);
   if (error) return logAndFail(error);
+
+  // A concrete distance goal (5k/10k/half) seeds the single run goal, so the
+  // recommended plan and the dashboard's 7-day plan line up from day one.
+  const targetM = input.runGoalKind ? goalKindDistanceM(input.runGoalKind) : 0;
+  if (targetM) {
+    const { data: existing } = await ctx.supabase
+      .from("run_goals")
+      .select("id")
+      .eq("user_id", ctx.userId)
+      .order("updated_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    const payload = { target_distance_m: targetM, updated_at: new Date().toISOString() };
+    if (existing) {
+      await ctx.supabase
+        .from("run_goals")
+        .update(payload)
+        .eq("id", (existing as { id: string }).id)
+        .eq("user_id", ctx.userId);
+    } else {
+      await ctx.supabase.from("run_goals").insert({ user_id: ctx.userId, ...payload });
+    }
+  }
 
   return { ok: true };
 }

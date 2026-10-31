@@ -81,4 +81,26 @@ describe("getRecommendations", () => {
     expect(recs.some((r) => r.id === "community")).toBe(true);
     expect(recs.length).toBeLessThanOrEqual(3);
   });
+
+  it("suggests a running plan (not a strength program) for a pure runner", () => {
+    const recs = getRecommendations(
+      { primaryGoals: [], identities: [], primaryActivity: "running" },
+      programs,
+      habitsMostlyDone,
+      en,
+    );
+    expect(recs.some((r) => r.id === "run-plan")).toBe(true);
+    expect(recs.some((r) => r.id === "program")).toBe(false);
+  });
+
+  it("suggests a strength program (not a running plan) for a pure lifter", () => {
+    const recs = getRecommendations(
+      { primaryGoals: ["build-muscle"], identities: [], primaryActivity: "strength" },
+      programs,
+      habitsMostlyDone,
+      en,
+    );
+    expect(recs.some((r) => r.id === "program")).toBe(true);
+    expect(recs.some((r) => r.id === "run-plan")).toBe(false);
+  });
 });

@@ -6,6 +6,10 @@ import {
   daysLeftFor,
   workoutProgress,
   WORKOUT_CHALLENGE_TARGET,
+  runCountProgress,
+  RUN_COUNT_CHALLENGE_TARGET,
+  kilometerProgress,
+  KILOMETER_CHALLENGE_TARGET_M,
 } from "./challenge-progress";
 
 describe("daysBetween", () => {
@@ -104,5 +108,24 @@ describe("cohortStatus", () => {
       started: true,
       daysLeft: 0,
     });
+  });
+});
+
+describe("runCountProgress", () => {
+  it("is the run count over the target, clamped to [0,1]", () => {
+    expect(runCountProgress(0)).toBe(0);
+    expect(runCountProgress(RUN_COUNT_CHALLENGE_TARGET / 2)).toBeCloseTo(0.5);
+    expect(runCountProgress(RUN_COUNT_CHALLENGE_TARGET)).toBe(1);
+    expect(runCountProgress(RUN_COUNT_CHALLENGE_TARGET + 5)).toBe(1);
+    expect(runCountProgress(-3)).toBe(0);
+  });
+});
+
+describe("kilometerProgress", () => {
+  it("is metres over the target distance, clamped to [0,1]", () => {
+    expect(kilometerProgress(0)).toBe(0);
+    expect(kilometerProgress(KILOMETER_CHALLENGE_TARGET_M / 2)).toBeCloseTo(0.5);
+    expect(kilometerProgress(KILOMETER_CHALLENGE_TARGET_M)).toBe(1);
+    expect(kilometerProgress(KILOMETER_CHALLENGE_TARGET_M * 2)).toBe(1);
   });
 });

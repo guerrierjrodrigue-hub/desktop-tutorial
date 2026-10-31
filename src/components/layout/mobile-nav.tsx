@@ -4,13 +4,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { getMobileNavItems } from "@/lib/nav";
 import { getSpiritualNavItem } from "@/lib/personalization";
+import type { ActivityMode } from "@/lib/activity";
 import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 
-export function MobileNav({ dict }: { dict: Dictionary }) {
+export function MobileNav({ dict, mode = null }: { dict: Dictionary; mode?: ActivityMode | null }) {
   const pathname = usePathname();
   // Purpose slot always links to Spiritual (which contains the Bible).
-  const items = getMobileNavItems(getSpiritualNavItem());
+  const items = getMobileNavItems(getSpiritualNavItem(), mode);
 
   return (
     <nav className="glass fixed inset-x-0 bottom-0 z-40 flex items-stretch justify-around border-t border-border pb-[env(safe-area-inset-bottom)] lg:hidden">

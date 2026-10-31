@@ -95,12 +95,21 @@ export function validateRunDate(ranOn: string, today: string): RunValidation {
 }
 
 /**
+ * Whether a run is a genuine effort (at least 10 minutes and 1 km) — the same
+ * bar the XP trigger uses, but without any date window. This is what lets a run
+ * check off the "do the workout" habit for a running or "both" account.
+ */
+export function runQualifiesAsWorkout(distanceM: number, durationS: number): boolean {
+  return durationS >= 600 && distanceM >= 1000;
+}
+
+/**
  * Whether a run qualifies for the daily XP reward: a genuine effort (at least
  * 10 minutes and 1 km) AND dated today or yesterday in the user's timezone.
  * Mirrors the ka_xp_run database trigger so the "+XP" toast matches reality.
  */
 export function runEarnsXp(distanceM: number, durationS: number, ranOn: string, today: string): boolean {
-  if (durationS < 600 || distanceM < 1000) return false;
+  if (!runQualifiesAsWorkout(distanceM, durationS)) return false;
   return ranOn <= today && ranOn >= addDaysToDateStr(today, -XP_WINDOW_DAYS);
 }
 

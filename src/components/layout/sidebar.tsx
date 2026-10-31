@@ -10,6 +10,7 @@ import {
   type NavItem,
 } from "@/lib/nav";
 import { getPurposeNavItems } from "@/lib/personalization";
+import type { ActivityMode } from "@/lib/activity";
 import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/i18n/dictionaries/en";
 import { Sparkles, ShieldCheck } from "lucide-react";
@@ -47,14 +48,16 @@ function NavLink({ item, active, dict }: { item: NavItem; active: boolean; dict:
 export function Sidebar({
   dict,
   freeMode = false,
+  mode = null,
 }: {
   dict: Dictionary;
   freeMode?: boolean;
+  mode?: ActivityMode | null;
 }) {
   const pathname = usePathname();
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + "/");
-  const groups = getNavGroups(getPurposeNavItems());
+  const groups = getNavGroups(getPurposeNavItems(), mode);
   const standaloneNavItems = getStandaloneNavItems();
 
   return (

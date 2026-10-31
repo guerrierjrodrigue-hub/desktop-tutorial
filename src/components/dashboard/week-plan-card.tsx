@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { CalendarRange, ArrowRight } from "lucide-react";
+import { CalendarRange, ArrowRight, Footprints } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { getCurrentUser } from "@/lib/queries/profile";
 import { getPrograms } from "@/lib/queries/programs";
+import { getRunPlans, getRunGoal } from "@/lib/queries/running";
 import { buildWeekPlan } from "@/lib/week-plan";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
@@ -16,6 +17,35 @@ export async function WeekPlanCard() {
     getPrograms(locale),
     getDictionary(locale),
   ]);
+
+  // Pure runners get their running plan here instead of a strength program.
+  if (user.primaryActivity === "running") {
+    const [plans, goal] = await Promise.all([getRunPlans(locale), getRunGoal()]);
+    const wantTenK = (goal?.targetDistanceM ?? 0) >= 10000;
+    const runPlan = plans.find((p) => p.slug === (wantTenK ? "c10k-10" : "c5k-8")) ?? plans[0];
+    if (!runPlan) return null;
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            <span className="inline-flex items-center gap-2">
+              <Footprints className="size-4 text-accent-bright" /> {dict["dashboard.weekPlan"]}
+            </span>
+          </CardTitle>
+        </CardHeader>
+        <Link
+          href={`/course/plans/${runPlan.slug}`}
+          className="group flex items-center justify-between gap-3 rounded-xl border border-border bg-surface-2 p-3 transition hover:border-accent/30"
+        >
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold group-hover:text-accent-bright">{runPlan.title}</p>
+            <p className="truncate text-xs text-muted">{runPlan.description}</p>
+          </div>
+          <ArrowRight className="size-4 shrink-0 text-faint transition-transform group-hover:translate-x-0.5" />
+        </Link>
+      </Card>
+    );
+  }
 
   const plan = buildWeekPlan(programs, {
     level: user.level,

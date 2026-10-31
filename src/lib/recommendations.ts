@@ -23,30 +23,47 @@ export function getRecommendations(
     level?: FitnessLevel;
     equipment?: string;
     trainingDays?: number;
+    primaryActivity?: "strength" | "running" | "both" | null;
   },
   programs: Omit<Program, "schedule">[],
   habits: Habit[],
   dict: Dictionary,
 ): Recommendation[] {
   const recs: Recommendation[] = [];
+  // Unset mode behaves like "both" so suggestions stay discoverable.
+  const mode = user.primaryActivity ?? "both";
 
-  const matchedGoal = user.primaryGoals
-    .map((id) => PRIMARY_GOAL_OPTIONS.find((g) => g.id === id))
-    .find((g): g is (typeof PRIMARY_GOAL_OPTIONS)[number] => Boolean(g));
-  const { program: suggestedProgram } = buildWeekPlan(programs, {
-    level: user.level,
-    equipment: user.equipment,
-    trainingDays: user.trainingDays,
-    goals: user.primaryGoals,
-  });
-  if (suggestedProgram) {
+  // Strength program suggestion — for strength and both, not pure runners.
+  if (mode !== "running") {
+    const matchedGoal = user.primaryGoals
+      .map((id) => PRIMARY_GOAL_OPTIONS.find((g) => g.id === id))
+      .find((g): g is (typeof PRIMARY_GOAL_OPTIONS)[number] => Boolean(g));
+    const { program: suggestedProgram } = buildWeekPlan(programs, {
+      level: user.level,
+      equipment: user.equipment,
+      trainingDays: user.trainingDays,
+      goals: user.primaryGoals,
+    });
+    if (suggestedProgram) {
+      recs.push({
+        id: "program",
+        label: suggestedProgram.title,
+        description: matchedGoal
+          ? `${dict["recommendations.matchesGoal"]} ${dict[matchedGoal.labelKey]}.`
+          : dict["recommendations.wellRounded"],
+        href: `/fitness/${suggestedProgram.id}`,
+      });
+    }
+  }
+
+  // A pure runner gets a running-plan suggestion in place of the strength
+  // program; a "both" account keeps running one tap away in the menu.
+  if (mode === "running") {
     recs.push({
-      id: "program",
-      label: suggestedProgram.title,
-      description: matchedGoal
-        ? `${dict["recommendations.matchesGoal"]} ${dict[matchedGoal.labelKey]}.`
-        : dict["recommendations.wellRounded"],
-      href: `/fitness/${suggestedProgram.id}`,
+      id: "run-plan",
+      label: dict["recommendations.followRunPlan"],
+      description: dict["recommendations.runPlanDescription"],
+      href: "/course/plans",
     });
   }
 

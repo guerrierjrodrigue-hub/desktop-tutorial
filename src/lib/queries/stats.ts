@@ -1,6 +1,9 @@
 import { getAuthedContext } from "@/lib/supabase/auth";
 import { getUserToday, startOfLocalDayUTC } from "@/lib/date";
 import { getUserTimezone } from "@/lib/timezone";
+import { getCurrentUser } from "@/lib/queries/profile";
+import { runQualifiesAsWorkout } from "@/lib/running";
+import { showsRunning, showsStrength } from "@/lib/activity";
 import { todayStats as mockTodayStats } from "@/data/dashboard";
 import type { DailyStats } from "@/types";
 import { composeTodayStats, type RawDailyStatsRow } from "./stats-compute";
@@ -54,20 +57,45 @@ export async function getTodayStats(): Promise<DailyStats> {
   return composeTodayStats(row, proteinSum, activeMinutes);
 }
 
-/** Whether the signed-in user has logged a workout today (demo mode always false — quests never fake completion). */
+/**
+ * Whether the signed-in user has trained today, following their mode: a logged
+ * strength session for a lifter, a qualifying run for a runner, either for
+ * "both" (demo mode always false — quests never fake completion).
+ */
 export async function getWorkoutDoneToday(): Promise<boolean> {
   const ctx = await getAuthedContext();
   if (!ctx) return false;
 
+  const tz = await getUserTimezone();
   // Bound to the start of the user's LOCAL day (not the server's UTC midnight),
   // so "done today" agrees with the timezone-aware XP day and dashboard views.
-  const startOfDay = startOfLocalDayUTC(await getUserTimezone());
+  const startOfDay = startOfLocalDayUTC(tz);
+  const todayStr = getUserToday(tz);
+  const user = await getCurrentUser();
 
-  const { count } = await ctx.supabase
-    .from("workout_logs")
-    .select("*", { count: "exact", head: true })
-    .eq("user_id", ctx.userId)
-    .gte("completed_at", startOfDay);
+  if (showsStrength(user.primaryActivity)) {
+    const { count } = await ctx.supabase
+      .from("workout_logs")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", ctx.userId)
+      .gte("completed_at", startOfDay);
+    if ((count ?? 0) > 0) return true;
+  }
 
-  return (count ?? 0) > 0;
+  if (showsRunning(user.primaryActivity)) {
+    const { data: runRows } = await ctx.supabase
+      .from("runs")
+      .select("distance_m, duration_s")
+      .eq("user_id", ctx.userId)
+      .eq("ran_on", todayStr);
+    if (
+      ((runRows ?? []) as { distance_m: number; duration_s: number }[]).some((r) =>
+        runQualifiesAsWorkout(r.distance_m, r.duration_s),
+      )
+    ) {
+      return true;
+    }
+  }
+
+  return false;
 }

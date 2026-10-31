@@ -14,7 +14,7 @@ import { TransformationScoreCard } from "@/components/dashboard/transformation-s
 import { RecommendationsCard } from "@/components/dashboard/recommendations-card";
 import { QuoteOfDayCard } from "@/components/dashboard/quote-of-day-card";
 import { DashboardGrid } from "@/components/dashboard/dashboard-grid";
-import { RunnerModePromo } from "@/components/dashboard/runner-mode-promo";
+import { ChooseModeCard } from "@/components/dashboard/choose-mode-card";
 import { getUserPreferences } from "@/lib/queries/preferences";
 import { getCurrentUser } from "@/lib/queries/profile";
 import { getLocale } from "@/lib/locale";
@@ -56,7 +56,7 @@ export default async function DashboardPage() {
         <Greeting />
         {!user.primaryActivity && (
           <div className="mt-6">
-            <RunnerModePromo dict={dict} />
+            <ChooseModeCard dict={dict} />
           </div>
         )}
         <div className="mt-6">
