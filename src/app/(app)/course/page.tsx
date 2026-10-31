@@ -8,6 +8,8 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { RunList } from "@/components/course/run-list";
 import { RunnerOnboarding } from "@/components/course/runner-onboarding";
+import { ActivateMode } from "@/components/activity/activate-mode";
+import { getCurrentUser } from "@/lib/queries/profile";
 import {
   getRuns, getRunPlan, getRunnerOnboarding, weekStats, weeklyDistances, records,
 } from "@/lib/queries/running";
@@ -28,13 +30,26 @@ export default async function CoursePage({
   searchParams: Promise<{ vue?: string }>;
 }) {
   const locale = await getLocale();
-  const [dict, runs, tz, onboarding, params] = await Promise.all([
+  const [dict, runs, tz, onboarding, params, user] = await Promise.all([
     getDictionary(locale),
     getRuns(),
     getUserTimezone(),
     getRunnerOnboarding(),
     searchParams,
+    getCurrentUser(),
   ]);
+
+  // A pure-strength account lands here only via a link: offer to add the mode.
+  if (user.primaryActivity === "strength") {
+    return (
+      <>
+        <Topbar title={dict["course.title"]} />
+        <main className="flex-1">
+          <ActivateMode dict={dict} activate="running" />
+        </main>
+      </>
+    );
+  }
 
   // First visit: ask the two questions before anything else, unless the user
   // chose to skip (?vue=1) — the questions stay reachable from the overview.

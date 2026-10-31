@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { Footprints, Check } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { setPrimaryActivity } from "@/app/(app)/profile/actions";
@@ -16,6 +17,7 @@ export function ActivitySetting({
   dict: Dictionary;
   initial?: Activity;
 }) {
+  const router = useRouter();
   const [value, setValue] = useState<Activity | undefined>(initial);
   const [saved, setSaved] = useState(false);
   const [, startTransition] = useTransition();
@@ -34,6 +36,8 @@ export function ActivitySetting({
       if (res.ok) {
         setSaved(true);
         setTimeout(() => setSaved(false), 2000);
+        // Refresh so the sidebar and mobile bar reflect the new mode at once.
+        router.refresh();
       }
     });
   }

@@ -13,14 +13,27 @@ import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 
 export async function WorkoutCard() {
-  const locale = await getLocale();
-  const dict = await getDictionary(locale);
-
-  // Pure runners get the run session of the day instead of a strength workout.
+  // The card follows the activity mode: runners get the run session, strength
+  // users get the strength workout, and "both" gets both stacked.
   const user = await getCurrentUser();
   if (user.primaryActivity === "running") {
     return <RunTodayCard />;
   }
+  if (user.primaryActivity === "both") {
+    return (
+      <div className="space-y-5">
+        <StrengthWorkoutCard />
+        <RunTodayCard />
+      </div>
+    );
+  }
+  return <StrengthWorkoutCard />;
+}
+
+async function StrengthWorkoutCard() {
+  const locale = await getLocale();
+  const dict = await getDictionary(locale);
+
   const [programs, today, workoutDone] = await Promise.all([
     getPrograms(locale),
     getTodayPlan(locale),

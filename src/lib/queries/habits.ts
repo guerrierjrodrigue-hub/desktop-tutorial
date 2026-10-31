@@ -5,6 +5,8 @@ import { localizeHabitLabel } from "@/lib/content-i18n";
 import { getCurrentUser } from "@/lib/queries/profile";
 import { spreadTrainingDays, mondayIndexFromDateStr } from "@/lib/week-plan";
 import { computeStreak } from "@/lib/habit-streak";
+import { runQualifiesAsWorkout } from "@/lib/running";
+import { showsRunning, showsStrength } from "@/lib/activity";
 import { habits as mockHabits } from "@/data/dashboard";
 import type { LocaleCode } from "@/i18n/locales";
 import type { Habit } from "@/types";
@@ -35,7 +37,7 @@ export async function getHabits(locale: LocaleCode = "en"): Promise<Habit[]> {
   const tz = await getUserTimezone();
   const todayStr = getUserToday(tz);
   const since = addDaysToDateStr(todayStr, -90);
-  const [{ data: logRows }, { data: workoutRows }] = await Promise.all([
+  const [{ data: logRows }, { data: workoutRows }, { data: runRows }, user] = await Promise.all([
     ctx.supabase
       .from("habit_logs")
       .select("*")
@@ -48,6 +50,13 @@ export async function getHabits(locale: LocaleCode = "en"): Promise<Habit[]> {
       .select("completed_at")
       .eq("user_id", ctx.userId)
       .gte("completed_at", `${since}T00:00:00Z`),
+    // A qualifying run does the same for a running / "both" account.
+    ctx.supabase
+      .from("runs")
+      .select("ran_on, distance_m, duration_s")
+      .eq("user_id", ctx.userId)
+      .gte("ran_on", since),
+    getCurrentUser(),
   ]);
 
   const logsByHabit = new Map<string, Set<string>>();
@@ -57,15 +66,23 @@ export async function getHabits(locale: LocaleCode = "en"): Promise<Habit[]> {
     logsByHabit.get(log.habit_id)!.add(log.log_date);
   }
 
-  // Local days (user's timezone) on which a workout was completed.
+  // Local days (user's timezone) on which the workout habit auto-satisfies.
+  // Which kinds of session count follows the account's mode: strength sessions
+  // for a lifter, qualifying runs for a runner, either for "both".
   const workoutDays = new Set<string>();
-  for (const w of (workoutRows ?? []) as { completed_at: string }[]) {
-    workoutDays.add(getUserToday(tz, new Date(w.completed_at)));
+  if (showsStrength(user.primaryActivity)) {
+    for (const w of (workoutRows ?? []) as { completed_at: string }[]) {
+      workoutDays.add(getUserToday(tz, new Date(w.completed_at)));
+    }
+  }
+  if (showsRunning(user.primaryActivity)) {
+    for (const r of (runRows ?? []) as { ran_on: string; distance_m: number; duration_s: number }[]) {
+      if (runQualifiesAsWorkout(r.distance_m, r.duration_s)) workoutDays.add(r.ran_on);
+    }
   }
 
   // Rest-day pattern from the user's weekly cadence (Mon→Sun). A planned rest
   // day neither breaks the workout habit's streak nor counts against the user.
-  const user = await getCurrentUser();
   const weekPattern = spreadTrainingDays(user.trainingDays ?? 3);
   const isWorkoutRestDay = (dateStr: string) =>
     weekPattern[mondayIndexFromDateStr(dateStr)] === "rest";

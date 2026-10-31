@@ -3,7 +3,11 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { getUserToday } from "@/lib/date";
 import { getUserTimezone } from "@/lib/timezone";
-import { daysLeftFor, cohortStatus, workoutProgress } from "@/lib/challenge-progress";
+import {
+  daysLeftFor, cohortStatus, workoutProgress, runCountProgress, kilometerProgress,
+} from "@/lib/challenge-progress";
+import { getCurrentUser } from "@/lib/queries/profile";
+import { showsRunning, showsStrength } from "@/lib/activity";
 import { publicDisplayName } from "@/lib/public-name";
 import { pick, CHALLENGE_FR } from "@/lib/content-i18n";
 import { challenges as mockChallenges } from "@/data/dashboard";
@@ -26,17 +30,26 @@ export async function getChallenges(locale: LocaleCode = "en"): Promise<Challeng
     });
   }
 
-  const [challengeRes, participantRes] = await Promise.all([
+  const [challengeRes, participantRes, user] = await Promise.all([
     ctx.supabase
       .from("challenges")
-      .select("id, title, title_fr, description, description_fr, type, duration_days, metric, start_date, invite_code")
+      .select("id, title, title_fr, description, description_fr, type, duration_days, metric, activity, start_date, invite_code")
       .order("created_at", { ascending: true }),
     ctx.supabase
       .from("challenge_participants")
       .select("challenge_id, user_id, progress, joined_at"),
+    getCurrentUser(),
   ]);
-  const challengeRows = challengeRes.data;
-  if (!challengeRows) return [];
+  const allRows = challengeRes.data;
+  if (!allRows) return [];
+
+  // Show only the account's mode plus the common ("both") challenges.
+  const challengeRows = allRows.filter((row) => {
+    const activity = (row as { activity?: string }).activity ?? "both";
+    if (activity === "running") return showsRunning(user.primaryActivity);
+    if (activity === "strength") return showsStrength(user.primaryActivity);
+    return true;
+  });
 
   const counts = new Map<string, number>();
   const mineByChallenge = new Map<string, { progress: number; joined_at: string }>();
@@ -64,6 +77,21 @@ export async function getChallenges(locale: LocaleCode = "en"): Promise<Challeng
           .eq("user_id", ctx.userId)
           .gte("completed_at", mine.joined_at);
         progress = workoutProgress(count ?? 0);
+      } else if (joined && mine && (row.metric === "runs" || row.metric === "kilometers")) {
+        // Genuine runs only (same effort gate as run XP) since the join date.
+        const joinedDay = getUserToday(tz, new Date(mine.joined_at));
+        const { data: runRows } = await ctx.supabase
+          .from("runs")
+          .select("distance_m, duration_s")
+          .eq("user_id", ctx.userId)
+          .gte("ran_on", joinedDay);
+        const genuine = ((runRows ?? []) as { distance_m: number; duration_s: number }[]).filter(
+          (r) => r.duration_s >= 600 && r.distance_m >= 1000,
+        );
+        progress =
+          row.metric === "runs"
+            ? runCountProgress(genuine.length)
+            : kilometerProgress(genuine.reduce((sum, r) => sum + r.distance_m, 0));
       }
 
       // A dated cohort shares one window from its start_date (late joiners keep

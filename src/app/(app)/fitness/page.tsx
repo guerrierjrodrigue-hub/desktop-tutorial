@@ -3,7 +3,9 @@ import { Topbar } from "@/components/layout/topbar";
 import { PageHeader } from "@/components/layout/page-header";
 import { ProgramCard } from "@/components/fitness/program-card";
 import { Badge } from "@/components/ui/badge";
+import { ActivateMode } from "@/components/activity/activate-mode";
 import { getPrograms } from "@/lib/queries/programs";
+import { getCurrentUser } from "@/lib/queries/profile";
 import { getLocale } from "@/lib/locale";
 import { getDictionary } from "@/i18n/get-dictionary";
 import type { ProgramCategory } from "@/types";
@@ -29,7 +31,24 @@ const categories: { key: ProgramCategory | "all"; labelKey: DictionaryKey }[] = 
 
 export default async function FitnessPage() {
   const locale = await getLocale();
-  const [programs, dict] = await Promise.all([getPrograms(locale), getDictionary(locale)]);
+  const [programs, dict, user] = await Promise.all([
+    getPrograms(locale),
+    getDictionary(locale),
+    getCurrentUser(),
+  ]);
+
+  // A pure-running account lands here only via a link: offer to add the mode.
+  if (user.primaryActivity === "running") {
+    return (
+      <>
+        <Topbar title={dict["nav.fitness"]} />
+        <main className="flex-1">
+          <ActivateMode dict={dict} activate="strength" />
+        </main>
+      </>
+    );
+  }
+
   return (
     <>
       <Topbar title={dict["nav.fitness"]} />

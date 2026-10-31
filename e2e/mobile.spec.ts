@@ -25,6 +25,7 @@ const ROUTES: { path: string; name: string }[] = [
   { path: "/challenges", name: "challenges" },
   { path: "/focus", name: "focus" },
   { path: "/profile", name: "profile" },
+  { path: "/onboarding", name: "onboarding" },
 ];
 
 test.describe("Mobile — no horizontal overflow on protected pages", () => {

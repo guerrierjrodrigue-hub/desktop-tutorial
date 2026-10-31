@@ -33,7 +33,9 @@ const GUARDED_FILES = [
   "course/shoe-manager.tsx",
   "course/gpx-import.tsx",
   "profile/activity-setting.tsx",
-  "dashboard/runner-mode-promo.tsx",
+  "dashboard/choose-mode-card.tsx",
+  "activity/activate-mode.tsx",
+  "onboarding/onboarding-wizard.tsx",
 ];
 
 // Proper nouns, brand/product names and bare units are not translatable.

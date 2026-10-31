@@ -43,14 +43,39 @@ export function cohortStatus(
 
 /** Target for the workout-count challenge ("30 workouts"). */
 export const WORKOUT_CHALLENGE_TARGET = 30;
+/** Target for the run-count challenge ("12 runs"). */
+export const RUN_COUNT_CHALLENGE_TARGET = 12;
+/** Target for the distance challenge, in metres ("50 km"). */
+export const KILOMETER_CHALLENGE_TARGET_M = 50_000;
+
+/** Progress (0..1) from a real count against a target (shared by count metrics). */
+export function countProgress(count: number, target: number): number {
+  if (target <= 0) return 0;
+  return Math.min(1, Math.max(0, count) / target);
+}
 
 /** Progress (0..1) for a workout-count challenge from a real workout count. */
 export function workoutProgress(
   count: number,
   target: number = WORKOUT_CHALLENGE_TARGET,
 ): number {
-  if (target <= 0) return 0;
-  return Math.min(1, Math.max(0, count) / target);
+  return countProgress(count, target);
+}
+
+/** Progress (0..1) for a run-count challenge from a real run count. */
+export function runCountProgress(
+  count: number,
+  target: number = RUN_COUNT_CHALLENGE_TARGET,
+): number {
+  return countProgress(count, target);
+}
+
+/** Progress (0..1) for a distance challenge from metres run against a target. */
+export function kilometerProgress(
+  metres: number,
+  targetMetres: number = KILOMETER_CHALLENGE_TARGET_M,
+): number {
+  return countProgress(metres, targetMetres);
 }
 
 /**
