@@ -9,7 +9,6 @@ const PROTECTED = [
   "/fitness",
   "/nutrition",
   "/spiritual",
-  "/coach",
   "/community",
   "/challenges",
   "/profile",

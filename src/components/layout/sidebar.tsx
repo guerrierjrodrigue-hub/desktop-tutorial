@@ -49,10 +49,12 @@ export function Sidebar({
   dict,
   freeMode = false,
   mode = null,
+  isAdmin = false,
 }: {
   dict: Dictionary;
   freeMode?: boolean;
   mode?: ActivityMode | null;
+  isAdmin?: boolean;
 }) {
   const pathname = usePathname();
   const isActive = (href: string) =>
@@ -108,13 +110,15 @@ export function Sidebar({
         </div>
       )}
 
-      <Link
-        href="/admin"
-        className="mt-2 flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-faint transition-colors hover:bg-surface-2/60 hover:text-foreground"
-      >
-        <ShieldCheck className="size-5 text-faint" />
-        {dict["nav.admin"]}
-      </Link>
+      {isAdmin && (
+        <Link
+          href="/admin"
+          className="mt-2 flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-faint transition-colors hover:bg-surface-2/60 hover:text-foreground"
+        >
+          <ShieldCheck className="size-5 text-faint" />
+          {dict["nav.admin"]}
+        </Link>
+      )}
     </aside>
   );
 }

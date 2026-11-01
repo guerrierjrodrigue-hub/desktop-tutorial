@@ -23,7 +23,6 @@ const GUARDED_FILES = [
   "spiritual/prayer-journal.tsx",
   "habits/habits-list.tsx",
   "profile/profile-editor.tsx",
-  "coach/coach-chat.tsx",
   "layout/topbar.tsx",
   "course/new-run-form.tsx",
   "course/interval-timer.tsx",

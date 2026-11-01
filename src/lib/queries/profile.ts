@@ -1,10 +1,7 @@
 import { cache } from "react";
-import type { SupabaseClient } from "@supabase/supabase-js";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getSessionUser } from "@/lib/supabase/auth";
 import { isFreeMode } from "@/lib/flags";
-import { globalStreak } from "@/lib/gamification";
-import { getUserToday, addDaysToDateStr } from "@/lib/date";
 import { currentUser as mockUser } from "@/data/user";
 import type { UserProfile } from "@/types";
 import type { ProfileRow } from "@/types/database";
@@ -39,6 +36,7 @@ function mapProfile(row: ProfileRow): UserProfile {
     trainingDays: row.training_days ?? undefined,
     reminderTime: row.reminder_time ?? undefined,
     isPremium: row.is_premium,
+    isAdmin: row.is_admin,
     xp: row.xp,
     streak: row.streak,
     joinedAt: row.joined_at,
@@ -70,30 +68,13 @@ export const getCurrentUser = cache(async function getCurrentUser(): Promise<Use
   if (data) {
     const row = data as ProfileRow;
     const profile = applyFreeMode(mapProfile(row));
-    // Global streak derived from xp_events (planned rest days don't break it).
-    const todayStr = getUserToday(row.timezone ?? "UTC");
-    const { data: dayRows } = await supabase
-      .from("xp_events")
-      .select("day")
-      .eq("user_id", user.id)
-      .gte("day", addDaysToDateStr(todayStr, -200));
-    profile.streak = globalStreak(
-      ((dayRows ?? []) as { day: string }[]).map((r) => r.day),
-      row.training_days ?? 3,
-      todayStr,
-    );
-    // Write the freshly computed streak back to the cached column so readers that
-    // query profiles.streak directly (leaderboard, coach context) stay in sync
-    // with the dashboard instead of showing a stale 0. Best-effort; a failed
-    // write never blocks the page.
-    if (row.streak !== profile.streak) {
-      // Permissive cast for the write: the hand-written Database type exposes no
-      // Update types (reads stay fully typed). Matches getAuthedContext's pattern.
-      await (supabase as SupabaseClient)
-        .from("profiles")
-        .update({ streak: profile.streak })
-        .eq("id", user.id);
-    }
+    // The global streak (planned rest days don't break it) is recomputed from
+    // xp_events and stored by a SECURITY DEFINER function — the user's session no
+    // longer has UPDATE on profiles.streak. It writes only the caller's own row
+    // and returns the fresh value, which readers of profiles.streak (e.g. the
+    // leaderboard) then see. Best-effort: on any failure keep the stored value.
+    const { data: freshStreak } = await supabase.rpc("ka_refresh_streak");
+    if (typeof freshStreak === "number") profile.streak = freshStreak;
     return profile;
   }
 
@@ -108,6 +89,7 @@ export const getCurrentUser = cache(async function getCurrentUser(): Promise<Use
     avatarUrl: user.user_metadata?.avatar_url ?? undefined,
     level: "beginner",
     isPremium: false,
+    isAdmin: false,
     xp: 0,
     streak: 0,
     joinedAt: user.created_at,

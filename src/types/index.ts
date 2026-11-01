@@ -36,6 +36,8 @@ export interface UserProfile {
   /** Preferred daily reminder time, "HH:MM". */
   reminderTime?: string;
   isPremium: boolean;
+  /** Platform administrator — gates the Administration area and its nav link. */
+  isAdmin: boolean;
   xp: number;
   streak: number;
   joinedAt: string;
@@ -327,14 +329,6 @@ export interface CommunityPost {
   /** Whether the signed-in user is the author (shows the delete action). */
   isOwn?: boolean;
 }
-
-export interface ChatMessage {
-  id: string;
-  role: "user" | "assistant";
-  content: string;
-}
-
-export type CoachId = "barnabas" | "titan" | "forge" | "haven";
 
 export type IdentityId =
   | "athlete"

@@ -31,7 +31,6 @@ const USER_TABLES: { table: string; column: "user_id" | "id" }[] = [
   { table: "user_badges", column: "user_id" },
   { table: "notification_preferences", column: "user_id" },
   { table: "user_preferences", column: "user_id" },
-  { table: "coach_messages", column: "user_id" },
 ];
 
 export async function GET() {

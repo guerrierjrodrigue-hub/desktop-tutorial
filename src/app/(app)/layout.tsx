@@ -18,7 +18,7 @@ export default async function AppLayout({
 
   return (
     <div className="mx-auto flex min-h-svh w-full max-w-[1400px]">
-      <Sidebar dict={dict} freeMode={freeMode} mode={mode} />
+      <Sidebar dict={dict} freeMode={freeMode} mode={mode} isAdmin={user.isAdmin} />
       <div className="flex min-w-0 flex-1 flex-col pb-20 lg:pb-0">
         {children}
       </div>

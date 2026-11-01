@@ -19,7 +19,6 @@ const en = {
   "nav.purposeJournal": "Purpose Journal",
   "nav.community": "Community",
   "nav.challenges": "Challenges",
-  "nav.coach": "Coach",
   "nav.profile": "Profile",
   "nav.admin": "Admin",
   "nav.goPremium": "Go Premium",
@@ -705,21 +704,6 @@ const en = {
   "community.join": "Join",
   "community.noGroupsYet": "You haven't joined any groups yet.",
 
-  // Coach picker page
-  "coach.pickerSubtitle": "Pick the coach that fits what you need today. You can switch anytime.",
-  // Coach chat (detail) page
-  "coach.chooseAnother": "Choose a different coach",
-  "coach.clear": "Clear conversation",
-  "coach.messagePlaceholder": "Message {name}…",
-  "coach.sendAria": "Send",
-  "coach.fallbackRetry": "I'm here for you. Let's try that again.",
-  "coach.fallbackUnreachable": "I couldn't reach my thoughts just now — but I'm still with you. Take a breath, and let's try again in a moment.",
-  "coach.tooLong": "Your message is too long (2000 characters max). Please shorten it.",
-  "coach.limitReached": "You've reached today's limit of {n} coach messages (free beta). Please come back tomorrow.",
-  "coach.unavailable": "{coach} is unavailable right now. Please try again in a moment.",
-  "coach.metaSuffix": "AI Coach",
-  "coach.metaFallback": "Coach",
-
   // Challenges page
   "challenges.title": "Challenges",
   "challenges.subtitle": "Discipline is easier together. Join a challenge and keep the streak alive.",
@@ -900,7 +884,7 @@ const en = {
   "mkt.privacy.s7.h": "7. Changes to this policy",
   "mkt.privacy.s7.b": "We may update this policy from time to time. We'll update the \"Last updated\" date above when we do, and, for material changes, we'll make a reasonable effort to notify you.",
   "mkt.privacy.s9.h": "8. Your rights (access, portability, deletion)",
-  "mkt.privacy.s9.b": "Under Québec's Law 25 and comparable laws, you can access and export all of your data at any time: go to Profile → Privacy → \"Export my data\" to download everything we hold about you as a JSON file. You can also permanently delete your account and all associated data from Profile → Privacy → \"Delete my account\". This erases your profile, habits, journal, prayers, workouts, meals, hydration and coach messages, cancels any billing, signs you out, and cannot be undone.",
+  "mkt.privacy.s9.b": "Under Québec's Law 25 and comparable laws, you can access and export all of your data at any time: go to Profile → Privacy → \"Export my data\" to download everything we hold about you as a JSON file. You can also permanently delete your account and all associated data from Profile → Privacy → \"Delete my account\". This erases your profile, habits, journal, prayers, workouts, meals and hydration, cancels any billing, signs you out, and cannot be undone.",
   "mkt.privacy.s10.h": "9. Visibility to other members",
   "mkt.privacy.s10.b": "To help members encourage one another, leaderboards and group features show a shortened name — your first name and last initial only (for example \"Jean G.\"). We never show your full surname or your email address to other members. You can hide your name entirely from leaderboards and groups at Profile → Privacy → \"Appear on leaderboards and in groups\"; when it's off, you appear only as an \"Anonymous member\".",
   "mkt.privacy.s8.h": "10. Contact us",
@@ -1159,7 +1143,6 @@ const en = {
   "meta.spiritual": "Spiritual",
   "meta.habits": "Habits",
   "meta.challenges": "Challenges",
-  "meta.coach": "Coach",
   "meta.community": "Community",
   "meta.journal": "Journal",
   "meta.focus": "Focus",

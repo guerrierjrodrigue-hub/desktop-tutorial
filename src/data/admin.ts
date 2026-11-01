@@ -36,5 +36,5 @@ export const adminLogs = [
   { id: "l2", level: "info", message: "New user signup: elena@example.com", time: "18m ago" },
   { id: "l3", level: "warn", message: "Payment failed for james@example.com (card declined)", time: "1h ago" },
   { id: "l4", level: "info", message: "Program published: Warrior HIIT", time: "3h ago" },
-  { id: "l5", level: "error", message: "OpenAI rate limit hit on /api/coach (retried, ok)", time: "5h ago" },
+  { id: "l5", level: "warn", message: "Weekly database backup completed (encrypted artifact, 30-day retention)", time: "5h ago" },
 ];
