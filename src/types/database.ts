@@ -61,6 +61,13 @@ export interface ProfileRow {
   run_level: "new" | "5k" | "10k" | null;
   /** Runner onboarding: chosen objective (null until answered). "free" = no plan. */
   run_goal_kind: "5k" | "10k" | "half" | "free" | null;
+  // Billing (Stripe). Written only by the service role / the checkout + webhook
+  // routes; the `authenticated` role has no UPDATE privilege on these (0040).
+  stripe_customer_id: string | null;
+  stripe_subscription_id: string | null;
+  subscription_price_id: string | null;
+  subscription_status: string | null;
+  current_period_end: Timestamptz | null;
 }
 
 /** One logged run (owner-only). pace_s_per_km is DB-generated. */
@@ -409,7 +416,6 @@ export interface WorkoutLogRow {
 
 export interface UserPreferencesRow {
   user_id: string;
-  active_coach: string;
   dashboard_layout: { id: string; hidden: boolean }[];
   updated_at: Timestamptz;
 }
@@ -485,7 +491,13 @@ export interface Database {
       run_shoes: T<RunShoeRow>;
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      /** Recompute and store the caller's global streak; returns the fresh value. */
+      ka_refresh_streak: {
+        Args: Record<string, never>;
+        Returns: number;
+      };
+    };
     Enums: {
       fitness_level: "beginner" | "intermediate" | "advanced";
       program_category:

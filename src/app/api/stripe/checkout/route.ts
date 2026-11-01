@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe/server";
 import { STRIPE_PRICES, isStripeConfigured } from "@/lib/stripe/config";
 import { getAuthedContext } from "@/lib/supabase/auth";
+import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { APP_URL } from "@/lib/constants";
 
 /** Create a Stripe Checkout session for a subscription plan. */
@@ -35,7 +36,9 @@ export async function POST(req: Request) {
       metadata: { user_id: ctx.userId },
     });
     customerId = customer.id;
-    await ctx.supabase
+    // stripe_customer_id is a protected column (0040): the user session has no
+    // UPDATE privilege on it, so persist it with the service-role client.
+    await createSupabaseAdminClient()
       .from("profiles")
       .update({ stripe_customer_id: customerId })
       .eq("id", ctx.userId);

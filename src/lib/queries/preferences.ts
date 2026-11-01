@@ -1,7 +1,6 @@
 import { getAuthedContext } from "@/lib/supabase/auth";
 
 export interface UserPreferences {
-  activeCoach: string;
   dashboardLayout: { id: string; hidden: boolean }[];
 }
 
@@ -10,7 +9,6 @@ export interface UserPreferences {
  * else stays one tap away via the dashboard's "Customize" toggle.
  */
 const DEFAULT_PREFERENCES: UserPreferences = {
-  activeCoach: "barnabas",
   dashboardLayout: [
     { id: "progress", hidden: false },
     { id: "workout", hidden: false },
@@ -26,7 +24,7 @@ const DEFAULT_PREFERENCES: UserPreferences = {
   ],
 };
 
-/** The signed-in user's saved coach + dashboard layout (empty/default when unconfigured). */
+/** The signed-in user's saved dashboard layout (default when unconfigured). */
 export async function getUserPreferences(): Promise<UserPreferences> {
   const ctx = await getAuthedContext();
   if (!ctx) return DEFAULT_PREFERENCES;
@@ -38,5 +36,5 @@ export async function getUserPreferences(): Promise<UserPreferences> {
     .single();
 
   if (!data) return DEFAULT_PREFERENCES;
-  return { activeCoach: data.active_coach, dashboardLayout: data.dashboard_layout ?? [] };
+  return { dashboardLayout: data.dashboard_layout ?? [] };
 }

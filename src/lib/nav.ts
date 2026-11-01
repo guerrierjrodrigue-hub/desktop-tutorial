@@ -1,6 +1,5 @@
 import type { LucideIcon } from "lucide-react";
 import type { DictionaryKey } from "@/i18n/dictionaries/en";
-import { isCoachEnabled } from "@/lib/flags";
 import { showsRunning, showsStrength, type ActivityMode } from "@/lib/activity";
 import {
   LayoutDashboard,
@@ -10,7 +9,6 @@ import {
   Timer,
   NotebookPen,
   Repeat,
-  Sparkles,
   Users,
   Trophy,
   User,
@@ -104,17 +102,9 @@ export function getNavGroups(purposeItems: NavItem[], mode?: ActivityMode | null
   ];
 }
 
-/**
- * Cross-cutting items rendered below the pillar groups (not pillar-specific).
- * The Coach entry only appears while the AI coach is enabled (see isCoachEnabled).
- */
+/** Cross-cutting items rendered below the pillar groups (not pillar-specific). */
 export function getStandaloneNavItems(): NavItem[] {
-  const items: NavItem[] = [];
-  if (isCoachEnabled()) {
-    items.push({ href: "/coach", label: "Coach", labelKey: "nav.coach", icon: Sparkles });
-  }
-  items.push({ href: "/profile", label: "Profile", labelKey: "nav.profile", icon: User });
-  return items;
+  return [{ href: "/profile", label: "Profile", labelKey: "nav.profile", icon: User }];
 }
 
 /**

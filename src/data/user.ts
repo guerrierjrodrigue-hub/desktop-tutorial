@@ -12,6 +12,7 @@ export const currentUser: UserProfile = {
   weightKg: 82,
   goal: "Build strength & steward my body well",
   isPremium: false,
+  isAdmin: false,
   xp: 4820,
   streak: 26,
   joinedAt: "2025-11-02",

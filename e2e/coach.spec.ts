@@ -1,20 +1,20 @@
 import { test, expect } from "./fixtures";
 
-// The AI coach (Barnabas) is disabled by default via COACH_ENABLED /
-// NEXT_PUBLIC_COACH_ENABLED. These tests assert the off state; when the flag is
-// turned back on, restore the picker/chat coverage from git history.
-test.describe("AI coach disabled", () => {
-  test("/coach redirects to the dashboard", async ({ page }) => {
-    await page.goto("/coach");
-    await expect(page).toHaveURL(/\/dashboard(\/|$|\?)/);
+// The AI coach feature was removed (Z2 / D-15): its pages and API routes no
+// longer exist, the @anthropic-ai/sdk dependency is gone, and no entry point
+// links to it. These tests guard against an accidental reintroduction.
+test.describe("AI coach removed", () => {
+  test("/coach no longer exists (404)", async ({ page }) => {
+    const res = await page.goto("/coach");
+    expect(res?.status()).toBe(404);
   });
 
-  test("/coach/[coachId] redirects to the dashboard", async ({ page }) => {
-    await page.goto("/coach/barnabas");
-    await expect(page).toHaveURL(/\/dashboard(\/|$|\?)/);
+  test("/coach/[coachId] no longer exists (404)", async ({ page }) => {
+    const res = await page.goto("/coach/barnabas");
+    expect(res?.status()).toBe(404);
   });
 
-  test("the coach API 404s without invoking the model", async ({ request }) => {
+  test("the coach API routes 404", async ({ request }) => {
     const chat = await request.post("/api/coach", {
       data: { coachId: "barnabas", messages: [{ role: "user", content: "hi" }] },
     });

@@ -1,7 +1,7 @@
 import { BookOpen } from "lucide-react";
 import type { NavItem } from "@/lib/nav";
 import type { DictionaryKey } from "@/i18n/dictionaries/en";
-import type { CoachId, IdentityId } from "@/types";
+import type { IdentityId } from "@/types";
 
 /** Selectable identities in onboarding — "who do you want to become?" */
 export const IDENTITY_OPTIONS: { id: IdentityId; labelKey: DictionaryKey }[] = [
@@ -83,14 +83,4 @@ export function getPurposeNavItems(): NavItem[] {
 /** The pillar's primary destination (Spiritual) — used for the mobile bottom bar. */
 export function getSpiritualNavItem(): NavItem {
   return SPIRITUAL_NAV_ITEM;
-}
-
-/** Suggests which coach persona best fits a user's selected identities. */
-export function suggestedCoachId(identities: string[]): CoachId {
-  if (identities.includes("christian")) return "barnabas";
-  if (identities.includes("athlete")) return "titan";
-  if (identities.includes("entrepreneur") || identities.includes("disciplined")) {
-    return "forge";
-  }
-  return "haven";
 }

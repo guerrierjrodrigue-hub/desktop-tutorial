@@ -12,8 +12,6 @@ import {
   localizeTags,
   localizeRecipeName,
 } from "./content-i18n";
-import { localizeCoach } from "./coaches";
-import { getCoach } from "@/data/coaches";
 
 describe("pick", () => {
   it("returns French only when locale is fr and a translation exists", () => {
@@ -74,21 +72,5 @@ describe("recipe localization", () => {
       "Rapide",
     ]);
     expect(localizeTags(["High protein"], "en")).toEqual(["High protein"]);
-  });
-});
-
-describe("localizeCoach", () => {
-  it("translates user-facing copy but keeps the name and system prompt", () => {
-    const en = getCoach("barnabas");
-    const fr = localizeCoach(en, "fr");
-    expect(fr.name).toBe("Barnabas");
-    expect(fr.systemPrompt).toBe(en.systemPrompt);
-    expect(fr.tagline).toContain("foi");
-    expect(fr.greeting).not.toBe(en.greeting);
-    expect(fr.offline.fallback).not.toBe(en.offline.fallback);
-  });
-  it("is a no-op in English", () => {
-    const en = getCoach("titan");
-    expect(localizeCoach(en, "en")).toBe(en);
   });
 });
