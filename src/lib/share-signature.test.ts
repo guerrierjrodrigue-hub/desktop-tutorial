@@ -45,19 +45,26 @@ describe("with a signing secret configured", () => {
   });
 });
 
-describe("with no signing secret (demo/local)", () => {
+describe("with no signing secret (sharing disabled)", () => {
   beforeEach(() => {
     delete process.env.SHARE_SIGNING_SECRET;
+    // A leftover service-role key / cron secret must NOT re-enable signing:
+    // the fallback was removed so one secret's blast radius stays contained.
+    process.env.SUPABASE_SERVICE_ROLE_KEY = "leftover-service-role-key";
+    process.env.CRON_SECRET = "leftover-cron-secret";
+  });
+  afterEach(() => {
     delete process.env.SUPABASE_SERVICE_ROLE_KEY;
     delete process.env.CRON_SECRET;
   });
 
-  it("reports signing as disabled and signs to null", () => {
+  it("reports signing as disabled and signs to null (no fallback secret)", () => {
     expect(shareSigningEnabled()).toBe(false);
     expect(signShareParams({ a: "1" })).toBeNull();
   });
 
-  it("allows any params (nothing to enforce)", () => {
-    expect(verifyShareParams({ a: "1" }, null)).toBe(true);
+  it("fails closed: rejects everything when disabled", () => {
+    expect(verifyShareParams({ a: "1" }, null)).toBe(false);
+    expect(verifyShareParams({ a: "1" }, "deadbeef")).toBe(false);
   });
 });

@@ -19,6 +19,8 @@ export function ShareStreakButton({
     track(EVENTS.shared, { kind: "streak" });
     // The URL is signed on the server so the image route accepts it.
     const url = await signedShareImageUrl({ type: "streak", value: String(streak), label: caption });
+    // Empty when sharing is disabled (no SHARE_SIGNING_SECRET): do nothing.
+    if (!url) return;
     const absolute = typeof window !== "undefined" ? new URL(url, window.location.origin).toString() : url;
     try {
       if (typeof navigator !== "undefined" && navigator.share) {

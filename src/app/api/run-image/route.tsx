@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 import { LOGO_PATHS } from "@/components/brand/logo";
-import { verifyShareParams } from "@/lib/share-signature";
+import { verifyShareParams, shareSigningEnabled } from "@/lib/share-signature";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +21,8 @@ const SIGNATURE =
  * Query params: distance, time, pace (already formatted, metric).
  */
 export function GET(req: Request) {
+  // Sharing is disabled when no SHARE_SIGNING_SECRET is configured.
+  if (!shareSigningEnabled()) return new Response("Sharing is not configured", { status: 404 });
   const { searchParams } = new URL(req.url);
   const distance = searchParams.get("distance") ?? "";
   const time = searchParams.get("time") ?? "";

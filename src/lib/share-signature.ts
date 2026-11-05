@@ -6,18 +6,14 @@ import crypto from "node:crypto";
  * the app signs the params server-side (HMAC-SHA256) and the image routes
  * verify the signature before rendering.
  *
- * The key comes from SHARE_SIGNING_SECRET, falling back to other server-only
- * secrets so production is protected without a new env var. When NO secret is
- * configured (local/demo with no backend), verification is skipped so the
- * feature still works — there is nothing secret to protect there.
+ * The key comes from SHARE_SIGNING_SECRET and nothing else: reusing another
+ * server secret (e.g. the Supabase service-role key) as a fallback would widen
+ * that secret's blast radius. When SHARE_SIGNING_SECRET is absent the share
+ * feature is DISABLED, not left open: URLs are not minted and the image routes
+ * reject every request, so no forgeable brand image can be produced.
  */
 function secret(): string | null {
-  return (
-    process.env.SHARE_SIGNING_SECRET ||
-    process.env.SUPABASE_SERVICE_ROLE_KEY ||
-    process.env.CRON_SECRET ||
-    null
-  );
+  return process.env.SHARE_SIGNING_SECRET || null;
 }
 
 /** Whether signatures are enforced (a signing secret is configured). */
@@ -41,8 +37,9 @@ export function signShareParams(params: Record<string, string>): string | null {
 }
 
 /**
- * Verify a signature against the params. Returns true when no secret is
- * configured (nothing to enforce); otherwise requires an exact, constant-time
+ * Verify a signature against the params. Fails closed: when no secret is
+ * configured the share feature is disabled, so this returns false (reject)
+ * rather than skipping the check. Otherwise requires an exact, constant-time
  * match.
  */
 export function verifyShareParams(
@@ -50,7 +47,7 @@ export function verifyShareParams(
   sig: string | null | undefined,
 ): boolean {
   const s = secret();
-  if (!s) return true;
+  if (!s) return false;
   if (!sig) return false;
   const expected = signShareParams(params);
   if (!expected) return false;

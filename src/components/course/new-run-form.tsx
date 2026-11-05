@@ -281,6 +281,8 @@ function AfterRun({
       time: formatDuration(run.durationS),
       pace: `${formatPace(run.paceSPerKm)} /km`,
     });
+    // Empty when sharing is disabled (no SHARE_SIGNING_SECRET): do nothing.
+    if (!url) return;
     const absolute = typeof window !== "undefined" ? new URL(url, window.location.origin).toString() : url;
     try {
       if (typeof navigator !== "undefined" && navigator.share) {
