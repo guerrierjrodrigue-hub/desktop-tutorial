@@ -25,6 +25,28 @@ test.describe("Marketing", () => {
     ).toBeVisible();
   });
 
+  // B1 (D-16): in free mode the home page must not offer paid CTAs or a
+  // monthly/annual choice — only "Try for free".
+  test("home page hides paid CTAs in free mode", async ({ page }) => {
+    await page.goto("/");
+    const main = page.getByRole("main");
+    for (const label of ["Get started", "Start free trial", "Go annual"]) {
+      await expect(main.getByRole("button", { name: label })).toHaveCount(0);
+      await expect(main.getByRole("link", { name: label })).toHaveCount(0);
+    }
+    // No monthly/annual price suffixes anywhere in the page.
+    await expect(main.getByText("/mo")).toHaveCount(0);
+    await expect(main.getByText("/yr")).toHaveCount(0);
+    // The single primary CTA is present (hero + pricing + final CTA).
+    await expect(main.getByRole("link", { name: /try for free/i }).first()).toBeVisible();
+  });
+
+  test("home page pricing subtitle has no payment wording in free mode", async ({ page }) => {
+    await page.goto("/");
+    const main = page.getByRole("main");
+    await expect(main.getByText(/upgrade when you're ready/i)).toHaveCount(0);
+  });
+
   test("sign in link leads to the login screen", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("link", { name: /sign in/i }).click();

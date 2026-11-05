@@ -21,7 +21,7 @@ import type { LocaleCode } from "@/i18n/locales";
 export async function generateMetadata(): Promise<Metadata> {
   const dict = await getDictionary(await getLocale());
   return {
-    title: { absolute: `${APP_NAME} — ${dict["mkt.tagline"]}` },
+    title: { absolute: `${APP_NAME}: ${dict["mkt.tagline"]}` },
     description: dict["mkt.meta.homeDescription"],
     alternates: { canonical: "/" },
   };
@@ -134,7 +134,7 @@ export default async function LandingPage({
 
         <Testimonials dict={dict} />
 
-        <Pricing dict={dict} locale={locale} />
+        <Pricing dict={dict} locale={locale} freeMode={freeMode} />
 
         {/* Final CTA */}
         <section className="mx-auto max-w-5xl px-6 py-20">
@@ -190,7 +190,15 @@ function Testimonials({ dict }: { dict: Dictionary }) {
   );
 }
 
-function Pricing({ dict, locale }: { dict: Dictionary; locale: LocaleCode }) {
+function Pricing({
+  dict,
+  locale,
+  freeMode,
+}: {
+  dict: Dictionary;
+  locale: LocaleCode;
+  freeMode: boolean;
+}) {
   return (
     <section id="pricing" className="mx-auto max-w-6xl px-6 py-24">
       <Reveal className="mx-auto max-w-2xl text-center">
@@ -198,11 +206,32 @@ function Pricing({ dict, locale }: { dict: Dictionary; locale: LocaleCode }) {
         <h2 className="mt-4 font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
           {dict["mkt.pricing.title"]}
         </h2>
-        <p className="mt-4 text-muted">{dict["mkt.pricing.subtitle"]}</p>
+        <p className="mt-4 text-muted">
+          {dict[freeMode ? "mkt.pricing.subtitleFree" : "mkt.pricing.subtitle"]}
+        </p>
       </Reveal>
 
       <div className="mt-14">
-        <PricingPlans dict={dict} locale={locale} />
+        {freeMode ? (
+          // FREE-BETA MODE: no paid plans, no monthly/annual choice, a single
+          // "Try for free" under the free-beta line. Flip APP_FREE_MODE off to
+          // restore the plan cards.
+          <Reveal className="mx-auto max-w-2xl">
+            <div className="glass ring-accent rounded-3xl border border-accent/30 bg-gradient-to-b from-accent/8 to-transparent px-8 py-12 text-center sm:px-12">
+              <Badge variant="premium">{dict["mkt.freeMode.footerBadge"]}</Badge>
+              <h3 className="mt-5 font-serif text-2xl font-semibold leading-snug sm:text-3xl">
+                {dict["mkt.freeMode.title"]}
+              </h3>
+              <div className="mt-8 flex justify-center">
+                <Link href="/signup">
+                  <Button size="lg">{dict["mkt.cta.tryFree"]}</Button>
+                </Link>
+              </div>
+            </div>
+          </Reveal>
+        ) : (
+          <PricingPlans dict={dict} locale={locale} />
+        )}
       </div>
     </section>
   );
