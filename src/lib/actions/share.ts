@@ -19,8 +19,10 @@ export async function signedShareImageUrl(input: {
     text: input.text ?? "",
   };
   const sig = signShareParams(params);
+  // Sharing is disabled when no signing secret is configured: no URL to mint.
+  if (!sig) return "";
   const qs = new URLSearchParams(params);
-  if (sig) qs.set("sig", sig);
+  qs.set("sig", sig);
   return `/api/share-image?${qs.toString()}`;
 }
 
@@ -31,8 +33,10 @@ export async function signedVerseImageUrl(input: {
 }): Promise<string> {
   const params: Record<string, string> = { ref: input.ref, text: input.text };
   const sig = signShareParams(params);
+  // Sharing is disabled when no signing secret is configured: no URL to mint.
+  if (!sig) return "";
   const qs = new URLSearchParams(params);
-  if (sig) qs.set("sig", sig);
+  qs.set("sig", sig);
   return `/api/verse-image?${qs.toString()}`;
 }
 
@@ -48,7 +52,9 @@ export async function signedRunImageUrl(input: {
     pace: input.pace,
   };
   const sig = signShareParams(params);
+  // Sharing is disabled when no signing secret is configured: no URL to mint.
+  if (!sig) return "";
   const qs = new URLSearchParams(params);
-  if (sig) qs.set("sig", sig);
+  qs.set("sig", sig);
   return `/api/run-image?${qs.toString()}`;
 }

@@ -4,13 +4,14 @@ import type { Database } from "@/types/database";
 import { SUPABASE_URL, SUPABASE_ANON_KEY, isSupabaseConfigured } from "./config";
 
 /** Protected route prefixes that require an authenticated session. */
-const PROTECTED = [
+export const PROTECTED = [
   "/dashboard",
   "/fitness",
   "/nutrition",
   "/spiritual",
   "/community",
   "/challenges",
+  "/course",
   "/profile",
   "/habits",
   "/journal",

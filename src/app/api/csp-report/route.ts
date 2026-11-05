@@ -68,7 +68,8 @@ export async function POST(req: NextRequest) {
           violations = [parsed];
         }
       } catch {
-        violations = [raw.slice(0, 2000)];
+        // Not JSON: ignore it. We never log arbitrary (non-JSON) request bodies.
+        return new NextResponse(null, { status: 204 });
       }
 
       for (const v of violations) {

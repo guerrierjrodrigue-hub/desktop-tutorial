@@ -13,4 +13,10 @@ test.describe("Auth guard", () => {
     await page.goto("/nutrition");
     await expect(page).toHaveURL(/\/login\?redirect=%2Fnutrition$/);
   });
+
+  // D-26: /course used to be missing from PROTECTED and answered 200 to anon.
+  test("anonymous visit to /course redirects to /login", async ({ page }) => {
+    await page.goto("/course");
+    await expect(page).toHaveURL(/\/login\?redirect=%2Fcourse$/);
+  });
 });
