@@ -28,16 +28,22 @@ export function ForgotPasswordForm({ dict }: { dict: Dictionary }) {
         </p>
       ) : (
         <form action={formAction} className="mt-8 space-y-3">
-          <div className="relative">
-            <Mail className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-faint" />
-            <input
-              name="email"
-              type="email"
-              placeholder={dict["auth.emailAddress"]}
-              autoComplete="email"
-              required
-              className="h-12 w-full rounded-xl border border-border bg-surface-2 pl-11 pr-4 text-sm outline-none transition focus:border-accent/40 focus:ring-2 focus:ring-accent/20"
-            />
+          <div>
+            <label htmlFor="fp-email" className="mb-1.5 block text-xs font-medium text-muted">
+              {dict["auth.emailAddress"]}
+            </label>
+            <div className="relative">
+              <Mail className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-faint" />
+              <input
+                id="fp-email"
+                name="email"
+                type="email"
+                placeholder={dict["auth.emailAddress"]}
+                autoComplete="email"
+                required
+                className="h-12 w-full rounded-xl border border-border bg-surface-2 pl-11 pr-4 text-sm outline-none transition focus:border-accent/40 focus:ring-2 focus:ring-accent/20"
+              />
+            </div>
           </div>
 
           {state.error && (

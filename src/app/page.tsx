@@ -58,7 +58,7 @@ export default async function LandingPage({
   return (
     <div className="flex min-h-svh flex-col">
       <MarketingNav />
-      <main className="flex-1">
+      <main id="contenu" className="flex-1">
         {deleted && (
           <p
             role="status"

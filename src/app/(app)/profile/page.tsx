@@ -46,7 +46,7 @@ export default async function ProfilePage() {
   return (
     <>
       <Topbar title={dict["nav.profile"]} />
-      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-6 sm:px-6">
+      <main id="contenu" className="mx-auto w-full max-w-4xl flex-1 px-4 py-6 sm:px-6">
         <ProfileEditor
           user={currentUser}
           level={level}

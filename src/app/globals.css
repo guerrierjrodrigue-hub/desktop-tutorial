@@ -68,6 +68,36 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Accessibility (Z3 C4): a clearly visible keyboard focus ring on every
+   interactive element. Amber-bright on the near-black surfaces clears the WCAG
+   AA 3:1 non-text contrast bar. Mouse clicks don't trigger :focus-visible, so
+   this never shows for pointer users. */
+:focus-visible {
+  outline: 3px solid var(--color-accent-bright);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Skip link (Z3 C3): first focusable element; off-screen until focused. */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  transform: translateY(-200%);
+  background: var(--color-accent);
+  color: var(--color-accent-fg);
+  padding: 0.625rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.15s ease;
+}
+.skip-link:focus {
+  transform: translateY(0);
+}
+
 /* Ambient background: subtle warm amber/ember radial glow on near-black. */
 .bg-ambient {
   background:

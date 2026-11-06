@@ -1,6 +1,7 @@
 import type { Dictionary } from "./en";
 
 const fr: Dictionary = {
+  "a11y.skipToContent": "Aller au contenu",
   "nav.dashboard": "Tableau de bord",
   "nav.body": "Corps",
   "nav.fitness": "Fitness",

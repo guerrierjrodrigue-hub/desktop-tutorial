@@ -30,7 +30,7 @@ export default async function AdminOverviewPage() {
   ]);
 
   return (
-    <main className="px-4 py-6 sm:px-8">
+    <main id="contenu" className="px-4 py-6 sm:px-8">
       <AdminHeader
         title="Overview"
         subtitle="The health of Kingdom Athlete at a glance."

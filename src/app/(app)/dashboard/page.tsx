@@ -52,7 +52,7 @@ export default async function DashboardPage() {
   return (
     <>
       <Topbar />
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6">
+      <main id="contenu" className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6">
         <Greeting />
         {!user.primaryActivity && (
           <div className="mt-6">

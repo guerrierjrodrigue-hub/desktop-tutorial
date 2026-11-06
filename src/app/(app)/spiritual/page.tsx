@@ -42,7 +42,7 @@ export default async function SpiritualPage() {
   return (
     <>
       <Topbar title={dict["spiritual.title"]} />
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6">
+      <main id="contenu" className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6">
         <PageHeader
           title={dict["spiritual.title"]}
           subtitle={dict["spiritual.subtitle"]}

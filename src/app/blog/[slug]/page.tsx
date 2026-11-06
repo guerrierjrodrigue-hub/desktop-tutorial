@@ -55,7 +55,7 @@ export default async function BlogPostPage({
   return (
     <div className="flex min-h-svh flex-col">
       <MarketingNav />
-      <main className="flex-1">
+      <main id="contenu" className="flex-1">
         <article className="mx-auto max-w-2xl px-6 pb-24 pt-16">
           <Reveal>
             <Link

@@ -3,6 +3,8 @@
  * dictionary in this folder must expose exactly the same keys.
  */
 const en = {
+  // Accessibility
+  "a11y.skipToContent": "Skip to content",
   // Primary navigation (sidebar groups + items)
   "nav.dashboard": "Dashboard",
   "nav.body": "Body",

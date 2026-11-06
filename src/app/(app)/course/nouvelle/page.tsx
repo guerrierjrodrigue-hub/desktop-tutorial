@@ -29,7 +29,7 @@ export default async function NewRunPage() {
   return (
     <>
       <Topbar title={dict["course.new.title"]} />
-      <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-6 sm:px-6">
+      <main id="contenu" className="mx-auto w-full max-w-2xl flex-1 px-4 py-6 sm:px-6">
         <Link
           href="/course"
           className="mb-3 inline-flex items-center gap-1.5 text-sm text-muted transition hover:text-foreground"

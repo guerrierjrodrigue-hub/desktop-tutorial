@@ -15,7 +15,7 @@ export default async function AdminReportsPage() {
   const open = reports.filter((r) => r.status === "open");
 
   return (
-    <main className="px-4 py-6 sm:px-8">
+    <main id="contenu" className="px-4 py-6 sm:px-8">
       <div className="mb-6">
         <AdminHeader
           title="Reports"

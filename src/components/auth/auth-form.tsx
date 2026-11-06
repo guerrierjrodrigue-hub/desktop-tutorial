@@ -88,11 +88,12 @@ export function AuthForm({ mode, dict }: { mode: "login" | "signup"; dict: Dicti
               <input type="text" name="company" tabIndex={-1} autoComplete="off" />
             </div>
             {isSignup && (
-              <Field icon={User} name="name" type="text" placeholder={dict["auth.fullName"]} autoComplete="name" />
+              <Field icon={User} name="name" label={dict["auth.fullName"]} type="text" placeholder={dict["auth.fullName"]} autoComplete="name" />
             )}
             <Field
               icon={Mail}
               name="email"
+              label={dict["auth.emailAddress"]}
               type="email"
               placeholder={dict["auth.emailAddress"]}
               autoComplete="email"
@@ -101,6 +102,7 @@ export function AuthForm({ mode, dict }: { mode: "login" | "signup"; dict: Dicti
             <Field
               icon={Lock}
               name="password"
+              label={dict["auth.password"]}
               type="password"
               placeholder={dict["auth.password"]}
               autoComplete={isSignup ? "new-password" : "current-password"}
@@ -168,15 +170,24 @@ function SubmitButton({
 
 function Field({
   icon: Icon,
+  label,
+  name,
   ...props
-}: { icon: typeof Mail } & React.InputHTMLAttributes<HTMLInputElement>) {
+}: { icon: typeof Mail; label: string } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
-    <div className="relative">
-      <Icon className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-faint" />
-      <input
-        {...props}
-        className="h-12 w-full rounded-xl border border-border bg-surface-2 pl-11 pr-4 text-sm outline-none transition focus:border-accent/40 focus:ring-2 focus:ring-accent/20"
-      />
+    <div>
+      <label htmlFor={name} className="mb-1.5 block text-xs font-medium text-muted">
+        {label}
+      </label>
+      <div className="relative">
+        <Icon className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-faint" />
+        <input
+          id={name}
+          name={name}
+          {...props}
+          className="h-12 w-full rounded-xl border border-border bg-surface-2 pl-11 pr-4 text-sm outline-none transition focus:border-accent/40 focus:ring-2 focus:ring-accent/20"
+        />
+      </div>
     </div>
   );
 }

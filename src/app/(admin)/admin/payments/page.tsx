@@ -20,7 +20,7 @@ export default async function AdminPaymentsPage() {
   const failed = payments.filter((p) => p.status === "failed").length;
 
   return (
-    <main className="px-4 py-6 sm:px-8">
+    <main id="contenu" className="px-4 py-6 sm:px-8">
       <AdminHeader
         title="Payments"
         subtitle="Recent Stripe billing events. Amounts aren't stored on the audit log yet — see Payments query TODO."

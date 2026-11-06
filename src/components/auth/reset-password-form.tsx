@@ -21,29 +21,41 @@ export function ResetPasswordForm({ dict }: { dict: Dictionary }) {
       <p className="mt-2 text-sm text-muted">{dict["auth.resetPasswordSubtitle"]}</p>
 
       <form action={formAction} className="mt-8 space-y-3">
-        <div className="relative">
-          <Lock className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-faint" />
-          <input
-            name="password"
-            type="password"
-            placeholder={dict["auth.newPassword"]}
-            autoComplete="new-password"
-            minLength={6}
-            required
-            className="h-12 w-full rounded-xl border border-border bg-surface-2 pl-11 pr-4 text-sm outline-none transition focus:border-accent/40 focus:ring-2 focus:ring-accent/20"
-          />
+        <div>
+          <label htmlFor="rp-password" className="mb-1.5 block text-xs font-medium text-muted">
+            {dict["auth.newPassword"]}
+          </label>
+          <div className="relative">
+            <Lock className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-faint" />
+            <input
+              id="rp-password"
+              name="password"
+              type="password"
+              placeholder={dict["auth.newPassword"]}
+              autoComplete="new-password"
+              minLength={6}
+              required
+              className="h-12 w-full rounded-xl border border-border bg-surface-2 pl-11 pr-4 text-sm outline-none transition focus:border-accent/40 focus:ring-2 focus:ring-accent/20"
+            />
+          </div>
         </div>
-        <div className="relative">
-          <Lock className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-faint" />
-          <input
-            name="confirmPassword"
-            type="password"
-            placeholder={dict["auth.confirmPassword"]}
-            autoComplete="new-password"
-            minLength={6}
-            required
-            className="h-12 w-full rounded-xl border border-border bg-surface-2 pl-11 pr-4 text-sm outline-none transition focus:border-accent/40 focus:ring-2 focus:ring-accent/20"
-          />
+        <div>
+          <label htmlFor="rp-confirm" className="mb-1.5 block text-xs font-medium text-muted">
+            {dict["auth.confirmPassword"]}
+          </label>
+          <div className="relative">
+            <Lock className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-faint" />
+            <input
+              id="rp-confirm"
+              name="confirmPassword"
+              type="password"
+              placeholder={dict["auth.confirmPassword"]}
+              autoComplete="new-password"
+              minLength={6}
+              required
+              className="h-12 w-full rounded-xl border border-border bg-surface-2 pl-11 pr-4 text-sm outline-none transition focus:border-accent/40 focus:ring-2 focus:ring-accent/20"
+            />
+          </div>
         </div>
 
         {state.error && (

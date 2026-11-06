@@ -53,7 +53,7 @@ export default async function JoinPage({
   return (
     <div className="flex min-h-svh flex-col">
       <MarketingNav />
-      <main className="flex-1">
+      <main id="contenu" className="flex-1">
         <section className="mx-auto flex max-w-xl flex-col items-center px-6 pb-24 pt-20 text-center">
           <span className="grid size-14 place-items-center rounded-2xl bg-accent/15 text-accent-bright">
             <Users className="size-7" />

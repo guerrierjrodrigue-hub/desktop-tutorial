@@ -29,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const dict = await getDictionary(locale);
   const tagline = dict["mkt.tagline"];
   const description = dict["mkt.meta.homeDescription"];
-  const title = `${APP_NAME} — ${tagline}`;
+  const title = `${APP_NAME}: ${tagline}`;
   const ogLocale = locale === "fr" ? "fr_CA" : "en_US";
 
   // The file-based opengraph-image.tsx / twitter-image.tsx are injected into the
@@ -97,6 +97,7 @@ export default async function RootLayout({
       className={`${inter.variable} ${fraunces.variable} h-full antialiased`}
     >
       <body className="bg-ambient min-h-full">
+        <a href="#contenu" className="skip-link">{dict["a11y.skipToContent"]}</a>
         <LocaleSync />
         <TimezoneSync />
         <AnalyticsProvider>{children}</AnalyticsProvider>

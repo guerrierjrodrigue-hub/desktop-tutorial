@@ -34,7 +34,7 @@ export default async function ChallengesPage() {
   return (
     <>
       <Topbar title={dict["challenges.title"]} />
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6">
+      <main id="contenu" className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6">
         <PageHeader title={dict["challenges.title"]} subtitle={dict["challenges.subtitle"]} />
 
         {referrals > 0 && (
