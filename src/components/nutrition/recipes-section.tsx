@@ -75,7 +75,9 @@ export function RecipesSection({ recipes, dict }: { recipes: Recipe[]; dict: Dic
         </div>
       </div>
 
-      <p className="mb-4 text-xs text-faint">{dict["nutrition.recipesEstimateNote"]}</p>
+      {/* Z3 G1: values are estimates, and an allergen caution for the beta. */}
+      <p className="mb-1 text-xs text-faint">{dict["nutrition.recipesEstimateNote"]}</p>
+      <p className="mb-4 text-xs text-faint">{dict["nutrition.allergenNote"]}</p>
 
       <label className="mb-4 flex items-center gap-2 rounded-lg border border-border bg-surface-2 px-3 py-2">
         <Search className="size-4 shrink-0 text-faint" />
@@ -102,13 +104,8 @@ export function RecipesSection({ recipes, dict }: { recipes: Recipe[]; dict: Dic
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {shown.map((r) => (
-          <Link
-            key={r.id}
-            href={`/nutrition/${r.id}`}
-            aria-label={dict["nutrition.viewRecipe"].replace("{name}", r.name)}
-            className="group rounded-[var(--radius)] outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
-          >
+        {shown.map((r) => {
+          const card = (
             <Card className="h-full p-0 transition group-hover:border-accent/40">
               <RecipeThumb recipe={r} className="h-24 w-full rounded-t-[var(--radius)]" />
               <div className="p-4">
@@ -133,8 +130,27 @@ export function RecipesSection({ recipes, dict }: { recipes: Recipe[]; dict: Dic
                 </div>
               </div>
             </Card>
-          </Link>
-        ))}
+          );
+
+          // Z3 G1: only dishes with a written recipe are clickable. A dish that
+          // has only estimated macros (no steps) is shown as a non-interactive
+          // card — nothing to open, so it isn't a link.
+          return r.hasFullRecipe ? (
+            <Link
+              key={r.id}
+              href={`/nutrition/${r.id}`}
+              data-testid="recipe-card"
+              aria-label={dict["nutrition.viewRecipe"].replace("{name}", r.name)}
+              className="group rounded-[var(--radius)] outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+            >
+              {card}
+            </Link>
+          ) : (
+            <div key={r.id} data-testid="recipe-card" className="rounded-[var(--radius)]">
+              {card}
+            </div>
+          );
+        })}
         {filtered.length === 0 && (
           <p className="col-span-full py-8 text-center text-sm text-muted">
             {query.trim()

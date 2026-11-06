@@ -693,6 +693,11 @@ const fr: Dictionary = {
   "nutrition.recipesTitle": "Recettes",
   "nutrition.recipesSubtitle": "Des repas riches en protéines et en aliments complets pour nourrir ton entraînement.",
   "nutrition.recipesEstimateNote": "Les valeurs nutritionnelles sont des estimations arrondies, pas un avis médical.",
+  "nutrition.allergenNote": "Peut contenir des allergènes. Vérifie toujours les ingrédients selon tes besoins.",
+  "health.disclaimer.title": "Une petite note santé",
+  "health.disclaimer.body":
+    "Kingdom Athlete n'est pas un avis médical. Consulte un professionnel de la santé avant de commencer un nouvel entraînement ou régime, et arrête si quelque chose fait mal.",
+  "health.disclaimer.dismiss": "Fermer",
   "nutrition.noRecipesInCategory": "Aucune recette dans cette catégorie pour l'instant.",
   "nutrition.searchRecipesPlaceholder": "Rechercher une recette par nom",
   "nutrition.searchRecipesAria": "Rechercher une recette par nom",

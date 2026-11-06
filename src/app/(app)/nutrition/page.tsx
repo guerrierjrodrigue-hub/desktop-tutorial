@@ -8,6 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { FoodLogger } from "@/components/nutrition/food-logger";
 import { HydrationTracker } from "@/components/nutrition/hydration-tracker";
 import { RecipesSection } from "@/components/nutrition/recipes-section";
+import { MedicalDisclaimer } from "@/components/health/medical-disclaimer";
 import { getTodayStats } from "@/lib/queries/stats";
 import { getFoodLogsToday, getRecipes } from "@/lib/queries/nutrition";
 import { getCurrentUser } from "@/lib/queries/profile";
@@ -63,6 +64,7 @@ export default async function NutritionPage() {
     <>
       <Topbar title={dict["nutrition.title"]} />
       <main id="contenu" className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6">
+        <MedicalDisclaimer scope="nutrition" dict={dict} />
         <PageHeader
           title={dict["nutrition.title"]}
           subtitle={dict["nutrition.subtitle"]}

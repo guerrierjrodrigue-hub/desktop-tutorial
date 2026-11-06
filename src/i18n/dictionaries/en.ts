@@ -710,6 +710,11 @@ const en = {
   "nutrition.recipesTitle": "Recipes",
   "nutrition.recipesSubtitle": "High-protein, whole-food meals to fuel your training.",
   "nutrition.recipesEstimateNote": "Nutrition values are rounded estimates, not medical advice.",
+  "nutrition.allergenNote": "May contain allergens. Always check ingredients for your own needs.",
+  "health.disclaimer.title": "A quick health note",
+  "health.disclaimer.body":
+    "Kingdom Athlete is not medical advice. Check with a healthcare professional before starting a new workout or diet, and stop if something hurts.",
+  "health.disclaimer.dismiss": "Dismiss",
   "nutrition.noRecipesInCategory": "No recipes in this category yet.",
   "nutrition.searchRecipesPlaceholder": "Search recipes by name",
   "nutrition.searchRecipesAria": "Search recipes by name",
