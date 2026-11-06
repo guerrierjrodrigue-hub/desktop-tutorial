@@ -51,6 +51,15 @@ export async function createPost(input: {
   const times = ((recent ?? []) as { created_at: string }[]).map((r) => r.created_at);
   if (exceedsPostRate(times)) return { ok: false, error: "community.error.rateLimited" };
 
+  // Beta fair-play cap: at most 20 posts per day (DB-enforced too, migration 0046).
+  const todayUtc = new Date().toISOString().slice(0, 10);
+  const { count: todayCount } = await ctx.supabase
+    .from("community_posts")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", ctx.userId)
+    .gte("created_at", todayUtc);
+  if ((todayCount ?? 0) >= 20) return { ok: false, error: "community.error.dailyLimit" };
+
   const { data, error } = await ctx.supabase
     .from("community_posts")
     .insert({

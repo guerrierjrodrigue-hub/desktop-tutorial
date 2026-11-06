@@ -33,6 +33,16 @@ export async function createPrayerRequest(input: {
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
 
+  // Beta fair-play cap: at most 10 prayer requests per day (DB-enforced too,
+  // via migration 0046). Friendly message before the insert.
+  const todayUtc = new Date().toISOString().slice(0, 10);
+  const { count } = await ctx.supabase
+    .from("prayer_requests")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", ctx.userId)
+    .gte("created_at", todayUtc);
+  if ((count ?? 0) >= 10) return { ok: false, error: "errors.prayerLimit" };
+
   const { data, error } = await ctx.supabase
     .from("prayer_requests")
     .insert({

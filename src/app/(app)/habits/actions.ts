@@ -19,6 +19,14 @@ export async function createHabit(label: string, icon: string): Promise<ActionRe
   const ctx = await getAuthedContext();
   if (!ctx) return demoOk;
 
+  // Beta fair-play cap: at most 30 habits per user (the DB enforces this too,
+  // via migration 0046; this gives a friendly message before the insert).
+  const { count } = await ctx.supabase
+    .from("habits")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", ctx.userId);
+  if ((count ?? 0) >= 30) return { ok: false, error: "errors.habitLimit" };
+
   const { data, error } = await ctx.supabase
     .from("habits")
     .insert({

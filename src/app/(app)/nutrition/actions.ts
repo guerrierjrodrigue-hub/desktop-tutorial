@@ -9,13 +9,16 @@ import { type ActionResult, demoOk } from "@/lib/actions/result";
 import { validate, logAndFail } from "@/lib/actions/errors";
 import { nextWaterMl, isValidWaterDelta } from "@/lib/hydration";
 
-const macro = z.number().finite().min(0).max(100000);
+// Sane beta bounds, mirrored exactly by the DB CHECK constraints in migration
+// 0047 (never stricter than the app): calories 0..10000, macros 0..1000 g.
+const calorieVal = z.number().finite().min(0).max(10000, "errors.foodValueTooHigh");
+const macroVal = z.number().finite().min(0).max(1000, "errors.foodValueTooHigh");
 const foodLogSchema = z.object({
   name: z.string().trim().min(1, "errors.foodNameRequired").max(120, "errors.tooLong"),
-  calories: macro,
-  proteinG: macro,
-  carbsG: macro.default(0),
-  fatG: macro.default(0),
+  calories: calorieVal,
+  proteinG: macroVal,
+  carbsG: macroVal.default(0),
+  fatG: macroVal.default(0),
 });
 
 /** Log a food entry for the signed-in user for today. */
