@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { Topbar } from "@/components/layout/topbar";
 import { WorkoutSession } from "@/components/fitness/workout-session";
+import { MedicalDisclaimer } from "@/components/health/medical-disclaimer";
 import { getProgramBySlug } from "@/lib/queries/programs";
 import { getCurrentUser } from "@/lib/queries/profile";
 import { getLocale } from "@/lib/locale";
@@ -46,6 +47,7 @@ export default async function WorkoutSessionPage({
     <>
       <Topbar title={day.title} />
       <main id="contenu" className="mx-auto w-full max-w-2xl flex-1 px-4 py-6 sm:px-6">
+        <MedicalDisclaimer scope="strength" dict={dict} />
         <WorkoutSession programId={program.id} day={day} dict={dict} />
       </main>
     </>

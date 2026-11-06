@@ -138,10 +138,12 @@ export default async function RecipeDetailPage({
             </Card>
           </div>
         ) : (
+          // Z3 G1: no "full recipe coming soon" promise. A dish without a
+          // written recipe just shows its estimated values with a clear caution.
           <Card className="mt-5 flex flex-col items-center gap-2 py-8 text-center">
             <UtensilsCrossed className="size-6 text-faint" />
-            <p className="font-serif text-lg font-semibold">{dict["nutrition.fullRecipeSoon"]}</p>
-            <p className="max-w-sm text-sm text-muted">{dict["nutrition.fullRecipeSoonNote"]}</p>
+            <p className="max-w-sm text-sm text-muted">{dict["nutrition.recipesEstimateNote"]}</p>
+            <p className="max-w-sm text-sm text-muted">{dict["nutrition.allergenNote"]}</p>
           </Card>
         )}
       </main>
