@@ -340,6 +340,7 @@ const fr: Dictionary = {
   "reminders.enable": "Activer les notifications",
   "reminders.verseReminder": "Verset & citation du jour",
   "reminders.workoutReminder": "Rappel d'entraînement",
+  "reminders.betaScheduleNote": "Un rappel par jour, le matin (environ 7 h à 8 h, heure de Montréal), pendant la bêta.",
 
   "spiritual.title": "Spirituel",
   "spiritual.subtitle": "Entraîne l'âme avec la même discipline que le corps.",
