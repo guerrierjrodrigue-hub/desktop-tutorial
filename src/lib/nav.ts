@@ -14,6 +14,7 @@ import {
   User,
   Compass,
   Footprints,
+  MessageSquarePlus,
 } from "lucide-react";
 
 export interface NavItem {
@@ -104,7 +105,10 @@ export function getNavGroups(purposeItems: NavItem[], mode?: ActivityMode | null
 
 /** Cross-cutting items rendered below the pillar groups (not pillar-specific). */
 export function getStandaloneNavItems(): NavItem[] {
-  return [{ href: "/profile", label: "Profile", labelKey: "nav.profile", icon: User }];
+  return [
+    { href: "/feedback", label: "Give feedback", labelKey: "nav.feedback", icon: MessageSquarePlus },
+    { href: "/profile", label: "Profile", labelKey: "nav.profile", icon: User },
+  ];
 }
 
 /**

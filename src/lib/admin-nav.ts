@@ -6,6 +6,7 @@ import {
   Flag,
   CreditCard,
   ScrollText,
+  MessageSquare,
 } from "lucide-react";
 
 export interface AdminNavItem {
@@ -19,6 +20,7 @@ export const adminNavItems: AdminNavItem[] = [
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/content", label: "Content", icon: FileText },
   { href: "/admin/reports", label: "Reports", icon: Flag },
+  { href: "/admin/feedback", label: "Feedback", icon: MessageSquare },
   { href: "/admin/payments", label: "Payments", icon: CreditCard },
   { href: "/admin/logs", label: "Logs", icon: ScrollText },
 ];
