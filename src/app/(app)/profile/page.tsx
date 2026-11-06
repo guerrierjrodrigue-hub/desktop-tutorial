@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Crown } from "lucide-react";
+import { Crown, MessageSquarePlus } from "lucide-react";
 import { Topbar } from "@/components/layout/topbar";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -148,6 +148,18 @@ export default async function ProfilePage() {
             </Link>
           </Card>
         )}
+
+        <Card className="mt-5 flex flex-col items-center justify-between gap-4 sm:flex-row">
+          <div className="text-center sm:text-left">
+            <h3 className="font-serif text-lg font-semibold">{dict["feedback.cardTitle"]}</h3>
+            <p className="text-sm text-muted">{dict["feedback.cardBody"]}</p>
+          </div>
+          <Link href="/feedback">
+            <Button variant="secondary">
+              <MessageSquarePlus className="size-4" /> {dict["nav.feedback"]}
+            </Button>
+          </Link>
+        </Card>
 
         <PrivacySection dict={dict} showOnLeaderboard={currentUser.showOnLeaderboard} />
       </main>

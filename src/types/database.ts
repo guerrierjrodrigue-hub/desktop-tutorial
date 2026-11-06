@@ -450,6 +450,16 @@ export interface NotificationPreferencesRow {
   updated_at: Timestamptz;
 }
 
+export interface FeedbackRow {
+  id: string;
+  user_id: string;
+  kind: "bug" | "idee" | "autre";
+  message: string;
+  page: string | null;
+  user_agent: string | null;
+  created_at: Timestamptz;
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -489,6 +499,7 @@ export interface Database {
       run_plan_sessions: T<RunPlanSessionRow>;
       run_goals: T<RunGoalRow>;
       run_shoes: T<RunShoeRow>;
+      feedback: T<FeedbackRow>;
     };
     Views: Record<string, never>;
     Functions: {

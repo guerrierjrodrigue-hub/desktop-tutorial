@@ -16,6 +16,7 @@ export const PROTECTED = [
   "/habits",
   "/journal",
   "/focus",
+  "/feedback",
   "/onboarding",
   "/admin",
 ];

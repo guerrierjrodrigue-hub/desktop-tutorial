@@ -116,3 +116,57 @@ export async function getReports(): Promise<AdminReport[]> {
     };
   });
 }
+
+export interface AdminFeedback {
+  id: string;
+  kind: "bug" | "idee" | "autre";
+  message: string;
+  page: string | null;
+  authorName: string;
+  createdAt: string;
+}
+
+interface FeedbackQueryRow {
+  id: string;
+  user_id: string;
+  kind: "bug" | "idee" | "autre";
+  message: string;
+  page: string | null;
+  created_at: string;
+}
+
+/**
+ * Beta feedback for the admin console. The admin's own authed client reads
+ * every row through the feedback_select_own policy's is_admin() branch (Z3
+ * Bloc D); author names come from the safe public view.
+ */
+export async function getAdminFeedback(): Promise<AdminFeedback[]> {
+  const ctx = await getAuthedContext();
+  if (!ctx) return [];
+
+  const { data } = await ctx.supabase
+    .from("feedback")
+    .select("id, user_id, kind, message, page, created_at")
+    .order("created_at", { ascending: false })
+    .limit(300);
+  const rows = (data ?? []) as FeedbackQueryRow[];
+  if (!rows.length) return [];
+
+  const userIds = [...new Set(rows.map((r) => r.user_id))];
+  const { data: nameRows } = await ctx.supabase
+    .from("profile_public")
+    .select("id, name")
+    .in("id", userIds);
+  const nameById = new Map(
+    ((nameRows ?? []) as { id: string; name: string }[]).map((n) => [n.id, n.name]),
+  );
+
+  return rows.map((r) => ({
+    id: r.id,
+    kind: r.kind,
+    message: r.message,
+    page: r.page,
+    authorName: nameById.get(r.user_id) ?? "Athlete",
+    createdAt: r.created_at,
+  }));
+}
