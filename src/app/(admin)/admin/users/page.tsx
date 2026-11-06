@@ -20,7 +20,7 @@ export default async function AdminUsersPage() {
   const users = await getRecentUsers(50);
 
   return (
-    <main className="px-4 py-6 sm:px-8">
+    <main id="contenu" className="px-4 py-6 sm:px-8">
       <AdminHeader
         title="Users"
         subtitle={`${users.length.toLocaleString()} members shown · manage accounts and plans.`}

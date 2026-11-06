@@ -45,7 +45,7 @@ export default async function WorkoutSessionPage({
   return (
     <>
       <Topbar title={day.title} />
-      <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-6 sm:px-6">
+      <main id="contenu" className="mx-auto w-full max-w-2xl flex-1 px-4 py-6 sm:px-6">
         <WorkoutSession programId={program.id} day={day} dict={dict} />
       </main>
     </>

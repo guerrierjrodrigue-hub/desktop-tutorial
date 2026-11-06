@@ -75,7 +75,7 @@ export default async function BiblePage({
   return (
     <>
       <Topbar title={dict["bible.title"]} />
-      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6">
+      <main id="contenu" className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:px-6">
         <PageHeader
           title={dict["bible.title"]}
           subtitle={dict["bible.subtitle"]}

@@ -23,7 +23,7 @@ export default async function AdminLogsPage() {
   const logs = await getAdminLogs(30);
 
   return (
-    <main className="px-4 py-6 sm:px-8">
+    <main id="contenu" className="px-4 py-6 sm:px-8">
       <AdminHeader
         title="Logs"
         subtitle="Activity feed from billing events and signups."

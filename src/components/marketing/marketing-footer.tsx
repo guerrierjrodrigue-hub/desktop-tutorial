@@ -52,7 +52,7 @@ export async function MarketingFooter() {
     <footer className="mt-24 border-t border-border">
       <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-5">
         <div className="lg:col-span-1">
-          <Link href="/" aria-label="Kingdom Athlete" className="inline-flex">
+          <Link href="/" aria-label="Kingdom Athlete" className="inline-flex min-h-[44px] items-center">
             <Logo variant="inline" height={20} className="text-foreground" />
           </Link>
           <p className="mt-4 max-w-xs text-sm text-muted">{dict["mkt.tagline"]}</p>
@@ -63,7 +63,11 @@ export async function MarketingFooter() {
             <ul className="mt-4 space-y-2.5 text-sm text-muted">
               {col.links.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="transition hover:text-accent-bright">
+                  {/* 44px tap target on mobile (Z3 C5). */}
+                  <Link
+                    href={link.href}
+                    className="inline-flex min-h-[44px] items-center transition hover:text-accent-bright"
+                  >
                     {dict[link.labelKey]}
                   </Link>
                 </li>

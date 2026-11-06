@@ -10,9 +10,11 @@ export function PageHeader({
   return (
     <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
       <div>
-        <h1 className="font-serif text-2xl font-semibold tracking-tight sm:text-3xl">
+        {/* h2, not h1: the page's single h1 is the Topbar title. Keeps one h1
+            per page (D-30) without changing the visual hierarchy. */}
+        <h2 className="font-serif text-2xl font-semibold tracking-tight sm:text-3xl">
           {title}
-        </h1>
+        </h2>
         {subtitle && <p className="mt-1 text-sm text-muted">{subtitle}</p>}
       </div>
       {children}

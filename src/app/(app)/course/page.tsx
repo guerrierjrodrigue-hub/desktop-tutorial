@@ -44,7 +44,7 @@ export default async function CoursePage({
     return (
       <>
         <Topbar title={dict["course.title"]} />
-        <main className="flex-1">
+        <main id="contenu" className="flex-1">
           <ActivateMode dict={dict} activate="running" />
         </main>
       </>
@@ -58,7 +58,7 @@ export default async function CoursePage({
     return (
       <>
         <Topbar title={dict["course.title"]} />
-        <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-6 sm:px-6">
+        <main id="contenu" className="mx-auto w-full max-w-2xl flex-1 px-4 py-6 sm:px-6">
           <PageHeader title={dict["course.title"]} subtitle={dict["course.subtitle"]} />
           <RunnerOnboarding dict={dict} initialLevel={onboarding.level} initialGoal={onboarding.goalKind} showSkip />
         </main>
@@ -92,7 +92,7 @@ export default async function CoursePage({
   return (
     <>
       <Topbar title={dict["course.title"]} />
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6">
+      <main id="contenu" className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6">
         <PageHeader title={dict["course.title"]} subtitle={dict["course.subtitle"]} />
 
         <div className="mb-5 flex flex-wrap gap-2">

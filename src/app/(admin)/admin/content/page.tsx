@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function AdminContentPage() {
   return (
-    <main className="px-4 py-6 sm:px-8">
+    <main id="contenu" className="px-4 py-6 sm:px-8">
       <div className="mb-6 flex items-end justify-between">
         <AdminHeader
           title="Content"

@@ -36,7 +36,7 @@ export function LocaleToggle({ current, label }: { current: LocaleCode; label: s
           onClick={() => choose(locale.code)}
           aria-pressed={current === locale.code}
           className={cn(
-            "rounded-full px-2.5 py-1 uppercase transition disabled:opacity-60",
+            "inline-flex min-h-[36px] items-center rounded-full px-3 uppercase transition disabled:opacity-60",
             current === locale.code
               ? "bg-accent/15 text-accent-bright"
               : "text-muted hover:text-foreground",

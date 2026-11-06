@@ -62,7 +62,7 @@ export default async function NutritionPage() {
   return (
     <>
       <Topbar title={dict["nutrition.title"]} />
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6">
+      <main id="contenu" className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6">
         <PageHeader
           title={dict["nutrition.title"]}
           subtitle={dict["nutrition.subtitle"]}

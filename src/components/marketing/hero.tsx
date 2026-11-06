@@ -82,7 +82,7 @@ function HeroContent({ dict, freeMode }: { dict: Dictionary; freeMode: boolean }
           <button
             type="button"
             onClick={() => setFilmOpen(true)}
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-muted underline-offset-4 transition hover:text-foreground hover:underline"
+            className="inline-flex min-h-[44px] items-center gap-1.5 text-sm font-medium text-muted underline-offset-4 transition hover:text-foreground hover:underline"
           >
             <Play className="size-3.5 fill-current" />
             {dict["mkt.hero.watchFilm"]}

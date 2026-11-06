@@ -26,7 +26,7 @@ export async function LegalPage({
   return (
     <div className="flex min-h-svh flex-col">
       <MarketingNav />
-      <main className="flex-1">
+      <main id="contenu" className="flex-1">
         <section className="mx-auto max-w-3xl px-6 pb-8 pt-20 text-center">
           <Reveal>
             <Badge variant="neutral">{dict["mkt.legal.badge"]}</Badge>

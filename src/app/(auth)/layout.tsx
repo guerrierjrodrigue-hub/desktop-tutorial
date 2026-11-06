@@ -35,7 +35,9 @@ export default async function AuthLayout({
             <Logo variant="inline" height={18} className="text-foreground" />
           </Link>
         </div>
-        {children}
+        <main id="contenu" className="flex w-full flex-col items-center">
+          {children}
+        </main>
         <p className="mt-10 text-center text-xs text-faint">
           {dict["mkt.auth.agreePrefix"]}{" "}
           <Link href="/terms" className="underline hover:text-muted">

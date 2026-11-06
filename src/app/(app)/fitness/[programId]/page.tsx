@@ -63,7 +63,7 @@ export default async function ProgramDetailPage({
   return (
     <>
       <Topbar />
-      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-6 sm:px-6">
+      <main id="contenu" className="mx-auto w-full max-w-4xl flex-1 px-4 py-6 sm:px-6">
         <Link
           href="/fitness"
           className="inline-flex items-center gap-1 text-sm text-muted transition hover:text-foreground"

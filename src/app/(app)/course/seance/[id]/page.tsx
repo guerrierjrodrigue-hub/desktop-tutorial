@@ -28,7 +28,7 @@ export default async function RunSessionPage({
   return (
     <>
       <Topbar title={dict["course.timer.title"]} />
-      <main className="mx-auto w-full max-w-xl flex-1 px-4 py-6 sm:px-6">
+      <main id="contenu" className="mx-auto w-full max-w-xl flex-1 px-4 py-6 sm:px-6">
         <Link
           href={`/course/plans/${planSlug}`}
           className="mb-3 inline-flex items-center gap-1.5 text-sm text-muted transition hover:text-foreground"
