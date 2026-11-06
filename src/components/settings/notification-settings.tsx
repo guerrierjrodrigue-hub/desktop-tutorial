@@ -39,9 +39,11 @@ export function NotificationSettings({
   const [subscribed, setSubscribed] = useState(hasSubscription);
   const [enabling, setEnabling] = useState(false);
   const [verseEnabled, setVerseEnabled] = useState(initial.verseReminderEnabled);
-  const [verseTime, setVerseTime] = useState(initial.verseReminderTime ?? "07:00");
   const [workoutEnabled, setWorkoutEnabled] = useState(initial.workoutReminderEnabled);
-  const [workoutTime, setWorkoutTime] = useState(initial.workoutReminderTime ?? "17:00");
+  // The per-minute picker was removed (Z3 Bloc F). We still persist a reminder
+  // time so the DB columns stay populated — the stored value, or a default.
+  const verseTime = initial.verseReminderTime ?? "07:00";
+  const workoutTime = initial.workoutReminderTime ?? "17:00";
   const [, startTransition] = useTransition();
 
   useEffect(() => {
@@ -139,30 +141,25 @@ export function NotificationSettings({
             icon={BookOpen}
             label={dict["reminders.verseReminder"]}
             enabled={verseEnabled}
-            time={verseTime}
             onToggle={(v) => {
               setVerseEnabled(v);
               persist({ verseReminderEnabled: v });
-            }}
-            onTimeChange={(t) => {
-              setVerseTime(t);
-              persist({ verseReminderTime: t });
             }}
           />
           <ReminderRow
             icon={Dumbbell}
             label={dict["reminders.workoutReminder"]}
             enabled={workoutEnabled}
-            time={workoutTime}
             onToggle={(v) => {
               setWorkoutEnabled(v);
               persist({ workoutReminderEnabled: v });
             }}
-            onTimeChange={(t) => {
-              setWorkoutTime(t);
-              persist({ workoutReminderTime: t });
-            }}
           />
+          {/* Z3 Bloc F: honest beta cadence — one morning reminder per day, no
+              per-minute picker (the cron can't honour precise times yet). */}
+          <p className="rounded-lg bg-surface-2 px-3 py-2 text-xs text-muted">
+            {dict["reminders.betaScheduleNote"]}
+          </p>
         </div>
       )}
     </Card>
@@ -173,16 +170,12 @@ function ReminderRow({
   icon: Icon,
   label,
   enabled,
-  time,
   onToggle,
-  onTimeChange,
 }: {
   icon: typeof Bell;
   label: string;
   enabled: boolean;
-  time: string;
   onToggle: (v: boolean) => void;
-  onTimeChange: (v: string) => void;
 }) {
   return (
     <div className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface-2 px-4 py-3">
@@ -190,7 +183,7 @@ function ReminderRow({
         type="button"
         onClick={() => onToggle(!enabled)}
         aria-pressed={enabled}
-        className="flex items-center gap-2.5 text-left text-sm font-medium"
+        className="flex min-h-[44px] flex-1 items-center gap-2.5 text-left text-sm font-medium"
       >
         <span
           className={cn(
@@ -202,13 +195,21 @@ function ReminderRow({
         </span>
         {label}
       </button>
-      <input
-        type="time"
-        value={time}
-        disabled={!enabled}
-        onChange={(e) => onTimeChange(e.target.value)}
-        className="h-9 rounded-lg border border-border bg-surface px-2 text-sm outline-none disabled:opacity-40"
-      />
+      {/* On/off indicator (replaces the removed time picker). */}
+      <span
+        aria-hidden
+        className={cn(
+          "h-6 w-11 shrink-0 rounded-full p-0.5 transition",
+          enabled ? "bg-accent/70" : "bg-elevated",
+        )}
+      >
+        <span
+          className={cn(
+            "block size-5 rounded-full bg-white transition-transform",
+            enabled ? "translate-x-5" : "translate-x-0",
+          )}
+        />
+      </span>
     </div>
   );
 }

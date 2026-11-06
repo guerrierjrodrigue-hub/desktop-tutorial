@@ -349,6 +349,7 @@ const en = {
   "reminders.enable": "Enable notifications",
   "reminders.verseReminder": "Daily verse & quote",
   "reminders.workoutReminder": "Workout reminder",
+  "reminders.betaScheduleNote": "One reminder per day, in the morning (about 7 to 8 AM, Montreal time), during the beta.",
 
   // Spiritual / Bible
   "spiritual.title": "Spiritual",

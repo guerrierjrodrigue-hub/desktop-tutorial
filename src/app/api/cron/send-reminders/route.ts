@@ -4,21 +4,12 @@ import { createSupabaseAdminClient, isAdminClientConfigured } from "@/lib/supaba
 import { getDailyDevotional } from "@/data/devotional";
 import { getQuoteOfDay } from "@/lib/quote-of-day";
 import { isLocaleCode, DEFAULT_LOCALE } from "@/i18n/locales";
+import { shouldSendDailyReminder } from "@/lib/reminders";
 import type { NotificationPreferencesRow, PushSubscriptionRow } from "@/types/database";
 
 const VAPID_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? "";
 const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY ?? "";
 const VAPID_SUBJECT = process.env.VAPID_SUBJECT ?? "mailto:hello@kingdomathlete.app";
-
-/**
- * How far past a user's target minute the cron will still fire, covering
- * gaps between cron ticks. Vercel Hobby plans only allow one cron run per
- * day, so this is intentionally generous (most of a day) — on Hobby, a
- * reminder fires on the first run after its target time each day rather
- * than at a precise minute. Tighten this (e.g. to 20) once the cron itself
- * runs more often than daily (Vercel Pro or higher).
- */
-const TOLERANCE_MINUTES = 20 * 60;
 
 function localTimeParts(date: Date, timeZone: string): { hhmm: string; dateStr: string } {
   const hhmm = (() => {
@@ -44,19 +35,6 @@ function localTimeParts(date: Date, timeZone: string): { hhmm: string; dateStr: 
     }
   })();
   return { hhmm, dateStr };
-}
-
-function minutesSinceMidnight(hhmm: string): number {
-  const [h, m] = hhmm.split(":").map(Number);
-  return h * 60 + m;
-}
-
-/** Whether `nowHHMM` is at or up to TOLERANCE_MINUTES past `targetHHMM`. */
-function isDue(targetHHMM: string | null, nowHHMM: string): boolean {
-  if (!targetHHMM) return false;
-  const target = minutesSinceMidnight(targetHHMM);
-  const now = minutesSinceMidnight(nowHHMM);
-  return now >= target && now - target <= TOLERANCE_MINUTES;
 }
 
 async function sendPush(
@@ -100,24 +78,19 @@ export async function GET(req: Request) {
     .or("verse_reminder_enabled.eq.true,workout_reminder_enabled.eq.true");
 
   const rows = (prefs ?? []) as NotificationPreferencesRow[];
-  let verseSent = 0;
-  let workoutSent = 0;
+  let sent = 0;
   let staleRemoved = 0;
 
   for (const pref of rows) {
     const { hhmm, dateStr } = localTimeParts(now, pref.timezone || "UTC");
     const locale = isLocaleCode(pref.locale) ? pref.locale : DEFAULT_LOCALE;
 
-    const dueVerse =
-      pref.verse_reminder_enabled &&
-      pref.last_verse_sent_date !== dateStr &&
-      isDue(pref.verse_reminder_time, hhmm);
-    const dueWorkout =
-      pref.workout_reminder_enabled &&
-      pref.last_workout_sent_date !== dateStr &&
-      isDue(pref.workout_reminder_time, hhmm);
-
-    if (!dueVerse && !dueWorkout) continue;
+    // Z3 Bloc F: one honest reminder per LOCAL day, in the morning window, for
+    // anyone opted in to either reminder. The per-minute time pickers were
+    // removed (Hobby cron can't honour them); reminder_time columns are kept.
+    const enabled = pref.verse_reminder_enabled || pref.workout_reminder_enabled;
+    // last_verse_sent_date is reused as the single "last reminder sent" marker.
+    if (!shouldSendDailyReminder(hhmm, dateStr, pref.last_verse_sent_date, enabled)) continue;
 
     const { data: subs } = await admin
       .from("push_subscriptions")
@@ -126,59 +99,38 @@ export async function GET(req: Request) {
     const subscriptions = (subs ?? []) as PushSubscriptionRow[];
     if (subscriptions.length === 0) continue;
 
-    if (dueVerse) {
-      const dayOfYear = Math.floor(
-        (Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) -
-          Date.UTC(now.getUTCFullYear(), 0, 0)) /
-          86_400_000,
-      );
-      const useVerse = dayOfYear % 2 === 0;
-      const quote = getQuoteOfDay(locale, now);
-      const devotional = getDailyDevotional(locale, now);
-      const body = useVerse
-        ? `"${devotional.verse.text}" (${devotional.verse.reference})`
-        : quote;
+    // Alternate verse / quote day to day so the daily nudge stays fresh.
+    const dayOfYear = Math.floor(
+      (Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) -
+        Date.UTC(now.getUTCFullYear(), 0, 0)) /
+        86_400_000,
+    );
+    const useVerse = dayOfYear % 2 === 0;
+    const quote = getQuoteOfDay(locale, now);
+    const devotional = getDailyDevotional(locale, now);
+    const body = useVerse
+      ? `"${devotional.verse.text}" (${devotional.verse.reference})`
+      : quote;
 
-      for (const sub of subscriptions) {
-        const result = await sendPush(sub, {
-          title: locale === "fr" ? "Ton encouragement du jour" : "Today's encouragement",
-          body,
-          url: "/dashboard",
-        });
-        if (result.gone) {
-          await admin.from("push_subscriptions").delete().eq("id", sub.id);
-          staleRemoved++;
-        }
+    for (const sub of subscriptions) {
+      const result = await sendPush(sub, {
+        title: locale === "fr" ? "Ton encouragement du jour" : "Today's encouragement",
+        body,
+        url: "/dashboard",
+      });
+      if (result.gone) {
+        await admin.from("push_subscriptions").delete().eq("id", sub.id);
+        staleRemoved++;
       }
-      await admin
-        .from("notification_preferences")
-        .update({ last_verse_sent_date: dateStr })
-        .eq("user_id", pref.user_id);
-      verseSent++;
     }
 
-    if (dueWorkout) {
-      for (const sub of subscriptions) {
-        const result = await sendPush(sub, {
-          title: locale === "fr" ? "C'est l'heure de s'entraîner" : "Time to train",
-          body:
-            locale === "fr"
-              ? "Ton entraînement du jour t'attend. Garde ta série en vie."
-              : "Your workout is waiting. Keep the streak alive.",
-          url: "/fitness",
-        });
-        if (result.gone) {
-          await admin.from("push_subscriptions").delete().eq("id", sub.id);
-          staleRemoved++;
-        }
-      }
-      await admin
-        .from("notification_preferences")
-        .update({ last_workout_sent_date: dateStr })
-        .eq("user_id", pref.user_id);
-      workoutSent++;
-    }
+    // Mark both markers for the local day so the single reminder isn't repeated.
+    await admin
+      .from("notification_preferences")
+      .update({ last_verse_sent_date: dateStr, last_workout_sent_date: dateStr })
+      .eq("user_id", pref.user_id);
+    sent++;
   }
 
-  return NextResponse.json({ checked: rows.length, verseSent, workoutSent, staleRemoved });
+  return NextResponse.json({ checked: rows.length, sent, staleRemoved });
 }
